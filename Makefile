@@ -22,7 +22,7 @@ CC = cc
 INSTALL = install -c
 MKDIR_P = mkdir -p
 
-DIST_FILES = Makefile README BUGS ratfor.man \
+DIST_FILES = Makefile README BUGS ratfor.man ratfor.pdf \
              getopt.c lookup.c lookup.h rat4.c ratcom.h ratdef.h \
              test.r testw.r
 
