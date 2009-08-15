@@ -35,7 +35,7 @@ gnuflag = -DGNU
 warnflags = -Wall -Werror -ansi
 ocdefines := -c -DF77 -DS_CHAR="$(signed_char)" $(gnuflag)
 
-allobjects = rat4.o lookup.o getopt.o error.o utils.o bulk.o
+allobjects = rat4.o lookup.o getopt.o error.o utils.o main.o
 
 #--------------------------------------------------------------------------
 
@@ -49,13 +49,13 @@ ratfor77: $(allobjects) Makefile
 	$(CC) $(ocdefines) $(warnflags) $(CFLAGS) $(CCFLSGS) -o $*.o $*.c 
 
 #XXX: temporary
-bulk.o: bulk.c bulk.h ratdef.h Makefile
-	$(CC) $(ocdefines) $(CFLAGS) $(CCFLSGS) -o bulk.o bulk.c 
+rat4.o: rat4.c rat4.h ratdef.h Makefile
+	$(CC) $(ocdefines) $(CFLAGS) $(CCFLSGS) -o rat4.o rat4.c 
 
 utils.o: lookup.h
 error.o: utils.h ratcom.h
-rat4.o: getopt.h error.h
-bulk.o: utils.h error.h getopt.h ratcom.h lookup.h keywords.h
+main.o: getopt.h error.h
+rat4.o: utils.h error.h getopt.h ratcom.h lookup.h keywords.h
 
 #--------------------------------------------------------------------------
 
