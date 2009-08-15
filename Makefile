@@ -41,14 +41,14 @@ ratfor77: $(allobjects) Makefile
 %.o: %.c %.h ratdef.h Makefile
 	$(CC) $(ocdefines) $(warnflags) $(CFLAGS) $(CCFLSGS) -o $*.o $*.c 
 
-#XXX: temporary
+#XXX: temporarly disabled warnings
 rat4.o: rat4.c rat4.h ratdef.h Makefile
 	$(CC) $(ocdefines) $(CFLAGS) $(CCFLSGS) -o rat4.o rat4.c 
 
 utils.o: lookup.h
 error.o: utils.h ratcom.h
 main.o: getopt.h error.h
-rat4.o: utils.h error.h getopt.h ratcom.h lookup.h keywords.h
+rat4.o: utils.h error.h getopt.h ratcom.h lookup.h
 
 #--------------------------------------------------------------------------
 
