@@ -11,7 +11,7 @@
  * ctoi - convert string at in[i] to int, increment i
  */
 int
-ctoi(S_CHAR in[], int *i)
+ctoi(char in[], int *i)
 {
     int k, j;
 
@@ -31,10 +31,10 @@ ctoi(S_CHAR in[], int *i)
  * itoc - special version of itoa
  */
 int
-itoc(int n, S_CHAR str[], int size)
+itoc(int n, char str[], int size)
 {
     int i, j, k, sign;
-    S_CHAR c;
+    char c;
 
     if ((sign = n) < 0)
         n = -n;
@@ -62,7 +62,7 @@ itoc(int n, S_CHAR str[], int size)
  *
  */
 void
-fold(S_CHAR token[])
+fold(char token[])
 {
     int i;
     /* WARNING - this routine depends heavily on the fact that letters
@@ -78,7 +78,7 @@ fold(S_CHAR token[])
  *
  */
 int
-equal(S_CHAR str1[], S_CHAR str2[])
+equal(char str1[], char str2[])
 {
     int i;
 
@@ -93,7 +93,7 @@ equal(S_CHAR str1[], S_CHAR str2[])
  *
  */
 void
-scopy(S_CHAR from[], int i, S_CHAR to[], int j)
+scopy(char from[], int i, char to[], int j)
 {
     int k1, k2;
 
@@ -110,7 +110,7 @@ scopy(S_CHAR from[], int i, S_CHAR to[], int j)
  *
  */
 int
-look(S_CHAR name[], S_CHAR defn[])
+look(char name[], char defn[])
 {
     struct hashlist *p;
     if ((p = lookup(name)) == NULL)

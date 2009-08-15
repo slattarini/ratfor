@@ -14,11 +14,11 @@ static struct hashlist *hashtab[HASHMAX];
  * strsave - save string s somewhere
  *
  */
-static S_CHAR
+static char
 *strsave(s)
-S_CHAR *s;
+char *s;
 {
-	S_CHAR *p;
+	char *p;
 
 	if ((p = malloc(strlen(s)+1)) != NULL)
 		strcpy(p, s);
@@ -31,7 +31,7 @@ S_CHAR *s;
  */
 static int
 hash(s)
-S_CHAR *s;
+char *s;
 {
 	int	hashval;
 
@@ -46,7 +46,7 @@ S_CHAR *s;
  */
 struct hashlist
 *lookup(s)
-S_CHAR *s;
+char *s;
 {
 	struct hashlist *np;
 
@@ -62,8 +62,8 @@ S_CHAR *s;
  */
 struct hashlist
 *install(name,def)
-S_CHAR *name;
-S_CHAR *def;
+char *name;
+char *def;
 {
 	int hashval;
 	struct hashlist *np, *lookup();

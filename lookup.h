@@ -8,12 +8,12 @@
 
 /* basic table entry */
 struct hashlist {
-	S_CHAR	*name;
-	S_CHAR	*def;
+	char	*name;
+	char	*def;
 	struct	hashlist *next; /* next in chain */
 };
 
 #define HASHMAX	100	/* size of hashtable */
 
-struct hashlist *install(S_CHAR *name, S_CHAR *def);
-struct hashlist *lookup(S_CHAR *s);
+struct hashlist *install(char *name, char *def);
+struct hashlist *lookup(char *s);
