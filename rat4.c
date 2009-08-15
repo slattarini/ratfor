@@ -33,38 +33,9 @@ Copyright
 #include <stdlib.h>
 
 #include "ratdef.h"
-#include "ratcom.h"
+#include "error.h"
 #include "getopt.h"
 
-/*
- * initialise global variables
- */
-void
-initvars(void)
-{
-    int i;
-
-    outp = 0;       /* output character pointer */
-    level = 0;      /* file control */
-    linect[0] = 1;  /* line count of first file */
-    fnamp = 0;
-    fnames[0] = EOS;
-    bp = -1;        /* pushback buffer pointer */
-    fordep = 0;     /* for stack */
-    swtop = 0;      /* switch stack index */
-    swlast = 1;     /* switch stack index */
-    
-    for (i = 0; i <= 126; i++)
-        tabptr[i] = 0;
-    
-    /* default definitions */
-    static char deftyp[] = { DEFTYPE, EOS };
-    install("define", deftyp);
-    install("DEFINE", deftyp);
-    
-    fcname[0] = EOS;  /* current function name */
-    label = startlab; /* next generated label */
-}
 
 /* main subroutine */
 int
@@ -74,12 +45,13 @@ char *argv[];
 {
     int c, errflg = 0;
     char *progname = argv[0];
+    FILE *infile;
     
+    extern void init(int, int, FILE *); /* XXX: move out */
     extern void parse(void); /* XXX: move out */
     
-    /* init global vars that can be changed by options */
-    startlab = 23000; /* default start label */
-    leaveC = NO;
+    int startlab = 23000; /* default start label */
+    int leaveC = NO;
     while ((c = our_getopt(argc, argv, "Chn:o:6:")) != EOF)
     switch (c) {
         case 'C':
@@ -113,11 +85,11 @@ char *argv[];
      * present version can only process one file, sadly.
      */
     if (optind77 >= argc)
-        infile[0] = stdin;
-    else if ((infile[0] = fopen(argv[optind77], "r")) == NULL)
+        infile = stdin;
+    else if ((infile = fopen(argv[optind77], "r")) == NULL)
         error("cannot read %s\n", argv[optind77]);
 
-    initvars();
+    init(startlab, leaveC, infile);
     printf("C Output from Public domain Ratfor, version 1.0\n");
     parse(); /* call parser.. */
 

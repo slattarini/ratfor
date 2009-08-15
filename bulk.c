@@ -7,6 +7,7 @@
 #include "ratdef.h"
 #include "ratcom.h"
 #include "utils.h"
+#include "lookup.h"
 #include "error.h"
 #include "keywords.h"
 
@@ -21,6 +22,40 @@ char *dat    = "data ";
 char *eoss   = "EOS/";
 
 extern S_CHAR ngetch();
+
+/*
+ * initialisation
+ */
+void
+init(int u_startlab, int u_leaveC, FILE *u_infile)
+{
+    int i;
+    
+    startlab = u_startlab;
+    leaveC = u_leaveC;
+    infile[0] = u_infile;
+
+    outp = 0;       /* output character pointer */
+    level = 0;      /* file control */
+    linect[0] = 1;  /* line count of first file */
+    fnamp = 0;
+    fnames[0] = EOS;
+    bp = -1;        /* pushback buffer pointer */
+    fordep = 0;     /* for stack */
+    swtop = 0;      /* switch stack index */
+    swlast = 1;     /* switch stack index */
+    
+    for (i = 0; i <= 126; i++)
+        tabptr[i] = 0;
+    
+    /* default definitions */
+    static char deftyp[] = { DEFTYPE, EOS };
+    install("define", deftyp);
+    install("DEFINE", deftyp);
+    
+    fcname[0] = EOS;  /* current function name */
+    label = startlab; /* next generated label */
+}
 
 /*
  * P A R S E R
