@@ -13,7 +13,7 @@
  * error - print error message with one parameter, then die
  */
 void
-error(S_CHAR *msg, S_CHAR *s)
+error(char *msg, char *s)
 {
     fprintf(stderr, msg, s);
     exit(1);
@@ -23,9 +23,9 @@ error(S_CHAR *msg, S_CHAR *s)
  * synerr - report Ratfor syntax error
  */
 void
-synerr(S_CHAR *msg)
+synerr(char *msg)
 {
-    S_CHAR lc[MAXCHARS];
+    char lc[MAXCHARS];
     int i;
 
     fprintf(stderr, "error at line ");
@@ -48,7 +48,7 @@ synerr(S_CHAR *msg)
  *  baderr - print error message, then die
  */
 void
-baderr(S_CHAR *msg)
+baderr(char *msg)
 {
     synerr(msg);
     exit(1);

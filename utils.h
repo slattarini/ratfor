@@ -1,6 +1,6 @@
-int ctoi(S_CHAR[], int*);
-int itoc(int, S_CHAR[], int size);
-void fold(S_CHAR[]);
-int equal(S_CHAR[], S_CHAR[]);
-void scopy(S_CHAR[], int, S_CHAR[], int);
-int look(S_CHAR[], S_CHAR[]);
+int ctoi(char[], int*);
+int itoc(int, char[], int size);
+void fold(char[]);
+int equal(char[], char[]);
+void scopy(char[], int, char[], int);
+int look(char[], char[]);

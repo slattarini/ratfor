@@ -22,7 +22,7 @@ char *rgoto  = "goto ";
 char *dat    = "data ";
 char *eoss   = "EOS/";
 
-extern S_CHAR ngetch();
+extern char ngetch();
 
 /*
  * initialisation
@@ -65,7 +65,7 @@ init(int u_startlab, int u_leaveC, FILE *u_infile)
 void
 parse(void)
 {
-    S_CHAR lexstr[MAXTOK];
+    char lexstr[MAXTOK];
     int lab, labval[MAXSTACK], lextyp[MAXSTACK], sp, i, token;
 
     sp = 0;
@@ -151,7 +151,7 @@ parse(void)
  */
 int
 alldig(str)
-S_CHAR str[];
+char str[];
 {
     int i,j;
 
@@ -172,7 +172,7 @@ S_CHAR str[];
  */
 balpar()
 {
-    S_CHAR token[MAXTOK];
+    char token[MAXTOK];
     int t,nlpar;
 
     if (gnbtok(token, MAXTOK) != LPAREN) {
@@ -207,11 +207,11 @@ balpar()
  */
 int
 deftok(token, toksiz, fd)
-S_CHAR token[];
+char token[];
 int toksiz;
 FILE *fd;
 {
-    S_CHAR defn[MAXDEF];
+    char defn[MAXDEF];
     int t;
 
     for (t=gtok(token, toksiz, fd); t!=EOF; t=gtok(token, toksiz, fd)) {
@@ -240,7 +240,7 @@ void
 eatup()
 {
 
-    S_CHAR ptoken[MAXTOK], token[MAXTOK];
+    char ptoken[MAXTOK], token[MAXTOK];
     int nlpar, t;
 
     nlpar = 0;
@@ -284,14 +284,14 @@ eatup()
  *
  */
 getdef(token, toksiz, defn, defsiz, fd)
-S_CHAR token[];
+char token[];
 int toksiz;
-S_CHAR defn[];
+char defn[];
 int defsiz;
 FILE *fd;
 {
     int i, nlpar, t;
-    S_CHAR c, ptoken[MAXTOK];
+    char c, ptoken[MAXTOK];
 
     skpblk(fd);
     /*
@@ -307,7 +307,7 @@ FILE *fd;
     if (gtok(token, toksiz, fd) != ALPHA)
         baderr("non-alphanumeric name.");
     skpblk(fd);
-    c = (S_CHAR) gtok(ptoken, MAXTOK, fd);
+    c = (char) gtok(ptoken, MAXTOK, fd);
     if (t == BLANK) {         /* define name defn */
         pbstr(ptoken);
         i = 0;
@@ -317,7 +317,7 @@ FILE *fd;
                 baderr("definition too long.");
             defn[i++] = c;
         }
-        while (c != SHARP && c != NEWLINE && c != (S_CHAR)EOF && c != PERCENT);
+        while (c != SHARP && c != NEWLINE && c != (char)EOF && c != PERCENT);
         if (c == SHARP || c == PERCENT)
             putbak(c);
     }
@@ -329,7 +329,7 @@ FILE *fd;
         for (i = 0; nlpar >= 0; i++)
             if (i > defsiz)
                 baderr("definition too long.");
-            else if (ngetch(&defn[i], fd) == (S_CHAR)EOF)
+            else if (ngetch(&defn[i], fd) == (char)EOF)
                 baderr("missing right paren.");
             else if (defn[i] == LPAREN)
                 nlpar++;
@@ -348,12 +348,12 @@ FILE *fd;
  */
 int
 gettok(token, toksiz)
-S_CHAR token[];
+char token[];
 int toksiz;
 {
     int t, i;
     int tok;
-    S_CHAR name[MAXNAME];
+    char name[MAXNAME];
 
     for ( ; level >= 0; level--) {
         for (tok = deftok(token, toksiz, infile[level]); tok != EOF;
@@ -429,7 +429,7 @@ int toksiz;
  */
 int
 gnbtok(token, toksiz)
-S_CHAR token[];
+char token[];
 int toksiz;
 {
     int tok;
@@ -445,11 +445,11 @@ int toksiz;
  */
 int
 gtok(lexstr, toksiz, fd)
-S_CHAR lexstr[];
+char lexstr[];
 int toksiz;
 FILE *fd;
 { int i, b, n, tok;
-    S_CHAR c;
+    char c;
     c = ngetch(&lexstr[0], fd);
     if (c == BLANK || c == TAB) {
         lexstr[0] = BLANK;
@@ -591,7 +591,7 @@ FILE *fd;
  */
 int
 lex(lexstr)
-S_CHAR lexstr[];
+char lexstr[];
 {
 
     int tok;
@@ -640,9 +640,9 @@ S_CHAR lexstr[];
  * ngetch - get a (possibly pushed back) character
  *
  */
-S_CHAR
+char
 ngetch(c, fd)
-S_CHAR *c;
+char *c;
 FILE *fd;
 {
 
@@ -651,7 +651,7 @@ FILE *fd;
         bp--;
     }
     else
-        *c = (S_CHAR) getc(fd);
+        *c = (char) getc(fd);
 
 /*
  * check for a continuation '_\n';  also removes UNDERLINES from
@@ -662,7 +662,7 @@ FILE *fd;
             *c = buf[bp];
             bp--;
         } else {
-            *c = (S_CHAR) getc(fd);
+            *c = (char) getc(fd);
         }
 
         if (*c != NEWLINE) {
@@ -675,7 +675,7 @@ FILE *fd;
                     *c = buf[bp];
                     bp--;
                 } else {
-                    *c = (S_CHAR) getc(fd);
+                    *c = (char) getc(fd);
                 }
             }
         }
@@ -688,7 +688,7 @@ FILE *fd;
  *
  */
 pbstr(in)
-S_CHAR in[];
+char in[];
 {
     int i;
 
@@ -701,7 +701,7 @@ S_CHAR in[];
  *
  */
 putbak(c)
-S_CHAR c;
+char c;
 {
     bp++;
     if (bp > BUFSIZE)
@@ -716,7 +716,7 @@ S_CHAR c;
  */
 int
 relate(token, fd)
-S_CHAR token[];
+char token[];
 FILE *fd;
 {
 
@@ -776,7 +776,7 @@ FILE *fd;
 skpblk(fd)
 FILE *fd;
 {
-    S_CHAR c;
+    char c;
 
     for (c = ngetch(&c, fd); c == BLANK || c == TAB; c = ngetch(&c, fd))
         /* empty body */;
@@ -790,7 +790,7 @@ FILE *fd;
  */
 int
 type(c)
-S_CHAR c;
+char c;
 {
     int t;
 
@@ -819,7 +819,7 @@ int labval[];
 int token;
 {
     int i, n;
-    S_CHAR t, ptoken[MAXTOK];
+    char t, ptoken[MAXTOK];
 
     n = 0;
     t = gnbtok(ptoken, MAXTOK);
@@ -905,7 +905,7 @@ int lab;
 forcod(lab)
 int *lab;
 {
-    S_CHAR t, token[MAXTOK];
+    char t, token[MAXTOK];
     int i, j, nlpar,tlab;
 
     tlab = *lab;
@@ -938,7 +938,7 @@ int *lab;
                 nlpar++;
             else if (t == RPAREN)
                 nlpar--;
-            if (t == (S_CHAR)EOF) {
+            if (t == (char)EOF) {
                 pbstr(token);
                 return;
             }
@@ -965,7 +965,7 @@ int *lab;
             nlpar++;
         else if (t == RPAREN)
             nlpar--;
-        if (t == (S_CHAR)EOF) {
+        if (t == (char)EOF) {
             pbstr(token);
             break;
         }
@@ -1070,7 +1070,7 @@ ifthen()
  *
  */
 labelc(lexstr)
-S_CHAR lexstr[];
+char lexstr[];
 {
 
     xfer = NO;   /* can't suppress goto's now */
@@ -1101,7 +1101,7 @@ int n;
  *
  */
 otherc(lexstr)
-S_CHAR lexstr[];
+char lexstr[];
 {
     xfer = NO;
     outtab();
@@ -1115,7 +1115,7 @@ S_CHAR lexstr[];
  *
  */
 outch(c)
-S_CHAR c;
+char c;
 {
     int i;
 
@@ -1167,8 +1167,8 @@ outdon()
 outcmnt(fd)
 FILE * fd;
 {
-    S_CHAR c;
-    S_CHAR comout[81];
+    char c;
+    char comout[81];
     int i, comoutp=0;
 
     comoutp=1;
@@ -1197,7 +1197,7 @@ FILE * fd;
 outasis(fd)
 FILE * fd;
 {
-    S_CHAR c;
+    char c;
     while((c = ngetch(&c, fd)) != NEWLINE)
         outch(c);
     outdon();
@@ -1226,7 +1226,7 @@ outnum(n)
 int n;
 {
 
-    S_CHAR chars[MAXCHARS];
+    char chars[MAXCHARS];
     int i, m;
 
     m = abs(n);
@@ -1250,7 +1250,7 @@ int n;
  *
  */
 outstr(str)
-S_CHAR str[];
+char str[];
 {
     int i;
 
@@ -1292,7 +1292,7 @@ int *lab;
  */
 retcod()
 {
-    S_CHAR token[MAXTOK], t;
+    char token[MAXTOK], t;
 
     t = gnbtok(token, MAXTOK);
     if (t != NEWLINE && t != SEMICOL && t != RBRACE) {
@@ -1315,7 +1315,7 @@ retcod()
 /* strdcl - generate code for string declaration */
 strdcl()
 {
-    S_CHAR t, name[MAXNAME], init[MAXTOK];
+    char t, name[MAXNAME], init[MAXTOK];
     int i, len;
 
     t = gnbtok(name, MAXNAME);
@@ -1384,7 +1384,7 @@ unstak(sp, lextyp, labval, token)
 int *sp;
 int lextyp[];
 int labval[];
-S_CHAR token;
+char token;
 {
     int tp;
 
@@ -1431,7 +1431,7 @@ untils(lab, token)
 int lab;
 int token;
 {
-    S_CHAR ptoken[MAXTOK];
+    char ptoken[MAXTOK];
 
     xfer = NO;
     outnum(lab);
@@ -1489,7 +1489,7 @@ int lab;
 int token;
 {
     int t, l, lb, ub, i, j, junk;
-    S_CHAR scrtok[MAXTOK];
+    char scrtok[MAXTOK];
 
     if (swtop <= 0) {
         synerr ("illegal case or default.");
@@ -1555,7 +1555,7 @@ caslab (n, t)
 int *n;
 int *t;
 {
-    S_CHAR tok[MAXTOK];
+    char tok[MAXTOK];
     int i, s;
 
     *t = gnbtok (tok, MAXTOK);
@@ -1589,7 +1589,7 @@ int *t;
 swcode (lab)
 int *lab;
 {
-    S_CHAR scrtok[MAXTOK];
+    char scrtok[MAXTOK];
 
     *lab = labgen (2);
     if (swlast + 3 > MAXSWITCH)

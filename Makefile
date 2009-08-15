@@ -3,13 +3,6 @@
 #
 # if F77 is defined, the output
 # of ratfor is Fortran 77.
-#
-#   On sun4,            use S_CHAR="char"
-#   On RS6000,          use S_CHAR="signed char"
-#   On DEC3100, maybe   use S_CHAR="signed char"
-#   On CRAY,            use S_CHAR="char"
-#   On GNU,             use S_CHAR="char"
-#
 
 # TODO: targets dist, distcheck
 
@@ -39,7 +32,7 @@ mandir = $(prefix)/$(MANDIR)
 signed_char = char
 gnuflag = -DGNU
 warnflags = -Wall -Werror -ansi
-ocdefines := -c -DF77 -DS_CHAR="$(signed_char)" $(gnuflag)
+ocdefines := -c -DF77 $(gnuflag)
 
 allobjects = rat4.o lookup.o getopt.o error.o utils.o main.o
 
