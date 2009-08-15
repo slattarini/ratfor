@@ -1,16 +1,35 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "lookup.h"
 
-static
-struct	hashlist *hashtab[HASHMAX];
+static struct hashlist *hashtab[HASHMAX];
 
 /*
  * from K&R "The C Programming language"
  * Table lookup routines
+ */
+
+/*
+ * strsave - save string s somewhere
  *
+ */
+static S_CHAR
+*strsave(s)
+S_CHAR *s;
+{
+	S_CHAR *p;
+
+	if ((p = malloc(strlen(s)+1)) != NULL)
+		strcpy(p, s);
+	return(p);
+}
+
+/*
  * hash - for a hash value for string s
  *
  */
+static int
 hash(s)
 S_CHAR *s;
 {
@@ -48,7 +67,6 @@ S_CHAR *def;
 {
 	int hashval;
 	struct hashlist *np, *lookup();
-	S_CHAR *strsave(), *malloc();
 
 	if ((np = lookup(name)) == NULL) {	/* not found.. */
 		np = (struct hashlist *) malloc(sizeof(*np));
@@ -65,20 +83,3 @@ S_CHAR *def;
 		return(NULL);
 	return(np);
 }
-
-/*
- * strsave - save string s somewhere
- *
- */
-S_CHAR
-*strsave(s)
-S_CHAR *s;
-{
-	S_CHAR *p, *malloc();
-
-	if ((p = malloc(strlen(s)+1)) != NULL)
-		strcpy(p, s);
-	return(p);
-}
-
-

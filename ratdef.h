@@ -1,9 +1,9 @@
 #define ACCENT  96
 #define AND     38
-#define APPEND
+#define APPEND  /*empty*/
 #define ATSIGN  64
-#define BACKSLASH       92
-#define BACKSPACE       8
+#define BACKSLASH  92
+#define BACKSPACE  8
 #define BANG    33
 #define BAR     124
 #define BIGA    65
@@ -88,7 +88,7 @@
 #define NEWLINE 10
 #define NO      0
 #define NOT     126
-#define OR      BAR	/* same as | */
+#define OR      BAR /* same as | */
 #define PERCENT 37
 #define PERIOD  46
 #define PLUS    43
@@ -103,7 +103,7 @@
 #define STAR    42
 #define TAB     9
 #define TILDE   126
-#define UNDERLINE       95
+#define UNDERLINE  95
 #define YES     1
 
 #define LIMIT   134217728
@@ -115,44 +115,43 @@
  *
  */
 
-#define LETTER		1
-#define DIGIT   	2
-#define ALPHA   	3
-#define LEXBREAK   	4
-#define LEXDIGITS   	5
-#define LEXDO   	6
-#define LEXELSE   	7
-#define LEXFOR   	8
-#define LEXIF   	9
-#define LEXNEXT   	10
-#define LEXOTHER   	11
-#define LEXREPEAT   	12
-#define LEXUNTIL   	13
-#define LEXWHILE   	14
-#define LEXRETURN   	15
-#define LEXEND   	16
-#define LEXSTOP   	17
-#define LEXSTRING   	18
-#define LEXSWITCH	19
-#define LEXCASE		20
-#define LEXDEFAULT	21
-#define DEFTYPE   	22
+#define LETTER          1
+#define DIGIT           2
+#define ALPHA           3
+#define LEXBREAK        4
+#define LEXDIGITS       5
+#define LEXDO           6
+#define LEXELSE         7
+#define LEXFOR          8
+#define LEXIF           9
+#define LEXNEXT         10
+#define LEXOTHER        11
+#define LEXREPEAT       12
+#define LEXUNTIL        13
+#define LEXWHILE        14
+#define LEXRETURN       15
+#define LEXEND          16
+#define LEXSTOP         17
+#define LEXSTRING       18
+#define LEXSWITCH       19
+#define LEXCASE         20
+#define LEXDEFAULT      21
+#define DEFTYPE         22
 
-#define MAXCHARS   	10   	/* characters for outnum */
-#define MAXDEF   	200   	/* max chars in a defn */
+#define MAXCHARS        10      /* characters for outnum */
+#define MAXDEF          200     /* max chars in a defn */
 #define MAXSWITCH       300     /* max stack for switch statement */
 #define CUTOFF          3       /* min number of cases necessary to generate
-*/
-                                /* a dispatch table */
+                                 * a dispatch table */
 #define DENSITY         2
-#define MAXFORSTK   	200   	/* max space for for reinit clauses */
-#define MAXFNAMES   	350  	/* max chars in filename stack NFILES*MAXNAME */
-#define MAXNAME   	64   	/* file name size in gettok */
-#define MAXSTACK   	100   	/* max stack depth for parser */
-#define MAXTBL   	15000   /* max chars in all definitions */
-#define MAXTOK   	132   	/* max chars in a token */
-#define NFILES   	7   	/* max depth of file inclusion */
+#define MAXFORSTK       200     /* max space for for reinit clauses */
+#define MAXFNAMES       350     /* max chars in filename stack NFILES*MAXNAME */
+#define MAXNAME         64      /* file name size in gettok */
+#define MAXSTACK        100     /* max stack depth for parser */
+#define MAXTBL          15000   /* max chars in all definitions */
+#define MAXTOK          132     /* max chars in a token */
+#define NFILES          7       /* max depth of file inclusion */
 
-#define RADIX   	PERCENT /* % indicates alternate radix */
-#define BUFSIZE   	300   	/* pushback buffer for ngetch and putbak */
+#define RADIX           PERCENT /* % indicates alternate radix */
+#define BUFSIZE         300     /* pushback buffer for ngetch and putbak */
 

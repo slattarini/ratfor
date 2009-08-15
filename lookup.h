@@ -6,13 +6,14 @@
  *
  */
 
-					/* basic table entry */
+/* basic table entry */
 struct hashlist {
 	S_CHAR	*name;
 	S_CHAR	*def;
-	struct	hashlist *next;		/* next in chain     */
+	struct	hashlist *next; /* next in chain */
 };
 
-#define HASHMAX	100			/* size of hashtable */
+#define HASHMAX	100	/* size of hashtable */
 
-					/* hash table itself */
+struct hashlist *install(S_CHAR *name, S_CHAR *def);
+struct hashlist *lookup(S_CHAR *s);
