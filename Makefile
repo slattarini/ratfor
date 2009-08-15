@@ -38,6 +38,7 @@ mandir = $(prefix)/$(MANDIR)
 
 signed_char = char
 gnuflag = -DGNU
+warnflags = -Wall -Werror -ansi
 ocdefines := -c -DF77 -DS_CHAR="$(signed_char)" $(gnuflag)
 
 allobjects = rat4.o lookup.o getopt.o error.o utils.o bulk.o
@@ -48,15 +49,19 @@ all: ratfor77
 .PHONY: all
 
 ratfor77: $(allobjects) Makefile
-	$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $(allobjects)
+	$(CC) $(warnflags) $(CFLAGS) $(LDFLAGS) -o $@ $(allobjects)
 
 %.o: %.c %.h ratdef.h Makefile
-	$(CC) $(ocdefines) $(CFLAGS) $(CCFLSGS) -o $*.o $*.c 
+	$(CC) $(ocdefines) $(warnflags) $(CFLAGS) $(CCFLSGS) -o $*.o $*.c 
+
+#XXX: temporary
+bulk.o: bulk.c bulk.h ratdef.h Makefile
+	$(CC) $(ocdefines) $(CFLAGS) $(CCFLSGS) -o bulk.o bulk.c 
 
 utils.o: lookup.h
 error.o: utils.h ratcom.h
-rat4.o: getopt.h ratcom.h
-bulk.o: utils.h error.h getopt.h ratcom.h keywords.h
+rat4.o: getopt.h error.h
+bulk.o: utils.h error.h getopt.h ratcom.h lookup.h keywords.h
 
 #--------------------------------------------------------------------------
 
