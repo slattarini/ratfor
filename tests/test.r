@@ -1,5 +1,6 @@
+define ONE 1
 integer x,y
-x=1; y=2
+x=ONE; y=2
 if(x == y)
 	write(6,600)
 else if(x > y)
@@ -16,7 +17,8 @@ while(x < 10){
 repeat
 	x=x-1
 until(x == 0)
-for(x=0; x < 10; x=x+1)
+# 8%12 is "octal 12" a.k.a. 10
+for(x=0; x < 8%12; x=x+1)
 	write(6,604)x
 600 format('Wrong, x != y')
 601 format('Also wrong, x < y')
