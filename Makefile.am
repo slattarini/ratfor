@@ -8,4 +8,3 @@ dist_doc_DATA = README
 MAINTAINERCLEANFILES = INSTALL
 
 ## vim: ft=automake noet sw=4 ts=4
-

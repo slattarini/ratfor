@@ -85,7 +85,7 @@ fi])
 if test x"$rat4_cv_sh_errexit_works" = x"no"; then
   AC_MSG_WARN([`${MAKE-make} check' will leave leftover directories tests/*.dir])
   AC_MSG_WARN([you can clean them up manually using `${MAKE-make} clean' or])
-  AC_MSG_WARN([`cd tests && ${MAKE-make} clean-local-check'])
+  AC_MSG_WARN([`cd tests && ${MAKE-make} clean-local-testdirs'])
 fi
 AC_SUBST([sh_errexit_works], [$rat4_cv_sh_errexit_works])
 
