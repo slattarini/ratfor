@@ -6,7 +6,7 @@
 AC_PREREQ([2.64])
 AC_INIT([ratfor], [1.0c], [stefano.lattarini@gmail.com])
 
-AC_CONFIG_SRCDIR([src/rat4.c])
+AC_CONFIG_SRCDIR([src/ratdef.c])
 AC_CONFIG_HEADERS([config.h])
 
 AC_CONFIG_AUX_DIR([build-aux])
@@ -31,6 +31,8 @@ AC_PROG_EGREP
 AC_PROG_FGREP
 AC_PROG_SED
 AC_PROG_LN_S
+
+# TODO: proper check & AC_SUBST for fortran77 compiler
 
 AC_CACHE_CHECK(
     [whether \$SHELL=$SHELL has working 'set -e' with exit trap],
