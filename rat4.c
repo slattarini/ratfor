@@ -1577,7 +1577,7 @@ int *lab;
     outdon();
     outgo(*lab); /* # goto L */
     xfer = YES;
-    while (gnbtok (scrtok, MAXTOK) == NEWLINE)
+    while (gnbtok(scrtok, MAXTOK) == NEWLINE)
         /* empty body */;
     if (scrtok[0] != LBRACE) {
         synerr ("missing left brace in switch statement.");
