@@ -11,7 +11,7 @@ AC_CONFIG_HEADERS([config.h])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.11 color-tests parallel-tests foreign])
+AM_INIT_AUTOMAKE([1.11 -Wall -Werror color-tests parallel-tests foreign])
 AM_SILENT_RULES([yes]) # make --enable-silent-rules the default.
 
 # Check for C support
