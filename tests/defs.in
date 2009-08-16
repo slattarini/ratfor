@@ -1,0 +1,194 @@
+#!/bin/sh
+# Common definitions and environments setting read (with the `source'
+# shell builtin) by all tests of ratfor.
+#
+# This file is heavily based on automake's own `tests/defs.in', so it
+# must be released under the GNU General Public License, version 2 or
+# later. For more info, see  <http://www.gnu.org/licenses/>.
+#
+
+(set -u) >/dev/null 2>&1 && set -u
+set -e
+
+# Shell initialization code, stolen from autoconf
+DUALCASE=1; export DUALCASE # for MKS sh
+if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
+  emulate sh
+  NULLCMD=:
+  # Pre-4.2 versions of Zsh do word splitting on ${1+"$@"}, which
+  # is contrary to our usage.  Disable this feature.
+  alias -g '${1+"$@"}'='"$@"'
+  setopt NO_GLOB_SUBST
+else
+    case `(set -o) 2>/dev/null` in
+        *posix*) set -o posix;;
+              *) ;;
+    esac
+fi
+(unset CDPATH) >/dev/null 2>&1 && unset CDPATH
+
+# Configured data, metadata and testing tools.
+PACKAGE_VERSION='@PACKAGE_VERSION@'
+PACKAGE_NAME='@PACKAGE_NAME@'
+EXEEXT='@EXEEXT@'
+GREP=${TESTING_GREP-'@GREP@'}
+EGREP=${TESTING_EGREP-'@EGREP@'}
+FGREP=${TESTING_FGREP-'@FGREP@'}
+SED=${TESTING_SED-'@SED@'}
+SHELL=${TESTING_SHELL-'@SHELL@'}
+
+# Be sure to run with the best shell found by configure
+if test x"${__RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__-}" = x"yes"; then
+    : # go ahead
+else
+    __RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__=yes
+    export __RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__
+    exec $SHELL "$0" ${1+"$@"}
+    exit 255
+fi
+unset __RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__
+
+# Used as a "fingerprint" to identify this file
+DEFS_ID='$Id$'
+
+# Ensure we are running from the right directory.
+test -f ./defs.sh || {
+   echo "defs.sh: not found in current directory" >&2
+   exit 1
+}
+$FGREP "$DEFS_ID" ./defs.sh >/dev/null || {
+   echo "defs.sh: does not contain expected \$Id\$ string:" >&2
+   echo "         $DEFS_ID" >&2
+   exit 1
+}
+
+test -n "${srcdir-}" || {
+   # compute $srcdir.
+   srcdir=`echo x"$0" | $SED -e 's/^x//' -e 's|/[^/]*$||'`
+   test x"$srcdir" != x"$0" || srcdir=.
+}
+
+# Ensure $srcdir is set correctly.
+test -f "$srcdir/defs.in" || {
+   echo "$srcdir/defs.in: not found." >&2
+   echo "Please check \$srcdir." >&2
+   exit 1
+}
+$FGREP "$DEFS_ID" ./defs.sh >/dev/null || {
+   echo "$srcdir/defs.in: does not contain expected \$Id\$ string:" >&2
+   echo "                 $DEFS_ID" >&2
+   echo "Please check \$srcdir." >&2
+   exit 1
+}
+
+# name of running test
+me=`echo x/"$0" | $SED -e 's|.*/||' -e 's/\.test$//'`
+
+# Always use an absolute srcdir.  Otherwise symlinks made in subdirs
+# of the test dir just won't work.
+case "$srcdir" in
+    /*) ;; # OK
+     *) srcdir=`cd "$srcdir" && pwd`;;
+esac
+
+# Absolute path of the directory where the test is run.
+curdir=`pwd`
+
+# Program to be tested
+RATFOR=${TESTED_RATFOR-"$curdir/ratfor${EXEEXT}"}
+test -f "$RATFOR" || {
+    echo "expected ratfor program to test not found: $RATFOR" >&2
+    exit 1
+}
+test -x "$RATFOR" || {
+    echo "expected ratfor program to test not executable: $RATFOR" >&2
+    exit 1
+}
+
+# We use a trap below for cleanup.  This requires us to go through
+# hoops to get the right exit status transported through the signal.
+# So use `Exit STATUS' instead of `exit STATUS' inside of the tests.
+# Turn off errexit here so that we don't trip the bug with OSF1/Tru64
+# sh inside this function.
+Exit() {
+  set +e
+  (exit $1)
+  exit $1
+}
+
+# "Safer" version of `rm -rf', useful for directories which are either
+# unwritable or have unwritable subdirectories.
+rm_rf() {
+    test $# -gt 0 || return 0  # do nothing if no argument is given
+    # the only interesting exit status is that of rm(1): ignore errors
+    # in find(1)
+    find "$1" -type d '!' -perm -200 -exec chmod u+w {} ";" || :
+    rm -rf "$1"
+}
+
+# run COMMAND [-e STATUS] [ARGUMENTS...]
+# -------------------------------------
+# Run the given COMMAND (can be a shell function or shell builtin) with
+# ARGUMENTS, and fail if it does not exit with STATUS (default: 0).
+# Also, save standard output and standard error from the COMMAND
+# respectively in files `stdout' and `stderr'.
+run() {
+    _run_cmd=$1
+    shift
+    case ${1-} in
+        -e) _run_expected_exitcode=$2; shift 2;;
+         *) _run_expected_exitcode=0;;
+    esac
+    _run_exitcode=0
+    case $* in
+        *x*) _run_reset_x='set -x';;
+          *) _run_reset_x=':';;
+    esac
+    set +x
+    "${_run_cmd}" ${1+"$@"} >stdout 2>stderr || _run_exitcode=$?
+    ${_run_reset_x}
+    cat stderr >&2
+    cat stdout
+    test ${_run_exitcode} = ${_run_expected_exitcode} || Exit 1
+}
+
+# RATFOR_run [-e STATUS] [ARGUMENTS...]
+# ------------------------------------
+# Run ratfor with ARGUMENTS, and fail if it does not exit with STATUS
+# (default: 0). Also, save standard output and standard error from
+# ratfor respectively in files `stdout' and `stderr'.
+RATFOR_run() {
+    run $RATFOR ${1+"$@"}
+}
+
+sh_errexit_works=@sh_errexit_works@
+if test x"$sh_errexit_works" = x"yes"; then
+    trap '
+        exit_status=$?
+        set +e
+        cd "$curdir"
+        case $exit_status,${keep_testdirs-} in
+            0,|0,[Nn][Oo]) rm_rf ${testSubDir-};;
+        esac
+        test "$signal" != 0 &&
+          echo "$as_me: caught signal $signal"
+        echo "$as_me: exit $exit_status"
+        exit $exit_status
+  ' 0
+  for signal in 1 2 13 15; do
+    trap 'signal='$signal'; { Exit 1; }' $signal
+  done
+fi
+signal=0
+
+testSubDir=$me.dir
+rm_rf $testSubDir
+mkdir $testSubDir
+cd ./$testSubDir
+
+echo "=== Running test $0"
+
+# Turn on shell traces.
+set -x
+
+pwd

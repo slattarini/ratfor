@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Check that there are no obvious errors in the testing framework.
+
+. ./defs.sh || exit 1
+
+test_func() {
+    cat <<EOF
+OUT
+EOF
+    echo ERR >&2
+}
+run test_func
+test -f stdout
+test -f stderr
+test x"`cat stdout`" = x"OUT"
+test x"`cat stderr`" = x"ERR"
+
+run eval 'echo OUT_bis && echo ERR_bis >&2 && :'
+test -f stdout
+test -f stderr
+test x"`cat stdout`" = x"OUT_bis"
+test x"`cat stderr`" = x"ERR_bis"
+Exit 0
