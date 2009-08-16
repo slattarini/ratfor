@@ -229,7 +229,7 @@ balpar()
     nlpar = 1;
     do {
         t = gettok(token, MAXTOK);
-        if (t==SEMICOL || t==LBRACE || t==RBRACE || t==EOF) {
+        if (t == SEMICOL || t == LBRACE || t == RBRACE || t == EOF) {
             pbstr(token);
             break;
         }
@@ -346,15 +346,15 @@ FILE *fd;
      *
      */
     if ((t = gtok(ptoken, MAXTOK, fd)) != LPAREN) {;
-        t = BLANK;              /* define name defn */
+        t = BLANK; /* define name defn */
         pbstr(ptoken);
     }
     skpblk(fd);
     if (gtok(token, toksiz, fd) != ALPHA)
         baderr("non-alphanumeric name.");
     skpblk(fd);
-    c = (char) gtok(ptoken, MAXTOK, fd);
-    if (t == BLANK) {         /* define name defn */
+    c = gtok(ptoken, MAXTOK, fd);
+    if (t == BLANK) { /* define name defn */
         pbstr(ptoken);
         i = 0;
         do {
@@ -362,8 +362,7 @@ FILE *fd;
             if (i > defsiz)
                 baderr("definition too long.");
             defn[i++] = c;
-        }
-        while (c != SHARP && c != NEWLINE && c != (char)EOF && c != PERCENT);
+        } while (c != SHARP && c != NEWLINE && c != EOF && c != PERCENT);
         if (c == SHARP || c == PERCENT)
             putbak(c);
     }
@@ -375,7 +374,7 @@ FILE *fd;
         for (i = 0; nlpar >= 0; i++)
             if (i > defsiz)
                 baderr("definition too long.");
-            else if (ngetch(&defn[i], fd) == (char)EOF)
+            else if (ngetch(&defn[i], fd) == EOF)
                 baderr("missing right paren.");
             else if (defn[i] == LPAREN)
                 nlpar++;
@@ -910,7 +909,7 @@ int *lab;
                 nlpar++;
             else if (t == RPAREN)
                 nlpar--;
-            if (t == (char)EOF) {
+            if (t == EOF) {
                 pbstr(token);
                 return;
             }
@@ -937,7 +936,7 @@ int *lab;
             nlpar++;
         else if (t == RPAREN)
             nlpar--;
-        if (t == (char)EOF) {
+        if (t == EOF) {
             pbstr(token);
             break;
         }
