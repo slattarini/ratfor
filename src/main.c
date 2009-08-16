@@ -51,20 +51,21 @@ main(int argc, char *argv[])
     
     int startlab = 23000; /* default start label */
     int leaveC = NO;
-    while ((c = getopt(argc, argv, "Cn:o:")) != EOF)
-    switch (c) {
-        case 'C':
-            leaveC = YES; /* keep comments in src */
-            break;
-        case 'l': /* user sets label */
-            startlab = atoi(optarg);
-            break;
-        case 'o':
-            if ((freopen(optarg, "w", stdout)) == NULL)
-                error("%s: cannot open for writing\n", optarg);
-            break;
-        default:
-            errflg = YES;
+    while ((c = getopt(argc, argv, "Cn:o:")) != EOF) {
+        switch (c) {
+            case 'C':
+                leaveC = YES; /* keep comments in src */
+                break;
+            case 'l': /* user sets label */
+                startlab = atoi(optarg);
+                break;
+            case 'o':
+                if ((freopen(optarg, "w", stdout)) == NULL)
+                    error("%s: cannot open for writing\n", optarg);
+                break;
+            default:
+                errflg = YES;
+        }
     }
 
     if (errflg) {
