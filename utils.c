@@ -1,4 +1,5 @@
 #include <string.h>
+#include <ctype.h>
 #include "utils.h"
 #include "lookup.h"
 #include "ratdef.h"
@@ -40,7 +41,7 @@ itoc(int n, char str[], int size)
         n = -n;
     i = 0;
     do {
-        str[i++] = n % 10 + '0';
+        str[i++] = n % 10 + DIG0;
     }
     while ((n /= 10) > 0 && i < size-2);
     if (sign < 0 && i < size-1)
@@ -49,7 +50,7 @@ itoc(int n, char str[], int size)
     /*
      * reverse the string and plug it back in
      */
-    for (j = 0, k = strlen((char *) (&str[0])) - 1; j < k; j++, k--) {
+    for (j = 0, k = strlen(str) - 1; j < k; j++, k--) {
         c = str[j];
         str[j] = str[k];
         str[k] = c;
@@ -65,12 +66,8 @@ void
 fold(char token[])
 {
     int i;
-    /* WARNING - this routine depends heavily on the fact that letters
-     * have been mapped into internal right-adjusted ascii. God help
-     * you if you have subverted this mechanism. */
     for (i = 0; token[i] != EOS; i++)
-        if (token[i] >= BIGA && token[i] <= BIGZ)
-            token[i] = token[i] - BIGA + LETA;
+            token[i] = tolower(token[i]);
 }
 
 /*
@@ -81,7 +78,6 @@ int
 equal(char str1[], char str2[])
 {
     int i;
-
     for (i = 0; str1[i] == str2[i]; i++)
         if (str1[i] == EOS)
             return(YES);
@@ -115,7 +111,7 @@ look(char name[], char defn[])
     struct hashlist *p;
     if ((p = lookup(name)) == NULL)
         return(NO);
-    (void) strcpy((char *) (&defn[0]),(char *) (&((p->def)[0])));
+    strcpy(defn, p->def);
     return(YES);
 }
 

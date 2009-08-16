@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <ctype.h>
 
 #include "ratdef.h"
 #include "ratcom.h"
@@ -416,7 +417,7 @@ int toksiz;
             else if (equal(token, incl) == NO) {
                 return(tok);
             }
-            for (i = 0 ;; i = strlen((char *) (&name[0]))) {
+            for (i = 0; ; i = strlen(name)) {
                 t = deftok(&name[i], MAXNAME, infile[level]);
                 if (t == NEWLINE || t == SEMICOL) {
                     pbstr(&name[i]);
@@ -439,7 +440,7 @@ int toksiz;
             else {
 /**/
                 name[i-1]=EOS;
-                infile[level+1] = fopen((char*)&name[2], "r");
+                infile[level+1] = fopen(&name[2], "r");
 /*WSB 6-25-91
                 infile[level+1] = fopen(name, "r");
 */
@@ -450,12 +451,12 @@ int toksiz;
                     level++;
                     if (fnamp + i <= MAXFNAMES) {
                         scopy(name, 0, fnames, fnamp);
-                        fnamp = fnamp + i;    /* push file name stack */
+                        fnamp = fnamp + i;  /* push file name stack */
                     }
                 }
             }
         }
-        if (level > 0) {      /* close include and pop file name stack */
+        if (level > 0) {  /* close include and pop file name stack */
             fclose(infile[level]);
             for (fnamp--; fnamp > 0; fnamp--)
                 if (fnames[fnamp-1] == EOS)
@@ -554,14 +555,15 @@ FILE *fd;
         }
         if (lexstr[i+1] == RADIX && b >= 2 && b <= 36) {
             /* n%ddd... */
-            for (n = 0;; n = b*n + c - DIG0) {
+            for (n = 0;; n = b*n + c) {
                 c = ngetch(&lexstr[0], fd);
-                if (c >= LETA && c <= LETZ)
-                    c = c - LETA + DIG9 + 1;
-                else if (c >= BIGA && c <= BIGZ)
-                    c = c - BIGA + DIG9 + 1;
+                if (c >= 'a' && c <= 'z')
+                    c = c - 'a' + DIG9 + 1;
+                else if (c >= 'A' && c <= 'Z')
+                    c = c - 'A' + DIG9 + 1;
                 if (c < DIG0 || c >= DIG0 + b)
                     break;
+                c = c - DIG0;
             }
             putbak(lexstr[0]);
             i = itoc(n, lexstr, toksiz);
@@ -693,51 +695,51 @@ FILE *fd;
 
     if (ngetch(&token[1], fd) != EQUALS) {
         putbak(token[1]);
-        token[2] = LETT;
+        token[2] = 't';
+    } else {
+        token[2] = 'e';
     }
-    else
-        token[2] = LETE;
     token[3] = PERIOD;
     token[4] = EOS;
     token[5] = EOS; /* for .not. and .and. */
     if (token[0] == GREATER)
-        token[1] = LETG;
+        token[1] = 'g';
     else if (token[0] == LESS)
-        token[1] = LETL;
+        token[1] = 'l';
     else if (token[0] == NOT || token[0] == BANG || token[0] == CARET) {
         if (token[1] != EQUALS) {
-            token[2] = LETO;
-            token[3] = LETT;
+            token[2] = 'o';
+            token[3] = 't';
             token[4] = PERIOD;
         }
-        token[1] = LETN;
+        token[1] = 'n';
     }
     else if (token[0] == EQUALS) {
         if (token[1] != EQUALS) {
             token[2] = EOS;
             return(0);
         }
-        token[1] = LETE;
-        token[2] = LETQ;
+        token[1] = 'e';
+        token[2] = 'q';
     }
     else if (token[0] == AND) { /* look for && or & */
-      if (ngetch(&token[1], fd) != AND) 
-                            putbak(token[1]);
-        token[1] = LETA;
-        token[2] = LETN;
-        token[3] = LETD;
+        if (ngetch(&token[1], fd) != AND) 
+            putbak(token[1]);
+        token[1] = 'a';
+        token[2] = 'n';
+        token[3] = 'd';
         token[4] = PERIOD;
     }
     else if (token[0] == OR) {
-      if (ngetch(&token[1], fd) != OR) /* look for || or | */ 
-                            putbak(token[1]);
-        token[1] = LETO;
-        token[2] = LETR;
+        if (ngetch(&token[1], fd) != OR) /* look for || or | */ 
+            putbak(token[1]);
+        token[1] = 'o';
+        token[2] = 'r';
     }
     else   /* can't happen */
         token[1] = EOS;
     token[0] = PERIOD;
-    return(strlen((char *) (&token[0]))-1);
+    return(strlen(token)-1);
 }
 
 /*
@@ -767,9 +769,7 @@ char c;
 
     if (c >= DIG0 && c <= DIG9)
         t = DIGIT;
-    else if (c >= LETA && c <= LETZ)
-        t = LETTER;
-    else if (c >= BIGA && c <= BIGZ)
+    else if (isupper(c) || islower(c))
         t = LETTER;
     else
         t = c;
@@ -925,7 +925,7 @@ int *lab;
     fordep++; /* stack reinit clause */
     j = 0;
     for (i = 1; i < fordep; i++)   /* find end *** should i = 1 ??? *** */
-        j = j + strlen((char *) (&forstk[j])) + 1;
+        j = j + strlen(&forstk[j]) + 1;
     forstk[j] = EOS;   /* null, in case no reinit */
     nlpar = 0;
     t = gnbtok(token, MAXTOK);
@@ -941,11 +941,10 @@ int *lab;
             break;
         }
         if (nlpar >= 0 && t != NEWLINE && t != UNDERLINE) {
-            if ((j + ((int) strlen((char *) (&token[0])))) >=
-                ((int) MAXFORSTK))
+            if ((j + strlen(token)) >= MAXFORSTK)
                 baderr("for clause too long.");
             scopy(token, 0, forstk, j);
-            j = j + strlen((char *) (&token[0]));
+            j = j + strlen(token);
         }
     }
     tlab++;   /* label for next's */
@@ -965,8 +964,8 @@ int lab;
     outnum(lab);
     j = 0;
     for (i = 1; i < fordep; i++)
-        j = j + strlen((char *) (&forstk[j])) + 1;
-    if (((int) strlen((char *) (&forstk[j]))) > ((int) 0)) {
+        j = j + strlen(&forstk[j]) + 1;
+    if (strlen(&forstk[j]) > 0) {
         outtab();
         outstr(&forstk[j]);
         outdon();
@@ -1015,10 +1014,10 @@ int lab;
 {
 
     outtab();      /* get to column 7 */
-    outstr(ifnot);      /* " if(.not. " */
+    outstr(ifnot); /* " if(.not. " */
     balpar();      /* collect and output condition */
-    outch(RPAREN);      /* " ) " */
-    outgo(lab);         /* " goto lab " */
+    outch(RPAREN); /* " ) " */
+    outgo(lab);    /* " goto lab " */
 }
 
 #ifdef F77
@@ -1045,8 +1044,8 @@ char lexstr[];
 {
 
     xfer = NO;   /* can't suppress goto's now */
-    if (strlen((char *) (&lexstr[0])) == 5)   /* warn about 23xxx labels */
-        if (atoi((char*)lexstr) >= startlab)
+    if (strlen(lexstr) == 5)   /* warn about 23xxx labels */
+        if (atoi(lexstr) >= startlab)
             synerr("warning: possible label conflict.");
     outstr(lexstr);
     outtab();
@@ -1294,7 +1293,7 @@ strdcl()
         synerr("missing string name.");
     if (gnbtok(init, MAXTOK) != LPAREN) {
         /* make size same as initial value */
-        len = strlen((char *) (&init[0])) + 1;
+        len = strlen(init) + 1;
         if (init[1] == SQUOTE || init[1] == DQUOTE)
             len = len - 2;
     }
@@ -1320,7 +1319,7 @@ strdcl()
     outdon();
     outtab();
     outstr(dat);
-    len = strlen((char *)(&init[0])) + 1;
+    len = strlen(init) + 1;
     if (init[0] == SQUOTE || init[0] == DQUOTE) {
         init[len-1] = EOS;
         scopy(init, 1, init, 0);
