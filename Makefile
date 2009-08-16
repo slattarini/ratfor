@@ -29,7 +29,6 @@ prefix = $(DESTDIR)$(PREFIX)
 bindir = $(prefix)/$(BINDIR)
 mandir = $(prefix)/$(MANDIR)
 
-signed_char = char
 gnuflag = -DGNU
 warnflags = -Wall -Werror -ansi
 ocdefines := -c -DF77 $(gnuflag)
