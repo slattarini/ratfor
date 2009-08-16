@@ -7,6 +7,8 @@ TESTS =	\
 
 EXTRA_DIST = $(TESTS)
 
+TESTS_ENVIRONMENT = srcdir='$(srcdir)'
+
 # Each test case depends on defs.sh and ratfor
 check_SCRIPTS = ratfor defs.sh
 
