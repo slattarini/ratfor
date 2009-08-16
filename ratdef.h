@@ -86,7 +86,6 @@
 #define LPAREN  40
 #define MINUS   45
 #define NEWLINE 10
-#define NO      0
 #define NOT     126
 #define OR      BAR /* same as | */
 #define PERCENT 37
@@ -104,6 +103,9 @@
 #define TAB     9
 #define TILDE   126
 #define UNDERLINE  95
+
+/* simulate booleans */
+#define NO      0
 #define YES     1
 
 #define LIMIT   134217728
@@ -153,5 +155,4 @@
 #define NFILES          7       /* max depth of file inclusion */
 
 #define RADIX           PERCENT /* % indicates alternate radix */
-#define BUFSIZE         300     /* pushback buffer for ngetch and putbak */
 
