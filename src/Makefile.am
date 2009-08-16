@@ -1,0 +1,9 @@
+## -*- Makefile.am -*-
+## Process this file with automake to produce Makefile.in
+## Makefile for the src/ratfor subdirectory.
+
+bin_PROGRAMS = ratfor77
+ratfor77_SOURCES = error.c io.c lookup.c main.c rat4.c utils.c
+
+## vim: ft=automake noet sw=4 ts=4
+

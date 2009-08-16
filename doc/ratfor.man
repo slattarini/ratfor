@@ -2,7 +2,7 @@ NAME
   ratfor77 - ratfor preprocessor for fortran77
 
 SYNOPSIS
- ratfor [-l n] [-C] [-o output] input
+  ratfor [-l START-LABEL] [-C] [-o OUTFILE] [INFILE]
 
 PARAMETERS
  -l n        user sets strating label n

@@ -1,4 +1,3 @@
-
 /*
  * from K&R "The C Programming language"
  * Table lookup routines

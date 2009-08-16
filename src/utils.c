@@ -1,5 +1,8 @@
+#include <config.h>
+
 #include <string.h>
 #include <ctype.h>
+
 #include "utils.h"
 #include "lookup.h"
 #include "ratdef.h"
