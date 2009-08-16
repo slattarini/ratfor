@@ -24,6 +24,20 @@ AM_PROG_CC_C_O
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
+# Check for headers
+
+for header in unistd stdlib string; do
+    AC_CHECK_HEADER(
+        [$header.h],
+        [:],
+        [AC_MSG_ERROR([header `<$header.h>' not found or broken])])
+done
+
+# Check for functions
+
+AC_CHECK_FUNC([getopt], [:],
+              [AC_MSG_ERROR([No proper `getopt' subroutine found])])
+
 # Test for things needed by the test suite.
 
 AC_PROG_GREP
@@ -32,7 +46,33 @@ AC_PROG_FGREP
 AC_PROG_SED
 AC_PROG_LN_S
 
-# TODO: proper check & AC_SUBST for fortran77 compiler
+# Get a list of available fortran compilers, to be used in testing
+dnl ---
+AC_ARG_VAR([RAT4_F77_LIST],
+[List of Fortran 77 compilers to be used in testing (should all be given
+as absolute paths!). If empty, configure will scan the system looking for
+a working Fortran 77 compiler.])
+dnl ---
+AC_MSG_CHECKING([a list of Fortran 77 compilers to be used in testing])
+if test -n "$RAT4_F77_LIST"; then
+    : # do nothing: user choiche override our checks
+    AC_MSG_RESULT([got a user-provided list!])
+else
+    AC_MSG_RESULT([no default list available])
+    AC_MSG_NOTICE([Now will scan the system to find a Fortran 77 compiler])
+    AC_PROG_F77
+    RAT4_F77_LIST=$F77
+fi
+if test -n "$RAT4_F77_LIST"; then
+    AC_MSG_NOTICE(
+        [Fortran 77 compilers to be used in testing: $RAT4_F77_LIST])
+else
+    AC_MSG_WARN([No Fortran 77 compiler found to be used in testing])
+    AC_MSG_WARN([Some parts of the testsuite will be skipped])
+fi
+
+# TODO: check that all compilers in $RAT4_F77_LIST work, remove those who
+#       don't
 
 AC_CACHE_CHECK(
     [whether \$SHELL=$SHELL has working 'set -e' with exit trap],
@@ -49,20 +89,6 @@ if test x"$rat4_cv_sh_errexit_works" = x"no"; then
   AC_MSG_WARN([`cd tests && ${MAKE-make} clean-local-check'])
 fi
 AC_SUBST([sh_errexit_works], [$rat4_cv_sh_errexit_works])
-
-# Check for headers
-
-for header in unistd stdlib string; do
-    AC_CHECK_HEADER(
-        [$header.h],
-        [:],
-        [AC_MSG_ERROR([header `<$header.h>' not found or broken])])
-done
-
-# Check for functions
-
-AC_CHECK_FUNC([getopt], [:],
-              [AC_MSG_ERROR([No proper `getopt' subroutine found])])
 
 # Do output.
 
