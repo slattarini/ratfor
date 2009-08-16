@@ -84,7 +84,8 @@ main(int argc, char *argv[])
         error("%s: cannot open for reading\n", argv[optind]);
 
     init(startlab, leaveC, infile);
-    printf("C Output from Public domain Ratfor, version 1.0\n");
+    printf("C Output from Public Domain Ratfor, version %s\n",
+           PACKAGE_VERSION);
     parse(); /* call parser and do the real work */
 
     exit(0); /* TODO: check stdout for write errors? */
