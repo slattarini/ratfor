@@ -71,8 +71,7 @@ else
     AC_MSG_WARN([Some parts of the testsuite will be skipped])
 fi
 
-# TODO: check that all compilers in $RAT4_F77_LIST work, remove those who
-#       don't
+# TODO: check that all compilers in $RAT4_F77_LIST work, bailout on error
 
 AC_CACHE_CHECK(
     [whether \$SHELL=$SHELL has working 'set -e' with exit trap],
