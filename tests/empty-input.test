@@ -1,0 +1,11 @@
+#!/bin/sh
+
+# Check that ratfor works on empty input
+
+. ./defs.sh || exit 1
+
+: > empty
+run_RATFOR -e 0 empty
+
+: ratfor must produce only comments on empty input
+NOT grep -v '^[Cc]' stdout || Exit 1

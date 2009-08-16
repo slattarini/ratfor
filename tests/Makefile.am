@@ -3,7 +3,9 @@
 ## Makefile for the test/ratfor subdirectory.
 
 TESTS =	\
-000sanity.test 
+000sanity.test \
+devnull-input.test \
+empty-input.test
 
 EXTRA_DIST = $(TESTS)
 
