@@ -1,3 +1,5 @@
+#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -15,8 +17,7 @@ static struct hashlist *hashtab[HASHMAX];
  *
  */
 static char
-*strsave(s)
-char *s;
+*strsave(char *s)
 {
 	char *p;
 
@@ -30,8 +31,7 @@ char *s;
  *
  */
 static int
-hash(s)
-char *s;
+hash(char *s)
 {
 	int	hashval;
 
@@ -45,8 +45,7 @@ char *s;
  *
  */
 struct hashlist
-*lookup(s)
-char *s;
+*lookup(char *s)
 {
 	struct hashlist *np;
 
@@ -61,9 +60,7 @@ char *s;
  *
  */
 struct hashlist
-*install(name,def)
-char *name;
-char *def;
+*install(char *name, char *def)
 {
 	int hashval;
 	struct hashlist *np, *lookup();

@@ -29,29 +29,32 @@ Copyright
 
 >*/
 
+#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 #include "ratdef.h"
 #include "main.h"
 #include "error.h"
-#include "getopt.h"
 
+static char *progname;
 
 /* main subroutine */
 int
 main(int argc, char *argv[])
 {
     int c, errflg = 0;
-    char *progname = argv[0];
     FILE *infile;
     
     extern void init(int, int, FILE *); /* XXX: move out */
     extern void parse(void); /* XXX: move out */
     
+    progname = argv[0];
     int startlab = 23000; /* default start label */
     int leaveC = NO;
-    while ((c = our_getopt(argc, argv, "Chn:o:6:")) != EOF)
+    while ((c = getopt(argc, argv, "Chn:o:6:")) != EOF)
     switch (c) {
         case 'C':
             leaveC = YES; /* keep comments in src */
@@ -75,7 +78,7 @@ main(int argc, char *argv[])
 
     if (errflg) {
         fprintf(stderr,
-                "usage: %s [-C][-hx][-l n][-o file][-6x] [file...]\n",
+                "usage: %s [-C] [-l n][-o file] [file...]\n",
                 progname);
         exit(2);
     }
@@ -83,10 +86,10 @@ main(int argc, char *argv[])
     /*
      * present version can only process one file, sadly.
      */
-    if (optind77 >= argc)
+    if (optind >= argc)
         infile = stdin;
-    else if ((infile = fopen(argv[optind77], "r")) == NULL)
-        error("cannot read %s\n", argv[optind77]);
+    else if ((infile = fopen(argv[optind], "r")) == NULL)
+        error("cannot read %s\n", argv[optind]);
 
     init(startlab, leaveC, infile);
     printf("C Output from Public domain Ratfor, version 1.0\n");

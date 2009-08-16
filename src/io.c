@@ -1,3 +1,5 @@
+#include <config.h>
+
 #include <stdio.h>  /* for getc() */
 #include <string.h> /* for strlen() */
 

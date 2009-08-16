@@ -1,5 +1,7 @@
 /* Big scary code of ratfor preprocessor */
 
+#include <config.h>
+
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -494,7 +496,8 @@ gtok(lexstr, toksiz, fd)
 char lexstr[];
 int toksiz;
 FILE *fd;
-{ int i, b, n, tok;
+{ 
+    int i, b, n, tok;
     char c;
     c = ngetch(&lexstr[0], fd);
     if (c == BLANK || c == TAB) {
@@ -613,8 +616,8 @@ FILE *fd;
           tok = NEWLINE;
     }
     else if (c == GREATER || c == LESS || c == NOT
-         || c == BANG || c == CARET || c == EQUALS
-         || c == AND || c == OR)
+             || c == BANG || c == CARET || c == EQUALS
+             || c == AND || c == OR)
         i = relate(lexstr, fd);
     if (i >= toksiz-1)
         synerr("token too long.");
@@ -622,12 +625,10 @@ FILE *fd;
     if (lexstr[0] == NEWLINE)
         linect[level] = linect[level] + 1;
 
-#if defined(CRAY) || defined(GNU)
     /* cray cannot compare char and ints, since EOF is an int we check
        with feof */
     if (feof(fd))
         tok = EOF;
-#endif
 
     return(tok);
 }
@@ -645,7 +646,7 @@ char lexstr[];
 
     for (tok = gnbtok(lexstr, MAXTOK);
          tok == NEWLINE; tok = gnbtok(lexstr, MAXTOK))
-            ;
+            /* empty body */;
     if (tok == EOF || tok == SEMICOL || tok == LBRACE || tok == RBRACE)
         return(tok);
     if (tok == DIGIT)
@@ -777,7 +778,7 @@ char c;
 }
 
 /*
- * C O D E  G E N E R A T I O N
+ *  C O D E  G E N E R A T I O N
  */
 
 /*
