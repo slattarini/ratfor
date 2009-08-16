@@ -146,42 +146,68 @@ rm_rf() {
     rm -rf "$1"
 }
 
-# run COMMAND [-e STATUS] [ARGUMENTS...]
-# -------------------------------------
+# Invert exit status of the given command
+NOT() {
+    test $# -gt 0 || set ':'
+    if "$@"; then
+        return 1
+    else
+        return 0
+    fi
+}
+
+# run_CMD COMMAND [-e STATUS] [-i FILE] [ARGUMENTS..]
+# ---------------------------------------------------
 # Run the given COMMAND (can be a shell function or shell builtin) with
-# ARGUMENTS, and fail if it does not exit with STATUS (default: 0).
+# ARGUMENTS (and with standard input taken from FILE, if option `-i' is
+# given), and fail if it does not exit with STATUS (default: 0).
 # Also, save standard output and standard error from the COMMAND
 # respectively in files `stdout' and `stderr'.
-run() {
+run_CMD() {
+    _run_stdin=-
+    _run_expected_exitcode=0
     _run_cmd=$1
     shift
-    case ${1-} in
-        -e) _run_expected_exitcode=$2; shift 2;;
-         *) _run_expected_exitcode=0;;
-    esac
+    while test $# -gt 0; do
+        case "$1" in
+            -e) _run_expected_exitcode=$2; shift;;
+            -i) _run_stdin=$2; shift;;
+            --) shift; break;;
+             *) break;;
+        esac
+        shift
+    done
     _run_exitcode=0
     case $- in
         *x*) _run_reset_x='set -x';;
           *) _run_reset_x=':';;
     esac
     set +x
-    "${_run_cmd}" ${1+"$@"} >stdout 2>stderr || _run_exitcode=$?
+    case "${_run_stdin}" in
+      -)
+        "${_run_cmd}" ${1+"$@"} >stdout 2>stderr || \
+            _run_exitcode=$?;;
+      *)
+        "${_run_cmd}" ${1+"$@"} <"${_run_stdin}" >stdout 2>stderr || \
+            _run_exitcode=$?;;
+    esac
     ${_run_reset_x}
     cat stderr >&2
     cat stdout
     test ${_run_exitcode} = ${_run_expected_exitcode} || Exit 1
 }
 
-# RATFOR_run [-e STATUS] [ARGUMENTS...]
-# ------------------------------------
-# Run ratfor with ARGUMENTS, and fail if it does not exit with STATUS
+# run_RATFOR [-e STATUS] [-i INFILE] [ARGUMENTS..]
+# ------------------------------------------------
+# Run ratfor with ARGUMENTS (and with standard input taken from FILE,
+# if option `-i' is given),, and fail if it does not exit with STATUS
 # (default: 0). Also, save standard output and standard error from
 # ratfor respectively in files `stdout' and `stderr'.
-RATFOR_run() {
-    run $RATFOR ${1+"$@"}
+run_RATFOR() {
+    run_CMD $RATFOR ${1+"$@"}
 }
 
-sh_errexit_works=@sh_errexit_works@
+sh_errexit_works='@sh_errexit_works@'
 if test x"$sh_errexit_works" = x"yes"; then
     trap '
         exit_status=$?
