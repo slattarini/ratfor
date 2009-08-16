@@ -9,6 +9,7 @@
 #include "utils.h"
 #include "lookup.h"
 #include "error.h"
+#include "io.h"
 #include "rat4.h"
 
 /* keywords: */
@@ -70,8 +71,6 @@ char *rgoto  = "goto ";
 char *dat    = "data ";
 char *eoss   = "EOS/";
 
-extern char ngetch();
-
 /*
  * initialisation
  */
@@ -89,7 +88,6 @@ init(int u_startlab, int u_leaveC, FILE *u_infile)
     linect[0] = 1;  /* line count of first file */
     fnamp = 0;
     fnames[0] = EOS;
-    bp = -1;        /* pushback buffer pointer */
     fordep = 0;     /* for stack */
     swtop = 0;      /* switch stack index */
     swlast = 1;     /* switch stack index */
@@ -683,80 +681,6 @@ char lexstr[];
         tok = LEXOTHER;
     return(tok);
 }
-
-/*
- * ngetch - get a (possibly pushed back) character
- *
- */
-char
-ngetch(c, fd)
-char *c;
-FILE *fd;
-{
-
-    if (bp >= 0) {
-        *c = buf[bp];
-        bp--;
-    }
-    else
-        *c = (char) getc(fd);
-
-/*
- * check for a continuation '_\n';  also removes UNDERLINES from
- * variable names
- */
-    while ( *c == UNDERLINE) {
-        if (bp >= 0) {
-            *c = buf[bp];
-            bp--;
-        } else {
-            *c = (char) getc(fd);
-        }
-
-        if (*c != NEWLINE) {
-            putbak(*c);
-            *c = UNDERLINE;
-            break;
-        } else {
-            while(*c == NEWLINE) {
-                if (bp >= 0) {
-                    *c = buf[bp];
-                    bp--;
-                } else {
-                    *c = (char) getc(fd);
-                }
-            }
-        }
-    }
-
-    return(*c);
-}
-/*
- * pbstr - push string back onto input
- *
- */
-pbstr(in)
-char in[];
-{
-    int i;
-
-    for (i = strlen((char *) (&in[0])) - 1; i >= 0; i--)
-        putbak(in[i]);
-}
-
-/*
- * putbak - push char back onto input
- *
- */
-putbak(c)
-char c;
-{
-    bp++;
-    if (bp > BUFSIZE)
-        baderr("too many characters pushed back.");
-    buf[bp] = c;
-}
-
 
 /*
  * relate - convert relational shorthands into long form

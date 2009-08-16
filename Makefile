@@ -28,7 +28,7 @@ gnuflag = -DGNU
 warnflags = -Wall -Werror -ansi
 ocdefines := -c -DF77 $(gnuflag)
 
-allobjects = rat4.o lookup.o getopt.o error.o utils.o main.o
+allobjects = rat4.o lookup.o getopt.o error.o utils.o io.o main.o
 
 #--------------------------------------------------------------------------
 
@@ -45,10 +45,11 @@ ratfor77: $(allobjects) Makefile
 rat4.o: rat4.c rat4.h ratdef.h Makefile
 	$(CC) $(ocdefines) $(CFLAGS) $(CCFLSGS) -o rat4.o rat4.c 
 
+io.o: 
 utils.o: lookup.h
 error.o: utils.h ratcom.h
 main.o: getopt.h error.h
-rat4.o: utils.h error.h getopt.h ratcom.h lookup.h
+rat4.o: utils.h error.h getopt.h ratcom.h lookup.h io.h
 
 #--------------------------------------------------------------------------
 
