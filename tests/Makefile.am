@@ -4,8 +4,8 @@
 
 TESTS =	\
 000sanity.test \
-empty-input.test \
-devnull-input.test
+devnull-input.test \
+empty-input.test
 
 EXTRA_DIST = $(TESTS)
 
@@ -31,29 +31,32 @@ TESTS_ENVIRONMENT += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
 # Check that the list of tests as given by $(TEST) is equal to the
 # list of all *.test scripts
 tmk = tests-in-makefile-list.tmp
-tfs = tests-in-makefile-list.tmp
+tfs = tests-on-filesystem-list.tmp
 tdiffs = diff-in-tests-lists.tmp 
 check-list-of-tests:
-	@echo "****--------------------------------------------"
-	@echo "** Checking consistency of list of tests..."
-	@for t in $(TESTS); do \
+	@set -e; \
+	 export LC_ALL=C; \
+	 echo "****--------------------------------------------"; \
+	 echo "** Checking consistency of list of tests..."; \
+	 for t in $(TESTS); do \
 	    echo "$$t"; \
-	 done > $(tmk)
-	@(cd $(srcdir) && for t in *.tests; do \
+	 done > $(tmk); \
+	 (cd $(srcdir) && for t in *.test; do \
 	    echo "$$t"; \
-	 done) > $(tfs)
-	@if $(DIFF_U) $(tmk) $(tfs) > $(tdiffs); then \
-	    : OK, no diffs; \
+	 done) > $(tfs); \
+	 if $(DIFF_U) $(tmk) $(tfs) > $(tdiffs); then \
+		echo "** OK"; : No diffs; \
+		e=0; \
 	 else \
 	    echo "*** ERROR ***" >&2; \
 	    echo " List of tests in Makefile an on filesystem differ" >&2; \
 	    echo " + $(DIFF_U) in-makefile on-filesystem" >&2; \
 	    cat $(tdiffs) >&2; \
-		echo "****--------------------------------------------"; \
-	    exit 1; \
-	 fi;
-	@echo "** OK"
-	@echo "****--------------------------------------------"
+	    e=1; \
+	 fi; \
+	 echo "****--------------------------------------------"; \
+	 rm -f $(tmk) $(tfs) $(tdiffs); \
+	 exit $$e;
 MOSTLYCLEANFILES += $(tmk) $(tfs) $(tdiffs)
 .PHONY: check-list-of-tests
 
