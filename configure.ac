@@ -74,10 +74,10 @@ fi
 # TODO: check that all compilers in $RAT4_F77_LIST work, bailout on error
 
 # Look for a diff command that can produce better human-readable output
+dnl# IMPORTANT NOTE: the cache variable *must* have the format
+dnl# `ac_cv_*' to work; using e.g. `rat4_cv_path_UDIFF' seems
+dnl# tempting, but does not work.
 AC_CACHE_CHECK(
-    dnl# IMPORTANT NOTE: the cache variable *must* have the format
-    dnl# `ac_cv_*' to work; using e.g. `rat4_cv_path_UDIFF' seems
-    dnl# tempting, but does not work.
     [for a diff command producing human-readable output],
     [ac_cv_path_UDIFF],
     [AC_PATH_PROGS_FEATURE_CHECK(
