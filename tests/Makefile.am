@@ -4,6 +4,7 @@
 
 TESTS =	\
 000sanity.test \
+empty-input.test \
 devnull-input.test
 
 EXTRA_DIST = $(TESTS)
