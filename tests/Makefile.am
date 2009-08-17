@@ -7,7 +7,8 @@
 TESTS = \
 000sanity.test \
 devnull-input.test \
-empty-input.test
+empty-input.test \
+integers-many-bases.test
 
 EXTRA_DIST = $(TESTS)
 

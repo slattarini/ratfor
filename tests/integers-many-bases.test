@@ -1,0 +1,108 @@
+#!/bin/sh
+# $Id$
+
+# Check the ratfor support for integers in bases != 10 (format: b%ddd...)
+
+. ./defs.sh || exit 1
+
+cat >testdata <<\EOF
+    ## format of lines:  INPUT  EXPECTED-OUTPUT
+
+    # just a decimal number
+    123     123
+    
+    # just a decimal number (ratfor should not recognize a leading
+    # `0' as an indicator of an octal number)
+    0123    0123
+    
+    # just a 0 followed by a string (ratfor should not recognize a
+    # leading `0x' as an indicator of an haxadecimal number)
+    0x1a5b  0x1a5b
+    
+    # octal numbers
+    8%10    8
+    8%123   83
+    # ratfor stops covering as it encounters a non-digit
+    8%10s2  8s2
+    # an octal number, stops at '9', which is not an octal digit
+    8%109   89
+    
+    # numbers in various bases
+    3%121   16
+    7%12    9
+    11%A0   110
+    11%a4   114
+    
+    # binary numbers
+    2%110100            52
+    2%100100110111      2359
+    2%0000100100110111  2359
+    
+    # hex numbers
+    16%2ff      767
+    16%a1       161
+    16%A1       161
+    16%dead     57005
+    16%beef     48879
+    
+    # this is too large and does not work presently, so must be disabled.
+    #16%deadbeef     37359285571
+EOF
+
+i=0
+# since a redirected while loop might take place in a subshell in some
+# shells, we need thew following hack
+exec 5<&1
+exec <./testdata
+status=0
+set +x
+while read LINE; do
+    case "$LINE" in
+        \#*|"") continue;;
+        *) set X $LINE && shift; in=$1 out=$2; set X && shift;;
+    esac
+    i=`expr $i + 1`
+    case $i in
+        ?) j=00$i;;
+       ??) j=0$i;;
+        *) j=$i;;
+    esac
+    echo "$out" >exp$j
+    # some contortions necessary to make t$j.r a valid ratfor input
+    (echo "begin program" && echo "x = $in" && echo "end program") >t$j.r
+    : > msg$j
+    echo "+ run_RATFOR -e 0 t$j.r"
+    run_RATFOR -e 0 t$j.r || echo "ratfor failed on input: $in" >>msg$j
+    if test -s stderr; then
+        echo "ratfor has no empty stderr on input: $in" >>msg$j
+    fi
+    if test -s msg$j; then
+      {
+        echo "=== begin stderr"
+        cat stderr
+        echo "=== end stderr"
+      } >>msg$j
+    fi
+    $SED \
+        -e '/^[cC]/d' \
+        -e 's/^ *//' \
+        -e '/^begin program$/d' \
+        -e '/^end program$/d' \
+        -e 's/^.*= *//' \
+        -e 's/ *$//' \
+    <stdout >got$j
+    echo "+ cmp got$j exp$j"
+    cmp got$j exp$j >/dev/null 2>&1 || {
+      echo "ratfor has unexpected output on input: $in" >msg$j
+        echo "=== EXPECTED"
+        cat exp$j
+        echo "=== GOT"
+        cat got$j
+        echo "==="
+    } >>msg$j
+    test ! -s msg$j || { cat msg$j; status=1; }
+done
+
+Exit $status
+
+# vim: ft=sh ts=4 sw=4 et
