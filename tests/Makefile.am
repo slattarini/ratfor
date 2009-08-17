@@ -11,7 +11,7 @@ EXTRA_DIST = $(TESTS)
 
 TESTS_ENVIRONMENT = srcdir='$(srcdir)'
 
-# might be updated later
+# might be updated later (esp. in included files)
 MOSTLYCLEANFILES = 
 
 # Each test case depends on defs.sh and ratfor
@@ -31,39 +31,11 @@ $(top_ratfor):
 # in our testsuite we merryli change the curent directory a lot.
 TESTS_ENVIRONMENT += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
 
-# Check that the list of tests as given by $(TESTS) is equal to the
-# list of all *.test scripts
-tmk = tests-in-makefile-list.tmp
-tfs = tests-on-filesystem-list.tmp
-tdiffs = diff-in-tests-lists.tmp 
-check-list-of-tests:
-	@set -e; \
-	 export LC_ALL=C; \
-	 echo "****--------------------------------------------"; \
-	 echo "** Checking consistency of list of tests..."; \
-	 for t in $(TESTS); do \
-	    echo "$$t"; \
-	 done > $(tmk); \
-	 (cd $(srcdir) && for t in *.test; do \
-	    echo "$$t"; \
-	 done) > $(tfs); \
-	 if $(DIFF_U) $(tmk) $(tfs) > $(tdiffs); then \
-		echo "** OK"; : No diffs; \
-		e=0; \
-	 else \
-	    echo "*** ERROR ***" >&2; \
-	    echo " List of tests in Makefile an on filesystem differ" >&2; \
-	    echo " + $(DIFF_U) in-makefile on-filesystem" >&2; \
-	    cat $(tdiffs) >&2; \
-	    e=1; \
-	 fi; \
-	 echo "****--------------------------------------------"; \
-	 rm -f $(tmk) $(tfs) $(tdiffs); \
-	 exit $$e;
-MOSTLYCLEANFILES += $(tmk) $(tfs) $(tdiffs)
-.PHONY: check-list-of-tests
-
-check-local: check-list-of-tests
+# Remove the ratfor binary used in testing
+clean-local-ratfor:
+	rm -f ratfor$(EXEEXT)
+.PHONY: clean-local-ratfor
+clean-local: local-ratfor
 
 # Remove any directory left behind the the test scripts (this is needed
 # especially if the shell used in test des not properly support the `-e'
@@ -76,10 +48,7 @@ clean-local-testdirs:
 .PHONY: clean-local-testdirs
 clean-local: clean-local-testdirs
 
-# Remove the ratfor binary used in testing
-clean-local-ratfor:
-	rm -f ratfor$(EXEEXT)
-.PHONY: clean-local-ratfor
-clean-local: clean-local-ratfor
+# Consistency checks on the list of tests.
+include CheckTestsList.am
 
 ## vim: ft=automake noet sw=4 ts=4
