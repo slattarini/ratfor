@@ -1,5 +1,5 @@
 .\" $Id$
-.TH RATFOR 1 "$Date$" "Public Domain Ratfor" ""
+.TH RATFOR 1 "Unknown Date" "Public Domain Ratfor" ""
 .\"
 .SH NAME
 .B ratfor
