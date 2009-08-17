@@ -3,7 +3,7 @@
 # $Id$
 
 m4_pattern_forbid([^_?RAT4_])
-m4_define([__vim_modeline__], [@%:@ vim: ft=sh ts=8 sw=8 noet])
+m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 
 #
 # Autoconf's and Automake's initializations
@@ -63,6 +63,7 @@ AC_PROG_GREP
 AC_PROG_EGREP
 AC_PROG_FGREP
 AC_PROG_SED
+AC_PROG_AWK
 AC_PROG_LN_S
 
 # Get a list of available fortran compilers, to be used in testing.

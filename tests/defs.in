@@ -8,8 +8,6 @@
 # later. For more info, see  <http://www.gnu.org/licenses/>.
 #
 
-(set -u) >/dev/null 2>&1 && set -u
-
 # Shell initialization code, stolen from autoconf
 DUALCASE=1; export DUALCASE # for MKS sh
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
@@ -26,6 +24,7 @@ else
     esac
 fi
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
+(set -u) >/dev/null 2>&1 && set -u
 
 # Configured data, metadata and testing tools.
 PACKAGE_VERSION='@PACKAGE_VERSION@'
@@ -35,7 +34,9 @@ GREP=${RAT4_TESTING_GREP-'@GREP@'}
 EGREP=${RAT4_TESTING_EGREP-'@EGREP@'}
 FGREP=${RAT4_TESTING_FGREP-'@FGREP@'}
 SED=${RAT4_TESTING_SED-'@SED@'}
+AWK=${RAT4_TESTING_AWK-'@AWK@'}
 SHELL=${RAT4_TESTING_SHELL-'@SHELL@'}
+DIFF_U=${RAT4_TESTING_DIFF_U-'@DIFF_U@'}
 
 case "${RAT4_TESTSUITE_FORCE_BIN_SH-}" in
     y|Y|yes|Yes|YES|1)
@@ -126,6 +127,19 @@ if do_sanity_checks; then
     }
 fi
 
+# Symbolic names for whitespace characters
+SPACE=' '
+TAB='	'
+NEWLINE='
+'
+# Some shorthands for common sed regexps and commands.
+ws="[${SPACE}${TAB}]"
+ws0p="${ws}*"
+ws1p="${ws}${ws0p}"
+ws_strip() {
+    $SED -e "s/^$ws0p//" -e "s/$ws0p$//"
+}
+
 # We use a trap below for cleanup.  This requires us to go through
 # hoops to get the right exit status transported through the signal.
 # So use `Exit STATUS' instead of `exit STATUS' inside of the tests.
@@ -161,7 +175,9 @@ NOT() {
 # ---------------------------------------------------
 # Run the given COMMAND (can be a shell function or shell builtin) with
 # ARGUMENTS (and with standard input taken from FILE, if option `-i' is
-# given), and fail if it does not exit with STATUS (default: 0).
+# given), and fail if it does not exit with STATUS (default: 0). Note
+# that if status is VOID or IGNORE, any exit value of the command will
+# be acceptable.
 # Also, save standard output and standard error from the COMMAND
 # respectively in files `stdout' and `stderr'.
 run_CMD() {
@@ -195,19 +211,20 @@ run_CMD() {
     ${_run_reset_x}
     cat stderr >&2
     cat stdout
-    test ${_run_exitcode} = ${_run_expected_exitcode} || Exit 1
+    case ${_run_expected_exitcode} in
+        VOID|void|IGNORE|ignore) return 0;;
+        "${_run_exitcode}") return 0;;
+        *) return 1;;
+    esac
 }
 
-# run_RATFOR [-e STATUS] [-i INFILE] [ARGUMENTS..]
-# ------------------------------------------------
-# Run ratfor with ARGUMENTS (and with standard input taken from FILE,
-# if option `-i' is given),, and fail if it does not exit with STATUS
-# (default: 0). Also, save standard output and standard error from
-# ratfor respectively in files `stdout' and `stderr'.
+# Usage: run_RATFOR [-e STATUS] [-i INFILE] [ARGUMENTS..]
+# See documentation of `run_CMD()' for more info.
 run_RATFOR() {
     run_CMD $RATFOR ${1+"$@"}
 }
 
+# Setup cleanup trap
 sh_errexit_works='@SH_ERREXIT_WORKS@'
 if test x"$sh_errexit_works" = x"yes"; then
     trap '
