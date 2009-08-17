@@ -207,7 +207,7 @@ run_RATFOR() {
     run_CMD $RATFOR ${1+"$@"}
 }
 
-sh_errexit_works='@sh_errexit_works@'
+sh_errexit_works='@SH_ERREXIT_WORKS@'
 if test x"$sh_errexit_works" = x"yes"; then
     trap '
         exit_status=$?
