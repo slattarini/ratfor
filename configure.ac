@@ -1,7 +1,9 @@
 # configure.ac file for Public Domain Ratfor
 # Process this file with autoconf to produce a configure script.
+# $Id$
 
 m4_pattern_forbid([^_?RAT4_])
+m4_define([__vim_modeline__], [@%:@ vim: ft=sh ts=8 sw=8 noet])
 
 #
 # Autoconf's and Automake's initializations
@@ -90,3 +92,13 @@ AC_CONFIG_FILES([
     tests/defs.sh:tests/defs.in
 ])
 AC_OUTPUT
+
+#
+# Done.
+#
+
+AS_EXIT(0)
+
+__vim_modeline__
+dnl*
+dnl* vim: ft=config ts=4 sw=4 et

@@ -1,12 +1,15 @@
-	This is a C version of ratfor, derived from a UofA ratfor
-	in ratfor. It was originally released to the net sometime
-	ago, and It is re-released for the benefit of those sites
-	who only get mod->comp.sources.
+README file for Public Domain Raftor.
+$Id$
 
-	It now includes minor changes to produce F77 code as well.
+    This is a C version of ratfor, derived from a UofA ratfor
+    in ratfor. It was originally released to the net sometime
+    ago, and it is re-released for the benefit of those sites
+    who only get mod->comp.sources.
 
-	This code *is* released in the public domain PD. See the file
+    It now includes minor changes to produce F77 code as well.
+
+    This code *is* released in the public domain PD. See the file
     COPYING for more information.
 
-	I would, as usual, appreciate hearing about bug fixes and
-	improvements.
+    I would, as usual, appreciate hearing about bug fixes and
+    improvements.

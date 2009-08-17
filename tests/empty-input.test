@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id$
 
 # Check that ratfor works on empty input
 
@@ -9,3 +10,5 @@ run_RATFOR -e 0 empty
 
 : ratfor must produce only comments on empty input
 NOT grep -v '^[Cc]' stdout || Exit 1
+
+# vim: ft=sh ts=4 sw=4 et

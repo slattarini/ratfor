@@ -1,5 +1,8 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
+##
+# $Id$
+#
 # ratfor: public domain ratfor preprocessor, written in C.
 # Makefile for the top-level directory of ratfor.
 

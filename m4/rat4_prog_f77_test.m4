@@ -1,4 +1,5 @@
 # ratfor_prog_f77_testing.m4 serial 1
+# $Id$
 
 # Get a list of available fortran compilers, to be used in testing.
 # First look for a user-provided list, else search the system for a
@@ -36,3 +37,5 @@ AC_DEFUN([RAT4_PROG_F77_TEST],
     # TODO: check that all compilers in $RAT4_F77_TEST_LIST work, bailout
     #       on error
 ])
+
+# vim: ft=m4 ts=4 sw=4 et
