@@ -1,3 +1,6 @@
+/* $Id$ */
+#ifndef RAT4_RATCOM_H
+#  define RAT4_RATCOM_H 1
 int startlab;                   /*  start label (configurable with `-l' switch)  */
 char fcname[MAXNAME];           /*  text of current function name                */
 int fordep;                     /*  current depth of for statements              */
@@ -19,3 +22,5 @@ int outp;                       /*  last position filled in outbuf; init = 0    
 int nfiles;                     /*  number of files                              */
 char outbuf[82];                /*  output lines collected here                  */
 char fname[MAXNAME][NFILES];    /*  file names                                   */
+#endif
+/* vim: set ft=c ts=4 sw=4 et : */

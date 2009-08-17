@@ -1,3 +1,5 @@
+/* $Id$ */
+
 /*< 
   ratfor77
  
@@ -90,3 +92,5 @@ main(int argc, char *argv[])
 
     exit(0); /* TODO: check stdout for write errors? */
 }
+
+/* vim: set ft=c ts=4 sw=4 et : */

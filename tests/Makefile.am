@@ -1,8 +1,10 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
-## Makefile for the test/ratfor subdirectory.
+##
+# $Id$
+# Makefile for the test/ratfor subdirectory.
 
-TESTS =	\
+TESTS = \
 000sanity.test \
 devnull-input.test \
 empty-input.test

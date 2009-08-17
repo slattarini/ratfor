@@ -1,3 +1,7 @@
+/* $Id$ */
+#ifndef RAT4_RATDEF_H
+#  define RAT4_RATDEF_H 1
+
 #define ACCENT  96
 #define AND     38
 #define APPEND  /*empty*/
@@ -104,3 +108,5 @@
 
 #define RADIX           PERCENT /* % indicates alternate radix */
 
+#endif
+/* vim: set ft=c ts=4 sw=4 et : */

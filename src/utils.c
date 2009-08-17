@@ -1,3 +1,5 @@
+/* $Id$ */
+
 #include <config.h>
 
 #include <string.h>
@@ -118,3 +120,4 @@ look(char name[], char defn[])
     return(YES);
 }
 
+/* vim: set ft=c ts=4 sw=4 et : */

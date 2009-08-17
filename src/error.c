@@ -1,3 +1,5 @@
+/* $Id$ */
+
 #include <config.h>
 
 #include <stdio.h>
@@ -55,3 +57,5 @@ baderr(char *msg)
     synerr(msg);
     exit(1);
 }
+
+/* vim: set ft=c ts=4 sw=4 et : */

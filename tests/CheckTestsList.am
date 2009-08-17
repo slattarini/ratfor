@@ -1,5 +1,6 @@
-# -*- Makefile.am -*-
-# Included by tests/Makefile.am
+## -*- Makefile.am -*-
+## $Id$
+## Included by tests/Makefile.am
 
 # temporary files used in the `check-list-of-tests' target
 tmk = tests-in-makefile-list.tmp
@@ -20,8 +21,8 @@ check-list-of-tests:
 	    echo "$$t"; \
 	 done) > $(tfs); \
 	 if $(DIFF_U) $(tmk) $(tfs) > $(tdiffs); then \
-		echo "** OK"; : No diffs; \
-		e=0; \
+	    echo "** OK"; : No diffs; \
+	    e=0; \
 	 else \
 	    echo "*** ERROR ***" >&2; \
 	    echo " List of tests in Makefile an on filesystem differ" >&2; \

@@ -1,4 +1,5 @@
 #!/bin/sh
+# $Id$
 
 # Check that there are no obvious errors in the testing framework.
 
@@ -23,3 +24,5 @@ test x"`cat stdout`" = x"OUT_bis"
 test x"`cat stderr`" = x"ERR_bis"
 
 Exit 0
+
+# vim: ft=sh ts=4 sw=4 et
