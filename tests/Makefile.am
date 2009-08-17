@@ -12,7 +12,9 @@ integers-many-bases.test
 
 EXTRA_DIST = $(TESTS)
 
-TESTS_ENVIRONMENT = srcdir='$(srcdir)'
+# Explicitly set the $srcdir variable for the test cases, so that the code
+# in defs.sh won't be forced to calculate it again and again.
+TESTS_ENVIRONMENT = srcdir='$(abs_srcdir)'
 
 # might be updated later (esp. in included files)
 MOSTLYCLEANFILES = 
@@ -33,6 +35,12 @@ $(top_ratfor):
 # Be sure to use the absolute path of the test ratfor executable, since
 # in our testsuite we merryli change the curent directory a lot.
 TESTS_ENVIRONMENT += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
+
+# To slighty improve the overall speed of our slow testsuite, force
+# consistency checks in defs.sh to be skipped by default for test cases
+# run from the Makefile (in which case the tests are mostly superfluous
+# anyway).
+TESTS_ENVIRONMENT += RAT4_TESTSUITE_BYPASS_SANITY_CHECKS=yes
 
 # Remove the ratfor binary used in testing
 clean-local-ratfor:
