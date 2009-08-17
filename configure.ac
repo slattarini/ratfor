@@ -73,6 +73,28 @@ fi
 
 # TODO: check that all compilers in $RAT4_F77_LIST work, bailout on error
 
+# Look for a diff command that can produce better human-readable output
+AC_CACHE_CHECK(
+    dnl# IMPORTANT NOTE: the cache variable *must* have the format
+    dnl# `ac_cv_*' to work; using e.g. `rat4_cv_path_UDIFF' seems
+    dnl# tempting, but does not work.
+    [for a diff command producing human-readable output],
+    [ac_cv_path_UDIFF],
+    [AC_PATH_PROGS_FEATURE_CHECK(
+        [UDIFF],
+        [diff gdiff],
+        [echo x >confdf1 && echo x >confdf2 \
+           && $ac_path_UDIFF -u confdf1 confdf2 >/dev/null 2>&1 \
+           && ac_path_UDIFF_found=: \
+           && ac_cv_path_UDIFF=$ac_path_UDIFF \
+           && DIFF_U="$ac_path_UDIFF -u"
+         rm -f confdf1 confdf2],
+        [AC_MSG_RESULT([None found.])
+         DIFF_U=diff])])
+AC_SUBST([DIFF_U])
+
+# Check if the $SHELL supports `trap "..." EXIT' and `set -e' that play
+# well togheter.
 AC_CACHE_CHECK(
     [whether \$SHELL=$SHELL has working 'set -e' with exit trap],
     [rat4_cv_sh_errexit_works],
