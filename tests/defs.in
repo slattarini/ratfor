@@ -30,13 +30,13 @@ fi
 PACKAGE_VERSION='@PACKAGE_VERSION@'
 PACKAGE_NAME='@PACKAGE_NAME@'
 EXEEXT='@EXEEXT@'
-GREP=${RAT4_TESTING_GREP-'@GREP@'}
-EGREP=${RAT4_TESTING_EGREP-'@EGREP@'}
-FGREP=${RAT4_TESTING_FGREP-'@FGREP@'}
-SED=${RAT4_TESTING_SED-'@SED@'}
-AWK=${RAT4_TESTING_AWK-'@AWK@'}
-SHELL=${RAT4_TESTING_SHELL-'@SHELL@'}
-DIFF_U=${RAT4_TESTING_DIFF_U-'@DIFF_U@'}
+GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
+EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
+FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
+SED=${RAT4_TESTSUITE_SED-'@SED@'}
+AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
+SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
+DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
 
 case "${RAT4_TESTSUITE_FORCE_BIN_SH-}" in
     y|Y|yes|Yes|YES|1)
@@ -44,28 +44,27 @@ case "${RAT4_TESTSUITE_FORCE_BIN_SH-}" in
         ;;
     *)
         # Be sure to run with the best shell found by configure
-        if test x"${__RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__-}" = x"yes"
-        then
+        if test -n "${__RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__-}"; then
             : # go ahead
         else
             __RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__=yes
             export __RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__
             exec $SHELL "$0" ${1+"$@"}
-            exit 255
+            exit 255 # NOTREACHED
         fi
         ;;
 esac
 
-case "${RAT4_BYPASS_TESTSUITE_SANITY_CHECKS-}" in
+case "${RAT4_TESTSUITE_BYPASS_SANITY_CHECKS-}" in
     y|Y|yes|Yes|YES|1) do_sanity_checks() { return 1; };;
                     *) do_sanity_checks() { return 0; };;
 esac
 
-# Make errors fatal
+# Make errors fatal.
 set -e
 
 # Used as a "fingerprint" to identify this file
-DEFS_ID='$Id$'
+RAT4_TESTSUITE_DEFS_ID='$Id$'
 
 if do_sanity_checks; then
     # Ensure we are running from the right directory.
@@ -73,35 +72,35 @@ if do_sanity_checks; then
         echo "defs.sh: not found in current directory" >&2
         exit 1
     }
-    $FGREP "$DEFS_ID" ./defs.sh >/dev/null || {
+    $FGREP "$RAT4_TESTSUITE_DEFS_ID" ./defs.sh >/dev/null || {
         echo "defs.sh: does not contain expected \$Id\$ string:" >&2
-        echo "         $DEFS_ID" >&2
+        echo "         $RAT4_TESTSUITE_DEFS_ID" >&2
         exit 1
     }
 fi
 
 test -n "${srcdir-}" || {
-   # compute $srcdir.
+   # compute $srcdir
    srcdir=`echo x"$0" | $SED -e 's/^x//' -e 's|/[^/]*$||'`
    test x"$srcdir" != x"$0" || srcdir=.
 }
 
 if do_sanity_checks; then
-    # Ensure $srcdir is set correctly.
+    # ensure $srcdir is set correctly
     test -f "$srcdir/defs.in" || {
         echo "$srcdir/defs.in: not found." >&2
         echo "Please check \$srcdir." >&2
         exit 1
     }
-    $FGREP "$DEFS_ID" "$srcdir/defs.in" >/dev/null || {
+    $FGREP "$RAT4_TESTSUITE_DEFS_ID" "$srcdir/defs.in" >/dev/null || {
         echo "$srcdir/defs.in: does not contain expected \$Id\$ string:">&2
-        echo "                 $DEFS_ID" >&2
+        echo "                 $RAT4_TESTSUITE_DEFS_ID" >&2
         echo "Please check \$srcdir." >&2
         exit 1
     }
 fi
 
-# name of running test
+# Name of the running test script.
 me=`echo x/"$0" | $SED -e 's|.*/||' -e 's/\.test$//'`
 
 # Always use an absolute srcdir.  Otherwise symlinks made in subdirs
@@ -115,7 +114,7 @@ esac
 curdir=`pwd`
 
 # Program to be tested
-RATFOR=${TESTED_RATFOR-"$curdir/ratfor${EXEEXT}"}
+RATFOR=${RAT4_TESTUITE_RATFOR_EXECUTABLE-"$curdir/ratfor${EXEEXT}"}
 if do_sanity_checks; then
     test -f "$RATFOR" || {
         echo "expected ratfor program to test not found: $RATFOR" >&2
