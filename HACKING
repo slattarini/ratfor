@@ -1,0 +1,93 @@
+$Id$
+
+HACKING file for Public Domain Ratfor.  This file attempts to describe the
+rules to use when hacking it.
+
+
+Bootstrap
+---------
+
+  To bootstrap checked-out sources, just run
+    $ autoreconf -vi
+  from the top directory. Note that to do this you'll need to have
+  installed the latest version of autoconf (2.64) and automake (1.11).
+
+
+Recording changes
+-----------------
+
+ * Add an adequate and clear comment for every check-in.
+ * Changes other than minor bug fixes must be mentioned in NEWS.
+ * Important bug fixings must be mentioned in NEWS, too.
+ * If you do a change that add some obscure code for a good reason,
+   please comment the code carefully and explicitly describe the resason
+   that led you to write it.
+ * We do not use a ChangeLog file.
+
+
+C Coding Style
+--------------
+
+  Mostly K&R style.
+  
+  Do not write function definitions like this:
+    ...
+    int foo(void) {
+       ... /* function body here */
+    }
+    ...
+    char* bar(char c, char s[], int n)
+    {
+       ... /* function body here */
+    }
+    ...
+  Intead use:
+    ...
+    int
+    foo(void)
+    {
+       ... /* function body here */
+    }
+    ...
+    char *
+    bar(char c, char s[], int n)
+    {
+       ... /* function body here */
+    }
+    ...
+  This greatly increases greppability of C source files.
+
+  For header files: protect from multiple inclusions with the idiom
+  (assuming a `foo.h' header file):
+    #ifndef RAT4_FOO_H
+    #  define RAT4_FOO_H 1
+    ... /* content of header file here */
+    #endif /* RAT4_FOO_H */
+
+
+Testsuite
+---------
+
+  Can be run with `make check'.  For more details, refer to file
+  `tests/README'.
+
+
+Fixing bugs
+-----------
+
+  The correct response to most actual bugs is to write a new test case
+  which demonstrates the bug.  Then fix the bug, re-run the test suite,
+  and check everything in.
+
+
+Make a release
+--------------
+
+  TODO
+
+
+Miscellaneous
+-------------
+  
+  * Do not checkin generated files like configure or the various
+    Makefile.in
