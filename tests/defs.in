@@ -37,6 +37,7 @@ SED=${RAT4_TESTSUITE_SED-'@SED@'}
 AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
 SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
 DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
+RAT4_TESTSUITE_F77=${RAT4_TESTSUITE_F77-'@RAT4_TESTSUITE_F77@'}
 
 case "${RAT4_TESTSUITE_FORCE_BIN_SH-}" in
     y|Y|yes|Yes|YES|1)
@@ -137,6 +138,13 @@ ws0p="${ws}*"
 ws1p="${ws}${ws0p}"
 ws_strip() {
     $SED -e "s/^$ws0p//" -e "s/$ws0p$//"
+}
+
+# Check that we have a valid fortran 77 compiler available, else abort
+# the script with exit status 77 (so that the testcase is considered
+# SKIP'd, not FAIL'd)
+require_fortran_compiler() {
+    [ -n "$RAT4_TESTSUITE_F77" ] || exit 77
 }
 
 # We use a trap below for cleanup.  This requires us to go through
