@@ -3,11 +3,11 @@
 
 # Find a Fortran 77 compiler, to be used in testing.
 # First look for a user-provided compiler (expected to be found in variable
-# `RAT4_TESTSUITE_F77 list'), else search the system for a valid and
-# working Fortran 77 compiler, using the `AC_PROG_F77' macro.
-# Put the detected compiler in `RAT4_TESTSUITE_F77' (this is set empty if
-# no compiler was found), and declare it as a "precious" variable (so that
-# in particular it is automatically AC_SUBST'd).
+# `RAT4_TESTSUITE_F77'), else search the system for a valid and working
+# Fortran 77 compiler, using the `AC_PROG_F77' macro.
+# Put the detected compiler in `RAT4_TESTSUITE_F77' (set this empty if no
+# compiler was found), and declare it as a "precious" variable (so that in
+# particular it is automatically AC_SUBST'd).
 
 AC_DEFUN([RAT4_PROG_F77_FOR_TESTSUITE],
    [dnl ---
