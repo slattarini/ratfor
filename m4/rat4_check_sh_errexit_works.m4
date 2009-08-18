@@ -1,4 +1,4 @@
-# serial 1 rat4_sh_errexit_works.m4
+# serial 1 rat4_check_sh_errexit_works.m4
 # $Id$
 
 # Check if the $SHELL supports `trap "..." EXIT' and `set -e' that play
@@ -12,9 +12,9 @@ AC_DEFUN([RAT4_CHECK_SH_ERREXIT_WORKS],
             test $? = 77;
          then
             rat4_cv_sh_errexit_works=yes
-        else
+         else
             rat4_cv_sh_errexit_works=no
-        fi])
+         fi])
     AC_SUBST([SH_ERREXIT_WORKS], [$rat4_cv_sh_errexit_works])])
 
 # vim: ft=m4 ts=4 sw=4 et
