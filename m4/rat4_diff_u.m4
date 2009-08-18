@@ -1,4 +1,4 @@
-# ratfor_diff_u.m4 serial 1
+# serial 1 ratfor_diff_u.m4
 # $Id$
 
 # Look for a diff command that can produce better human-readable output.
