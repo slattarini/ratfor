@@ -20,7 +20,7 @@ AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.11 -Wall -Werror color-tests parallel-tests foreign])
-AM_SILENT_RULES([yes]) # make --enable-silent-rules the default.
+AM_SILENT_RULES([yes]) # make `--enable-silent-rules' the default
 
 #
 # Check for C support
