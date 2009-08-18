@@ -12,6 +12,13 @@ integers-many-bases.test
 
 EXTRA_DIST = $(TESTS)
 
+# Since we are using the new the new `parallel-tests' functionality
+# of automake, use $(LOG_COMPILER) instead of $(TESTS_ENVIRONMENT),
+# as it is the new recommended way to go, $(TESTS_ENVIRONMENT) being
+# now tought as user-reserved.
+TEST_LOG_COMPILER = env 
+TEST_AM_LOG_FLAGS = # will be updated later
+
 # Explicitly set the $srcdir variable for the test cases.
 #  (Q.1) Why do we need this definition?
 #  (A.1) So that the code in defs.sh won't be forced to calculate it
@@ -23,7 +30,7 @@ EXTRA_DIST = $(TESTS)
 #        is the usual case), defs.sh will be forced to make it an
 #        absolute path (with e.g. srcdir=`pwd`/$srcdir), thereby
 #        slowing the execution of the testsuite.
-TESTS_ENVIRONMENT = srcdir='$(abs_srcdir)'
+TEST_AM_LOG_FLAGS += srcdir='$(abs_srcdir)'
 
 # might be updated later (esp. in included files)
 MOSTLYCLEANFILES = 
@@ -43,13 +50,13 @@ $(top_ratfor):
 
 # Be sure to use the absolute path of the test ratfor executable, since
 # in our testsuite we merryli change the curent directory a lot.
-TESTS_ENVIRONMENT += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
+TEST_AM_LOG_FLAGS += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
 
 # To slighty improve the overall speed of our slow testsuite, force
 # consistency checks in defs.sh to be skipped by default for test cases
 # run from the Makefile (in which case the tests are mostly superfluous
 # anyway).
-TESTS_ENVIRONMENT += RAT4_TESTSUITE_BYPASS_SANITY_CHECKS=yes
+TEST_AM_LOG_FLAGS += RAT4_TESTSUITE_BYPASS_SANITY_CHECKS=yes
 
 # Remove the ratfor binary used in testing
 clean-local-ratfor:
