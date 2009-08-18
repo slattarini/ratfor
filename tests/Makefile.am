@@ -12,9 +12,15 @@ integers-many-bases.test
 
 EXTRA_DIST = $(TESTS)
 
-# Explicitly set the $srcdir variable for the test cases, so that the code
-# in defs.sh won't be forced to calculate it again and again.
-TESTS_ENVIRONMENT = srcdir='$(abs_srcdir)'
+##
+## NOTE: we once explicitly set the $srcdir variable for the test cases
+## in the definition $(TESTS_ENVIRONMENT), so that the code in defs.sh
+## wasn't forced to calculate it again and again. But newer automake
+## (>= 1.11) automatically export the $(srcdir) variable in the
+## environment of any test, so our hack is no more needed.
+##
+## TESTS_ENVIRONMENT = srcdir='$(abs_srcdir)'
+##
 
 # might be updated later (esp. in included files)
 MOSTLYCLEANFILES = 
