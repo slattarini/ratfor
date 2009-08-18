@@ -1,4 +1,4 @@
-# ratfor_prog_f77_testing.m4 serial 3
+# serial 3 ratfor_prog_f77_testing.m4
 # $Id$
 
 # Get a Fortran 77 compiler, to be used in testing.

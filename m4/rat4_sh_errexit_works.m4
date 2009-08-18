@@ -1,4 +1,4 @@
-# rat4_sh_errexit_works.m4 serial 1
+# serial 1 rat4_sh_errexit_works.m4
 # $Id$
 
 # Check if the $SHELL supports `trap "..." EXIT' and `set -e' that play
