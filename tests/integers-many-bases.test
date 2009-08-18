@@ -69,7 +69,7 @@ while read LINE; do
     esac
     echo "$out" >exp$j
     # some contortions necessary to make t$j.r a valid ratfor input
-    (echo "begin program" && echo "x = $in" && echo "end program") >t$j.r
+    echo "x = $in" >t$j.r
     : > msg$j
     echo "+ run_RATFOR -e 0 t$j.r"
     run_RATFOR -e 0 t$j.r || echo "ratfor failed on input: $in" >>msg$j
@@ -86,8 +86,6 @@ while read LINE; do
     $SED \
         -e '/^[cC]/d' \
         -e 's/^ *//' \
-        -e '/^begin program$/d' \
-        -e '/^end program$/d' \
         -e 's/^.*= *//' \
         -e 's/ *$//' \
     <stdout >got$j
