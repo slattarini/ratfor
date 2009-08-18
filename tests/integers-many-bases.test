@@ -68,7 +68,6 @@ while read LINE; do
         *) j=$i;;
     esac
     echo "$out" >exp$j
-    # some contortions necessary to make t$j.r a valid ratfor input
     echo "x = $in" >t$j.r
     : > msg$j
     echo "+ run_RATFOR -e 0 t$j.r"
