@@ -235,19 +235,19 @@ run_RATFOR() {
 sh_errexit_works='@SH_ERREXIT_WORKS@'
 if test x"$sh_errexit_works" = x"yes"; then
     trap '
-        exit_status=$?
+        rat4_testcase_exit_status=$?
         set +e
         cd "$curdir"
         case $rat4_testcase_exit_status,${keep_testdirs-} in
             0,|0,[nN]|0,[Nn][Oo]) rm_rf ${testSubDir-};;
         esac
-        test "$rat4_testcase_signal" != 0 && 
+        test x"$rat4_testcase_signal" != x"0" && 
           echo "$me: caught signal $rat4_testcase_signal"
         echo "$me: exit $rat4_testcase_exit_status"
         exit $rat4_testcase_exit_status
   ' 0
   for sig in 1 2 13 15; do
-    trap 'rat4_testcase_signal='$sig'; { Exit 1; }' $rat4_testcase_signal
+    trap 'rat4_testcase_signal='$sig'; { Exit 1; }' $sig
   done
   unset sig
 fi
