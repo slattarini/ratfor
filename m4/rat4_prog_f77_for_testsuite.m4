@@ -1,7 +1,7 @@
-# serial 3 ratfor_prog_f77_testing.m4
+# serial 1 rat4_prog_f77_for_testsuite.m4
 # $Id$
 
-# Get a Fortran 77 compiler, to be used in testing.
+# Find a Fortran 77 compiler, to be used in testing.
 # First look for a user-provided compiler (expected to be found in variable
 # `RAT4_TESTSUITE_F77 list'), else search the system for a valid and
 # working Fortran 77 compiler, using the `AC_PROG_F77' macro.
@@ -30,7 +30,7 @@ AC_DEFUN([RAT4_PROG_F77_FOR_TESTSUITE],
     fi
     if test -n "$RAT4_TESTSUITE_F77"; then
       AC_MSG_NOTICE(
-        m4_do([Fortran 77 compiler to be used in testing:],
+        m4_do([Fortran 77 compiler to be used in testing: ],
               [$RAT4_TESTSUITE_F77]))
     else
       AC_MSG_WARN([No Fortran 77 compiler found to be used in testing])
