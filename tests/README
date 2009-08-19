@@ -80,6 +80,15 @@ Writing test cases
 
 Do
 --
+  
+  Use `Exit' rather than `exit' to terminate a test. Do *not* use Exit
+  in a subshell.
+
+  Every test must use a call to `Exit' (either to indicate SUCCESS, FAIL
+  or SKIP) to do normal termination.  If a test exit for another reason
+  (e.g. a call to plain `exit', a failed command when the `set -e' switch
+  is active, a termination signal, a syntax error in shell code, ...) the
+  test will end in an "hard error", and will be considered FAIL'd.
 
   If you plan to fix a bug, write the test case first.  This way you'll
   make sure the test catches the bug, and that it succeeds once you have
@@ -98,8 +107,8 @@ Do
 
   Use $GREP, $FGREP, $EFREP, $SED, $AWK, $SHELL instead of the
   corresponding commands.  Also prefer $DIFF_U on plain `diff'.
-  This list might be incomplete: look at defs.in for a complete list
-  of tools.
+  This list of tools might be incomplete: look at defs.in for a
+  complete list.
 
   Use `cat' or `grep' to display (part of) files that may be
   interesting for debugging, so that when a user send a verbose
@@ -107,8 +116,6 @@ Do
   output on the stderr file descriptor.  If some redirected command
   is likely to fail, and `set -e' is in effect, display its output
   even in the failure case, before exiting.
-
-  Use `Exit' rather than `exit' to abort a test.
 
   It's more important to make sure that a feature works, than
   make sure that ratfor's output looks correct.  It might look
