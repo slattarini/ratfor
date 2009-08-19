@@ -164,7 +164,9 @@ rm_rf() {
     test $# -gt 0 || return 0  # do nothing if no argument is given
     # the only interesting exit status is that of rm(1): ignore errors
     # in find(1)
-    find "$1" -type d '!' -perm -200 -exec chmod u+w {} ";" || :
+    if test -d "$1"; then
+        find "$1" -type d '!' -perm -200 -exec chmod u+w {} ";" || :
+    fi
     rm -rf "$1"
 }
 
