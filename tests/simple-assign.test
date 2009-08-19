@@ -1,0 +1,14 @@
+#!/bin/sh
+# $Id$
+
+# Check that ratfor correctly pass a simple assignment unchanged
+
+. ./defs.sh || exit 1
+
+echo 'x = 1' > tst.r
+run_RATFOR -e 0 tst.r || Exit 1
+echo 'x = 1' > out.exp
+grep -v '^[Cc]' stdout | sed -e "s/$ws0p//" > out.got
+$DIFF_U out.exp out.got && Exit 0 || Exit 1
+
+# vim: ft=sh ts=4 sw=4 et

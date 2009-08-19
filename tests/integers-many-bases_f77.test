@@ -2,9 +2,11 @@
 # $Id$
 
 # Check the ratfor support for integers in bases != 10 (format: b%ddd...)
-# The checks are done by "grepping" the ratfor output.
+# The checks are done compiling and runing the ratfor output.
 
 . ./defs.sh || exit 1
+
+require_fortran_compiler
 
 i=0
 # since a redirected while loop might take place in a subshell in some
@@ -20,9 +22,13 @@ while read LINE; do
           continue
           ;;
       *)
-          # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE-OK]"
-          # here we cn ignore the third argument
-          set X $LINE && shift; in=$1 out=$2; set X && shift
+          # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE]"
+          set X $LINE && shift; in=$1 out=$2 compile=${3-}; set X && shift
+          case $compile in
+            ""|compile|COMPILE) continue;;
+            fail|FAIL) continue;;
+            *) HARDERROR "invalid field for compile: \`$compile'";;
+          esac
           ;;
     esac
     i=`expr $i + 1`
@@ -32,24 +38,35 @@ while read LINE; do
         *) j=$i;;
     esac
     echo "$out" >exp$j
-    echo "x = $in" >t$j.r
+cat >t$j.r <<EOF
+program t$j
+integer x
+x = $in
+write(*, 100) x
+100 format(I50)
+stop
+end
+EOF
     : > msg$j
     echo "+ run_RATFOR -e 0 t$j.r"
-    run_RATFOR -e 0 t$j.r || echo "* ratfor failed on input: $in" >>msg$j
+    run_RATFOR -e 0 t$j.r || echo "ratfor failed on input: t$j" >>msg$j
     if test -s stderr; then
       {
-        echo "* ratfor has no empty stderr on input: $in" >>msg$j
+        echo "ratfor has no empty stderr on input: $in" >>msg$j
         echo "=== begin stderr"
         cat stderr
         echo "=== end stderr"
       } >>msg$j
     fi
-    $SED \
-        -e '/^[cC]/d' \
-        -e 's/^ *//' \
-        -e 's/^.*= *//' \
-        -e 's/ *$//' \
-    <stdout >got$j
+    mv stdout t$j.f
+    rm -f stderr
+    echo "+ run_F77 -e 0 -- -o t$j.exe t$j.f"
+    run_F77 -e 0 -- -o t$j.exe t$j.f \
+      || echo "fortran failed on input file: t$j.f" >>msg$j
+    Exit 1
+    run_CMD -e 0 ./t$j.exe \
+      || echo "compiled progrm failed: t$j.exe" >>msg$j
+    ws_strip <stdout >got$j
     echo "+ cmp got$j exp$j"
     cmp got$j exp$j >/dev/null 2>&1 || {
         echo "* ratfor has unexpected output on input: $in" >msg$j

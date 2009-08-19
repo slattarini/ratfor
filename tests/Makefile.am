@@ -4,13 +4,33 @@
 # $Id$
 # Makefile for the test/ratfor subdirectory.
 
+TEST_EXTENSIONS = .test
+
+# --------------- #
+#  LIST OF TESTS  #
+# --------------- #
+
 TESTS = \
 000sanity.test \
 devnull-input.test \
 empty-input.test \
-integers-many-bases.test
+integers-many-bases.test \
+integers-many-bases_f77.test \
+simple-assign.test
 
 EXTRA_DIST = $(TESTS)
+
+# ----------------------- #
+#  REQUIREMENTS OF TESTS  #
+# ----------------------- #
+
+EXTRA_DIST += integers-many-bases.data
+integers-many-bases.log: integers-many-bases.data
+integers-many-bases_f77.log: integers-many-bases.data
+
+# --------------------------------- #
+#  TESTSUITE ENVIRONMENT AND SETUP  #
+# --------------------------------- #
 
 # Since we are using the new the new `parallel-tests' functionality
 # of automake, use $(LOG_COMPILER) instead of $(TESTS_ENVIRONMENT),
@@ -38,12 +58,14 @@ MOSTLYCLEANFILES =
 # Each test case depends on defs.sh and ratfor
 check_SCRIPTS = ratfor defs.sh
 
+# Real ratfor binary.
 top_ratfor = $(top_builddir)/src/ratfor$(EXEEXT)
 
 # Ratfor binary to be used in testing.
 ratfor$(EXEEXT): $(top_ratfor)
 	rm -f $@ && $(LN_S) $(top_ratfor)
 
+# Tell how to rebuild the real ratfor binary (f*ck'd recursive make).
 $(top_ratfor):
 	cd $(abs_top_builddir)/src \
 	  && $(MAKE) $(AM_MAKEFLAGS) ratfor$(EXEEXT)
@@ -57,6 +79,10 @@ TEST_AM_LOG_FLAGS += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
 # run from the Makefile (in which case the tests are mostly superfluous
 # anyway).
 TEST_AM_LOG_FLAGS += RAT4_TESTSUITE_BYPASS_SANITY_CHECKS=yes
+
+# ------------------- #
+#  TESTSUITE CLEANUP  #
+# ------------------- #
 
 # Remove the ratfor binary used in testing
 clean-local-ratfor:
@@ -75,7 +101,10 @@ clean-local-testdirs:
 .PHONY: clean-local-testdirs
 clean-local: clean-local-testdirs
 
-# Consistency checks on the list of tests.
+# ----------------------------------------- #
+#  CONSISTENCY CHECKS ON THE LIST OF TESTS  #
+# ----------------------------------------- #
+
 include CheckTestsList.am
 
 ## vim: ft=automake noet sw=4 ts=4
