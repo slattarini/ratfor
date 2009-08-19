@@ -8,6 +8,10 @@
 run_RATFOR -e 0 /dev/null
 
 : ratfor must produce only comments on empty input
-NOT grep -v '^[Cc]' stdout || Exit 1
+if grep -v '^[Cc]' stdout; then
+    Exit 1
+else
+    Exit 0
+fi
 
 # vim: ft=sh ts=4 sw=4 et

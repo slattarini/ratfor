@@ -72,15 +72,6 @@ RAT4_PROG_F77_FOR_TESTSUITE
 # Look for a diff command that can produce better human-readable output.
 RAT4_PROG_DIFF_U
 
-# Check if the $SHELL supports `trap "..." EXIT' and `set -e' that play
-# well togheter.
-RAT4_CHECK_SH_ERREXIT_WORKS
-if test x"$rat4_cv_sh_errexit_works" = x"no"; then
-  AC_MSG_WARN([`${MAKE-make} check' will leave leftover directories tests/*.dir])
-  AC_MSG_WARN([you can clean them up manually using `${MAKE-make} clean' or])
-  AC_MSG_WARN([`cd tests && ${MAKE-make} clean-local-testdirs'])
-fi
-
 #
 # Do output.
 #
