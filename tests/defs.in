@@ -214,6 +214,7 @@ NOT() {
 # Also, save standard output and standard error from the COMMAND
 # respectively in files `stdout' and `stderr'.
 run_CMD() {
+    # not to be diplayed even when `set -x' is active
     { _run_prev_dollarminus=$-; set +x; } 2>/dev/null
     case ${_run_prev_dollarminus} in
         *x*) _run_reset_x='set -x';;
@@ -241,14 +242,18 @@ run_CMD() {
         "${_run_cmd}" ${1+"$@"} <"${_run_stdin}" >stdout 2>stderr || \
             _run_exitcode=$?;;
     esac
-    ${_run_reset_x}
+    echo "=== stderr" >&2
     cat stderr >&2
+    echo "=== stdout"
     cat stdout
+    echo "==="
     case ${_run_expected_exitcode} in
-        VOID|void|IGNORE|ignore) return 0;;
-        "${_run_exitcode}") return 0;;
-        *) return 1;;
+        VOID|void|IGNORE|ignore|"${_run_exitcode}") _run_rc=0;;
+        *) _run_rc=1;;
     esac
+    ${_run_reset_x}
+    # not to be diplayed even when `set -x' is active
+    { return ${_run_rc}; } 2>/dev/null
 }
 
 # Usage: run_RATFOR [-e STATUS] [-i INFILE] [ARGUMENTS..]
