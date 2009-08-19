@@ -26,19 +26,6 @@ fi
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 (set -u) >/dev/null 2>&1 && set -u
 
-# Configured data, metadata and testing tools.
-PACKAGE_VERSION='@PACKAGE_VERSION@'
-PACKAGE_NAME='@PACKAGE_NAME@'
-EXEEXT='@EXEEXT@'
-GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
-EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
-FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
-SED=${RAT4_TESTSUITE_SED-'@SED@'}
-AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
-SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
-DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
-RAT4_TESTSUITE_F77=${RAT4_TESTSUITE_F77-'@RAT4_TESTSUITE_F77@'}
-
 case "${RAT4_TESTSUITE_FORCE_BIN_SH-}" in
     y|Y|yes|Yes|YES|1)
         # go ahead with the current shell
@@ -55,6 +42,25 @@ case "${RAT4_TESTSUITE_FORCE_BIN_SH-}" in
         fi
         ;;
 esac
+
+# Configured data, metadata and testing tools.
+PACKAGE_VERSION='@PACKAGE_VERSION@'
+PACKAGE_NAME='@PACKAGE_NAME@'
+EXEEXT='@EXEEXT@'
+GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
+EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
+FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
+SED=${RAT4_TESTSUITE_SED-'@SED@'}
+AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
+SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
+DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
+RAT4_TESTSUITE_F77=${RAT4_TESTSUITE_F77-'@RAT4_TESTSUITE_F77@'}
+
+# Symbolic names for exit statuses
+SUCCESS=0
+FAILURE=1
+E_SKIP=77 # test case skipped
+E_HARD=99 # test case aborted due to some "hard error"
 
 case "${RAT4_TESTSUITE_BYPASS_SANITY_CHECKS-}" in
     y|Y|yes|Yes|YES|1) do_sanity_checks() { return 1; };;
@@ -134,18 +140,13 @@ NEWLINE='
 '
 # Some shorthands for common sed regexps and commands.
 ws="[${SPACE}${TAB}]"
-ws0p="${ws}*"
-ws1p="${ws}${ws0p}"
-ws_strip() {
-    $SED -e "s/^$ws0p//" -e "s/$ws0p$//"
-}
-
-# Check that we have a valid fortran 77 compiler available, else abort
-# the script with exit status 77 (so that the testcase is considered
-# SKIP'd, not FAIL'd)
-require_fortran_compiler() {
-    [ -n "$RAT4_TESTSUITE_F77" ] || exit 77
-}
+ws0p="${ws}*" # zero or more white spaces
+ws1p="${ws}${ws0p}" # one or more white spaces
+# strip leading and trailing white spaces from input
+ws_strip() { $SED -e "s/^$ws0p//" -e "s/$ws0p$//"; }
+# convert any sequence of tab and space chars to a single space char,
+# and strip leading and trailing white spaces
+ws_normalize() { $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"; }
 
 # We use a trap below for cleanup.  This requires us to go through
 # hoops to get the right exit status transported through the signal.
@@ -156,6 +157,29 @@ Exit() {
   set +e
   (exit $1)
   exit $1
+}
+
+# Usage: testcase_SKIP [WHY]
+# Cause the current testcase to be SKIP'd, explaining why.
+testcase_SKIP() {
+    test $# -eq 0 || echo "$me: SKIPPED: $*"
+    Exit $E_SKIP
+}
+
+# Usage: testcase_SKIP [WHY]
+# Cause the current testcase to be aborted with an "hard error",
+# explaining why.
+testcase_HARDERROR() {
+    test $# -eq 0 || echo "$me: HARD ERROR: $*"
+    Exit $E_HARD
+}
+
+# Check that we have a valid fortran 77 compiler available, else 
+# cause the testcase to be SKIP'd
+require_fortran_compiler() {
+    [ -n "$RAT4_TESTSUITE_F77" ] || \
+      testcase_SKIP "Fotran 77 compiler not available" \
+                    "(variable \`\$RAT4_TESTSUITE_F77' is empty"
 }
 
 # "Safer" version of `rm -rf', useful for directories which are either
@@ -232,6 +256,13 @@ run_CMD() {
 run_RATFOR() {
     run_CMD $RATFOR ${1+"$@"}
 }
+
+# Usage: run_FORTRAN [-e STATUS] [ARGUMENTS..]
+# See documentation of `run_CMD()' for more info.
+run_F77() {
+    run_CMD "$RAT4_TESTSUITE_F77" ${1+"$@"}
+}
+
 
 # Setup cleanup trap
 sh_errexit_works='@SH_ERREXIT_WORKS@'
