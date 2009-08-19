@@ -214,6 +214,11 @@ NOT() {
 # Also, save standard output and standard error from the COMMAND
 # respectively in files `stdout' and `stderr'.
 run_CMD() {
+    { _run_prev_dollarminus=$-; set +x; } 2>/dev/null
+    case ${_run_prev_dollarminus} in
+        *x*) _run_reset_x='set -x';;
+          *) _run_reset_x=':';;
+    esac
     _run_stdin=-
     _run_expected_exitcode=0
     _run_cmd=$1
@@ -228,11 +233,6 @@ run_CMD() {
         shift
     done
     _run_exitcode=0
-    case $- in
-        *x*) _run_reset_x='set -x';;
-          *) _run_reset_x=':';;
-    esac
-    set +x
     case "${_run_stdin}" in
       -)
         "${_run_cmd}" ${1+"$@"} >stdout 2>stderr || \
