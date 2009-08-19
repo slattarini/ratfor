@@ -11,13 +11,13 @@ OUT
 EOF
     echo ERR >&2
 }
-run_CMD test_func
+run_CMD test_func || Exit 1
 test -f stdout || Exit 1
 test -f stderr || Exit 1
 test x"`cat stdout`" = x"OUT" || Exit 1
 test x"`cat stderr`" = x"ERR" || Exit 1
 
-run_CMD eval 'echo OUT_bis && echo ERR_bis >&2 && :'
+run_CMD eval 'echo OUT_bis && echo ERR_bis >&2 && :' || Exit 1
 test -f stdout || Exit 1
 test -f stderr || Exit 1
 test x"`cat stdout`" = x"OUT_bis" || Exit 1
