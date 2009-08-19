@@ -5,7 +5,7 @@
 
 . ./defs.sh || exit 1
 
-run_RATFOR -e 0 /dev/null
+run_RATFOR -e 0 /dev/null || Exit 1
 
 : ratfor must produce only comments on empty input
 if grep -v '^[Cc]' stdout; then
