@@ -157,10 +157,11 @@ ws_normalize() { $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"; }
 # Wrapper around exit, needed to pass the correct exit status to the
 # exit trap (see `cleanup_at_exit()') below
 Exit() {
-  set +e
-  echo "$1" >"$exitStatusFile"
-  (exit $1)
-  exit $1
+    set +x
+    set +e
+    echo "$1" >"$exitStatusFile"
+    (exit $1)
+    exit $1
 }
 
 # Our exit trap: should deal with normal termination, signals,
