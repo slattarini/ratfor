@@ -81,6 +81,12 @@ Writing test cases
 Do
 --
   
+  Keep the shell code as portable as possible.  This can be trickier that
+  you think; for more information, you can refer to the Autoconf manual,
+  especially the section `Portable shell programming' -- which should be
+  reachable at the following URL:
+  http://www.gnu.org/software/autoconf/manual/html_node/Portable-Shell.html
+
   Use `Exit' rather than `exit' to terminate a test. Do *not* use Exit
   in a subshell.
 
