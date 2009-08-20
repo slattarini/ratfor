@@ -11,7 +11,7 @@ i=0
 # shells, we need thew following hack
 exec 5<&1
 exec <"$srcdir"/integers-many-bases.data
-status=0
+rc=0
 set +x
 while read LINE; do
     case "$LINE" in
@@ -59,9 +59,9 @@ while read LINE; do
         cat got$j
         echo "==="
     } >>msg$j
-    test ! -s msg$j || { cat msg$j; status=1; }
+    test ! -s msg$j || { cat msg$j; rc=1; }
 done
 
-Exit $status
+Exit $rc
 
 # vim: ft=sh ts=4 sw=4 et
