@@ -21,8 +21,12 @@ while read LINE; do
           ;;
       *)
           # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE-OK]"
-          # here we cn ignore the third argument
-          set X $LINE && shift; in=$1 out=$2; set X && shift
+          set X $LINE && shift; in=$1 out=$2 compile=${3-}; set X && shift
+          case $compile in
+            ""|compile-also|no-compile);;
+            compile-only) continue;;
+            *) testcase_HARDERROR "invalid 'compile' field: \`$compile'";;
+          esac
           ;;
     esac
     i=`expr $i + 1`
