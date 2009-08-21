@@ -36,7 +36,7 @@ integers-many-bases_f77.log: integers-many-bases.data
 # of automake, use $(LOG_COMPILER) instead of $(TESTS_ENVIRONMENT),
 # as it is the new recommended way to go, $(TESTS_ENVIRONMENT) being
 # now tought as user-reserved.
-TEST_LOG_COMPILER = env 
+TEST_LOG_COMPILER = # will be updated later
 TEST_AM_LOG_FLAGS = # will be updated later
 
 # Explicitly set the $srcdir variable for the test cases.
@@ -74,11 +74,16 @@ $(top_ratfor):
 # in our testsuite we merryli change the curent directory a lot.
 TEST_AM_LOG_FLAGS += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
 
+# To improve the overall speed of our slow testsuite, let it know that
+# it is already being run with the proper $SHELL (as found by configure),
+# so that the test scripts won't re-execute themselves with $SHELL
+TEST_AM_LOG_FLAGS += RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL='yes'
+
 # To slighty improve the overall speed of our slow testsuite, force
 # consistency checks in defs.sh to be skipped by default for test cases
 # run from the Makefile (in which case the tests are mostly superfluous
 # anyway).
-TEST_AM_LOG_FLAGS += RAT4_TESTSUITE_BYPASS_SANITY_CHECKS=yes
+TEST_AM_LOG_FLAGS += RAT4_TESTSUITE_BYPASS_SANITY_CHECKS='yes'
 
 # ------------------- #
 #  TESTSUITE CLEANUP  #

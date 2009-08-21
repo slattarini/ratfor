@@ -35,22 +35,30 @@ SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
 DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
 F77=${RAT4_TESTSUITE_F77-'@RAT4_TESTSUITE_F77@'}
 
-case "${RAT4_TESTSUITE_FORCE_BIN_SH-}" in
+#
+# By default, the test scripts are run with the /bin/sh shell, but this
+# might be a rather limited shell. And in this case, configure probably
+# detected a better shell and saved it in the AC_SUBST'd variable $SHELL.
+# So let's by default rerun with the shell in $SHELL, just to be safe.
+# However, if the user know in advance that the shell used to run the
+# test scripts is good enough, he can prevent the re-execution of the
+# scripts with $SHELL by adding the following definiton to the environment:
+#  RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL=yes
+#
+case "${RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL-}" in
     y|Y|yes|Yes|YES|1)
-        # go ahead with the current shell
+        : # go ahead with the current shell
         ;;
     *)
-        # Be sure to run with the best shell found by configure
-        if test -n "${__RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__-}"; then
-            : # go ahead
-        else
-            __RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__=yes
-            export __RAT4_TESTSUITE_RERUN_WITH_CONFIG_SHELL__
-            exec $SHELL "$0" ${1+"$@"}
-            exit 255 # NOTREACHED
-        fi
+        RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL=yes
+        export RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL
+        exec $SHELL "$0" ${1+"$@"}
+        exit 255 # NOTREACHED
         ;;
 esac
+
+# Make errors fatal.
+set -e
 
 # Symbolic names for exit statuses
 SUCCESS=0
@@ -62,9 +70,6 @@ case "${RAT4_TESTSUITE_BYPASS_SANITY_CHECKS-}" in
     y|Y|yes|Yes|YES|1) do_sanity_checks() { return 1; };;
                     *) do_sanity_checks() { return 0; };;
 esac
-
-# Make errors fatal.
-set -e
 
 # Used as a "fingerprint" to identify this file
 RAT4_TESTSUITE_DEFS_ID='$Id$'
