@@ -3,7 +3,7 @@
 
 # Check that ratfor correctly pass a simple assignment unchanged
 
-. ./defs.sh || exit 1
+. ./defs.sh || exit 99
 
 echo 'x = 1' > tst.r
 run_RATFOR -e 0 tst.r || Exit 1

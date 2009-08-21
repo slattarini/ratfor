@@ -4,7 +4,7 @@
 # Check the ratfor support for integers in bases != 10 (format: b%ddd...)
 # The checks are done by "grepping" the ratfor output.
 
-. ./defs.sh || exit 1
+. ./defs.sh || exit 99
 
 i=0
 # since a redirected while loop might take place in a subshell in some
