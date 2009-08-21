@@ -35,6 +35,15 @@ SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
 DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
 F77=${RAT4_TESTSUITE_F77-'@RAT4_TESTSUITE_F77@'}
 
+# Symbolic names for exit statuses
+SUCCESS=0
+FAILURE=1
+E_SKIP=77 # test case skipped
+E_HARD=99 # test case aborted due to some "hard error"
+
+# Make errors fatal.
+set -e
+
 #
 # By default, the test scripts are run with the /bin/sh shell, but this
 # might be a rather limited shell. And in this case, configure probably
@@ -53,18 +62,9 @@ case "${RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL-}" in
         RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL=yes
         export RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL
         exec $SHELL "$0" ${1+"$@"}
-        exit 255 # NOTREACHED
+        exit $E_HARD # NOTREACHED
         ;;
 esac
-
-# Make errors fatal.
-set -e
-
-# Symbolic names for exit statuses
-SUCCESS=0
-FAILURE=1
-E_SKIP=77 # test case skipped
-E_HARD=99 # test case aborted due to some "hard error"
 
 case "${RAT4_TESTSUITE_BYPASS_SANITY_CHECKS-}" in
     y|Y|yes|Yes|YES|1) do_sanity_checks() { return 1; };;
@@ -78,12 +78,12 @@ if do_sanity_checks; then
     # Ensure we are running from the right directory.
     test -f ./defs.sh || {
         echo "defs.sh: not found in current directory" >&2
-        exit 1
+        exit $E_HARD
     }
     $FGREP "$RAT4_TESTSUITE_DEFS_ID" ./defs.sh >/dev/null || {
         echo "defs.sh: does not contain expected \$Id\$ string:" >&2
         echo "         $RAT4_TESTSUITE_DEFS_ID" >&2
-        exit 1
+        exit $E_HARD
     }
 fi
 
@@ -98,13 +98,13 @@ if do_sanity_checks; then
     test -f "$srcdir/defs.in" || {
         echo "$srcdir/defs.in: not found." >&2
         echo "Please check \$srcdir." >&2
-        exit 1
+        exit $E_HARD
     }
     $FGREP "$RAT4_TESTSUITE_DEFS_ID" "$srcdir/defs.in" >/dev/null || {
         echo "$srcdir/defs.in: does not contain expected \$Id\$ string:">&2
         echo "                 $RAT4_TESTSUITE_DEFS_ID" >&2
         echo "Please check \$srcdir." >&2
-        exit 1
+        exit $E_HARD
     }
 fi
 
@@ -125,12 +125,12 @@ testrootdir=`pwd`
 RATFOR=${RAT4_TESTUITE_RATFOR_EXECUTABLE-"$testrootdir/ratfor${EXEEXT}"}
 if do_sanity_checks; then
     test -f "$RATFOR" || {
-        echo "expected ratfor program to test not found: $RATFOR" >&2
-        exit 1
+        echo "Expected ratfor program to test not found: $RATFOR" >&2
+        exit $E_HARD
     }
     test -x "$RATFOR" || {
-        echo "expected ratfor program to test not executable: $RATFOR" >&2
-        exit 1
+        echo "Expected ratfor program to test not executable: $RATFOR" >&2
+        exit $E_HARD
     }
 fi
 
@@ -139,6 +139,7 @@ SPACE=' '
 TAB='	'
 NEWLINE='
 '
+
 # Some shorthands for common sed regexps and commands.
 ws="[${SPACE}${TAB}]"
 ws0p="${ws}*" # zero or more white spaces
@@ -156,7 +157,7 @@ ws_normalize() { $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"; }
 # when a syntax error is found.  Yay for them.
 # So use `Exit STATUS' instead of `exit STATUS' inside of the tests.
 
-# Will be defined later (onoce testSubDir is defined):
+# Will be defined later (once $testSubDir is defined):
 #  exitStatusFile=$testSubDir/exit.status
 
 # Wrapper around exit, needed to pass the correct exit status to the
@@ -192,6 +193,20 @@ cleanup_at_exit() {
     exit $rat4_testcase_exit_status
 }
 
+# Usage: testcase_PASS
+# Cause the current testcase to terminate with success.
+testcase_PASS() {
+    Exit $SUCCESS
+}
+
+# Usage: testcase_FAIL [WHY]
+# Cause the current testcase to terminate with failure, explaining
+# the cause of failure if WHY argument is given.
+testcase_FAIL() {
+    test $# -eq 0 || echo "$me: FAIL: $*"
+    Exit $FAILURE
+}
+
 # Usage: testcase_SKIP [WHY]
 # Cause the current testcase to be SKIP'd, explaining why.
 testcase_SKIP() {
@@ -203,7 +218,7 @@ testcase_SKIP() {
 # Cause the current testcase to be aborted with an "hard error",
 # explaining why.
 testcase_HARDERROR() {
-    test $# -eq 0 || echo "$me: HARD ERROR: $*"
+    test $# -eq 0 || echo "$me: HARD ERROR: $*" >&2
     Exit $E_HARD
 }
 
@@ -302,21 +317,21 @@ run_F77() {
     run_CMD "$F77" ${1+"$@"}
 }
 
-# Setup cleanup traps
+# Setup cleanup traps.
 trap 'cleanup_at_exit' 0
 trap 'echo SIGHUP  >"$exitStatusFile" || :; Exit 1' 1
 trap 'echo SIGINT  >"$exitStatusFile" || :; Exit 1' 2
 trap 'echo SIGPIPE >"$exitStatusFile" || :; Exit 1' 13
 trap 'echo SIGTERM >"$exitStatusFile" || :; Exit 1' 15
 
-# Were the tests will run
+# Were the tests will run.
 rm_rf $me.dir
 mkdir $me.dir
 cd ./$me.dir
 testSubDir=`pwd` # absolute path
 
-# defined here since it needs $testSubDir
-exitStatusFile=$testSubDir/exit.status
+# This is defined here and not before only because it needs $testSubDir.
+exitStatusFile="$testSubDir/exit.status"
 
 echo "=== Running test $0"
 
