@@ -27,7 +27,7 @@ while read LINE; do
           case $compile in
             ""|compile|COMPILE) continue;;
             fail|FAIL) continue;;
-            *) HARDERROR "invalid field for compile: \`$compile'";;
+            *) testcase_HARDERROR "invalid 'compile' field: \`$compile'";;
           esac
           ;;
     esac
