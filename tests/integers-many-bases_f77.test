@@ -13,7 +13,7 @@ i=0
 # shells, we need thew following hack
 exec 5<&1
 exec <"$srcdir"/integers-many-bases.data
-rc=0
+failed=no
 set +x
 while read LINE; do
     case "$LINE" in
@@ -68,16 +68,18 @@ EOF
     ws_strip <stdout >got$j
     echo "+ cmp got$j exp$j"
     cmp got$j exp$j >/dev/null 2>&1 || {
-      echo "* compiled progam has unexpected output on input: $in" >msg$j
+      echo "* compiled program has unexpected output on input: $in" >msg$j
       echo "=== EXPECTED"
       cat exp$j
       echo "=== GOT"
       cat got$j
       echo "==="
     } >>msg$j
-    test ! -s msg$j || { cat msg$j; rc=1; }
+    test ! -s msg$j || { cat msg$j; failed=yes; }
 done
 
-Exit $rc
+test x"$failed" = x"no" || testcase_FAIL
+
+testcase_PASS
 
 # vim: ft=sh ts=4 sw=4 et

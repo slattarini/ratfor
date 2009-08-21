@@ -6,9 +6,11 @@
 . ./defs.sh || exit 99
 
 echo 'x = 1' > tst.r
-run_RATFOR -e 0 tst.r || Exit 1
+run_RATFOR -e 0 tst.r || testcase_FAIL
 echo 'x = 1' > out.exp
 grep -v '^[Cc]' stdout | sed -e "s/$ws0p//" > out.got
-$DIFF_U out.exp out.got && Exit 0 || Exit 1
+$DIFF_U out.exp out.got || testcase_FAIL
+
+testcase_PASS
 
 # vim: ft=sh ts=4 sw=4 et
