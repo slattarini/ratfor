@@ -3,7 +3,7 @@
 
 # Check that ratfor works on /dev/null
 
-. ./defs.sh || exit 1
+. ./defs.sh || exit 99
 
 run_RATFOR -e 0 /dev/null || Exit 1
 

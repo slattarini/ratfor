@@ -3,7 +3,7 @@
 
 # Check that ratfor works on empty input
 
-. ./defs.sh || exit 1
+. ./defs.sh || exit 99
 
 : > empty
 run_RATFOR -e 0 empty || Exit 1
