@@ -25,8 +25,8 @@ while read LINE; do
           # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE]"
           set X $LINE && shift; in=$1 out=$2 compile=${3-}; set X && shift
           case $compile in
-            ""|compile|COMPILE) continue;;
-            fail|FAIL) continue;;
+            ""|compile-also|compile-only);;
+            no-compile) continue;;
             *) testcase_HARDERROR "invalid 'compile' field: \`$compile'";;
           esac
           ;;
@@ -56,25 +56,24 @@ EOF
         echo "=== begin stderr"
         cat stderr
         echo "=== end stderr"
-      } >>msg$j
+      }
     fi
     mv stdout t$j.f
     rm -f stderr
     echo "+ run_F77 -e 0 -- -o t$j.exe t$j.f"
     run_F77 -e 0 -- -o t$j.exe t$j.f \
       || echo "fortran failed on input file: t$j.f" >>msg$j
-    Exit 1
-    run_CMD -e 0 ./t$j.exe \
+    run_CMD ./t$j.exe -e 0 \
       || echo "compiled progrm failed: t$j.exe" >>msg$j
     ws_strip <stdout >got$j
     echo "+ cmp got$j exp$j"
     cmp got$j exp$j >/dev/null 2>&1 || {
-        echo "* ratfor has unexpected output on input: $in" >msg$j
-        echo "=== EXPECTED"
-        cat exp$j
-        echo "=== GOT"
-        cat got$j
-        echo "==="
+      echo "* compiled progam has unexpected output on input: $in" >msg$j
+      echo "=== EXPECTED"
+      cat exp$j
+      echo "=== GOT"
+      cat got$j
+      echo "==="
     } >>msg$j
     test ! -s msg$j || { cat msg$j; rc=1; }
 done
