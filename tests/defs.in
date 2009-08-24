@@ -293,7 +293,7 @@ run_CMD() {
         *) _run_rc=1;;
     esac
     ${_run_reset_x}
-    : "got exit status ${_run_exitcode} (expecting ${_run_expected_exitcode})"
+    : "exit status ${_run_exitcode} (expecting ${_run_expected_exitcode})"
     : 'leaving run_CMD(): restored -x flag, reset to prevoious verbosity'
     return ${_run_rc}
 }
