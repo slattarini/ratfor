@@ -22,6 +22,11 @@ fi
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 (set -u) >/dev/null 2>&1 && set -u
 
+# NLS nuisances: we want to run in plain C locale, for repeatibility
+LC_ALL=C; export LC_ALL
+LANGUAGE=C; export LANGUAGE
+LANG=C; export LANG
+
 # Configured data, metadata and testing tools.
 PACKAGE_VERSION='@PACKAGE_VERSION@'
 PACKAGE_NAME='@PACKAGE_NAME@'
@@ -149,6 +154,27 @@ ws_strip() { $SED -e "s/^$ws0p//" -e "s/$ws0p$//"; }
 # convert any sequence of tab and space chars to a single space char,
 # and strip leading and trailing white spaces
 ws_normalize() { $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"; }
+
+# Simple subroutines for test manipulation, from bot strings and stdin.
+
+getstr() {
+    case $# in
+        0) cat;;
+        *) echo "$*";;
+    esac
+}
+
+# convert standard input (or given args, if any) to upper case
+toupper() {
+    getstr ${1+"$@"} | \
+      tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ
+}
+
+# convert standard input (or given args, if any) to lower case
+tolower() {
+    getstr ${1+"$@"} | \
+      tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz
+}
 
 # We use a trap for cleanup.  This requires us to go through hoops to
 # get the right exit status transported through signals.  Also, more
