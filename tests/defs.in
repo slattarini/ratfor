@@ -256,7 +256,7 @@ NOT() {
 # respectively in files `stdout' and `stderr'.
 run_CMD() {
     # WARNING: Solaris /bin/sh does not like `{ a=1; } 2>/dev/null'
-    : save '-x' flag
+    : 'entering run_CMD(): save -x flag, become quiet'
     _run_prev_dollarminus=$-
     set +x
     case ${_run_prev_dollarminus} in
@@ -277,14 +277,12 @@ run_CMD() {
         shift
     done
     _run_exitcode=0
-    case "${_run_stdin}" in
-      -)
-        "${_run_cmd}" ${1+"$@"} >stdout 2>stderr || \
-            _run_exitcode=$? ;;
-      *)
-        "${_run_cmd}" ${1+"$@"} <"${_run_stdin}" >stdout 2>stderr || \
-            _run_exitcode=$? ;;
-    esac
+    _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdout 2>stderr'
+    if test x"${_run_stdin}" != x"-"; then
+        _run_evald_cmd="${_run_evald_cmd}"' <"${_run_stdin}"'
+    fi
+    _run_evald_cmd="${_run_evald_cmd} || _run_exitcode=\$?"
+    eval "${_run_evald_cmd}"
     echo "=== stderr" >&2
     cat stderr >&2
     echo "=== stdout"
@@ -295,7 +293,7 @@ run_CMD() {
         *) _run_rc=1;;
     esac
     ${_run_reset_x}
-    : restored '-x' flag
+    : 'leaving run_CMD(): restored -x flag, reset to prevoious verbosity'
     return ${_run_rc}
 }
 
