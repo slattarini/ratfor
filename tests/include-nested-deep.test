@@ -1,0 +1,52 @@
+#!/bin/sh
+# $Id$
+
+# Test "deeply" nested 'include'.
+
+. ./defs.sh || exit 99
+
+(set -C) >/dev/null 2>&1 && set -C
+
+cat > top.r <<EOF
+enter0
+include inc1.r
+exit0
+EOF
+
+cat > inc1.r <<EOF
+enter1
+include inc2.r
+exit1
+EOF
+
+cat > inc2.r <<EOF
+enter2
+include inc3.r
+exit2
+EOF
+
+cat > inc3.r <<EOF
+enter3
+exit3
+EOF
+
+tolower > expected <<\EOF
+enter0
+enter1
+enter2
+enter3
+exit3
+exit2
+exit1
+exit0
+EOF
+
+run_RATFOR -e 0 top.r || testcase_FAIL
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+$DIFF_U expected got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

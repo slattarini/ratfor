@@ -2,6 +2,13 @@ $Id$
 
 (Originally written by some "jon@sep.stanford.edu.us")
 
+---
+
+The `include' stateent coerce the name of the file to include to lowercase.
+This crazy on case-senible file-systems. Must be fixed ASAP.
+
+---
+
 This is not a bug but a design error in both AT&T ratfor
 and this public domain ratfor:
 

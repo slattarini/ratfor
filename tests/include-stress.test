@@ -1,0 +1,56 @@
+#!/bin/sh
+# $Id$
+
+# Stress testing for the 'include' functionality.
+
+. ./defs.sh || exit 99
+
+(set -C) >/dev/null 2>&1 && set -C
+
+echo 'ONE' > inc1.r
+echo 'TWO; include inc2b.r' > inc2.r
+echo 'TWObis' > inc2b.r
+(echo 'THREE'; echo 'include inc3b.r') > inc3.r
+(echo 'THREEbis'; echo 'include inc3bb.r') > inc3b.r
+echo 'THREEbisbis' > inc3bb.r
+echo 'FOUR' | sed 's/\(.\)/\1@/g' | tr @ "$NEWLINE" > inc4.r
+
+sed 's/_/ /g' > tst.r <<EOF
+@MARK1@
+include inc1.r
+@MARK2@
+  include  inc2.r _
+@MARK3@
+include${TAB}inc3.r_
+@MARK4@
+${TAB}  include inc4.r ${TAB}
+@MARK5@
+EOF
+
+tolower > expected <<\EOF
+@MARK1@
+ONE
+@MARK2@
+TWO
+TWObis
+@MARK3@
+THREE
+THREEbis
+THREEbisbis
+@MARK4@
+F
+O
+U
+R
+@MARK5@
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+$DIFF_U expected got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

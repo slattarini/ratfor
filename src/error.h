@@ -4,5 +4,6 @@
 void error(char *, char *);
 void synerr(char *);
 void baderr(char *);
+extern int exit_status;
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

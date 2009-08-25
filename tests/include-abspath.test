@@ -1,0 +1,26 @@
+#!/bin/sh
+# $Id$
+
+# Check that 'include' works on absolute paths.
+
+. ./defs.sh || exit 99
+
+# Sigh! we can't use `pwd` as the absolute directory since it could
+# contain spaces or uppercase letters (yes, currently the `include'
+# builtin coerces file names to lowercase!)
+
+abs_tmp_dir=/tmp/$me-$$.dir
+mkdir "$abs_tmp_dir"
+echo 'foo$bar' > "$abs_tmp_dir/inc.r"
+echo "include $abs_tmp_dir/inc.r" > tst.r
+
+run_RATFOR -e 0 tst.r || {
+    rm -rf "$abs_tmp_dir"
+    testcase_FAIL
+}
+rm -rf "$abs_tmp_dir"
+fgrep 'foo$bar' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

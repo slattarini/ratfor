@@ -89,8 +89,9 @@ main(int argc, char *argv[])
     printf("C Output from Public Domain Ratfor, version %s\n",
            PACKAGE_VERSION);
     parse(); /* call parser and do the real work */
-
-    exit(0); /* TODO: check stdout for write errors? */
+    
+    /* return program global exit status, declared in error.h */
+    exit(exit_status); /* TODO: check stdout for write errors? */
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */

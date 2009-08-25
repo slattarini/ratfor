@@ -9,6 +9,9 @@
 #include "ratdef.h"
 #include "ratcom.h" /* this must go last */
 
+/* Global program exit status, declared in error.h */
+int exit_status = 0;
+
 /*
  * E R R O R  M E S S A G E S
  */
@@ -24,7 +27,7 @@ error(char *msg, char *s)
 }
 
 /*
- * synerr - report Ratfor syntax error
+ * synerr - report Ratfor syntax error, set global exit status to failure
  */
 void
 synerr(char *msg)
@@ -46,10 +49,11 @@ synerr(char *msg)
             break;
         }
     fprintf(stderr,": \n      %s\n", msg);
+    exit_status = 1;
 }
 
 /*
- *  baderr - print error message, then die
+ * baderr - report Ratfor syntax error, then die
  */
 void
 baderr(char *msg)
