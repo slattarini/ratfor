@@ -1,0 +1,35 @@
+#!/bin/sh
+# $Id$
+
+# Check that 'include' fail unredable/non-existent files
+
+. ./defs.sh || exit 99
+
+test ! -f none.r
+echo 'include none.r' > tst1.r
+
+echo 'NOTINCLUDED' > unread.r
+chmod a-r unread.r
+test -f unread.r
+test ! -r unread.r
+cat <<EOF > tst2.r
+#1
+#2
+include unread.r
+EOF
+
+run_RATFOR -e 1 tst1.r || testcase_FAIL
+mv stderr stderr1
+fgrep 'error at line 1:' stderr1 || testcase_FAIL
+#TODO: check for more detailed error message
+fgrep 'cannot open include' stderr1 || testcase_FAIL
+
+run_RATFOR -e 1 tst2.r || testcase_FAIL
+mv stderr stderr2
+fgrep 'error at line 3:' stderr2 || tescase_FAIL
+#TODO: check for more detailed error message
+fgrep 'cannot open include' stderr2 || tescase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

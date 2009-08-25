@@ -400,7 +400,7 @@ gettok(token, toksiz)
 char token[];
 int toksiz;
 {
-    int t, i;
+    int t, i, j;
     int tok;
     char name[MAXNAME];
 
@@ -441,19 +441,21 @@ int toksiz;
             if (level >= NFILES)
                 synerr("includes nested too deeply.");
             else {
-/**/
+/*XXX re-add support for quoted filenames, sooner or later
                 name[i-1]=EOS;
                 infile[level+1] = fopen(&name[2], "r");
-/*WSB 6-25-91
-                infile[level+1] = fopen(name, "r");
 */
+                /* skip leading white space in name */
+                for (j = 0; name[j] == BLANK || name[j] == TAB; j++)
+                    /* empty body */;
+                infile[level+1] = fopen(&name[j], "r");
                 linect[level+1] = 1;
-                if (infile[level+1] == NULL)
-                    synerr("can't open include.");
-                else {
+                if (infile[level+1] == NULL) {
+                    synerr("cannot open include."); /*XXX improve errmsg */
+                } else {
                     level++;
                     if (fnamp + i <= MAXFNAMES) {
-                        scopy(name, 0, fnames, fnamp);
+                        scopy(name, 0, fnames, fnamp); /* XXX: only `name'? */
                         fnamp = fnamp + i;  /* push file name stack */
                     }
                 }

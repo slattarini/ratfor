@@ -10,13 +10,25 @@ TEST_EXTENSIONS = .test
 #  LIST OF TESTS  #
 # --------------- #
 
+# currently, the line numbers in error messages about the `include'
+# statement seem to be off by one
+XFAIL_TESTS = include-fail.test
+
 TESTS = \
 000sanity.test \
 devnull-input.test \
 empty-input.test \
+include-abspath.test \
+include-basic.test \
+include-fail.test \
+include-nested-deep.test \
+include-nested.test \
+include-stress.test \
 integers-many-bases.test \
 integers-many-bases_f77.test \
-simple-assign.test
+simple-assign.test \
+synerr-lineno.test \
+synerr.test
 
 EXTRA_DIST = $(TESTS)
 

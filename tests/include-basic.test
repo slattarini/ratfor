@@ -1,0 +1,58 @@
+#!/bin/sh
+# $Id$
+
+# Check that simple 'include' works.
+
+. ./defs.sh || exit 99
+
+set +x
+
+{ echo foo1; echo foo2; } > included.r
+
+cat >tst1.r <<EOF
+main1
+include included.r
+main2
+EOF
+
+tolower > exp1 <<\EOF
+main1
+foo1
+foo2
+main2
+EOF
+
+echo 'bar' > included
+
+cat >tst2.r <<EOF
+main1
+include included
+main2
+EOF
+
+tolower > exp2 <<\EOF
+main1
+bar
+main2
+EOF
+
+set -x
+
+cat tst1.r
+cat tst2.r
+
+run_RATFOR -e 0 tst1.r || testcase_FAIL
+mv stdout stdout1
+mv stderr stderr1
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout1 >got1
+$DIFF_U exp1 got1 || testcase_FAIL
+
+run_RATFOR -e 0 tst2.r || testcase_FAIL
+mv stdout stdout2
+mv stderr stderr2
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout2 >got2
+$DIFF_U exp2 got2 || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,38 @@
+#!/bin/sh
+# $Id$
+
+# Test simple nested 'include'.
+
+. ./defs.sh || exit 99
+
+(set -C) >/dev/null 2>&1 && set -C
+
+cat > top.r <<EOF
+TopStart
+include inc.r
+TopEnd
+EOF
+
+cat > inc.r <<EOF
+IncludeStart
+Body
+IncludeEnd
+EOF
+
+tolower > expected <<\EOF
+TopStart
+IncludeStart
+Body
+IncludeEnd
+TopEnd
+EOF
+
+run_RATFOR -e 0 top.r || testcase_FAIL
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+$DIFF_U expected got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

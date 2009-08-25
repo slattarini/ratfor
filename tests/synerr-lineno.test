@@ -1,0 +1,13 @@
+#!/bin/sh
+# $Id$
+
+# Check that line numbers in error messages are ok
+
+. ./defs.sh || exit 99
+
+echo '}' > tst.r
+run_RATFOR -e 1 tst.r || testcase_FAIL
+fgrep 'error at line 1:' stderr || testcase_FAIL
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
