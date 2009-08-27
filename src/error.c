@@ -17,6 +17,18 @@ int exit_status = 0;
  */
 
 /*
+ * synerr_ - interla function to report Ratfor syntax error
+ */
+static void
+synerr_(int offset, char *msg)
+{
+    /* account for EOF errors, where level < 0 */
+    int i = (level >= 0) ? level : 0;
+    fprintf(stderr, "%s:%d: %s\n", filename[i], linect[i] + offset, msg);
+    exit_status = 1;
+}
+
+/*
  * error - print error message with one parameter, then die
  */
 void
@@ -32,25 +44,20 @@ error(char *msg, char *s)
 void
 synerr(char *msg)
 {
-    char lc[MAXCHARS];
-    int i;
-
-    fprintf(stderr, "error at line ");
-    if (level >= 0)
-        i = level;
-    else
-        i = 0;   /* for EOF errors */
-    itoc(linect[i], lc, MAXCHARS);
-    fprintf(stderr, lc);
-    for (i = fnamp - 1; i > 1; i = i - 1)
-        if (fnames[i-1] == EOS) {   /* print file name */
-            fprintf(stderr, " in ");
-            fprintf(stderr, &fnames[i]);
-            break;
-        }
-    fprintf(stderr,": \n      %s\n", msg);
-    exit_status = 1;
+    synerr_(0, msg);
 }
+
+/*
+ * synerr_eof() - report Ratfor syntax error about unexpected end-of-file,
+ *                taking care of not having line number in error message
+ *                off by one
+ */
+void
+synerr_eof(void)
+{
+    synerr_(-1, "unexpected EOF.");
+}
+
 
 /*
  * baderr - report Ratfor syntax error, then die

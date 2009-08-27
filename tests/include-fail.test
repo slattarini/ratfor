@@ -3,32 +3,62 @@
 
 # Check that 'include' fail unredable/non-existent files
 
+# WARNING: ratfor must not abort on failed include. Check for this, too.
+
 . ./defs.sh || exit 99
 
 test ! -f none.r
-echo 'include none.r' > tst1.r
-
 echo 'NOTINCLUDED' > unread.r
 chmod a-r unread.r
 test -f unread.r
 test ! -r unread.r
+
+cat > tst1.r <<EOF
+include none.r
+#2
+#3
+include none.r
+stillalive
+EOF
+
 cat <<EOF > tst2.r
+include unread.r
+#2
+x3
+#4
+y5
+include unread.r
+stillalive
+EOF
+
+cat > tst3.r <<EOF
 #1
 #2
-include unread.r
+include none.r
+#4
+include nest.r
+EOF
+
+cat > nest.r <<EOF
+#1
+#2
+#3
+include none.r
 EOF
 
 run_RATFOR -e 1 tst1.r || testcase_FAIL
+mv stdout stdout1
 mv stderr stderr1
-fgrep 'error at line 1:' stderr1 || testcase_FAIL
-#TODO: check for more detailed error message
-fgrep 'cannot open include' stderr1 || testcase_FAIL
+fgrep 'tst1.r:1: cannot open include: I/O error' stderr1 || testcase_FAIL
+fgrep 'tst1.r:4: cannot open include: I/O error' stderr1 || testcase_FAIL
+fgrep 'stillalive' stdout1 || testcase_FAIL
 
 run_RATFOR -e 1 tst2.r || testcase_FAIL
+mv stdout stdout2
 mv stderr stderr2
-fgrep 'error at line 3:' stderr2 || tescase_FAIL
-#TODO: check for more detailed error message
-fgrep 'cannot open include' stderr2 || tescase_FAIL
+fgrep 'tst1.r:1: cannot open include: I/O error' stderr1 || testcase_FAIL
+fgrep 'tst1.r:6: cannot open include: I/O error' stderr1 || testcase_FAIL
+fgrep 'stillalive' stdout1 || testcase_FAIL
 
 testcase_PASS
 

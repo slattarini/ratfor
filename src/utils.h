@@ -1,6 +1,7 @@
 /* $Id$ */
 #ifndef RAT4_UTILS_H
 #  define RAT4_UTILS_H 1
+char *strsave(char *);
 int ctoi(char[], int*);
 int itoc(int, char[], int size);
 void fold(char[]);

@@ -1,0 +1,32 @@
+#!/bin/sh
+# $Id$
+
+# Check that line numbers in error messages are ok, even in included files
+
+. ./defs.sh || exit 99
+
+cat > top.r <<EOF
+#1
+#2
+} #3
+#4
+include inc.r
+#5
+} #6
+EOF
+
+echo > inc.r <<EOF
+} #1
+#2
+} #3
+EOF
+
+run_RATFOR -e 1 top.r   || testcase_FAIL
+fgrep 'top.r:3:' stderr || testcase_FAIL
+fgrep 'inc.r:1:' stderr || testcase_FAIL
+fgrep 'inc.r:3:' stderr || testcase_FAIL
+fgrep 'top.r:6:' stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

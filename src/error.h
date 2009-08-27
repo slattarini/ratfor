@@ -3,6 +3,7 @@
 #  define RAT4_ERROR_H 1
 void error(char *, char *);
 void synerr(char *);
+void synerr_eof(void);
 void baderr(char *);
 extern int exit_status;
 #endif

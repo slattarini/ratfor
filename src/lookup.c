@@ -5,6 +5,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "utils.h"
 #include "lookup.h"
 
 static struct hashlist *hashtab[HASHMAX];
@@ -13,20 +14,6 @@ static struct hashlist *hashtab[HASHMAX];
  * from K&R "The C Programming language"
  * Table lookup routines
  */
-
-/*
- * strsave - save string s somewhere
- *
- */
-static char
-*strsave(char *s)
-{
-    char *p;
-
-    if ((p = malloc(strlen(s)+1)) != NULL)
-        strcpy(p, s);
-    return(p);
-}
 
 /*
  * hash - for a hash value for string s
