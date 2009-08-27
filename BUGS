@@ -2,12 +2,17 @@ $Id$
 
 (Originally written by some "jon@sep.stanford.edu.us")
 
----
+ ---
+
+The sytanx errors seems not to be reported if found inside files included
+with the `include' directive. Must be fixed ASAP.
+
+ ---
 
 The `include' stateent coerce the name of the file to include to lowercase.
 This crazy on case-senible file-systems. Must be fixed ASAP.
 
----
+ ---
 
 The `return' keyword being used outside any function defition is not
 flagged as an error, so that at the main level a ratfor stament like:
@@ -16,7 +21,7 @@ is translated to fortran code like:
   =1
   return
 
----
+ ---
 
 This is not a bug but a design error in both AT&T ratfor
 and this public domain ratfor:
@@ -34,3 +39,4 @@ its name.
 
 Please let me know if you fix this.
             jon@sep.stanford.edu.us
+ ---
