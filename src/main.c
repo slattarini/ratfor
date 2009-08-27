@@ -53,7 +53,7 @@ main(int argc, char *argv[])
     
     int startlab = 23000; /* default start label */
     int leaveC = NO;
-    while ((c = getopt(argc, argv, "Cn:o:")) != EOF) {
+    while ((c = getopt(argc, argv, "Cl:o:")) != EOF) {
         switch (c) {
             case 'C':
                 leaveC = YES; /* keep comments in src */
