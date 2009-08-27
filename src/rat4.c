@@ -79,22 +79,28 @@ char *eoss   = "EOS/";
  * initialisation
  */
 void
-init(int u_startlab, int u_leaveC, FILE *u_infile)
+init(int u_startlab, int u_leaveC, char *u_filename)
 {
     int i;
+    FILE *in;
     
     startlab = u_startlab;
     leaveC = u_leaveC;
-    infile[0] = u_infile;
+    
+    /* XXX wrap this in a function */
+    if (equal(u_filename, "-"))
+        in = stdin;
+    else if ((in = fopen(u_filename, "r")) == NULL)
+        error("%s: cannot open for reading\n", u_filename); /*XXX: perror?*/
 
-    outp = 0;       /* output character pointer */
-    level = 0;      /* file control */
-    linect[0] = 1;  /* line count of first file */
-    fnamp = 0;
-    fnames[0] = EOS;
-    fordep = 0;     /* for stack */
-    swtop = 0;      /* switch stack index */
-    swlast = 1;     /* switch stack index */
+    outp = 0;                   /* output character pointer */
+    level = 0;                  /* file control */
+    linect[0] = 1;              /* line count of first file */
+    filename[0] = u_filename;   /* filename of first file */
+    infile[0] = in;             /* file handle of first file */
+    fordep = 0;                 /* for stack */
+    swtop = 0;                  /* switch stack index */
+    swlast = 1;                 /* switch stack index */
     
     for (i = 0; i <= 126; i++)
         tabptr[i] = 0;
@@ -188,7 +194,7 @@ parse(void)
         }
     }
     if (sp != 0)
-        synerr("unexpected EOF.");
+        synerr_eof();
 }
 
 /*
@@ -303,7 +309,7 @@ eatup()
             break;
         }
         if (t == EOF) {
-            synerr("unexpected EOF.");
+            synerr_eof();
             pbstr(token);
             break;
         }
@@ -420,6 +426,7 @@ int toksiz;
             else if (equal(token, incl) == NO) {
                 return(tok);
             }
+            /* deal with file inclusion */
             for (i = 0; ; i = strlen(name)) {
                 t = deftok(&name[i], MAXNAME, infile[level]);
                 if (t == NEWLINE || t == SEMICOL) {
@@ -448,24 +455,27 @@ int toksiz;
                 /* skip leading white space in name */
                 for (j = 0; name[j] == BLANK || name[j] == TAB; j++)
                     /* empty body */;
-                infile[level+1] = fopen(&name[j], "r");
-                linect[level+1] = 1;
-                if (infile[level+1] == NULL) {
-                    synerr("cannot open include."); /*XXX improve errmsg */
-                } else {
-                    level++;
-                    if (fnamp + i <= MAXFNAMES) {
-                        scopy(name, 0, fnames, fnamp); /* XXX: only `name'? */
-                        fnamp = fnamp + i;  /* push file name stack */
-                    }
+                filename[level+1] = strsave(&name[j]);
+                if (filename[level+1] == NULL) {
+                    synerr("cannot open include: memory error."); /*XXX improve errmsg */
+                    goto include_done;
                 }
+                infile[level+1] = fopen(filename[level+1], "r");
+                if (infile[level+1] == NULL) {
+                    synerr("cannot open include: I/O error."); /*XXX improve errmsg */
+                    goto include_done;
+                }
+                linect[level+1] = 1;
+                ++level;
+include_done:
+                /* nothing else to do */;
             }
         }
         if (level > 0) {  /* close include and pop file name stack */
             fclose(infile[level]);
-            for (fnamp--; fnamp > 0; fnamp--)
-                if (fnames[fnamp-1] == EOS)
-                    break;
+            infile[level] = NULL; /* just to be sure */
+            free(filename[level]);
+            filename[level] = NULL; /* just to be sure */
         }
     }
     token[0] = EOF;   /* in case called more than once */
@@ -1512,7 +1522,7 @@ int token;
     }
 
     if (t == EOF)
-        synerr ("unexpected EOF.");
+        synerr_eof();
     else if (t != COLON)
         baderr ("missing colon in case or default label.");
 

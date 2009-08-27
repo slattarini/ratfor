@@ -9,9 +9,23 @@
 #include "lookup.h"
 #include "ratdef.h"
 
+
 /*
  * U T I L I T Y  R O U T I N E S
  */
+
+
+/*
+ * strsave - save string s somewhere, by malloc'ing memory
+ */
+char
+*strsave(char *s)
+{
+    char *p;
+    if ((p = malloc(strlen(s)+1)) != NULL)
+        strcpy(p, s);
+    return(p);
+}
 
 /*
  * ctoi - convert string at in[i] to int, increment i
@@ -72,7 +86,7 @@ fold(char token[])
 {
     int i;
     for (i = 0; token[i] != EOS; i++)
-            token[i] = tolower(token[i]);
+        token[i] = tolower(token[i]);
 }
 
 /*

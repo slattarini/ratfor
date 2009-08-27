@@ -9,20 +9,28 @@
 
 cat > top.r <<EOF
 TopStart
-include inc.r
+include incl.r
 TopEnd
 EOF
 
-cat > inc.r <<EOF
+cat > incl.r <<EOF
 IncludeStart
-Body
+include nest.r
 IncludeEnd
+EOF
+
+cat > nest.r <<EOF
+NestedIncludeStart
+Body
+NestedIncludeEnd
 EOF
 
 tolower > expected <<\EOF
 TopStart
 IncludeStart
+NestedIncludeStart
 Body
+NestedIncludeEnd
 IncludeEnd
 TopEnd
 EOF

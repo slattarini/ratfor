@@ -10,9 +10,12 @@ TEST_EXTENSIONS = .test
 #  LIST OF TESTS  #
 # --------------- #
 
-# currently, the line numbers in error messages about the `include'
-# statement seem to be off by one
-XFAIL_TESTS = include-fail.test
+# Currently, messages about syntax errors are *not* dispalyed if the error
+# occur in an included file. Sigh. To be fixed ASAP.
+XFAIL_TESTS = \
+synerr-include-lineno.test \
+include-fail.test \
+include-synerr.test
 
 TESTS = \
 000sanity.test \
@@ -24,11 +27,13 @@ include-fail.test \
 include-nested-deep.test \
 include-nested.test \
 include-stress.test \
+include-synerr.test \
 integers-many-bases.test \
 integers-many-bases_f77.test \
 simple-assign.test \
-synerr-lineno.test \
-synerr.test
+synerr-basic.test \
+synerr-include-lineno.test \
+synerr-lineno.test
 
 EXTRA_DIST = $(TESTS)
 
@@ -56,7 +61,7 @@ AM_TEST_LOG_FLAGS = # will be updated later
 #  (A.1) So that the code in defs.sh won't be forced to calculate it
 #        again and again.
 #  (Q.2) Why we can't rely on automake feature of exporting
-#       `srcdir=$(srcdir)' in the environment of every test case?
+#        `srcdir=$(srcdir)' in the environment of every test case?
 #  (A.2) We prefer to export `srcdir=$(abs_srcdir)' instead, since
 #        otherwise, whenever $(srcdir) is not an absolute path (which
 #        is the usual case), defs.sh will be forced to make it an

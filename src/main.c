@@ -4,7 +4,7 @@
   ratfor77
  
 Usage
-  ratfor77 < input.r >output.f pars
+  ratfor77 -o output.f input.r pars
  
 Input Parameters
   l - flag [-l n]  user sets strating label n
@@ -40,16 +40,13 @@ Copyright
 #include "ratdef.h"
 #include "main.h"
 #include "error.h"
+#include "rat4.h"
 
 int
 main(int argc, char *argv[])
 {
     int c, errflg = NO;
-    char *progname = argv[0];
-    FILE *infile;
-    
-    extern void init(int, int, FILE *); /* XXX: move out */
-    extern void parse(void); /* XXX: move out */
+    char *progname = argv[0], *infile = "-";
     
     int startlab = 23000; /* default start label */
     int leaveC = NO;
@@ -62,8 +59,9 @@ main(int argc, char *argv[])
                 startlab = atoi(optarg);
                 break;
             case 'o':
+                /* XXX make this "lazily" executed later */
                 if ((freopen(optarg, "w", stdout)) == NULL)
-                    error("%s: cannot open for writing\n", optarg);
+                    error("%s: cannot open for writing\n", optarg); /*XXX: perror*/
                 break;
             default:
                 errflg = YES;
@@ -77,15 +75,11 @@ main(int argc, char *argv[])
         exit(2);
     }
 
-    /*
-     * present version can only process one file, sadly.
-     */
-    if (optind >= argc)
-        infile = stdin;
-    else if ((infile = fopen(argv[optind], "r")) == NULL)
-        error("%s: cannot open for reading\n", argv[optind]);
-
-    init(startlab, leaveC, infile);
+    /* TODO error if two or more args given */
+    
+    if (optind < argc)
+        infile = argv[optind];
+    init(startlab, leaveC, infile); /* intialize preprocessor status */
     printf("C Output from Public Domain Ratfor, version %s\n",
            PACKAGE_VERSION);
     parse(); /* call parser and do the real work */
