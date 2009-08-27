@@ -34,11 +34,15 @@ Interpretation
 Getting details from failures
 -----------------------------
 
-  Each test is a script.  By default, verbose output of a test foo.test
-  is retained in the log file foo.log.  A summary log is created in the
-  file test-suite.log.  In a non-VPATH build you can also run test scripts
-  directly (with the current directory being necessarly the the `tests/'
-  subdirectory), they will be verbose and no log file will be written.
+  Each test is a shell script, and by default is run by $CONFIG_SHELL
+  (which should be the best shell found at configure time).
+  By default, verbose output of a test `foo.test' is retained in the log
+  file `foo.log'.  A summary log is created in the file `test-suite.log'.
+  
+  In a non-VPATH build you can also run test scripts directly (with the
+  current directory being necessarly the the `tests/' subdirectory), they
+  will be verbose and no log file will be written.
+  
   You can limit the set of files using the TESTS variable, and enable
   detailed test output at the end of the test run with the VERBOSE
   variable:
@@ -53,6 +57,26 @@ Getting details from failures
 
   But remember that `make -e' can be evil, since it could pull to much
   things in the makefile's namespace.  You've been warned.
+
+
+Supported shells
+----------------
+
+  The test scripts are written with portability in mind, so that they
+  should run an any decent bourne-compatible shell.
+  
+  However, some care must be used with Zsh, since, when not directly
+  starting in bourne-compatibility mode, it has some incompatibilities
+  in the handling of `$0' which conflict with our usage, and which have
+  no easy workaround.  Thus, if you want to run a test script, say
+  foo.test, with Zsh, you *can't* simply do `zsh foo.test', but you
+  *must* resort to:
+    zsh --no-function-argzero foo.test
+
+  Note that this problem does not occur if zsh is executed through a
+  symlink with `sh' basename, since in that case it immediatly starts
+  in bourne-compatibility mode.  So you should be perfectly safe even
+  having zsh as your /bin/sh.
 
 
 Preserving temporary files
