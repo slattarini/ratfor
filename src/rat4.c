@@ -251,8 +251,7 @@ balpar()
             nlpar--;
         /* else nothing special */
         outstr(token);
-    }
-    while (nlpar > 0);
+    } while (nlpar > 0);
     if (nlpar != 0)
         synerr("missing parenthesis in condition.");
 }
@@ -625,7 +624,7 @@ FILE *fd;
           outcmnt(fd);      /* copy comments to output */
         else
           while (ngetch(&lexstr[0], fd) != NEWLINE) /* strip comments */
-            ;
+            /* empty body */;
           tok = NEWLINE;
     }
     else if (c == GREATER || c == LESS || c == NOT
