@@ -10,30 +10,42 @@ TEST_EXTENSIONS = .test
 #  LIST OF TESTS  #
 # --------------- #
 
+XFAIL_TESTS = # updated later
+
 # Currently, messages about syntax errors are *not* dispalyed if the error
 # occur in an included file. Sigh. To be fixed ASAP.
-XFAIL_TESTS = \
-synerr-include-lineno.test \
-include-fail.test \
-include-synerr.test
+XFAIL_TESTS += \
+  synerr-include-lineno.test \
+  include-fail.test \
+  include-synerr.test
+
+# Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
+XFAIL_TESTS += define-case-sensibility.test
 
 TESTS = \
-000sanity.test \
-devnull-input.test \
-empty-input.test \
-include-abspath.test \
-include-basic.test \
-include-fail.test \
-include-nested-deep.test \
-include-nested.test \
-include-stress.test \
-include-synerr.test \
-integers-many-bases.test \
-integers-many-bases_f77.test \
-simple-assign.test \
-synerr-basic.test \
-synerr-include-lineno.test \
-synerr-lineno.test
+  000sanity.test \
+  define-balanced-paren.test \
+  define-basic.test \
+  define-case-sensibility.test \
+  define-multiline.test \
+  define-nested.test \
+  define-semicolon.test \
+  define-whitespaces.test \
+  devnull-input.test \
+  empty-input.test \
+  include-abspath.test \
+  include-basic.test \
+  include-fail.test \
+  include-nested-deep.test \
+  include-nested.test \
+  include-stress.test \
+  include-synerr.test \
+  integers-many-bases.test \
+  integers-many-bases_f77.test \
+  simple-assign.test \
+  synerr-basic.test \
+  synerr-include-lineno.test \
+  synerr-lineno.test
 
 EXTRA_DIST = $(TESTS)
 

@@ -1,0 +1,42 @@
+#!/bin/sh
+# $Id$
+
+# Check that simple 'define' works.
+
+. ./defs.sh || exit 99
+
+tr '_' "$TAB" >tst.r <<EOF
+define sym1 text1
+define(sym2,text2)
+DEFINE sym3  _"text3" _
+DEFINE (sym4,text4)
+x1 sym1
+sym 1
+x2:sym2
+sym 2
+x3?sym3
+sym 3
+x4,sym4
+sym 4
+sym5
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+
+fgrep -i define stdout && testcase_FAIL
+
+grep  'sym[1234]' stdout    && testcase_FAIL
+fgrep 'sym5' stdout         || testcase_FAIL
+
+for i in 1 2 3 4; do
+    grep "sym  *$i" stdout  || testcase_FAIL
+done
+
+fgrep 'x1 text1' stdout     || testcase_FAIL
+fgrep 'x2:text2' stdout     || testcase_FAIL
+fgrep 'x3?"text3"' stdout   || testcase_FAIL
+fgrep 'x4,text4' stdout     || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
