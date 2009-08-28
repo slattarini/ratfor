@@ -140,6 +140,10 @@ Do
   This list of tools might be incomplete: look at defs.in for a
   complete list.
 
+  When calculating diffs on expected output and obtained output, put
+  file containing expected output first, as in `$DIFF_U exp.txt got.txt'.
+  This will make the output of diff more intuitive and easier to grasp.
+
   If you plan to fix a bug, write the test case first.  This way you'll
   make sure the test catches the bug, and that it succeeds once you have
   fixed the bug.  Also, cite the PR number (if any), and the original
