@@ -345,7 +345,7 @@ char defn[];
 int defsiz;
 FILE *fd;
 {
-    int i, nlpar, t;
+    int i, nlpar, t, t2;
     char c, ptoken[MAXTOK];
 
     skpblk(fd);
@@ -359,8 +359,16 @@ FILE *fd;
         pbstr(ptoken);
     }
     skpblk(fd);
-    if (gtok(token, toksiz, fd) != ALPHA)
+    t2 = gtok(token, toksiz, fd); /* name */
+    if (t == BLANK && (t2 == NEWLINE || t2 == SEMICOL)) {
+        /* stray `define', as in `...; define; ...' */
+        baderr("empty name.");
+    } else if (t == LPAREN && t2 == COMMA) {
+        /* `define (name, defn)' with empty name */
+        baderr("empty name.");
+    } else if (t2 != ALPHA) {
         baderr("non-alphanumeric name.");
+    }
     skpblk(fd);
     c = gtok(ptoken, MAXTOK, fd);
     if (t == BLANK) { /* define name defn */

@@ -27,6 +27,7 @@ TESTS = \
   define-balanced-paren.test \
   define-basic.test \
   define-case-sensibility.test \
+  define-fail.test \
   define-multiline.test \
   define-nested.test \
   define-semicolon.test \
