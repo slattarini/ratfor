@@ -30,7 +30,7 @@ enter3
 exit3
 EOF
 
-tolower > expected <<\EOF
+tolower > exp <<\EOF
 enter0
 enter1
 enter2
@@ -45,7 +45,7 @@ run_RATFOR -e 0 top.r || testcase_FAIL
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
 
-$DIFF_U expected got || testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
 
 testcase_PASS
 
