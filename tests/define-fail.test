@@ -1,0 +1,29 @@
+#!/bin/sh
+# $Id$
+
+# Check that `define' fails with proper error messages if usen improperly.
+
+. ./defs.sh || exit 99
+
+tcnt=0
+baddef() {
+    tcnt=`expr $tcnt + 1` || testcase_HARDERROR
+    echo "$1" > tst$tcnt.r
+    cat tst$tcnt.r
+    run_RATFOR -e 1 tst$tcnt.r || testcase_FAIL
+    mv stdout stdout$tcnt
+    mv stderr stderr$tcnt
+    fgrep "$2" stderr$tcnt || testcase_FAIL
+}
+
+baddef  'define 11 eleven'  'non-alphanumeric name'
+baddef  'define 1s foo'     'non-alphanumeric name'
+baddef  'define @ foo'      'non-alphanumeric name'
+baddef  'define , xxx'      'non-alphanumeric name'
+baddef  'define'            'empty name'
+baddef  'define; x = 1'     'empty name'
+baddef  'define( , xxx)'    'empty name'
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
