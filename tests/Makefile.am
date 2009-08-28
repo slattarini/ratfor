@@ -78,19 +78,17 @@ check_SCRIPTS = ratfor$(EXEEXT) defs.sh
 # Real ratfor binary.
 top_ratfor = $(top_builddir)/src/ratfor$(EXEEXT)
 
-# Ratfor binary to be used in testing.
-# Yep, the rule to force the real ratfor binary to be correctly rebuilt
-# even from within this directory is a bit tricky -- aha, the woes of
-# recursive make...
-ratfor$(EXEEXT): .top_ratfor_rebuilt
+# Ratfor binary to be used in testing. It depends on the real ratfor
+# binary (at the moment, it's just a link to it).
+ratfor$(EXEEXT): $(top_ratfor)
 	rm -f $@ && $(LN_S) $(top_ratfor) $@
 
 # Tell how to rebuild the real ratfor binary -- aha, the woes of recursive
 # make...
-.top_ratfor_rebuilt:
-	cd $(abs_top_builddir)/src \
-	  && $(MAKE) $(AM_MAKEFLAGS) ratfor$(EXEEXT)
-	date > $@
+$(top_ratfor): _force
+	cd $(abs_top_builddir)/src && $(MAKE) $(AM_MAKEFLAGS) ratfor$(EXEEXT)
+_force:
+.PHONY: _force
 
 # Be sure to use the absolute path of the test ratfor executable, since
 # in our testsuite we merryli change the curent directory a lot.
@@ -118,7 +116,7 @@ AM_TEST_LOG_FLAGS += $(TEST_SHELL)
 
 # Remove the ratfor binary used in testing
 clean-local-ratfor:
-	rm -f ratfor$(EXEEXT) .top_ratfor_rebuilt
+	rm -f ratfor$(EXEEXT)
 .PHONY: clean-local-ratfor
 clean-local: local-ratfor
 
