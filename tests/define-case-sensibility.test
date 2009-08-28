@@ -1,0 +1,29 @@
+#!/bin/sh
+# $Id$
+
+# Check that 'define' is case-sensible w.r.t. the symbol name.
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+define sym1 foo
+define sym2 bar
+define SYM2 quux
+l1:sym1
+U1:SYM1
+l2:sym2
+U2:SYM2
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+
+fgrep define stdout && testcase_FAIL
+
+fgrep -i 'l1:foo'  stdout || testcase_FAIL
+fgrep -i 'U1:SYM1' stdout || testcase_FAIL
+fgrep -i 'l1:bar'  stdout || testcase_FAIL
+fgrep -i 'U2:quux' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

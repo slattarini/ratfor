@@ -1,0 +1,27 @@
+#!/bin/sh
+# $Id$
+
+# Check that `define(SYM, VALUE)' works if VALUE contains semicolons.
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+define(sym1, a = 1; b = 1; c = 1;)
+define(sym2, d = 1; ;;e = 1)
+sym1
+sym2
+alive
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+ws_normalize <stdout >xstdout
+
+fgrep sym xstdout && testcase_FAIL
+fgrep alive xstdout || testcase_FAIL
+for x in a b c d e; do
+    grep "$x *= *1" xstdout || testcase_FAIL
+done
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

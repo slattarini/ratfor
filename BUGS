@@ -1,7 +1,5 @@
 $Id$
 
-(Originally written by some "jon@sep.stanford.edu.us")
-
  ---
 
 The sytanx errors seems not to be reported if found inside files included
@@ -14,6 +12,26 @@ This crazy on case-senible file-systems. Must be fixed ASAP.
 
  ---
 
+The builtin `define' is case-insensible w.r.t. symbol names, so that a
+statement like:
+  define SYM "value"
+defines both the symbols `SYM' and `sym' to "value"!
+
+  ---
+ 
+This is a limitation rather than a bug.
+
+Defining a symbol (with the `define' builtin) to an expression containing
+that same symbol will led to a silent infinite recursion, and ratfor will
+hang. An example of this situation:
+  define SYM SYM
+A more convoluted example:
+  define SYM1 SYM2
+  define SYM2 SYM3
+  define SYM3 SYM1
+ 
+ ---
+
 The `return' keyword being used outside any function defition is not
 flagged as an error, so that at the main level a ratfor stament like:
   return 1
@@ -23,8 +41,8 @@ is translated to fortran code like:
 
  ---
 
-This is not a bug but a design error in both AT&T ratfor
-and this public domain ratfor:
+This is not a bug but a design error in both AT&T ratfor and this
+public domain ratfor.
 
 The problem is with the switch statment.
 It switches on an integer valued expression.
@@ -37,6 +55,4 @@ is unusable because the switch is done on a new variable that
 is not declared or declarable by the programmer who cannot guess
 its name.
 
-Please let me know if you fix this.
-            jon@sep.stanford.edu.us
  ---

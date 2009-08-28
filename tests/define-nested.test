@@ -1,0 +1,48 @@
+#!/bin/sh
+# $Id$
+
+# Check that nested `include' works.
+
+. ./defs.sh || exit 99
+
+cat >tst1.r <<EOF
+define L0 L1
+define L1 L2
+:L0:
+EOF
+
+run_RATFOR -e 0 tst1.r || testcase_FAIL
+grep -v '^[cC]' stdout >stdout1
+rm -f stdout
+
+fgrep define stdout1 && testcase_FAIL
+grep -i 'L[01]' stdout1 && testcase_FAIL
+grep -i ':L2:' stdout1 || testcase_FAIL
+
+# the same test as above, with deeper nesting
+
+cat >tst2.r <<EOF
+define L0 L1
+define L1 L2
+define L2 L3
+define L3 L4
+define L4 L5
+define L5 L6
+define L6 L7
+define L7 L8
+define L8 L9
+define L9 foo
+:L9:
+EOF
+
+run_RATFOR -e 0 tst2.r || testcase_FAIL
+grep -v '^[cC]' stdout >stdout2
+rm -f stdout
+
+fgrep define stdout2 && testcase_FAIL
+grep -i 'L[0-9]' stdout2 && testcase_FAIL
+grep -i ':foo:' stdout2 || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

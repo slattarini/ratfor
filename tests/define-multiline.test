@@ -1,0 +1,28 @@
+#!/bin/sh
+# $Id$
+
+# Check that `define(SYM, VALUE)' works on multi-line VALUE.
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+define(sym,#
+line1
+line2
+line3)
+sym
+alive
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+ws_strip <stdout >xstdout
+
+fgrep sym xstdout && testcase_FAIL
+fgrep alive xstdout || testcase_FAIL
+for i in 1 2 3; do
+    grep "^line${i}$" xstdout || testcase_FAIL
+done
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

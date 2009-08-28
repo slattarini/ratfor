@@ -1,0 +1,26 @@
+#!/bin/sh
+# $Id$
+
+# Check that simple `define' works on text containing balanced parens.
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+define(sym1, subr())
+define(sym2, if (bar == 0.11) { func(2); func(1) } else error())
+sym1
+sym2
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+
+fgrep define stdout && testcase_FAIL
+grep 'sym[12]' stdout && testcase_FAIL
+fgrep 'bar' stdout || testcase_FAIL
+fgrep 'func(1)' stdout || testcase_FAIL
+fgrep 'func(2)' stdout || testcase_FAIL
+fgrep 'error()' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
