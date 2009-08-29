@@ -76,6 +76,11 @@ case "${RAT4_TESTSUITE_BYPASS_SANITY_CHECKS-}" in
                     *) do_sanity_checks() { return 0; };;
 esac
 
+# In a test script, it is an error if any command which must read from
+# standard input does so without first redirecting it; so close stdin
+# to make such an error stick out clearly.
+exec <&-
+
 # Used as a "fingerprint" to identify this file
 RAT4_TESTSUITE_DEFS_ID='$Id$'
 
