@@ -8,7 +8,7 @@
 echo 'x = 1' > tst.r
 run_RATFOR -e 0 tst.r || testcase_FAIL
 echo 'x = 1' > out.exp
-grep -v '^[Cc]' stdout | sed -e "s/$ws0p//" > out.got
+$GREP -v '^[Cc]' stdout | $SED -e "s/$ws0p//" > out.got
 $DIFF_U out.exp out.got || testcase_FAIL
 
 testcase_PASS

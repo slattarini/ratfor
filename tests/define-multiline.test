@@ -27,7 +27,7 @@ alive
 EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
-grep -v '^[cC]' stdout | ws_normalize | tolower >got
+$GREP -v '^[cC]' stdout | ws_normalize | tolower >got
 
 $DIFF_U exp got || testcase_FAIL
 

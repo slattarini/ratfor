@@ -22,10 +22,10 @@ echo > inc.r <<EOF
 EOF
 
 run_RATFOR -e 1 top.r   || testcase_FAIL
-fgrep 'top.r:3:' stderr || testcase_FAIL
-fgrep 'inc.r:1:' stderr || testcase_FAIL
-fgrep 'inc.r:3:' stderr || testcase_FAIL
-fgrep 'top.r:6:' stderr || testcase_FAIL
+$FGREP 'top.r:3:' stderr || testcase_FAIL
+$FGREP 'inc.r:1:' stderr || testcase_FAIL
+$FGREP 'inc.r:3:' stderr || testcase_FAIL
+$FGREP 'top.r:6:' stderr || testcase_FAIL
 
 testcase_PASS
 

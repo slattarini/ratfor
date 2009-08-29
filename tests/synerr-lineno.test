@@ -8,7 +8,7 @@
 echo '}' > tst1.r
 run_RATFOR -e 1 tst1.r || testcase_FAIL
 mv stderr stderr1
-fgrep 'tst1.r:1:' stderr1 || testcase_FAIL
+$FGREP 'tst1.r:1:' stderr1 || testcase_FAIL
 
 cat > tst2.r <<EOF
 #1
@@ -20,8 +20,8 @@ cat > tst2.r <<EOF
 EOF
 run_RATFOR -e 1 tst2.r || testcase_FAIL
 mv stderr stderr2
-fgrep 'tst2.r:2:' stderr2 || testcase_FAIL
-fgrep 'tst2.r:5:' stderr2 || testcase_FAIL
+$FGREP 'tst2.r:2:' stderr2 || testcase_FAIL
+$FGREP 'tst2.r:5:' stderr2 || testcase_FAIL
 
 cat > tst3.r <<EOF
 { #1
@@ -32,7 +32,7 @@ EOF
 run_RATFOR -e 1 tst3.r || testcase_FAIL
 mv stderr stderr3
 # unexpected EOF in input
-fgrep 'tst3.r:3:' stderr3 || testcase_FAIL
+$FGREP 'tst3.r:3:' stderr3 || testcase_FAIL
 
 testcase_PASS
 

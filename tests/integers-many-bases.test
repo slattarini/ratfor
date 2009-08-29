@@ -48,7 +48,7 @@ exec 5<&-
 cat tst.r
 run_RATFOR -e 0 tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
-grep -v '^[cC]' <stdout >got
+$GREP -v '^[cC]' <stdout >got
 makeup got exp
 { echo " ==="; } 2>/dev/null
 cat exp

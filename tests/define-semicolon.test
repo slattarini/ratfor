@@ -16,10 +16,10 @@ EOF
 run_RATFOR -e 0 tst.r || testcase_FAIL
 ws_normalize <stdout >xstdout
 
-fgrep sym xstdout && testcase_FAIL
-fgrep alive xstdout || testcase_FAIL
+$FGREP sym xstdout && testcase_FAIL
+$FGREP alive xstdout || testcase_FAIL
 for x in a b c d e; do
-    grep "$x *= *1" xstdout || testcase_FAIL
+    $GREP "$x *= *1" xstdout || testcase_FAIL
 done
 
 testcase_PASS

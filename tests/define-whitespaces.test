@@ -16,9 +16,9 @@ EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
 
-fgrep 'a: text1:a' stdout  || testcase_FAIL
-fgrep 'b:text2 :b' stdout  || testcase_FAIL
-fgrep 'c: text3 :c' stdout  || testcase_FAIL
+$FGREP 'a: text1:a' stdout  || testcase_FAIL
+$FGREP 'b:text2 :b' stdout  || testcase_FAIL
+$FGREP 'c: text3 :c' stdout || testcase_FAIL
 
 testcase_PASS
 

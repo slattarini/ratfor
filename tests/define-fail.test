@@ -13,7 +13,7 @@ baddef() {
     run_RATFOR -e 1 tst$tcnt.r || testcase_FAIL
     mv stdout stdout$tcnt
     mv stderr stderr$tcnt
-    fgrep "$2" stderr$tcnt || testcase_FAIL
+    $FGREP "$2" stderr$tcnt || testcase_FAIL
 }
 
 baddef  'define 11 eleven'  'non-alphanumeric name'
