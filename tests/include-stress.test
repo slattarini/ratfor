@@ -27,7 +27,7 @@ ${TAB}  include inc4.r ${TAB}
 @MARK5@
 EOF
 
-tolower > expected <<\EOF
+tolower > exp <<\EOF
 @MARK1@
 ONE
 @MARK2@
@@ -49,7 +49,19 @@ run_RATFOR -e 0 tst.r || testcase_FAIL
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
 
-$DIFF_U expected got || testcase_FAIL
+# to have more information on test failure
+cat inc1.r
+cat inc2.r
+cat inc2b.r
+cat inc3.r
+cat inc3b.r
+cat inc3bb.r
+cat inc4.r
+cat tst.r
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
 
 testcase_PASS
 
