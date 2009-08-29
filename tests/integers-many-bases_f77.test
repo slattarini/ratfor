@@ -8,13 +8,21 @@
 
 require_fortran_compiler
 
-i=0
+: >exp
+: >tst.r
+
+cat >>tst.r <<EOF
+program testprog
+    implicit none
+100 format(A30, " ==> ", I30)
+EOF
+
 # since a redirected while loop might take place in a subshell in some
 # shells, we need thew following hack
 exec 5<&1
 exec <"$srcdir"/integers-many-bases.data
-failed=no
 set +x
+echo "** reading data from $srcdir/integers-many-bases.data"
 while read LINE; do
     case "$LINE" in
       \#*|"")
@@ -22,8 +30,8 @@ while read LINE; do
           continue
           ;;
       *)
-          # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE]"
-          set X $LINE && shift; in=$1 out=$2 compile=${3-}; set X && shift
+          # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE-FLAG]"
+          set X $LINE; shift; in=$1 out=$2 compile=${3-}; set X; shift
           case $compile in
             ""|compile-also|compile-only);;
             no-compile) continue;;
@@ -31,54 +39,36 @@ while read LINE; do
           esac
           ;;
     esac
-    i=`expr $i + 1`
-    case $i in
-        ?) j=00$i;;
-       ??) j=0$i;;
-        *) j=$i;;
-    esac
-    echo "$out" >exp$j
-cat >t$j.r <<EOF
-program t$j
-integer x
-x = $in
-write(*, 100) x
-100 format(I50)
-stop
+    echo "    write(*,100) '$in', $in" >> tst.r
+    echo "$in ==> $out" >> exp
+done
+set -x
+exec 5<&-
+
+cat >>tst.r <<EOF
+    stop
 end
 EOF
-    : > msg$j
-    echo "+ run_RATFOR -e 0 t$j.r"
-    run_RATFOR -e 0 t$j.r || echo "ratfor failed on input: t$j" >>msg$j
-    if test -s stderr; then
-      {
-        echo "ratfor has no empty stderr on input: $in" >>msg$j
-        echo "=== begin stderr"
-        cat stderr
-        echo "=== end stderr"
-      }
-    fi
-    mv stdout t$j.f
-    rm -f stderr
-    echo "+ run_F77 -e 0 -- -o t$j.exe t$j.f"
-    run_F77 -e 0 -- -o t$j.exe t$j.f \
-      || echo "fortran failed on input file: t$j.f" >>msg$j
-    run_CMD ./t$j.exe -e 0 \
-      || echo "compiled progrm failed: t$j.exe" >>msg$j
-    ws_strip <stdout >got$j
-    echo "+ cmp got$j exp$j"
-    cmp got$j exp$j >/dev/null 2>&1 || {
-      echo "* compiled program has unexpected output on input: $in" >msg$j
-      echo "=== EXPECTED"
-      cat exp$j
-      echo "=== GOT"
-      cat got$j
-      echo "==="
-    } >>msg$j
-    test ! -s msg$j || { cat msg$j; failed=yes; }
-done
 
-test x"$failed" = x"no" || testcase_FAIL
+cat tst.r
+run_RATFOR -e 0 tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout tst.f
+
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+test -s stderr && testcase_FAIL
+ws_normalize <stdout >got
+
+{ echo " ==="; } 2>/dev/null
+cat exp
+{ echo " ==="; } 2>/dev/null
+cat got
+{ echo " ==="; } 2>/dev/null
+$DIFF_U exp got || testcase_FAIL
+{ echo " ==="; } 2>/dev/null
+
+testcase_PASS
 
 testcase_PASS
 
