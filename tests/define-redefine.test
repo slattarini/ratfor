@@ -1,0 +1,27 @@
+#!/bin/sh
+# $Id$
+
+# Check tha symbols defined with `define' can be redefined.
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+define sym foo
+sym
+define sym bar
+sym
+EOF
+
+cat >exp <<EOF
+foo
+bar
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+grep -v '^[cC]' stdout | ws_normalize | tolower > got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,40 @@
+#!/bin/sh
+# $Id$
+
+# Check basics of `define' (with f77)
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+tr '_' "$TAB" >tst.r <<\EOF
+    define(ONE, 1)
+    define TWO 2
+    define( _ THREE _, _3__ )
+    program testprogram
+        implicit none
+        write(*,100) "ONE", ONE
+        write(*,100) "TWO", TWO
+        write(*,100) "THREE", THREE
+100     format(A10,":",I1)
+        stop
+    end # testprogram
+EOF
+
+cat > exp <<EOF
+one:1
+two:2
+three:3
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+ws_normalize <stdout | sed -e 's/ *: */:/' | tolower >got
+test -s stderr && { cat stderr; testcase_FAIL; }
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

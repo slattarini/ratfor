@@ -1,0 +1,44 @@
+#!/bin/sh
+# $Id$
+
+# Check (with f77) that `define(SYM, VALUE)' works on multi-line VALUE.
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+cat >tst.r <<EOF
+define(cmd,
+    x = 1
+    y = 2
+    z = 3
+100 format(I1))
+
+    program testprogram
+        implicit none
+        integer x, y, z
+        cmd
+        write(*,100) x
+        write(*,100) y
+        write(*,100) z
+        stop
+    end # testprogram
+EOF
+
+cat > exp <<EOF
+1
+2
+3
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+test -s stderr && { cat stderr; testcase_FAIL; }
+mv stdout got
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
