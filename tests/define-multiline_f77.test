@@ -35,7 +35,7 @@ run_RATFOR -e 0 tst.r || testcase_FAIL
 mv stdout tst.f
 run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
 run_CMD ./tst.exe -e 0 || testcase_FAIL
-test -s stderr && { cat stderr; testcase_FAIL; }
+test -s stderr && testcase_FAIL
 mv stdout got
 $DIFF_U exp got || testcase_FAIL
 
