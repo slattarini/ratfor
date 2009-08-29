@@ -21,7 +21,7 @@ baddef  'define 1s foo'     'non-alphanumeric name'
 baddef  'define @ foo'      'non-alphanumeric name'
 baddef  'define , xxx'      'non-alphanumeric name'
 baddef  'define'            'empty name'
-baddef  'define; x = 1'     'empty name'
+baddef  'define; x y'       'empty name'
 baddef  'define( , xxx)'    'empty name'
 
 testcase_PASS

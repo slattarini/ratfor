@@ -14,7 +14,7 @@ EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
 
-fgrep define stdout && testcase_FAIL
+fgrep 'define' stdout && testcase_FAIL
 grep 'sym[12]' stdout && testcase_FAIL
 fgrep 'bar' stdout || testcase_FAIL
 fgrep 'func(1)' stdout || testcase_FAIL

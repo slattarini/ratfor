@@ -23,9 +23,9 @@ EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
 
-fgrep -i define stdout && testcase_FAIL
+fgrep -i 'define' stdout && testcase_FAIL
 
-grep  'sym[1234]' stdout    && testcase_FAIL
+grep 'sym[1234]' stdout     && testcase_FAIL
 fgrep 'sym5' stdout         || testcase_FAIL
 
 for i in 1 2 3 4; do
