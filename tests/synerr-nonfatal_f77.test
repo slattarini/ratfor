@@ -1,0 +1,35 @@
+#!/bin/sh
+# $Id$
+
+# Check that ratfor continue its execution on non-fatal syntax errors.
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<EOF
+program testprogram
+    write(*,100) "ALIVE"
+    } # syntax error here
+100 format(A5)
+    next # syntax error here
+    stop
+end # testprogram
+EOF
+
+echo 'ALIVE' > exp
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+$FGREP 'illegal right brace' stderr || testcase_FAIL
+$FGREP 'illegal next' stderr || testcase_FAIL
+mv stdout tst.f
+
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+mv stdout got
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
