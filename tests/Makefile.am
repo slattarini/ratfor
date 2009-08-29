@@ -57,7 +57,9 @@ ALL_TESTS = \
   simple-assign.test \
   synerr-basic.test \
   synerr-include-lineno.test \
-  synerr-lineno.test
+  synerr-lineno.test \
+  synerr-nonfatal.test \
+  synerr-nonfatal_f77.test
 
 EXTRA_DIST = $(TESTS)
 
