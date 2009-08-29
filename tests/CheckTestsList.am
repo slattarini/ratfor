@@ -14,7 +14,7 @@ check-list-of-tests:
 	 export LC_ALL=C; \
 	 echo "****--------------------------------------------"; \
 	 echo "** Checking consistency of list of tests..."; \
-	 for t in $(TESTS); do \
+	 for t in $(ALL_TESTS); do \
 	    echo "$$t"; \
 	 done > $(tmk); \
 	 (cd $(srcdir) && for t in *.test; do \

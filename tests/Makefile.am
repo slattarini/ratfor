@@ -22,7 +22,11 @@ XFAIL_TESTS += \
 # Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
 XFAIL_TESTS += define-case-sensibility.test
 
-TESTS = \
+# We need this auxiliary variable to keep the list of *all* test scripts
+# so that the user can override the $(TESTS) variable without clashing
+# with consistency checks done by  the `check-list-of-tests' target defined
+# in `CheckTestList.am'.
+ALL_TESTS = \
   000sanity.test \
   define-balanced-paren.test \
   define-balanced-paren_f77.test \
@@ -55,6 +59,9 @@ TESTS = \
   synerr-lineno.test
 
 EXTRA_DIST = $(TESTS)
+
+# run all tests by default
+TESTS = $(ALL_TESTS)
 
 # ----------------------- #
 #  REQUIREMENTS OF TESTS  #
