@@ -1,0 +1,55 @@
+#!/bin/sh
+# $Id$
+
+# Check (with f77) that `define' works on text containing balanced parens.
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+cat >tst.r <<\EOF
+    define(xsubr, call sub1())
+    define(xmain, if (i != 1) call sub2(i, j); else call sub2(i+7, j))
+    subroutine sub1()
+        implicit none
+        write(*,100) "sub1"
+100     format(A4)
+        return
+    end # sub1()
+    subroutine sub2(x, y)
+        implicit none
+        integer x, y
+        write(*,200) y, x
+200     format(I1,":",I1)
+        return
+    end # sub2()
+    program testprogram
+        implicit none
+        integer i, j
+        xsubr
+        j = 1; i = 5;
+        xmain
+        j = 2; i = 1;
+        xmain
+        stop
+    end # testprogram
+EOF
+
+
+cat > exp <<EOF
+sub1
+1:5
+2:8
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+mv stdout got
+test -s stderr && { cat stderr; testcase_FAIL; }
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

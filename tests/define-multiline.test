@@ -6,22 +6,30 @@
 . ./defs.sh || exit 99
 
 cat >tst.r <<EOF
-define(sym,#
+define(sym1,#
 line1
 line2
 line3)
-sym
+define sym2 a_
+b_
+c
+sym1
+sym2
+alive
+EOF
+
+cat > exp <<EOF
+line1
+line2
+line3
+abc
 alive
 EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
-ws_strip <stdout >xstdout
+grep -v '^[cC]' stdout | ws_normalize | tolower >got
 
-fgrep sym xstdout && testcase_FAIL
-fgrep alive xstdout || testcase_FAIL
-for i in 1 2 3; do
-    grep "^line${i}$" xstdout || testcase_FAIL
-done
+$DIFF_U exp got || testcase_FAIL
 
 testcase_PASS
 

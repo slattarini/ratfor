@@ -25,12 +25,18 @@ XFAIL_TESTS += define-case-sensibility.test
 TESTS = \
   000sanity.test \
   define-balanced-paren.test \
+  define-balanced-paren_f77.test \
   define-basic.test \
+  define-basic_f77.test \
   define-case-sensibility.test \
   define-fail.test \
   define-multiline.test \
+  define-multiline_f77.test \
   define-nested.test \
+  define-nested_f77.test \
+  define-redefine.test \
   define-semicolon.test \
+  define-semicolon_f77.test \
   define-whitespaces.test \
   devnull-input.test \
   empty-input.test \

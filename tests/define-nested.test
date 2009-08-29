@@ -9,15 +9,19 @@ cat >tst1.r <<EOF
 define L0 L1
 define L1 L2
 :L0:
+define L1 L3
+:L0:
+EOF
+
+tolower >exp1 <<EOF
+:L2:
+:L3:
 EOF
 
 run_RATFOR -e 0 tst1.r || testcase_FAIL
-grep -v '^[cC]' stdout >stdout1
+grep -v '^[cC]' stdout | ws_normalize | tolower > got1
 rm -f stdout
-
-fgrep define stdout1 && testcase_FAIL
-grep -i 'L[01]' stdout1 && testcase_FAIL
-grep -i ':L2:' stdout1 || testcase_FAIL
+$DIFF_U exp1 got1 || testcase_FAIL
 
 # the same test as above, with deeper nesting
 
@@ -31,17 +35,27 @@ define L5 L6
 define L6 L7
 define L7 L8
 define L8 L9
+:L0:
 define L9 foo
+:L0:
+define L9 bar
+:L0:
+define bar quux
+:L0:
+EOF
+
+tolower >exp2 <<EOF
 :L9:
+:foo:
+:bar:
+:quux:
 EOF
 
 run_RATFOR -e 0 tst2.r || testcase_FAIL
-grep -v '^[cC]' stdout >stdout2
+grep -v '^[cC]' stdout | ws_normalize | tolower > got2
 rm -f stdout
 
-fgrep define stdout2 && testcase_FAIL
-grep -i 'L[0-9]' stdout2 && testcase_FAIL
-grep -i ':foo:' stdout2 || testcase_FAIL
+$DIFF_U exp2 got2 || testcase_FAIL
 
 testcase_PASS
 
