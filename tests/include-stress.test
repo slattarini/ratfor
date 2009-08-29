@@ -13,9 +13,9 @@ echo 'TWObis' > inc2b.r
 (echo 'THREE'; echo 'include inc3b.r') > inc3.r
 (echo 'THREEbis'; echo 'include inc3bb.r') > inc3b.r
 echo 'THREEbisbis' > inc3bb.r
-echo 'FOUR' | sed 's/\(.\)/\1@/g' | tr @ "$NEWLINE" > inc4.r
+echo 'FOUR' | $SED 's/\(.\)/\1@/g' | tr @ "$NEWLINE" > inc4.r
 
-sed 's/_/ /g' > tst.r <<EOF
+tr '_' ' ' > tst.r <<EOF
 @MARK1@
 include inc1.r
 @MARK2@

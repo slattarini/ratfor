@@ -26,9 +26,9 @@ cat bar.r
 
 err='illegal right brace'
 run_RATFOR -e 1 foo.r || testcase_FAIL
-fgrep "foo.r:3: $err" stderr || testcase_FAIL
-fgrep "bar.r:2: $err" stderr || testcase_FAIL
-fgrep "foo.r:7: $err" stderr || testcase_FAIL
+$FGREP "foo.r:3: $err" stderr || testcase_FAIL
+$FGREP "bar.r:2: $err" stderr || testcase_FAIL
+$FGREP "foo.r:7: $err" stderr || testcase_FAIL
 
 testcase_PASS
 

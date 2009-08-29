@@ -8,7 +8,7 @@
 run_RATFOR -e 0 /dev/null || testcase_FAIL
 
 : ratfor must produce only comments on empty input
-grep -v '^[Cc]' stdout && testcase_FAIL
+$GREP -v '^[Cc]' stdout && testcase_FAIL
 
 testcase_PASS
 

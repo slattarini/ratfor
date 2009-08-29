@@ -49,16 +49,16 @@ EOF
 run_RATFOR -e 1 tst1.r || testcase_FAIL
 mv stdout stdout1
 mv stderr stderr1
-fgrep 'tst1.r:1: cannot open include: I/O error' stderr1 || testcase_FAIL
-fgrep 'tst1.r:4: cannot open include: I/O error' stderr1 || testcase_FAIL
-fgrep 'stillalive' stdout1 || testcase_FAIL
+$FGREP 'tst1.r:1: cannot open include: I/O error' stderr1 || testcase_FAIL
+$FGREP 'tst1.r:4: cannot open include: I/O error' stderr1 || testcase_FAIL
+$FGREP 'stillalive' stdout1 || testcase_FAIL
 
 run_RATFOR -e 1 tst2.r || testcase_FAIL
 mv stdout stdout2
 mv stderr stderr2
-fgrep 'tst1.r:1: cannot open include: I/O error' stderr1 || testcase_FAIL
-fgrep 'tst1.r:6: cannot open include: I/O error' stderr1 || testcase_FAIL
-fgrep 'stillalive' stdout1 || testcase_FAIL
+$FGREP 'tst1.r:1: cannot open include: I/O error' stderr1 || testcase_FAIL
+$FGREP 'tst1.r:6: cannot open include: I/O error' stderr1 || testcase_FAIL
+$FGREP 'stillalive' stdout1 || testcase_FAIL
 
 testcase_PASS
 

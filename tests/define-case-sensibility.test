@@ -17,12 +17,12 @@ EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
 
-fgrep define stdout && testcase_FAIL
+$FGREP define stdout && testcase_FAIL
 
-fgrep -i 'l1:foo'  stdout || testcase_FAIL
-fgrep -i 'U1:SYM1' stdout || testcase_FAIL
-fgrep -i 'l1:bar'  stdout || testcase_FAIL
-fgrep -i 'U2:quux' stdout || testcase_FAIL
+$FGREP -i 'l1:foo'  stdout || testcase_FAIL
+$FGREP -i 'U1:SYM1' stdout || testcase_FAIL
+$FGREP -i 'l1:bar'  stdout || testcase_FAIL
+$FGREP -i 'U2:quux' stdout || testcase_FAIL
 
 testcase_PASS
 

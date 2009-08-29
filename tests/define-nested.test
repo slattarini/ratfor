@@ -19,7 +19,7 @@ tolower >exp1 <<EOF
 EOF
 
 run_RATFOR -e 0 tst1.r || testcase_FAIL
-grep -v '^[cC]' stdout | ws_normalize | tolower > got1
+$GREP -v '^[cC]' stdout | ws_normalize | tolower > got1
 rm -f stdout
 $DIFF_U exp1 got1 || testcase_FAIL
 
@@ -52,7 +52,7 @@ tolower >exp2 <<EOF
 EOF
 
 run_RATFOR -e 0 tst2.r || testcase_FAIL
-grep -v '^[cC]' stdout | ws_normalize | tolower > got2
+$GREP -v '^[cC]' stdout | ws_normalize | tolower > got2
 rm -f stdout
 
 $DIFF_U exp2 got2 || testcase_FAIL

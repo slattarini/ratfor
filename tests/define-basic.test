@@ -23,19 +23,19 @@ EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
 
-fgrep -i 'define' stdout && testcase_FAIL
+$FGREP -i 'define' stdout && testcase_FAIL
 
-grep 'sym[1234]' stdout     && testcase_FAIL
-fgrep 'sym5' stdout         || testcase_FAIL
+$GREP 'sym[1234]' stdout    && testcase_FAIL
+$FGREP 'sym5' stdout        || testcase_FAIL
 
 for i in 1 2 3 4; do
-    grep "sym  *$i" stdout  || testcase_FAIL
+    $GREP "sym  *$i" stdout || testcase_FAIL
 done
 
-fgrep 'x1 text1' stdout     || testcase_FAIL
-fgrep 'x2:text2' stdout     || testcase_FAIL
-fgrep 'x3?"text3"' stdout   || testcase_FAIL
-fgrep 'x4,text4' stdout     || testcase_FAIL
+$FGREP 'x1 text1' stdout    || testcase_FAIL
+$FGREP 'x2:text2' stdout    || testcase_FAIL
+$FGREP 'x3?"text3"' stdout  || testcase_FAIL
+$FGREP 'x4,text4' stdout    || testcase_FAIL
 
 testcase_PASS
 

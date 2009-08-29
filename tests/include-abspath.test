@@ -19,7 +19,7 @@ run_RATFOR -e 0 tst.r || {
     testcase_FAIL
 }
 rm -rf "$abs_tmp_dir"
-fgrep 'foo$bar' stdout || testcase_FAIL
+$FGREP 'foo$bar' stdout || testcase_FAIL
 
 testcase_PASS
 
