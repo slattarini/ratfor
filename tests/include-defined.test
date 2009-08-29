@@ -1,0 +1,40 @@
+#!/bin/sh
+# $Id$
+
+# Check that `include' works when passed as argument a `define'd token.
+
+. ./defs.sh || exit 99
+
+set +x
+
+cat > foo.r <<EOF
+foo1
+foo2
+EOF
+
+cat > tst.r <<EOF
+define BAR foo.r
+main1
+include BAR
+main2
+EOF
+
+tolower > exp <<\EOF
+main1
+foo1
+foo2
+main2
+EOF
+
+set -x
+
+cat tst.r
+cat foo.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

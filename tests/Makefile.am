@@ -46,6 +46,7 @@ ALL_TESTS = \
   empty-input.test \
   include-abspath.test \
   include-basic.test \
+  include-defined.test \
   include-fail.test \
   include-nested-deep.test \
   include-nested.test \
