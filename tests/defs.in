@@ -325,7 +325,7 @@ run_CMD() {
     esac
     ${_run_reset_x}
     : "exit status ${_run_exitcode} (expecting ${_run_expected_exitcode})"
-    : 'leaving run_CMD(): restored -x flag, reset to prevoious verbosity'
+    : 'leaving run_CMD(): restored -x flag, reset to previous verbosity'
     return ${_run_rc}
 }
 
