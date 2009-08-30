@@ -158,7 +158,8 @@ clean-local: clean-local-ratfor
 # case the test directory or any of its subdirectories was made unwritable
 # by the testsuite.
 clean-local-testdirs:
-	find *.dir -type d '!' -perm -200 -exec chmod u+w {} ";"
+	: we are not interested in errors of find, just in those of rm
+	find *.dir -type d '!' -perm -200 -exec chmod u+w {} ";" || :
 	rm -rf *.dir
 .PHONY: clean-local-testdirs
 clean-local: clean-local-testdirs
