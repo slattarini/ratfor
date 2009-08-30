@@ -1,0 +1,17 @@
+#!/bin/sh
+# $Id$
+
+# Check that `-C' switch of ratfor preserve comments in output.
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+# this is a "%c@mm3nt%'!
+blah blah blah
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP -i "^c.*\"%c@mm3nt%'!" stdout && testcase_FAIL
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
