@@ -1,7 +1,7 @@
 #!/bin/sh
 # $Id$
 
-# Stress testing for the 'include' functionality.
+# Stress testing for the `include' statement.
 
 . ./defs.sh || exit 99
 
