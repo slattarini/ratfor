@@ -1,0 +1,42 @@
+#!/bin/sh
+# $Id$
+
+# Check that comments kept by the `-C' switch does not interfere with the
+# "real" ratfor output
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+tr '_' "$TAB" >tst.r <<\EOF
+program testprog
+    # this is a "%c@mm3nt%'!
+# this too is a "%c@mm3nt%'!
+    integer x
+100 format(I1)
+    write(*,100) 1
+# end
+    x = 2
+    # x = 3
+    write(*,100) x
+#write(*,100) 7
+    stop
+end # testprogram
+EOF
+
+cat > exp <<EOF
+1
+2
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+ws_normalize <stdout >got
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

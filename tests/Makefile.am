@@ -54,6 +54,8 @@ ALL_TESTS = \
   include-synerr.test \
   integers-many-bases.test \
   integers-many-bases_f77.test \
+  keepcomment.test \
+  keepcomment_f77.test \
   simple-assign.test \
   synerr-basic.test \
   synerr-include-lineno.test \
