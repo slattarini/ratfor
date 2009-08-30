@@ -57,6 +57,7 @@ ALL_TESTS = \
   keepcomment.test \
   keepcomment_f77.test \
   simple-assign.test \
+  stress_f77.test \
   synerr-basic.test \
   synerr-include-lineno.test \
   synerr-lineno.test \

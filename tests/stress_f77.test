@@ -1,0 +1,152 @@
+#!/bin/sh
+# $Id$
+
+# Stress test for ratfor (by compiling and running generated fortran code)
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<EOF
+# -*- ratfor -*-
+
+define Ifmt I20
+define Afmt A40
+
+integer function foo(a, b)
+    implicit none
+    integer a, b
+    if (a == b) {
+        write(*,100) a, b; 100 format(Ifmt, ' = ', Ifmt);
+    } else if (a > b) {
+        write(*,101) a, b; 101 format(Ifmt, ' > ', Ifmt);
+    } else {
+        write(*,102) a, b; 102 format(Ifmt, ' < ', Ifmt);
+    }
+    return 0
+end # foo
+    
+subroutine bar()
+    integer m, n, t, foo
+    define ONE 1
+    m = ONE
+    n = 2
+    t = foo(m, n)
+    define V2 5
+    define V1 V2
+    # define V1 0
+    define V0 V1
+    t = foo(V0, 4)
+    define V1 1
+    t = foo(V0, m)
+end # bar
+
+program testprog
+    integer x, y, r, foo
+    define(TSTLBL, write(*,800))
+
+    TSTLBL '@foo'
+    r = foo(10, 11)
+    write(*, 701) r; 701 format("r:",Ifmt)
+    
+    TSTLBL '@bar'
+    call bar()
+    
+    x = 1; y = 2;
+    TSTLBL '@while'
+    while (x < 10) {
+        if (y != 2)
+            break
+        if (y ^= 2) {
+            x = 20
+            next
+        }
+        write(*,900) x
+        x = x + 1
+    }
+    
+    TSTLBL '@repeat-until';
+    repeat {
+        write(*,900)x
+        x=x-1
+    } until (x == 0)
+    
+    TSTLBL '@for'
+    # 8%12 is "octal 12" a.k.a. 10
+    for (x = -1; x < 8%12; x = x + 1)
+        write(*,900)x
+
+    TSTLBL '@stop'
+    stop # program ends here
+    write(*,800) "NOTREACHED"
+
+800 format(Afmt)
+900 format("x:", Ifmt)
+
+end
+EOF
+
+cat > exp <<EOF
+@foo
+10 < 11
+r:0
+@bar
+1 < 2
+5 > 4
+1 = 1
+@while
+x:1
+x:2
+x:3
+x:4
+x:5
+x:6
+x:7
+x:8
+x:9
+@repeat-until
+x:10
+x:9
+x:8
+x:7
+x:6
+x:5
+x:4
+x:3
+x:2
+x:1
+@for
+x:-1
+x:0
+x:1
+x:2
+x:3
+x:4
+x:5
+x:6
+x:7
+x:8
+x:9
+@stop
+EOF
+
+cat tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+ws_normalize <stdout | $SED 's/ *: */:/g' >got
+
+cat got
+cat exp
+
+test -s stderr && testcase_FAIL
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
