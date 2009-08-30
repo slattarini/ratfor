@@ -56,8 +56,11 @@ ALL_TESTS = \
   integers-many-bases_f77.test \
   keepcomment.test \
   keepcomment_f77.test \
+  long-infile.test \
+  long-infile_f77.test \
   simple-assign.test \
-  stress_f77.test \
+  stress1_f77.test \
+  stress2_f77.test \
   synerr-basic.test \
   synerr-include-lineno.test \
   synerr-lineno.test \
