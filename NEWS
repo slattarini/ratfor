@@ -1,9 +1,23 @@
 $Id$
 List of user-visible changes of Public Domain Ratfor.
 
+New in 1.0f
+-----------
+
+ * The format of error messages has been improved -- now it follows the
+   gcc-style `FILENAME:LINENO: ERRMSG'
+ * Bugfix in option parsing: the option `-l' is now recognized again
+ * The make targets `distcheck' and `clean' should now work.
+ * The make target `check' now let the user override the variable
+   `$(TESTS)' withour problems
+ * The list of known bugs has been extended and improved.
+ * The ratfor binary used by the testsuite is now correctly rebuild
+   when needed, even from within the `tests' directory
+ * The ratfor source code has been modularized and cleaned somewhat.
+
 New in 1.0e
 -----------
- 
+
  * On non-fatal syntax errors in input, a proper error message is
    displayed on standard error, but input processing is not stopped
    (this was also the previous behaviour).  However, if any syntax
@@ -16,7 +30,7 @@ New in 1.0e
 
 New in 1.0d
 -----------
- 
+
  * Ratfor build system now uses automake and autoconf.
  * Added an article of B.W. Kernighan on ratfor (doc/ratfor.pdf).
  * Added a testsuite.
