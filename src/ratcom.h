@@ -17,8 +17,6 @@ FILE *infile[NFILES];           /*  file number[level]; init infile[1] = STDIN  
 char *filename[NFILES];         /*  filename of input file[level]                */
 int avail;                      /*  first first location in table; init = 1      */
 int tabptr[127];                /*  name pointers; init = 0                      */
-int outp;                       /*  last position filled in outbuf; init = 0     */
 int nfiles;                     /*  number of files                              */
-char outbuf[82];                /*  output lines collected here                  */
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

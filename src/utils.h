@@ -1,12 +1,13 @@
 /* $Id$ */
 #ifndef RAT4_UTILS_H
 #  define RAT4_UTILS_H 1
+#include <string.h>
+#define STREQ(x, y) (strcmp((x),(y)) == 0)
 char *strsave(char *);
 int ctoi(char[], int*);
 int itoc(int, char[], int size);
 void fold(char[]);
-int equal(char[], char[]);
 void scopy(char[], int, char[], int);
 int look(char[], char[]);
-#endif
+#endif /* RAT4_UTILS_H */
 /* vim: set ft=c ts=4 sw=4 et : */

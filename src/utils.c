@@ -23,12 +23,12 @@ char
 {
     char *p;
     if ((p = malloc(strlen(s)+1)) != NULL)
-        strcpy(p, s);
+        strcpy(p, s); /* XXX strncpy? */
     return(p);
 }
 
 /*
- * ctoi - convert string at in[i] to int, increment i
+ * ctoi - convert string at in[*i] to int, increment i
  */
 int
 ctoi(char in[], int *i)
@@ -90,20 +90,6 @@ fold(char token[])
 }
 
 /*
- * equal - compare str1 to str2; return YES if equal, NO if not
- *
- */
-int
-equal(char str1[], char str2[])
-{
-    int i;
-    for (i = 0; str1[i] == str2[i]; i++)
-        if (str1[i] == EOS)
-            return(YES);
-    return(NO);
-}
-
-/*
  * scopy - copy string at from[i] to to[j]
  *
  */
@@ -130,7 +116,7 @@ look(char name[], char defn[])
     struct hashlist *p;
     if ((p = lookup(name)) == NULL)
         return(NO);
-    strcpy(defn, p->def);
+    strcpy(defn, p->def); /* XXX potential overflow here! */
     return(YES);
 }
 
