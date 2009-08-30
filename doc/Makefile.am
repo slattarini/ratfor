@@ -4,10 +4,7 @@
 # Makefile for the ratfor/doc subdirectory.
 # $Id$
 
-## Manual pages to be installed.
 dist_man1_MANS = ratfor.man
-CLEANFILES = $(dist_man1_MANS)
-
 dist_doc_DATA = ratfor.pdf
 
 #--------------------------------------------------------------------------
