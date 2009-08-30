@@ -16,64 +16,65 @@
 #include "io.h"
 #include "rat4.h"
 
-/* keywords: */
 
-char sdo[] = "do";
-char vdo[] = { LEXDO, EOS };
+/* KEYWORDS */
 
-char sif[] = "if";
-char vif[] = { LEXIF, EOS };
+static const char sdo[] = "do";
+static const char vdo[] = { LEXDO, EOS };
 
-char selse[] = "else";
-char velse[] = { LEXELSE, EOS };
+static const char sif[] = "if";
+static const char vif[] = { LEXIF, EOS };
+
+static const char selse[] = "else";
+static const char velse[] = { LEXELSE, EOS };
 
 #ifdef F77
-char sthen[] = "then";
-char sendif[] = "endif";
+static const char sthen[] = "then";
+static const char sendif[] = "endif";
 #endif /* F77 */
 
-char swhile[] = "while";
-char vwhile[] = { LEXWHILE, EOS };
+static const char swhile[] = "while";
+static const char vwhile[] = { LEXWHILE, EOS };
 
-char ssbreak[] = "break";
-char vbreak[] = { LEXBREAK, EOS };
+static const char ssbreak[] = "break";
+static const char vbreak[] = { LEXBREAK, EOS };
 
-char snext[] = "next";
-char vnext[] = { LEXNEXT, EOS };
+static const char snext[] = "next";
+static const char vnext[] = { LEXNEXT, EOS };
 
-char sfor[] = "for"; 
-char vfor[] = { LEXFOR, EOS };
+static const char sfor[] = "for"; 
+static const char vfor[] = { LEXFOR, EOS };
 
-char srept[] = "repeat";
-char vrept[] = { LEXREPEAT, EOS };
+static const char srept[] = "repeat";
+static const char vrept[] = { LEXREPEAT, EOS };
 
-char suntil[] = "until";
-char vuntil[] = { LEXUNTIL, EOS };
+static const char suntil[] = "until";
+static const char vuntil[] = { LEXUNTIL, EOS };
 
-char sswitch[] = "switch";
-char vswitch[] = { LEXSWITCH, EOS };
+static const char sswitch[] = "switch";
+static const char vswitch[] = { LEXSWITCH, EOS };
 
-char scase[] = "case";
-char vcase[] = { LEXCASE, EOS };
+static const char scase[] = "case";
+static const char vcase[] = { LEXCASE, EOS };
 
-char sdefault[] = "default";
-char vdefault[] = { LEXDEFAULT, EOS };
+static const char sdefault[] = "default";
+static const char vdefault[] = { LEXDEFAULT, EOS };
 
-char sret[] = "return";
-char vret[] = { LEXRETURN, EOS };
+static const char sret[] = "return";
+static const char vret[] = { LEXRETURN, EOS };
 
-char sstr[] = "string";
-char vstr[] = { LEXSTRING, EOS };
+static const char sstr[] = "string";
+static const char vstr[] = { LEXSTRING, EOS };
 
-/* constant strings */
 
-char *ifnot  = "if(.not.";
-char *incl   = "include";
-char *fncn   = "function";
-char *contin = "continue";
-char *rgoto  = "goto ";
-char *dat    = "data ";
-char *eoss   = "EOS/";
+/* CONSTANT STRINGS */
+
+static const char ifnot[]  = "if(.not.";
+static const char contin[] = "continue";
+static const char rgoto[]  = "goto ";
+static const char dat[]    = "data ";
+static const char eoss[]   = "EOS/";
+
 
 /*
  * initialisation
@@ -88,12 +89,11 @@ init(int u_startlab, int u_leaveC, char *u_filename)
     leaveC = u_leaveC;
     
     /* XXX wrap this in a function */
-    if (equal(u_filename, "-"))
+    if (STREQ(u_filename, "-"))
         in = stdin;
     else if ((in = fopen(u_filename, "r")) == NULL)
         error("%s: cannot open for reading\n", u_filename); /*XXX: perror?*/
 
-    outp = 0;                   /* output character pointer */
     level = 0;                  /* file control */
     linect[0] = 1;              /* line count of first file */
     filename[0] = u_filename;   /* filename of first file */
@@ -107,12 +107,13 @@ init(int u_startlab, int u_leaveC, char *u_filename)
     
     /* default definitions */
     static char deftyp[] = { DEFTYPE, EOS };
-    install("define", deftyp);
-    install("DEFINE", deftyp);
+    install("define", deftyp); /*XXX*/
+    install("DEFINE", deftyp); /*XXX*/
     
     fcname[0] = EOS;  /* current function name */
     label = startlab; /* next generated label */
 }
+
 
 /*
  * P A R S E R
@@ -197,30 +198,79 @@ parse(void)
         synerr_eof();
 }
 
+
 /*
- * L E X I C A L  A N A L Y S E R
+ *  L E X I C A L  A N A L Y S E R
  */
+
 
 /*
  *  alldig - return YES if str is all digits
  *
  */
 int
-alldig(str)
-char str[];
+alldig(const char str[])
 {
-    int i,j;
+    int i;
 
-    j = NO;
     if (str[0] == EOS)
-        return(j);
+        return(NO);
     for (i = 0; str[i] != EOS; i++)
-        if (type(str[i]) != DIGIT)
-            return(j);
-    j = YES;
-    return(j);
+        if (!isdigit(str[i]))
+            return(NO);
+    return(YES);
 }
 
+/*
+ * lex - return lexical type of token
+ *
+ */
+int
+lex(lexstr)
+char lexstr[];
+{
+
+    int tok;
+
+    for (tok = gnbtok(lexstr, MAXTOK);
+         tok == NEWLINE; tok = gnbtok(lexstr, MAXTOK))
+            /* empty body */;
+    if (tok == EOF || tok == SEMICOL || tok == LBRACE || tok == RBRACE)
+        return(tok);
+    if (tok == DIGIT)
+        tok = LEXDIGITS;
+    else if (STREQ(lexstr, sif) == YES)
+        tok = vif[0];
+    else if (STREQ(lexstr, selse) == YES)
+        tok = velse[0];
+    else if (STREQ(lexstr, swhile) == YES)
+        tok = vwhile[0];
+    else if (STREQ(lexstr, sdo) == YES)
+        tok = vdo[0];
+    else if (STREQ(lexstr, ssbreak) == YES)
+        tok = vbreak[0];
+    else if (STREQ(lexstr, snext) == YES)
+        tok = vnext[0];
+    else if (STREQ(lexstr, sfor) == YES)
+        tok = vfor[0];
+    else if (STREQ(lexstr, srept) == YES)
+        tok = vrept[0];
+    else if (STREQ(lexstr, suntil) == YES)
+        tok = vuntil[0];
+    else if (STREQ(lexstr, sswitch) == YES)
+        tok = vswitch[0];
+    else if (STREQ(lexstr, scase) == YES)
+        tok = vcase[0];
+    else if (STREQ(lexstr, sdefault) == YES)
+        tok = vdefault[0];
+    else if (STREQ(lexstr, sret) == YES)
+        tok = vret[0];
+    else if (STREQ(lexstr, sstr) == YES)
+        tok = vstr[0];
+    else
+        tok = LEXOTHER;
+    return(tok);
+}
 
 /*
  * balpar - copy balanced paren string
@@ -229,7 +279,7 @@ char str[];
 balpar()
 {
     char token[MAXTOK];
-    int t,nlpar;
+    int t, nlpar;
 
     if (gnbtok(token, MAXTOK) != LPAREN) {
         synerr("missing left paren.");
@@ -257,37 +307,6 @@ balpar()
 }
 
 /*
- * deftok - get token; process macro calls and invocations
- *
- */
-int
-deftok(token, toksiz, fd)
-char token[];
-int toksiz;
-FILE *fd;
-{
-    char defn[MAXDEF];
-    int t;
-
-    for (t=gtok(token, toksiz, fd); t!=EOF; t=gtok(token, toksiz, fd)) {
-        if (t != ALPHA) /* non-alpha */
-            break;
-        if (look(token, defn) == NO) /* undefined */
-            break;
-        if (defn[0] == DEFTYPE) { /* get definition */
-            getdef(token, toksiz, defn, MAXDEF, fd);
-            install(token, defn);
-        }
-        else
-            pbstr(defn); /* push replacement onto input */
-    }
-    if (t == ALPHA) /* convert to single case */
-        fold(token);
-    return(t);
-}
-
-
-/*
  * eatup - process rest of statement; interpret continuations
  *
  */
@@ -312,12 +331,11 @@ eatup()
             pbstr(token);
             break;
         }
-        if (t == COMMA || t == PLUS
-                   || t == MINUS || t == STAR || t == LPAREN
-                       || t == AND || t == BAR || t == BANG
-                   || t == EQUALS || t == UNDERLINE ) {
+        if (t == COMMA || t == PLUS || t == MINUS || t == STAR
+            || t == LPAREN || t == AND || t == BAR || t == BANG
+            || t == EQUALS || t == UNDERLINE ) {
             while (gettok(ptoken, MAXTOK) == NEWLINE)
-                ;
+                /* empty body */;
             pbstr(ptoken);
             if (t == UNDERLINE)
                 token[0] = EOS;
@@ -334,468 +352,6 @@ eatup()
         synerr("unbalanced parentheses.");
 }
 
-/*
- * getdef (for no arguments) - get name and definition
- *
- */
-getdef(token, toksiz, defn, defsiz, fd)
-char token[];
-int toksiz;
-char defn[];
-int defsiz;
-FILE *fd;
-{
-    int i, nlpar, t, t2;
-    char c, ptoken[MAXTOK];
-
-    skpblk(fd);
-    /*
-     * define(name,defn) or
-     * define name defn
-     *
-     */
-    if ((t = gtok(ptoken, MAXTOK, fd)) != LPAREN) {;
-        t = BLANK; /* define name defn */
-        pbstr(ptoken);
-    }
-    skpblk(fd);
-    t2 = gtok(token, toksiz, fd); /* name */
-    if (t == BLANK && (t2 == NEWLINE || t2 == SEMICOL)) {
-        /* stray `define', as in `...; define; ...' */
-        baderr("empty name.");
-    } else if (t == LPAREN && t2 == COMMA) {
-        /* `define (name, defn)' with empty name */
-        baderr("empty name.");
-    } else if (t2 != ALPHA) {
-        baderr("non-alphanumeric name.");
-    }
-    skpblk(fd);
-    c = gtok(ptoken, MAXTOK, fd);
-    if (t == BLANK) { /* define name defn */
-        pbstr(ptoken);
-        i = 0;
-        do {
-            c = ngetch(&c, fd);
-            if (i > defsiz)
-                baderr("definition too long.");
-            defn[i++] = c;
-        } while (c != SHARP && c != NEWLINE && c != EOF && c != PERCENT);
-        if (c == SHARP || c == PERCENT)
-            putbak(c);
-    }
-    else if (t == LPAREN) { /* define (name, defn) */
-        if (c != COMMA)
-            baderr("missing comma in define.");
-        /* else got (name, */
-        nlpar = 0;
-        for (i = 0; nlpar >= 0; i++)
-            if (i > defsiz)
-                baderr("definition too long.");
-            else if (ngetch(&defn[i], fd) == EOF)
-                baderr("missing right paren.");
-            else if (defn[i] == LPAREN)
-                nlpar++;
-            else if (defn[i] == RPAREN)
-                nlpar--;
-        /* else normal character in defn[i] */
-    }
-    else
-        baderr("getdef is confused.");
-    defn[i-1] = EOS;
-}
-
-/*
- * gettok - get token. handles file inclusion and line numbers
- *
- */
-int
-gettok(token, toksiz)
-char token[];
-int toksiz;
-{
-    int t, i, j;
-    int tok;
-    char name[MAXNAME];
-
-    for ( ; level >= 0; level--) {
-        for (tok = deftok(token, toksiz, infile[level]); tok != EOF;
-             tok = deftok(token, toksiz, infile[level]))
-        {
-            if (equal(token, fncn) == YES) {
-                skpblk(infile[level]);
-                t = deftok(fcname, MAXNAME, infile[level]);
-                pbstr(fcname);
-                if (t != ALPHA)
-                    synerr("missing function name.");
-                putbak(BLANK);
-                return(tok);
-            }
-            else if (equal(token, incl) == NO) {
-                return(tok);
-            }
-            /* deal with file inclusion */
-            for (i = 0; ; i = strlen(name)) {
-                t = deftok(&name[i], MAXNAME, infile[level]);
-                if (t == NEWLINE || t == SEMICOL) {
-                    pbstr(&name[i]);
-                    break;
-                }
-            }
-            name[i] = EOS;
-/*WSB 6-25-91
-            if (name[1] == SQUOTE) {
-                outtab();
-                outstr(token);
-                outstr(name);
-                outdon();
-                eatup();
-                return(tok);
-            }
-*/
-            if (level >= NFILES)
-                synerr("includes nested too deeply.");
-            else {
-/*XXX re-add support for quoted filenames, sooner or later
-                name[i-1]=EOS;
-                infile[level+1] = fopen(&name[2], "r");
-*/
-                /* skip leading white space in name */
-                for (j = 0; name[j] == BLANK || name[j] == TAB; j++)
-                    /* empty body */;
-                filename[level+1] = strsave(&name[j]);
-                if (filename[level+1] == NULL) {
-                    synerr("cannot open include: memory error."); /*XXX improve errmsg */
-                    goto include_done;
-                }
-                infile[level+1] = fopen(filename[level+1], "r");
-                if (infile[level+1] == NULL) {
-                    synerr("cannot open include: I/O error."); /*XXX improve errmsg */
-                    goto include_done;
-                }
-                linect[level+1] = 1;
-                ++level;
-include_done:
-                /* nothing else to do */;
-            }
-        }
-        if (level > 0) {  /* close include and pop file name stack */
-            fclose(infile[level]);
-            infile[level] = NULL; /* just to be sure */
-            free(filename[level]);
-            filename[level] = NULL; /* just to be sure */
-        }
-    }
-    token[0] = EOF;   /* in case called more than once */
-    token[1] = EOS;
-    tok = EOF;
-    return(tok);
-}
-
-/*
- * gnbtok - get nonblank token
- *
- */
-int
-gnbtok(token, toksiz)
-char token[];
-int toksiz;
-{
-    int tok;
-
-    skpblk(infile[level]);
-    tok = gettok(token, toksiz);
-    return(tok);
-}
-
-/*
- * gtok - get token for Ratfor
- *
- */
-int
-gtok(lexstr, toksiz, fd)
-char lexstr[];
-int toksiz;
-FILE *fd;
-{ 
-    int i, b, n, tok;
-    char c;
-    c = ngetch(&lexstr[0], fd);
-    if (c == BLANK || c == TAB) {
-        lexstr[0] = BLANK;
-        while (c == BLANK || c == TAB) /* compress many blanks to one */
-            c = ngetch(&c, fd);
-        if (c == PERCENT) {
-            outasis(fd); /* copy direct to output if % */
-            c = NEWLINE;
-        }
-        if (c == SHARP) {
-            if(leaveC == YES) {
-              outcmnt(fd); /* copy comments to output */
-              c = NEWLINE;
-            }
-            else
-                while (ngetch(&c, fd) != NEWLINE) /* strip comments */
-                    /* empty body */;
-        }
-/*
-        if (c == UNDERLINE)
-            if(ngetch(&c, fd) == NEWLINE)
-                while(ngetch(&c, fd) == NEWLINE)
-                    ;
-            else
-            {
-                putbak(c);
-                c = UNDERLINE;
-            }
-*/
-        if (c != NEWLINE)
-            putbak(c);
-        else
-            lexstr[0] = NEWLINE;
-        lexstr[1] = EOS;
-        return((int)lexstr[0]);
-    }
-    i = 0;
-    tok = type(c);
-    if (tok == LETTER) { /* alpha */
-        for (i = 0; i < toksiz - 3; i++) {
-            tok = type(ngetch(&lexstr[i+1], fd));
-            /* Test for DOLLAR added by BM, 7-15-80 */
-            if (tok != LETTER && tok != DIGIT
-                && tok != UNDERLINE && tok!=DOLLAR
-                && tok != PERIOD)
-                break;
-        }
-        putbak(lexstr[i+1]);
-        tok = ALPHA;
-    }
-    else if (tok == DIGIT) { /* digits */
-        b = c - DIG0; /* in case alternate base number */
-        for (i = 0; i < toksiz - 3; i++) {
-            if (type(ngetch(&lexstr[i+1], fd)) != DIGIT)
-                break;
-            b = 10*b + lexstr[i+1] - DIG0;
-        }
-        if (lexstr[i+1] == RADIX && b >= 2 && b <= 36) {
-            /* n%ddd... */
-            for (n = 0;; n = b*n + c) {
-                c = ngetch(&lexstr[0], fd);
-                if (c >= 'a' && c <= 'z')
-                    c = c - 'a' + DIG9 + 1;
-                else if (c >= 'A' && c <= 'Z')
-                    c = c - 'A' + DIG9 + 1;
-                if (c < DIG0 || c >= DIG0 + b)
-                    break;
-                c = c - DIG0;
-            }
-            putbak(lexstr[0]);
-            i = itoc(n, lexstr, toksiz);
-        }
-        else
-            putbak(lexstr[i+1]);
-        tok = DIGIT;
-    }
-#ifdef SQUAREB
-    else if (c == LBRACK) { /* allow [ for { */
-        lexstr[0] = LBRACE;
-        tok = LBRACE;
-    }
-    else if (c == RBRACK) { /* allow ] for } */
-        lexstr[0] = RBRACE;
-        tok = RBRACE;
-    }
-#endif
-    else if (c == SQUOTE || c == DQUOTE) {
-        for (i = 1; ngetch(&lexstr[i], fd) != lexstr[0]; i++) {
-            if (lexstr[i] == UNDERLINE)
-                if (ngetch(&c, fd) == NEWLINE) {
-                    while (c == NEWLINE || c == BLANK || c == TAB)
-                        c = ngetch(&c, fd);
-                    lexstr[i] = c;
-                }
-                else
-                    putbak(c);
-            if (lexstr[i] == NEWLINE || i >= toksiz-1) {
-                synerr("missing quote.");
-                lexstr[i] = lexstr[0];
-                putbak(NEWLINE);
-                break;
-            }
-        }
-    }
-    else if (c == PERCENT) {
-        outasis(fd);        /* direct copy of protected */
-        tok = NEWLINE;
-    }
-    else if (c == SHARP) { 
-        if(leaveC == YES)
-          outcmnt(fd);      /* copy comments to output */
-        else
-          while (ngetch(&lexstr[0], fd) != NEWLINE) /* strip comments */
-            /* empty body */;
-          tok = NEWLINE;
-    }
-    else if (c == GREATER || c == LESS || c == NOT
-             || c == BANG || c == CARET || c == EQUALS
-             || c == AND || c == OR)
-        i = relate(lexstr, fd);
-    if (i >= toksiz-1)
-        synerr("token too long.");
-    lexstr[i+1] = EOS;
-    if (lexstr[0] == NEWLINE)
-        linect[level] = linect[level] + 1;
-
-    /* cray cannot compare char and ints, since EOF is an int we check
-       with feof */
-    if (feof(fd))
-        tok = EOF;
-
-    return(tok);
-}
-
-/*
- * lex - return lexical type of token
- *
- */
-int
-lex(lexstr)
-char lexstr[];
-{
-
-    int tok;
-
-    for (tok = gnbtok(lexstr, MAXTOK);
-         tok == NEWLINE; tok = gnbtok(lexstr, MAXTOK))
-            /* empty body */;
-    if (tok == EOF || tok == SEMICOL || tok == LBRACE || tok == RBRACE)
-        return(tok);
-    if (tok == DIGIT)
-        tok = LEXDIGITS;
-    else if (equal(lexstr, sif) == YES)
-        tok = vif[0];
-    else if (equal(lexstr, selse) == YES)
-        tok = velse[0];
-    else if (equal(lexstr, swhile) == YES)
-        tok = vwhile[0];
-    else if (equal(lexstr, sdo) == YES)
-        tok = vdo[0];
-    else if (equal(lexstr, ssbreak) == YES)
-        tok = vbreak[0];
-    else if (equal(lexstr, snext) == YES)
-        tok = vnext[0];
-    else if (equal(lexstr, sfor) == YES)
-        tok = vfor[0];
-    else if (equal(lexstr, srept) == YES)
-        tok = vrept[0];
-    else if (equal(lexstr, suntil) == YES)
-        tok = vuntil[0];
-    else if (equal(lexstr, sswitch) == YES)
-        tok = vswitch[0];
-    else if (equal(lexstr, scase) == YES)
-        tok = vcase[0];
-    else if (equal(lexstr, sdefault) == YES)
-        tok = vdefault[0];
-    else if (equal(lexstr, sret) == YES)
-        tok = vret[0];
-    else if (equal(lexstr, sstr) == YES)
-        tok = vstr[0];
-    else
-        tok = LEXOTHER;
-    return(tok);
-}
-
-/*
- * relate - convert relational shorthands into long form
- *
- */
-int
-relate(token, fd)
-char token[];
-FILE *fd;
-{
-
-    if (ngetch(&token[1], fd) != EQUALS) {
-        putbak(token[1]);
-        token[2] = 't';
-    } else {
-        token[2] = 'e';
-    }
-    token[3] = PERIOD;
-    token[4] = EOS;
-    token[5] = EOS; /* for .not. and .and. */
-    if (token[0] == GREATER)
-        token[1] = 'g';
-    else if (token[0] == LESS)
-        token[1] = 'l';
-    else if (token[0] == NOT || token[0] == BANG || token[0] == CARET) {
-        if (token[1] != EQUALS) {
-            token[2] = 'o';
-            token[3] = 't';
-            token[4] = PERIOD;
-        }
-        token[1] = 'n';
-    }
-    else if (token[0] == EQUALS) {
-        if (token[1] != EQUALS) {
-            token[2] = EOS;
-            return(0);
-        }
-        token[1] = 'e';
-        token[2] = 'q';
-    }
-    else if (token[0] == AND) { /* look for && or & */
-        if (ngetch(&token[1], fd) != AND) 
-            putbak(token[1]);
-        token[1] = 'a';
-        token[2] = 'n';
-        token[3] = 'd';
-        token[4] = PERIOD;
-    }
-    else if (token[0] == OR) {
-        if (ngetch(&token[1], fd) != OR) /* look for || or | */ 
-            putbak(token[1]);
-        token[1] = 'o';
-        token[2] = 'r';
-    }
-    else   /* can't happen */
-        token[1] = EOS;
-    token[0] = PERIOD;
-    return(strlen(token)-1);
-}
-
-/*
- * skpblk - skip blanks and tabs in file  fd
- *
- */
-skpblk(fd)
-FILE *fd;
-{
-    char c;
-
-    for (c = ngetch(&c, fd); c == BLANK || c == TAB; c = ngetch(&c, fd))
-        /* empty body */;
-    putbak(c);
-}
-
-
-/*
- * type - return LETTER, DIGIT or char; works with ascii alphabet
- *
- */
-int
-type(c)
-char c;
-{
-    int t;
-
-    if (c >= DIG0 && c <= DIG9)
-        t = DIGIT;
-    else if (isupper(c) || islower(c))
-        t = LETTER;
-    else
-        t = c;
-    return(t);
-}
 
 /*
  *  C O D E  G E N E R A T I O N
@@ -1102,26 +658,6 @@ char lexstr[];
 }
 
 /*
- * outch - put one char into output buffer
- *
- */
-outch(c)
-char c;
-{
-    int i;
-
-    if (outp >= 72) {   /* continuation card */
-        outdon();
-        for (i = 0; i < 6; i++)
-            outbuf[i] = BLANK;
-        outbuf[5]='*';
-        outp = 6;
-    }
-    outbuf[outp] = c;
-    outp++;
-}
-
-/*
  * outcon - output "n   continue"
  *
  */
@@ -1129,68 +665,14 @@ outcon(n)
 int n;
 {
     xfer = NO;
+#if 0
     if (n <= 0 && outp == 0)
-        return;            /* don't need unlabeled continues */
+        return; /* don't need unlabeled continues */
+#endif
     if (n > 0)
         outnum(n);
     outtab();
     outstr(contin);
-    outdon();
-}
-
-/*
- * outdon - finish off an output line
- *
- */
-outdon()
-{
-
-    outbuf[outp] = NEWLINE;
-    outbuf[outp+1] = EOS;
-    printf("%s", outbuf);
-    outp = 0;
-}
-
-/*
- * outcmnt - copy comment to output
- *
- */
-outcmnt(fd)
-FILE * fd;
-{
-    char c;
-    char comout[81];
-    int i, comoutp=0;
-
-    comoutp=1;
-    comout[0]='C';
-    while((c = ngetch(&c, fd)) != NEWLINE) {
-        if (comoutp > 79) {
-            comout[80]=NEWLINE;
-            comout[81]=EOS;
-            printf("%s",comout);
-            comoutp=0;
-            comout[comoutp]='C';
-            comoutp++;
-        }
-        comout[comoutp]=c;
-        comoutp++;
-    }
-    comout[comoutp]=NEWLINE;
-    comout[comoutp+1]=EOS;
-    printf("%s",comout);
-}
-
-/*
- * outasis - copy directly out
- *
- */
-outasis(fd)
-FILE * fd;
-{
-    char c;
-    while((c = ngetch(&c, fd)) != NEWLINE)
-        outch(c);
     outdon();
 }
 
@@ -1208,57 +690,6 @@ int n;
     outnum(n);
     outdon();
 }
-
-/*
- * outnum - output decimal number
- *
- */
-outnum(n)
-int n;
-{
-
-    char chars[MAXCHARS];
-    int i, m;
-
-    m = abs(n);
-    i = -1;
-    do {
-        i++;
-        chars[i] = (m % 10) + DIG0;
-        m = m / 10;
-    }
-    while (m > 0 && i < MAXCHARS);
-    if (n < 0)
-        outch(MINUS);
-    for ( ; i >= 0; i--)
-        outch(chars[i]);
-}
-
-
-
-/*
- * outstr - output string
- *
- */
-outstr(str)
-char str[];
-{
-    int i;
-
-    for (i=0; str[i] != EOS; i++)
-        outch(str[i]);
-}
-
-/*
- * outtab - get past column 6
- *
- */
-outtab()
-{
-    while (outp < 6)
-        outch(BLANK);
-}
-
 
 /*
  * repcod - generate code for beginning of repeat
@@ -1714,3 +1145,5 @@ int lab;
     outch ('I');
     outnum (lab);
 }
+
+/* vim: set ft=c ts=4 sw=4 et : */
