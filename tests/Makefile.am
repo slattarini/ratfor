@@ -149,7 +149,7 @@ AM_TEST_LOG_FLAGS += $(TEST_SHELL)
 clean-local-ratfor:
 	rm -f ratfor$(EXEEXT)
 .PHONY: clean-local-ratfor
-clean-local: local-ratfor
+clean-local: clean-local-ratfor
 
 # Remove any directory left behind the the test scripts (this is needed
 # especially if the shell used in test des not properly support the `-e'
