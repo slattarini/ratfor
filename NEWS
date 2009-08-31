@@ -1,6 +1,14 @@
 $Id$
 List of user-visible changes of Public Domain Ratfor.
 
+New in 1.0g
+-----------
+ 
+ * The make target `clean' should now work correctly even an a already
+   cleaned tree (previously it could fail if no temporary directory used
+   by test scripts was present!)
+ * Ratfor uses Git as its version control system.
+
 New in 1.0f
 -----------
 

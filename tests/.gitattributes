@@ -1,0 +1,6 @@
+README              ident
+Makefile.am         ident
+CheckTestsList.am   ident
+tests/defs.in       ident
+tests/*.test        ident
+tests/*.data        ident
