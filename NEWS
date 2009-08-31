@@ -1,6 +1,12 @@
 $Id$
 List of user-visible changes of Public Domain Ratfor.
 
+New in 1.0h
+-----------
+ 
+ * Extended make rules useful to maintainers, in particular with the
+   addition of files `GNUmakefile' and `maint.mk'
+
 New in 1.0g
 -----------
  
@@ -45,3 +51,17 @@ New in 1.0d
  * Added this NEWS file.
  * Ratfor uses Subversion as its version control system.
 
+New in 1.0c
+-----------
+ 
+ * NOTHING: never released
+
+New in 1.0b
+-----------
+ 
+ * NOTHING: never released
+
+New in 1.0a
+-----------
+ 
+ * NOTHING: never released
