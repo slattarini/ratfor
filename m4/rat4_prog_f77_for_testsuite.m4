@@ -1,4 +1,4 @@
-# serial 1 rat4_prog_f77_for_testsuite.m4
+# serial 2 rat4_prog_f77_for_testsuite.m4
 # $Id$
 
 # Find a Fortran 77 compiler, to be used in testing.
@@ -12,9 +12,11 @@
 AC_DEFUN([RAT4_PROG_F77_FOR_TESTSUITE],
    [dnl ---
     AC_ARG_VAR([RAT4_TESTSUITE_F77],
-      [List of Fortran 77 compilers to be used in testing (should all be
-       given as absolute paths!). If empty, configure will scan the system
-       looking for a working Fortran 77 compiler.])
+      [Fortran 77 compiler to be used in testing (should be given as an
+       absolute path). If empty, configure will scan the system looking
+       for a working Fortran 77 compiler. If set to the special value
+       `NONE', no Fortran 77 compiler will be used in the tests (the tests
+       requiring such a compiler will be skipped).])
     dnl ---
     AC_MSG_CHECKING([a of Fortran 77 compilers to be used in testing])
     if test -n "$RAT4_TESTSUITE_F77"; then

@@ -250,8 +250,12 @@ testcase_HARDERROR() {
 # Check that we have a valid fortran 77 compiler available, else 
 # cause the testcase to be SKIP'd
 require_fortran_compiler() {
-    [ -n "$F77" ] || testcase_SKIP "Fotran 77 compiler not available" \
-                                   "(variable \`\$F77' is empty)"
+    case "$F77" in
+        "") testcase_SKIP "Fotran 77 compiler not available" \
+                          "(variable \`\$F77' is empty)";;
+      NONE) testcase_SKIP "Fotran 77 compiler should not be used" \
+                          "(variable \`\$F77' is set to \`NONE')";;
+    esac
 }
 
 # "Safer" version of `rm -rf', useful for directories which are either
