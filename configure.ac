@@ -66,7 +66,7 @@ AC_PROG_SED
 AC_PROG_AWK
 AC_PROG_LN_S
 
-# Get an available fortran compilers, to be used in testing.
+# Get an available fortran compiler, to be used in testing.
 RAT4_PROG_F77_FOR_TESTSUITE
 
 # Look for a diff command that can produce better human-readable output.
