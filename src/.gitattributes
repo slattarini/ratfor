@@ -1,0 +1,2 @@
+Makefile.am ident
+*.[ch]      ident
