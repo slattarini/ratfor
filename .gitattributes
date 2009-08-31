@@ -1,8 +1,10 @@
-BUGS ident
+BUGS    ident
 COPYING ident
 HACKING ident
-NEWS ident
-README ident
+NEWS    ident
+README  ident
 
-configure.ac ident
-Makefile.am ident
+configure.ac    ident
+Makefile.am     ident
+maint.mk        ident
+GNUmakefile     ident

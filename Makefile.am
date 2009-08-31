@@ -6,11 +6,12 @@
 # ratfor: public domain ratfor preprocessor, written in C.
 # Makefile for the top-level directory of ratfor.
 
-## Additional search path for aclocal m4 macros.
 ACLOCAL_AMFLAGS = -I m4 --install
+
+EXTRA_DIST = GNUmakefile maint.mk
 
 SUBDIRS = src doc tests 
 
-dist_doc_DATA = README 
+dist_doc_DATA = README BUGS NEWS
 
 ## vim: ft=automake noet sw=4 ts=4

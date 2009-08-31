@@ -23,3 +23,6 @@ Makefile.in
 /configure
 
 /stamp-h1
+
+/ratfor-*.tar.gz
+/ratfor-*/

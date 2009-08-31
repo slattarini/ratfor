@@ -15,9 +15,7 @@ AC_INIT([ratfor], [1.0g], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([src/rat4.c])
 AC_CONFIG_HEADERS([config.h])
-
 AC_CONFIG_MACRO_DIR([m4])
-
 AC_CONFIG_AUX_DIR([build-aux])
 
 AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
@@ -78,6 +76,9 @@ RAT4_PROG_DIFF_U
 # Do output.
 #
 
+# make GNUmakefile available also in VPATH builds
+AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
+
 AC_CONFIG_FILES([
     Makefile
     doc/Makefile
@@ -85,6 +86,7 @@ AC_CONFIG_FILES([
     tests/Makefile
     tests/defs.sh:tests/defs.in
 ])
+
 AC_OUTPUT
 
 #
