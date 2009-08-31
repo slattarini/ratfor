@@ -11,5 +11,8 @@ $Id$
     This code *is* released in the public domain PD. See the file
     COPYING for more information.
 
+    For more information about the ratfor testsuite, please read
+    the file `tests/README'.
+
     I would, as usual, appreciate hearing about bug fixes and
     improvements.

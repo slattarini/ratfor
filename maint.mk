@@ -47,7 +47,7 @@ strict_distcheck_configure_flags = \
 .PHONY: vc-nodiff-check
 vc-nodiff-check:
 	@rm -f vc-diffs.tmp
-	@(unset CDPATH && cd $(srcdir) && $(GIT) diff) >vc-diffs.tmp
+	@(unset CDPATH; cd $(srcdir) && $(GIT) diff) >vc-diffs.tmp
 	@test ! -s vc-diffs.tmp || { \
 	  cat vc-diffs.tmp;	\
 	  echo "$(ME): Some files are locally modified:" >&2; \
@@ -79,9 +79,7 @@ strict-distcheck:
 	 }; \
 	 echo "  ===== "; \
 	 echo "$(ME): running strict-distcheck"; \
-	 : XXX do this when we will modify configure properly; \
-	 : 'for f77 in NONE $(strict_distcheck_f77_compilers); do'; \
-	 for f77 in $(strict_distcheck_f77_compilers); do \
+	 for f77 in NONE $(strict_distcheck_f77_compilers); do \
 	   configure_flags="$(strict_distcheck_configure_flags) F77='$$f77'"; \
 	   echo "  ===== "; \
 	   xrun $(xmake) distcheck \

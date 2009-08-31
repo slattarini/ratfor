@@ -6,6 +6,10 @@ New in 1.0h
  
  * Extended make rules useful to maintainers, in particular with the
    addition of files `GNUmakefile' and `maint.mk'
+ * Now the user can explicitly tell configure that he doesn't have (or
+   doesn't want to use) a Fortran 77 compiler for the testsuite.
+   This is done by setting the configure variable `RAT4_TESTSUITE_F77'
+   to `NONE'.
 
 New in 1.0g
 -----------

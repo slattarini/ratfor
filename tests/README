@@ -31,6 +31,23 @@ Interpretation
     SKIP  - skipped tests (third party tools not available)
 
 
+Fortran 77 Compiler
+-------------------
+  
+  Some tests require a Fortran 77 compiler.  If it is not present, they
+  should be automatically skipped.
+  
+  By default, configure scans your system to found an available compiler,
+  but this can be overridden by passing it a proper value for the variable
+  `RAT4_TESTSUITE_F77', as in:
+    
+    ./configure RAT4_TESTSUITE_F77=/usr/local/gnu/bin/g77
+  
+  A special value of `NONE' for `RAT4_TESTSUITE_F77' will explicitly tell
+  configure that you don't have any avaiable Fortran 77 compiler.  All the
+  tests requiring such a compiler will be skipped.
+
+
 Getting details from failures
 -----------------------------
 
