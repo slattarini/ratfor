@@ -10,6 +10,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 #
 
 AC_PREREQ([2.64])
+AC_REVISION([$Id$])
 AC_INIT([ratfor], [1.0g], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([src/rat4.c])
@@ -19,7 +20,8 @@ AC_CONFIG_MACRO_DIR([m4])
 
 AC_CONFIG_AUX_DIR([build-aux])
 
-AM_INIT_AUTOMAKE([1.11 -Wall -Werror color-tests parallel-tests foreign])
+AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
+                       no-installinfo no-texinfo.tex])
 AM_SILENT_RULES([yes]) # make `--enable-silent-rules' the default
 
 #
