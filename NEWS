@@ -36,15 +36,22 @@ New in 1.0f
 New in 1.0e
 -----------
 
- * On non-fatal syntax errors in input, a proper error message is
-   displayed on standard error, but input processing is not stopped
-   (this was also the previous behaviour).  However, if any syntax
-   error occourred, ratfor is now guaranteed to eventually exit with
-   exit status `1' (previously it exited with exit status `0').
+ * On non-fatal syntax errors in input, a proper error message is displayed
+   on standard error, but input processing is not stopped (this was also
+   the previous behaviour). However, if any syntax error occourred, ratfor
+   is now guaranteed to eventually exit with  exit status `1' (previously
+   it exited with exit status `0').
  * Ratfor does not more force quoted filenames for `include' to work.
- * Unfortunately, Ratfor does not more even accept quoted filenames
-   passed to `include'.  Hopefully this will be fixed in a future
-   release.
+ * Unfortunately, Ratfor does not more even accept quoted filenames passed
+   to `include'. Hopefully this will be fixed in a future release.
+ * The testsuite now uses only one Fortran 77 compiler, not a list of them.
+   The user can override the Fortran compiler automatically detected by
+   configure using the variable `RAT4_TESTSUITE_F77' (previously the
+   variable `RAT4_TESTSUITE_F77_LIST' was to be used instead).
+ * The user can now override the `TESTS_ENVIRONMENT' variable when doing
+   `make check'.
+ * The environmental variables which can influence the ratfor testsuite are
+   now all placed in the namespace `RAT4_TESTSUITE_*'
 
 New in 1.0d
 -----------
