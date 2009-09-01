@@ -1,5 +1,4 @@
-# -*-Makefile-*-
-# $Id$
+# -*- Makefile -*-
 # Loosely inspired to `maintainer-makefile' module.
 
 ME := maint.mk

@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check nested definitions with `define' (with f77)
 

@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check tha symbols defined with `define' can be redefined.
 

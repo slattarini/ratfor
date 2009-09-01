@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that syntax errors are reported on stderr and in exit status
 

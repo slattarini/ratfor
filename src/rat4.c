@@ -1,4 +1,3 @@
-/* $Id$ */
 /* Big scary code of ratfor preprocessor */
 
 #include <config.h>

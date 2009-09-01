@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that there are no obvious errors in the testing framework.
 

@@ -1,4 +1,7 @@
-/* $Id$ */
+/*
+ * from K&R "The C Programming language"
+ * Table lookup routines
+ */
 
 #include <config.h>
 
@@ -9,11 +12,6 @@
 #include "lookup.h"
 
 static struct hashlist *hashtab[HASHMAX];
-
-/*
- * from K&R "The C Programming language"
- * Table lookup routines
- */
 
 /*
  * hash - for a hash value for string s

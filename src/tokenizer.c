@@ -1,4 +1,3 @@
-/* $Id$ */
 /* Get tokens for the ratfor preprocessor. */
 
 #include <config.h>

@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that ratfor works on empty input
 

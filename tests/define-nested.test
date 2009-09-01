@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that nested `include' works.
 

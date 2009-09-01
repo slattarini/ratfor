@@ -1,7 +1,5 @@
-$Id$
-
-HACKING file for Public Domain Ratfor.  This file attempts to describe the
-rules to use when hacking it.
+HACKING file for Public Domain Ratfor.
+This file attempts to describe the rules to use when hacking it.
 
 
 Bootstrap
@@ -91,3 +89,10 @@ Miscellaneous
   
   * Do not checkin generated files like configure or the various
     Makefile.in
+  * Do not use $Id$ lines, which create more problems than they solve.
+    In fact, when a file with $Id$ lines and "ident" git attribute is
+    (locally) committed, its $Id$ line is *not* updated with the new
+    commit's SHA-1 id; thus, a "make dist" can easily create a tarball
+    including files with *wrong* $Id$ line -- which is far, far worse
+    than having no $Id$ line at all.
+

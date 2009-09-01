@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef RAT4_RATCOM_H
 #  define RAT4_RATCOM_H 1
 int startlab;                   /*  start label (configurable with `-l' switch)  */

@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that 'include' fail unredable/non-existent files
 

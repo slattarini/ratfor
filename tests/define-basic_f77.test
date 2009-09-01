@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check basics of `define' (with f77)
 

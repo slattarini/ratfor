@@ -1,6 +1,5 @@
 # -*-Makefile-*-
-# $Id$
-# Copied verbatim from gnulib `gnumakefile' module.
+## Copied verbatim from gnulib `gnumakefile' module.
 
 # Having a separate GNUmakefile lets me `include' the dynamically
 # generated rules created via cfg.mk (package-local configuration)

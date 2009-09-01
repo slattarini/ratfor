@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 # Common definitions and environments setting read (with the `source'
 # shell builtin) by all tests of ratfor.
 #
@@ -81,18 +80,10 @@ esac
 # to make such an error stick out clearly.
 exec <&-
 
-# Used as a "fingerprint" to identify this file
-RAT4_TESTSUITE_DEFS_ID='$Id$'
-
 if do_sanity_checks; then
     # Ensure we are running from the right directory.
     test -f ./defs.sh || {
         echo "defs.sh: not found in current directory" >&2
-        exit $E_HARD
-    }
-    $FGREP "$RAT4_TESTSUITE_DEFS_ID" ./defs.sh >/dev/null || {
-        echo "defs.sh: does not contain expected \$Id\$ string:" >&2
-        echo "         $RAT4_TESTSUITE_DEFS_ID" >&2
         exit $E_HARD
     }
 fi
@@ -107,12 +98,6 @@ if do_sanity_checks; then
     # ensure $srcdir is set correctly
     test -f "$srcdir/defs.in" || {
         echo "$srcdir/defs.in: not found." >&2
-        echo "Please check \$srcdir." >&2
-        exit $E_HARD
-    }
-    $FGREP "$RAT4_TESTSUITE_DEFS_ID" "$srcdir/defs.in" >/dev/null || {
-        echo "$srcdir/defs.in: does not contain expected \$Id\$ string:">&2
-        echo "                 $RAT4_TESTSUITE_DEFS_ID" >&2
         echo "Please check \$srcdir." >&2
         exit $E_HARD
     }

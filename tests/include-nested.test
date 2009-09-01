@@ -1,7 +1,6 @@
 #!/bin/sh
-# $Id$
 
-# Test simple nested 'include'.
+# Test simple nested `include'.
 
 . ./defs.sh || exit 99
 

@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that ratfor works on very long input files (process, compile & run)
 

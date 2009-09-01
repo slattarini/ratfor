@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef RAT4_IO_H 
 #  define RAT4_IO_H 1
 
