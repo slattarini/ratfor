@@ -1,4 +1,5 @@
 # -*- Makefile -*-
+# Contains maintainer-specific rules. Included by top-level GNUmakefile.
 # Loosely inspired to `maintainer-makefile' module.
 
 ME := maint.mk
