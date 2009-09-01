@@ -49,15 +49,29 @@ strict_distcheck_configure_flags = \
 #	FFLAGS='$(FFLAGS) -Wall -Werror'
 
 .PHONY: vc-nodiff-check
-vc-nodiff-check:
-	@rm -f vc-diffs.tmp
-	@(unset CDPATH; cd $(srcdir) && $(GIT) diff) >vc-diffs.tmp
-	@test ! -s vc-diffs.tmp || { \
-	  cat vc-diffs.tmp;	\
-	  echo "$(ME): Some files are locally modified:" >&2; \
+vc-nodiff-check: git-no-diff-check git-no-diff-cached-check
+
+.PHONY: git-no-diff-check
+git-no-diff-check:
+	@(unset CDPATH; cd $(srcdir) && $(GIT) diff) >$@.tmp
+	@test ! -s $@.tmp || { \
+	  cat $@.tmp; \
+	  echo "$(ME): some local modifications not added to Git index" >&2; \
 	  exit 1; \
 	};
-	@rm -f vc-diffs.tmp;
+	@rm -f $@.tmp;
+CLEAN_FILES += git-no-diff-check.tmp
+
+.PHONY: git-no-diff-cached-check
+git-no-diff-cached-check:
+	@(unset CDPATH; cd $(srcdir) && $(GIT) diff --cached) >$@.tmp
+	@test ! -s $@.tmp || { \
+	  cat $@.tmp;	\
+	  echo "$(ME): there are uncommitted modifications to Git index" >&2; \
+	  exit 1; \
+	};
+	@rm -f $@.tmp;
+CLEAN_FILES += git-no-diff-cached-check.tmp
 
 .PHONY: version-for-major-check
 version-for-major-check: 
