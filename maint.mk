@@ -2,14 +2,43 @@
 # $Id$
 # Loosely inspired to `maintainer-makefile' module.
 
-# This Makefile fragment tries to be general-purpose enough to be
-# used by many projects via the gnulib maintainer-makefile module.
-
 ME := maint.mk
 
 # Prevent programs like 'sort' from considering distinct strings to be equal.
 # Doing it here saves us from having to set LC_ALL elsewhere in this file.
 export LC_ALL = C
+
+# When running autoreconf, honor the `AUTORECONF' environment variable,
+# regardless of the fact that make was called with or without the `-e'
+# switch.
+_autoreconf := $(shell echo "$${AUTORECONF:-autoreconf}")
+
+# Call autoreconf the source tree, to rebuild autotools-generated files.
+.PHONY: autoreconf
+autoreconf:
+	cd $(srcdir) && rm -rf autom4te.cache && $(_autoreconf) -vi
+
+# Regenrate the source tree, and reconfigure the build tree.
+.PHONY: reconfigure
+reconfigure: autoreconf
+	$(SHELL) $(srcdir)/configure
+
+# By default, call autoreconf in an uncofigured tree before trying to
+# make the requsted targets.
+ifeq ($(.DEFAULT_GOAL),abort-due-to-no-makefile)
+ifeq ($(MAKECMDGOALS),)
+.DEFAULT_GOAL := _remake
+.PHONY: _remake
+_remake: reconfigure
+	$(MAKE) $(AM_MAKEFLAGS) all
+else
+.DEFAULT_GOAL :=
+$(MAKECMDGOALS): _reconfigure_and_redo
+.PHONY: _reconfigure_and_redo
+_reconfigure_and_redo: reconfigure
+	$(MAKE) $(MAKECMDGOALS)
+endif
+endif
 
 # Do not save the original name or timestamp in the .tar.gz file.
 # Use --rsyncable if available.
@@ -94,20 +123,20 @@ strict-distcheck:
 	   echo "+ $$*"; \
 	   "$$@" || { echo "$(ME): COMMAND FAILED: $$*"; exit 1; }; \
 	 }; \
-	 echo "  ===== "; \
+	 echo " -*-*-*-"; \
 	 echo "$(ME): running strict-distcheck"; \
 	 for f77 in NONE $(strict_distcheck_f77_compilers); do \
 	   configure_flags="$(strict_distcheck_configure_flags) F77='$$f77'"; \
-	   echo "  ===== "; \
+	   echo " -*-*-*-"; \
 	   xrun $(xmake) distcheck \
 	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
 	     DISTCHECK_CONFIGURE_FLAGS="$$configure_flags"; \
-	   echo "  ===== "; \
+	   echo "  -*-*-*- "; \
 	   xrun $(xmake) -j8 distcheck \
 	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
 	     DISTCHECK_CONFIGURE_FLAGS="$$configure_flags"; \
 	 done; \
-	 echo "  ===== "; \
+	 echo " -*-*-*-"; \
 	 exit $$e;
 
 .PHONY: alpha beta major
