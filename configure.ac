@@ -2,6 +2,8 @@
 # Process this file with autoconf to produce a configure script.
 
 m4_pattern_forbid([^_?RAT4_])
+# This apparently weird quote is needed to avoid that vim picks up
+# and intepretes the following line as a vim modeline for this file.
 m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 
 #
