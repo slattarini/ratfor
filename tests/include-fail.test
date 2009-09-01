@@ -12,6 +12,9 @@ chmod a-r unread.r
 test -f unread.r
 test ! -r unread.r
 
+ls -l unread.r 2>&1 || :
+ls -l none.r 2>&1 || :
+
 cat > tst1.r <<EOF
 include none.r
 #2
