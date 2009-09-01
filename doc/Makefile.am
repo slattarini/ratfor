@@ -2,7 +2,6 @@
 ## Process this file with automake to produce Makefile.in
 ##
 # Makefile for the ratfor/doc subdirectory.
-# $Id$
 
 dist_man1_MANS = ratfor.man
 

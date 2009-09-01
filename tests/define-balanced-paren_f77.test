@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check (with f77) that `define' works on text containing balanced parens.
 

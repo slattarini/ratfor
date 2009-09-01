@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that ratfor continue its execution on non-fatal syntax errors.
 

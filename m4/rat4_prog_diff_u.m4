@@ -1,5 +1,4 @@
 # serial 1 rat4_prog_diff_u.m4
-# $Id$
 
 # Look for a diff command that can produce better human-readable output.
 # IMPORTANT NOTE: the cache variable *must* have the format `ac_cv_*' to

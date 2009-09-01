@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that comments kept by the `-C' switch does not interfere with the
 # "real" ratfor output

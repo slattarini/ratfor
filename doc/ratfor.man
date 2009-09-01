@@ -1,4 +1,3 @@
-.\" $Id$
 .TH RATFOR 1 "Unknown Date" "Public Domain Ratfor" ""
 .\"
 .SH NAME

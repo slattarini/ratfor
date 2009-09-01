@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that `define' fails with proper error messages if usen improperly.
 

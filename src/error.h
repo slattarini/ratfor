@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef RAT4_ERROR_H 
 #  define RAT4_ERROR_H 1
 void error(char *, char *);

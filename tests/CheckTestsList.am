@@ -1,5 +1,4 @@
 ## -*- Makefile.am -*-
-## $Id$
 ## Included by tests/Makefile.am
 
 # temporary files used in the `check-list-of-tests' target

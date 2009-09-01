@@ -1,4 +1,4 @@
-/* $Id$ */
+/* Common macros for the ratfor preprocessor */
 #ifndef RAT4_RATDEF_H
 #  define RAT4_RATDEF_H 1
 

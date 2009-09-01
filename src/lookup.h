@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef RAT4_LOOKUP_H
 #  define RAT4_LOOKUP_H 1
 

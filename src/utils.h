@@ -1,4 +1,3 @@
-/* $Id$ */
 #ifndef RAT4_UTILS_H
 #  define RAT4_UTILS_H 1
 #include <string.h>

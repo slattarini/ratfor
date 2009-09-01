@@ -1,7 +1,6 @@
 #!/bin/sh
-# $Id$
 
-# Check that 'include' correctly keep track of file names and line numbers.
+# Check that `include' correctly keep track of file names and line numbers.
 
 . ./defs.sh || exit 99
 

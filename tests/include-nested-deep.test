@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Test "deeply" nested `include'.
 

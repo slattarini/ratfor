@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check basic usage of `include' statement.
 

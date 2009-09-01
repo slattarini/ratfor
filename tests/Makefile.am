@@ -1,7 +1,6 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# $Id$
 # Makefile for the test/ratfor subdirectory.
 
 TEST_EXTENSIONS = .test

@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Stress test for ratfor (by compiling and running generated fortran code)
 

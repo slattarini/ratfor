@@ -1,5 +1,4 @@
 #!/bin/sh
-# $Id$
 
 # Check that line numbers in error messages are ok
 

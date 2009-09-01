@@ -211,6 +211,3 @@ Do not
   (Note that this doesn't prevent the test from failing for another
   reason, but at least it makes sure the original error is still there.)
 
----
-
-$Id$

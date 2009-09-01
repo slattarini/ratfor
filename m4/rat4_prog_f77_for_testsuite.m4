@@ -1,5 +1,4 @@
 # serial 2 rat4_prog_f77_for_testsuite.m4
-# $Id$
 
 # Find a Fortran 77 compiler, to be used in testing.
 # First look for a user-provided compiler (expected to be found in variable
