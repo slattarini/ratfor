@@ -18,6 +18,10 @@ gzip_rsyncable := \
   	    echo x--rsyncable | sed 's/^x//')
 GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
 
+# quoted-version: $(VERSION) with some metacharacters quoted, to be used
+# e.g. in grep or sed commands
+quoted-version = $(subst .,\.,$(VERSION))
+
 GIT = git
 
 # we assume $(MAKE) to be GNU make, of course, so this is legitimate
@@ -64,11 +68,10 @@ version-for-major-check:
 
 .PHONY: news-up-to-date-check
 vc-diff-check:
-	@version=`echo '$(VERSION)' | sed 's/\./\\\\./'`; \
-	 grep "^New in $$version$$" $(srcdir)/NEWS >/dev/null || { \
+	grep "^New in $(quoted-version)$$" $(srcdir)/NEWS >/dev/null || { \
 	   echo "$(ME): version \`$(VERSION)' not mentioned in NEWS" >&2; \
 	   exit 1; \
-	 }
+	}
 
 .PHONY: strict-distcheck
 strict-distcheck:
@@ -97,10 +100,14 @@ strict-distcheck:
 ALL_RECURSIVE_TARGETS += alpha beta major
 alpha beta major:
 	$(xmake) GIT='$(GIT)' vc-nodiff-check 
-	[ x'$(VERSION)' != x ] || { \
-	  echo "$(ME): $@: no version given." >&2; \
+	@[ x'$(VERSION)' != x ] || { \
+	  echo "$(ME): $@: no version given!" >&2; \
 	  exit 1; \
 	}
+	@if $(GIT) tag | grep '^v$(quoted-version) *$$' >/dev/null; then \
+	  echo "$(ME): $@: git tag \`v$(VERSION)' already exists" >&2; \
+	  exit 1; \
+	fi
 	if test x"$@" = x"major"; then \
 	  $(xmake) version-for-major-check || exit 1; \
 	fi
