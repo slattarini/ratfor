@@ -17,6 +17,11 @@ XFAIL_TESTS += \
   synerr-include-lineno.test \
   include-fail.test \
   include-synerr.test
+  
+# Currently, ratfor output strings with the same quoting they are input
+# with; this should be changed, and only single-quoted strings (e.g. 'foo')
+# should be outputted.
+XFAIL_TESTS += no-double-quotes.test
 
 # Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
 XFAIL_TESTS += define-case-sensibility.test
@@ -57,7 +62,12 @@ ALL_TESTS = \
   keepcomment_f77.test \
   long-infile.test \
   long-infile_f77.test \
-  simple-assign.test \
+  no-curly-brackets.test \
+  no-double-quotes.test \
+  no-semicolons.test \
+  no-tabs.test \
+  startlabel-default.test \
+  startlabel-user-choice.test \
   stress1_f77.test \
   stress2_f77.test \
   synerr-basic.test \
