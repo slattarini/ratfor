@@ -2,9 +2,11 @@ List of user-visible changes of Public Domain Ratfor.
 
 New in XXX
 -----------
-
- * Now, if `make' is called on an unconfigured tree, and it is GNU make,
-   it automatically run autoreconf and ./configure before trying to build
+ 
+ * Tabs in input are always converted to single spaces in output, even in
+   generated fortran comments.
+ * If `make' is called on an unconfigured tree, and it is GNU make, it
+   automatically run autoreconf and ./configure before trying to build
    the given targets.
  * Added the customary installation instruction (in file `INSTALL').
 
