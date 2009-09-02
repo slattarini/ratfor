@@ -7,9 +7,9 @@
 s=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 longline=$s$s$s$s$s$s$s$s$s$s$s$s$s
 
-echo "%$longline" >tst.t
+echo "%$longline" >tst.r
 
-run_RATFOR -e 0 tst1.r || testcase_FAIL
+run_RATFOR -e 0 tst.r || testcase_FAIL
 $GREP "^$longline$" stdout || testcase_FAIL
 
 testcase_PASS

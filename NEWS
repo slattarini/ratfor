@@ -3,6 +3,12 @@ List of user-visible changes of Public Domain Ratfor.
 New in XXX
 -----------
  
+ * Now an input line starting with `%' is always passed *truly* verbatim
+   to output, without line wrapping (if the user wants to output raw
+   fortran code, we expect him to know what he's doing, so we must be as
+   unobtrusive as possible).  Previously, even the `%'-quoted lines were
+   subjected to line wrapping, so that they did not exceed the maximum
+   line lenght allowed in valid fortran code.
  * Now an underscore character `_' at the end of a line do continuation
    *only* for the next newline character, while previously it did line
    continuation up to the first non-empty line found.
