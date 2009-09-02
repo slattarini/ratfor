@@ -18,7 +18,13 @@ statement like:
 defines both the symbols `SYM' and `sym' to "value"!
 
   ---
- 
+
+Lines starting with `%' should be copied verbatim to the output (apart
+from stripping the `%', of course). But currently they are still subjected
+to line wrapping.
+  
+  ---
+
 This is a limitation rather than a bug.
 
 Defining a symbol (with the `define' builtin) to an expression containing
@@ -31,6 +37,8 @@ A more convoluted example:
   define SYM3 SYM1
  
  ---
+
+This is a limitation rather than a bug.
 
 The `return' keyword being used outside any function defition is not
 flagged as an error, so that at the main level a ratfor stament like:
