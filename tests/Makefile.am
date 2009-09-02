@@ -32,6 +32,7 @@ XFAIL_TESTS += define-case-sensibility.test
 # in `CheckTestList.am'.
 ALL_TESTS = \
   000sanity.test \
+  comments.test \
   define-balanced-paren.test \
   define-balanced-paren_f77.test \
   define-basic.test \

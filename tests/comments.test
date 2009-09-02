@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Check that ratfor comments (and only real ratfor comments) are discarded.
+
+. ./defs.sh || exit 99
+
+cat > tst.r <<EOF
+# thow me away
+"# keep me"
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP -i 'throw me away' tst.r && testcase_FAIL
+$GREP 'keep me' tst.r || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
