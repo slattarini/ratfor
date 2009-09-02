@@ -25,7 +25,11 @@ XFAIL_TESTS += no-double-quotes.test
 
 # Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
 XFAIL_TESTS += define-case-sensibility.test
-  
+
+# Underscores are not yet recognized as alphanumeric characters by ratfor;
+# this should be fixed soon
+XFAIL_TESTS += define-underscores.test
+
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
@@ -39,6 +43,8 @@ ALL_TESTS = \
   define-basic_f77.test \
   define-case-sensibility.test \
   define-fail.test \
+  define-long-definition.test \
+  define-long-name.test \
   define-multiline.test \
   define-multiline_f77.test \
   define-nested.test \
@@ -46,6 +52,8 @@ ALL_TESTS = \
   define-redefine.test \
   define-semicolon.test \
   define-semicolon_f77.test \
+  define-stress_f77.test \
+  define-underscores.test \
   define-whitespaces.test \
   devnull-input.test \
   empty-input.test \
@@ -55,6 +63,7 @@ ALL_TESTS = \
   include-fail.test \
   include-nested-deep.test \
   include-nested.test \
+  include-recursive.test \
   include-stress.test \
   include-synerr.test \
   integers-many-bases.test \

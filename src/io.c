@@ -11,7 +11,7 @@
  *   I / O   W R A P P E R S
  */
 
-#define BUFSIZE 512 /* mostly arbitrary */
+#define BUFSIZE 2048 /* mostly arbitrary */
 
 static char buf[BUFSIZE];   /* pushed-back chars */
 static int bp = -1;         /* pushback buffer pointer */

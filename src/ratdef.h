@@ -92,7 +92,7 @@
 #define LEXDEFAULT      21
 
 #define MAXCHARS        10      /* characters for outnum */
-#define MAXDEF          200     /* max chars in a defn */
+#define MAXDEF          2048    /* max chars in a defn */
 #define MAXSWITCH       300     /* max stack for switch statement */
 #define CUTOFF          3       /* min number of cases necessary to generate
                                  * a dispatch table */
@@ -102,7 +102,7 @@
 #define MAXNAME         64      /* file name size in gettok */
 #define MAXSTACK        100     /* max stack depth for parser */
 #define MAXTBL          15000   /* max chars in all definitions */
-#define MAXTOK          132     /* max chars in a token */
+#define MAXTOK          1024    /* max chars in a token */
 #define NFILES          7       /* max depth of file inclusion */
 
 #define RADIX           PERCENT /* % indicates alternate radix */
