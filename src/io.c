@@ -166,7 +166,7 @@ outnum(int n)
     } while (m > 0 && i < MAXCHARS);
     if (n < 0)
         outch(MINUS);
-    for ( ; i >= 0; i--)
+    for (; i >= 0; i--)
         outch(chars[i]);
 }
 
@@ -196,7 +196,7 @@ outcmnt(FILE * fp)
 
     comoutp = 1;
     comout[0] = 'c';
-    while((c = ngetch(&c, fp)) != NEWLINE) {
+    while ((c = ngetch(&c, fp)) != NEWLINE) {
         if (comoutp > 79) {
             comout[80] = NEWLINE;
             comout[81] = EOS;
@@ -205,7 +205,7 @@ outcmnt(FILE * fp)
             comout[comoutp] = 'c';
             comoutp++;
         }
-        comout[comoutp] = c;
+        comout[comoutp] = (c == TAB ? BLANK : c);
         comoutp++;
     }
     comout[comoutp] = NEWLINE;
