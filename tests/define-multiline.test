@@ -5,15 +5,11 @@
 . ./defs.sh || exit 99
 
 cat >tst.r <<EOF
-define(sym1,#
+define(sym,#
 line1
 line2
 line3)
-define sym2 a_
-b_
-c
-sym1
-sym2
+sym
 alive
 EOF
 
@@ -21,7 +17,6 @@ cat > exp <<EOF
 line1
 line2
 line3
-abc
 alive
 EOF
 

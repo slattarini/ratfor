@@ -26,6 +26,9 @@ XFAIL_TESTS += no-double-quotes.test
 # Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
 XFAIL_TESTS += define-case-sensibility.test
 
+# trailing undercores still eat up too much newlines; will be fixed soon
+XFAIL_TESTS += underscore.test
+
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
@@ -75,7 +78,9 @@ ALL_TESTS = \
   synerr-include-lineno.test \
   synerr-lineno.test \
   synerr-nonfatal.test \
-  synerr-nonfatal_f77.test
+  synerr-nonfatal_f77.test \
+  underscore.test \
+  underscore_f77.test
 
 EXTRA_DIST = $(TESTS)
 

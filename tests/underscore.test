@@ -1,0 +1,92 @@
+#!/bin/sh
+
+# Test line continuation by `_'.
+
+. ./defs.sh || exit 99
+
+tr '@' ' ' > tst.r <<\EOF
+#-------------------------------
+abc_
+def
+#-------------------------------
+abc_
+@def
+#-------------------------------
+abc___
+def
+#-------------------------------
+abc_@_
+def
+#-------------------------------
+x_
+y_
+z
+#-------------------------------
+x_@
+y
+#-------------------------------
+x_
+
+y
+#-------------------------------
+"bl_
+ah"
+"bl_ah"
+#-------------------------------
+define sym1 r_
+s_
+t
+sym1
+#-------------------------------
+define(sym2, u_
+v_
+w)
+sym2
+#-------------------------------
+def_
+ine_
+@sym3 foo
+sym3
+#-------------------------------
+d_
+e_
+f_
+i_
+n_
+e_
+(sym4, bar)
+sym4
+#-------------------------------
+EOF
+
+cat > exp <<\EOF
+abcdef
+abc def
+abc__def
+abc_ def
+xyz
+x_
+y
+x
+y
+"blah"
+"bl_ah"
+rst
+uvw
+foo
+bar
+EOF
+
+cat tst.r
+cat exp
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP -v '^[cC]' <stdout | $SED 's/^      //' >got
+
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
