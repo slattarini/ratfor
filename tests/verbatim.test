@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Check the use of `%' to output lines verbatim
+
+. ./defs.sh || exit 99
+
+vtext="{|| bar VeRbAtIm $TAB &&}"
+vtext2="define foo bar; $vtext"
+
+echo "$vtext" >tst1.r
+echo "%$vtext" >tst2.r
+echo "foo; %$vtext" >tst3.r
+echo "define bar quux; %$vtext" >tst4.r
+(echo "%$vtext2"; echo "foo is safe") >tst5.r
+
+run_RATFOR -e 0 tst1.r || testcase_FAIL
+mv stdout stdout1
+$GREP "$vtext" stdout1 && testcase_FAIL
+
+run_RATFOR -e 0 tst2.r || testcase_FAIL
+mv stdout stdout3
+$GREP "^$vtext$" stdout3 || testcase_FAIL
+
+run_RATFOR -e 0 tst4.r || testcase_FAIL
+mv stdout stdout4
+$GREP "^$vtext$" stdout4 || testcase_FAIL
+
+run_RATFOR -e 0 tst5.r || testcase_FAIL
+mv stdout stdout5
+$GREP "^$vtext2$" stdout5 || testcase_FAIL
+$GREP "foo is safe" stdout5 || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
