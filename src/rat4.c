@@ -12,6 +12,7 @@
 #include "utils.h"
 #include "error.h"
 #include "io.h"
+#include "lex.h"
 #include "rat4.h"
 
 

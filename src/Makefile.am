@@ -4,6 +4,7 @@
 # Makefile for the src/ratfor subdirectory.
 
 bin_PROGRAMS = ratfor
+
 ratfor_SOURCES = \
 	error.c error.h \
 	io.c io.h \
@@ -12,6 +13,6 @@ ratfor_SOURCES = \
 	rat4.c rat4.h \
 	utils.c utils.h \
 	tokenizer.c tokenizer.h \
-    ratcom.h ratdef.h
+    ratcom.h ratdef.h lex.h
 
 ## vim: ft=automake noet sw=4 ts=4

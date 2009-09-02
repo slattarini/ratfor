@@ -7,7 +7,6 @@
 #define APPEND  /*empty*/
 #define ATSIGN  64
 #define BACKSLASH  92
-#define BACKSPACE  8
 #define BANG    33
 #define BAR     124
 #define BLANK   32
@@ -31,7 +30,6 @@
 #define EQUALS  61
 #define ESCAPE  ATSIGN
 #define GREATER 62
-#define HUGE    30000
 #define LBRACE  123
 #define LBRACK  91
 #define LESS    60
@@ -60,37 +58,6 @@
 #define NO      0
 #define YES     1
 
-#define LIMIT   134217728
-#define LIM1    28
-#define LIM2    -28
-
-/*
- * lexical analyser symbols
- *
- */
-
-#define LETTER          1
-#define DIGIT           2
-#define ALPHA           3
-#define LEXBREAK        4
-#define LEXDIGITS       5
-#define LEXDO           6
-#define LEXELSE         7
-#define LEXFOR          8
-#define LEXIF           9
-#define LEXNEXT         10
-#define LEXOTHER        11
-#define LEXREPEAT       12
-#define LEXUNTIL        13
-#define LEXWHILE        14
-#define LEXRETURN       15
-#define LEXEND          16
-#define LEXSTOP         17
-#define LEXSTRING       18
-#define LEXSWITCH       19
-#define LEXCASE         20
-#define LEXDEFAULT      21
-
 #define MAXCHARS        10      /* characters for outnum */
 #define MAXDEF          2048    /* max chars in a defn */
 #define MAXSWITCH       300     /* max stack for switch statement */
@@ -98,14 +65,12 @@
                                  * a dispatch table */
 #define DENSITY         2
 #define MAXFORSTK       200     /* max space for for reinit clauses */
-#define MAXFNAMES       350     /* max chars in filename stack NFILES*MAXNAME */
 #define MAXNAME         64      /* file name size in gettok */
 #define MAXSTACK        100     /* max stack depth for parser */
-#define MAXTBL          15000   /* max chars in all definitions */
 #define MAXTOK          1024    /* max chars in a token */
 #define NFILES          7       /* max depth of file inclusion */
 
-#define RADIX           PERCENT /* % indicates alternate radix */
+#define RADIX PERCENT /* `%' indicates alternate radix for numbers */
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

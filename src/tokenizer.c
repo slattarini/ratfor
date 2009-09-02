@@ -13,6 +13,7 @@
 #include "lookup.h"
 #include "error.h"
 #include "io.h"
+#include "lex.h"
 
 
 /*
