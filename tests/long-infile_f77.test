@@ -17,7 +17,7 @@ end
 EOF
 $F77 sanity.f -o sanity.exe 2>sanity.err
 $GREP "MAIN sanity:" sanity.err && \
-  testcase_SKIP "fort77 is too much limited to bu used in this test case"
+  testcase_SKIP "fort77 is too much limited to be used in this test case"
 rm -f sanity.*
 
 cat > tst.r <<EOF
