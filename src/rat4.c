@@ -78,23 +78,23 @@ static const char eoss[]   = "EOS/";
  * initialisation
  */
 void
-init(int u_startlab, int u_leaveC, char *u_filename)
+init(int xstartlab, int xleaveC, char *xfilename)
 {
     int i;
     FILE *in;
     
-    startlab = u_startlab;
-    leaveC = u_leaveC;
+    startlab = xstartlab;
+    leaveC = xleaveC;
     
     /* XXX wrap this in a function */
-    if (STREQ(u_filename, "-"))
+    if (STREQ(xfilename, "-"))
         in = stdin;
-    else if ((in = fopen(u_filename, "r")) == NULL)
-        error("%s: cannot open for reading\n", u_filename); /*XXX: perror?*/
+    else if ((in = fopen(xfilename, "r")) == NULL)
+        error("%s: cannot open for reading\n", xfilename); /*XXX: perror?*/
 
     level = 0;                  /* file control */
     linect[0] = 1;              /* line count of first file */
-    filename[0] = u_filename;   /* filename of first file */
+    filename[0] = xfilename;    /* filename of first file */
     infile[0] = in;             /* file handle of first file */
     fordep = 0;                 /* for stack */
     swtop = 0;                  /* switch stack index */

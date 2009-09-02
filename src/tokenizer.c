@@ -20,9 +20,9 @@
  */
 
 static const char incl[] = "include";
+static const char fncn[]  = "function";
 static const char defn[] = "define";
 static const char bdefn[] = "DEFINE";
-static const char fncn[]  = "function";
 
 
 /*
@@ -235,7 +235,7 @@ gtok(char lexstr[], int toksiz, FILE *fp)
         }
     }
     else if (c == PERCENT) {
-        outasis(fp);        /* direct copy of protected */
+        outasis(fp);  /* direct copy of protected */
         tok = NEWLINE;
     }
     else if (c == SHARP) {
