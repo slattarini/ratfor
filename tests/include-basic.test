@@ -4,8 +4,6 @@
 
 . ./defs.sh || exit 99
 
-set +x
-
 cat > included.r <<EOF
 foo1
 foo2
@@ -41,7 +39,11 @@ EOF
 set -x
 
 cat tst1.r
+cat included.r
+cat exp1
 cat tst2.r
+cat included
+cat exp2
 
 run_RATFOR -e 0 tst1.r || testcase_FAIL
 mv stdout stdout1
