@@ -25,6 +25,10 @@ XFAIL_TESTS += no-double-quotes.test
 
 # Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
 XFAIL_TESTS += define-case-sensibility.test
+  
+# The "verbatim output" functionality is partly broken (line wrapping is
+# still performed on lines that should be copied verbatim).
+XFAIL_TESTS += verbatim-long-line.test
 
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
@@ -78,7 +82,10 @@ ALL_TESTS = \
   synerr-nonfatal.test \
   synerr-nonfatal_f77.test \
   underscore.test \
-  underscore_f77.test
+  underscore_f77.test \
+  verbatim-long-line.test \
+  verbatim.test \
+  verbatim_f77.test
 
 EXTRA_DIST = $(TESTS)
 

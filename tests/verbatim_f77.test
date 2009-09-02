@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Check the use of `%' to output lines verbatim enough to keep the
+# fortran compiler happy.
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<\EOF
+program testprog
+  implicit none
+  integer x, y, c, i
+  x = 8  # this should be overwritten
+  y = 2  # this should not be overwritten
+  c = 3  # this should not be overwritten
+  i = 5  # this should not be used
+# the next line should be a fortran comment
+%c = 7
+%      if(y.eq.
+%     &2) goto 20
+%10    x=9
+%      goto 30
+%20    x=1
+%30    continue
+  write(*,100) x
+  define(y,i)
+# y should not be substituted in the following line
+%      write(*,100) y
+  write(*,100) c
+  100 format(i1)
+  stop
+end
+EOF
+
+cat > exp <<\EOF
+1
+2
+3
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+mv stdout got
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
