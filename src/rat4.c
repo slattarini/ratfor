@@ -10,7 +10,6 @@
 #include "ratdef.h"
 #include "ratcom.h"
 #include "utils.h"
-#include "lookup.h"
 #include "error.h"
 #include "io.h"
 #include "rat4.h"
@@ -103,11 +102,6 @@ init(int u_startlab, int u_leaveC, char *u_filename)
     
     for (i = 0; i <= 126; i++)
         tabptr[i] = 0;
-    
-    /* default definitions */
-    static char deftyp[] = { DEFTYPE, EOS };
-    install("define", deftyp); /*XXX*/
-    install("DEFINE", deftyp); /*XXX*/
     
     fcname[0] = EOS;  /* current function name */
     label = startlab; /* next generated label */
