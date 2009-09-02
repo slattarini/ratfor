@@ -66,6 +66,7 @@ ALL_TESTS = \
   no-double-quotes.test \
   no-semicolons.test \
   no-tabs.test \
+  rel-transl.test
   startlabel-default.test \
   startlabel-user-choice.test \
   stress1_f77.test \
