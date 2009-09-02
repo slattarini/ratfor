@@ -13,9 +13,12 @@
 
 #define BUFSIZE 512 /* mostly arbitrary */
 
-static char buf[BUFSIZE];  /*  pushed-back chars */
-static int bp = -1;  /* pushback buffer pointer */
+static char buf[BUFSIZE];   /* pushed-back chars */
+static int bp = -1;         /* pushback buffer pointer */
 
+/* get next char (either pushed back or new from the stream) */
+#define ngetch_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
+    
 /*
  * ngetch - get a (possibly pushed back) character
  *
@@ -24,41 +27,23 @@ int
 ngetch(FILE *fp)
 {
     int c;
-
-    if (bp >= 0) {
-        c = buf[bp];
-        bp--;
-    } else {
-        c = getc(fp);
-    }
-
-   /* check for a continuation '_\n';  also removes UNDERLINES from
-    * variable names */
-    while (c == UNDERLINE) {
-        if (bp >= 0) {
-            c = buf[bp];
-            bp--;
-        } else {
-            c = getc(fp);
-        }
+    
+    /* check for a continuation '_\n';  also removes UNDERLINES from
+     * variable names */
+    if ((c = ngetch_(fp)) == UNDERLINE) {
+        c = ngetch_(fp);
         if (c != NEWLINE) {
             putbak(c);
             c = UNDERLINE;
-            break;
         } else {
-            while (c == NEWLINE) {
-                if (bp >= 0) {
-                    c = buf[bp];
-                    bp--;
-                } else {
-                    c = getc(fp);
-                }
-            }
+            c = ngetch_(fp);
         }
     }
-
+    
     return(c);
 }
+
+#undef ngetch_
 
 /*
  * pbstr - push string back onto input
@@ -79,8 +64,7 @@ pbstr(const char in[])
 void
 putbak(char c)
 {
-    bp++;
-    if (bp > BUFSIZE)
+    if (++bp > BUFSIZE)
         baderr("too many characters pushed back.");
     buf[bp] = c;
 }
@@ -96,7 +80,8 @@ static int outp = 0;    /*  last position filled in outbuf */
  * outch - put one char into output buffer
  *
  */
-void outch(char c)
+void
+outch(char c)
 {
     int i;
 
@@ -162,8 +147,7 @@ outnum(int n)
     m = n > 0 ? (n) : (-n); /* abs value of n */
     i = -1;
     do {
-        i++;
-        chars[i] = (m % 10) + DIG0;
+        chars[++i] = (m % 10) + DIG0;
         m = m / 10;
     } while (m > 0 && i < MAXCHARS);
     if (n < 0)
@@ -196,19 +180,17 @@ outcmnt(FILE * fp)
     char comout[81];
     int i, comoutp = 0;
 
-    comoutp = 1;
     comout[0] = 'c';
+    comoutp = 1;
     while ((c = ngetch(fp)) != NEWLINE) {
         if (comoutp > 79) {
             comout[80] = NEWLINE;
             comout[81] = EOS;
             printf("%s", comout);
-            comoutp = 0;
-            comout[comoutp] = 'c';
-            comoutp++;
+            comout[0] = 'c';
+            comoutp = 1;
         }
-        comout[comoutp] = (c == TAB ? BLANK : c);
-        comoutp++;
+        comout[comoutp++] = (c == TAB ? BLANK : c);
     }
     comout[comoutp] = NEWLINE;
     comout[comoutp+1] = EOS;

@@ -3,6 +3,18 @@ List of user-visible changes of Public Domain Ratfor.
 New in XXX
 -----------
  
+ * Now an underscore character `_' at the end of a line do continuation
+   *only* for the next newline character, while previously it did line
+   continuation up to the first non-empty line found.
+   For example, with the new behaviour, the input:
+     foo_
+
+     bar
+   has an output similar to:
+     foo
+     bar
+   while with the old behaviour it had an output similar to:
+     foobar
  * Tabs in input are always converted to single spaces in output, even in
    generated fortran comments.
  * If `make' is called on an unconfigured tree, and it is GNU make, it
