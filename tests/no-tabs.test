@@ -1,0 +1,52 @@
+#!/bin/sh
+
+# Check that tabs are not improperly passed down in ratfor output.
+
+. ./defs.sh || exit 99
+
+tr '@' "$TAB" > tst.r <<\EOF
+@
+@ @ @;
+  @@ @@;
+
+@#@
+ #@
+# @ @@ ...?
+
+@x = 1
+x@= 1
+x =@1
+x@=@1
+  
+{@z = 12@3 }
+@ { z = 22 }
+
+foo(1)
+foo(@1)
+foo(1@)
+foo(@1@)
+foo@(@1@)
+
+bar(@)
+bar@()
+bar@()
+bar @ (  @)
+
+define(BAZ,@s @ x@)
+BAZ
+@BAZ
+BAZ@
+@BAZ@
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout stdout1
+$FGREP "$TAB" stdout1 && testcase_FAIL
+
+run_RATFOR -e 0 -- -C tst.r || testcase_FAIL
+mv stdout stdout2
+$FGREP "$TAB" stdout2 && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
