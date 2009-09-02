@@ -1,0 +1,75 @@
+#!/bin/sh
+
+# Test line continuation by `_', with the help of f77.
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+tr '@' ' ' > tst.r <<\EOF
+program testprog
+implicit none
+    
+in_
+teger _
+abc, ab_, c, x_
+y,_
+i
+
+ab_ = 6
+
+a_
+b_
+c_
+= 7
+
+x_
+y = _
+8
+
+wri_
+te(*,10_
+0) 9
+write(*,1_
+0_
+0) xy
+write(*,100) ab_
+c
+write(*,100) ab_@
+c = 7
+
+f_
+or(i = 0; i < 4; i = (i + 2)_
+-1){ write(*,100) i }
+
+100 format(I1)
+stop
+end
+EOF
+
+cat >exp <<\EOF
+9
+8
+7
+6
+0
+1
+2
+3
+EOF
+
+cat tst.r
+cat exp
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+mv stdout got
+
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
