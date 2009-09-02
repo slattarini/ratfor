@@ -120,8 +120,12 @@ AM_TEST_LOG_FLAGS += srcdir='$(abs_srcdir)'
 # might be updated later (esp. in included files)
 MOSTLYCLEANFILES = 
 
-# Each test case depends on defs.sh and ratfor
+# Each test case depends on defs.sh and ratfor.
 check_SCRIPTS = ratfor$(EXEEXT) defs.sh
+
+# Let a call to `make all' rebuild all the scripts/programs needed by the
+# testsuite
+all-local: $(check_SCRIPTS)
 
 # Real ratfor binary.
 top_ratfor = $(top_builddir)/src/ratfor$(EXEEXT)
