@@ -92,8 +92,7 @@ outch(char c)
         outbuf[5] = '*';
         outp = 6;
     }
-    outbuf[outp] = c;
-    outp++;
+    outbuf[outp++] = c;
 }
 
 /*

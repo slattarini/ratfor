@@ -90,7 +90,6 @@
 #define LEXSWITCH       19
 #define LEXCASE         20
 #define LEXDEFAULT      21
-#define DEFTYPE         22
 
 #define MAXCHARS        10      /* characters for outnum */
 #define MAXDEF          200     /* max chars in a defn */

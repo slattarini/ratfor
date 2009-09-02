@@ -20,6 +20,8 @@
  */
 
 static const char incl[] = "include";
+static const char defn[] = "define";
+static const char bdefn[] = "DEFINE";
 static const char fncn[]  = "function";
 
 
@@ -335,20 +337,21 @@ getdef(char token[], int toksiz, char defn[], int defsiz, FILE *fp)
 static int
 deftok(char token[], int toksiz, FILE *fp)
 {
-    char defn[MAXDEF];
+    char tkdefn[MAXDEF];
     int t;
 
     for (t=gtok(token, toksiz, fp); t!=EOF; t=gtok(token, toksiz, fp)) {
-        if (t != ALPHA) /* non-alpha */
-            break;
-        if (look(token, defn) == NO) /* undefined */
-            break;
-        if (defn[0] == DEFTYPE) { /* get definition */
-            getdef(token, toksiz, defn, MAXDEF, fp);
-            install(token, defn);
+        if (t != ALPHA) {
+            break;  /* non-alpha */
+        } else if (STREQ(token, defn) || STREQ(token, bdefn)) {
+            /* get definition for token */
+            getdef(token, toksiz, tkdefn, MAXDEF, fp);
+            install(token, tkdefn);
+        } else if (look(token, tkdefn) == NO) {
+            break;  /* undefined */
+        } else {
+            pbstr(tkdefn);  /* push replacement onto input */
         }
-        else
-            pbstr(defn); /* push replacement onto input */
     }
     if (t == ALPHA) /* convert to single case */
         fold(token);
