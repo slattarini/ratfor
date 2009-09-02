@@ -21,41 +21,43 @@ static int bp = -1;  /* pushback buffer pointer */
  *
  */
 int
-ngetch(char *c, FILE *fp)
+ngetch(FILE *fp)
 {
+    int c;
+
     if (bp >= 0) {
-        *c = buf[bp];
+        c = buf[bp];
         bp--;
     } else {
-        *c = getc(fp);
+        c = getc(fp);
     }
 
    /* check for a continuation '_\n';  also removes UNDERLINES from
     * variable names */
-    while (*c == UNDERLINE) {
+    while (c == UNDERLINE) {
         if (bp >= 0) {
-            *c = buf[bp];
+            c = buf[bp];
             bp--;
         } else {
-            *c = getc(fp);
+            c = getc(fp);
         }
-        if (*c != NEWLINE) {
-            putbak(*c);
-            *c = UNDERLINE;
+        if (c != NEWLINE) {
+            putbak(c);
+            c = UNDERLINE;
             break;
         } else {
-            while(*c == NEWLINE) {
+            while (c == NEWLINE) {
                 if (bp >= 0) {
-                    *c = buf[bp];
+                    c = buf[bp];
                     bp--;
                 } else {
-                    *c = (char) getc(fp);
+                    c = getc(fp);
                 }
             }
         }
     }
 
-    return(*c);
+    return(c);
 }
 
 /*
@@ -178,7 +180,7 @@ void
 outasis(FILE * fp)
 {
     char c;
-    while ((c = ngetch(&c, fp)) != NEWLINE)
+    while ((c = ngetch(fp)) != NEWLINE)
         outch(c);
     outdon();
 }
@@ -196,7 +198,7 @@ outcmnt(FILE * fp)
 
     comoutp = 1;
     comout[0] = 'c';
-    while ((c = ngetch(&c, fp)) != NEWLINE) {
+    while ((c = ngetch(fp)) != NEWLINE) {
         if (comoutp > 79) {
             comout[80] = NEWLINE;
             comout[81] = EOS;

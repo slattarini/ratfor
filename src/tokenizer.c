@@ -15,7 +15,7 @@
 #include "io.h"
 
 
-/* 
+/*
  *  P R I V A T E  V A R I A B L E S
  */
 
@@ -37,7 +37,7 @@ skpblk(FILE *fp)
 {
     char c;
 
-    for (c = ngetch(&c, fp); c == BLANK || c == TAB; c = ngetch(&c, fp))
+    for (c = ngetch(fp); c == BLANK || c == TAB; c = ngetch(fp))
         /* empty body */;
     putbak(c);
 }
@@ -50,7 +50,7 @@ static int
 type(char c)
 {
     int t;
-    
+
     if (isdigit(c))
         t = DIGIT;
     else if (isupper(c) || islower(c))
@@ -68,7 +68,7 @@ static int
 relate(char token[], FILE *fp)
 {
 
-    if (ngetch(&token[1], fp) != EQUALS) {
+    if ((token[1] = ngetch(fp)) != EQUALS) {
         putbak(token[1]);
         token[2] = 't';
     } else {
@@ -98,7 +98,7 @@ relate(char token[], FILE *fp)
         token[2] = 'q';
     }
     else if (token[0] == AND) { /* look for && or & */
-        if (ngetch(&token[1], fp) != AND) 
+        if ((token[1] = ngetch(fp)) != AND)
             putbak(token[1]);
         token[1] = 'a';
         token[2] = 'n';
@@ -106,7 +106,7 @@ relate(char token[], FILE *fp)
         token[4] = PERIOD;
     }
     else if (token[0] == OR) {
-        if (ngetch(&token[1], fp) != OR) /* look for || or | */ 
+        if ((token[1] = ngetch(fp)) != OR) /* look for || or | */
             putbak(token[1]);
         token[1] = 'o';
         token[2] = 'r';
@@ -123,14 +123,14 @@ relate(char token[], FILE *fp)
  */
 static int
 gtok(char lexstr[], int toksiz, FILE *fp)
-{ 
+{
     int i, b, n, tok;
     char c;
-    c = ngetch(&lexstr[0], fp);
+    c = lexstr[0] = ngetch(fp);
     if (c == BLANK || c == TAB) {
         lexstr[0] = BLANK;
         while (c == BLANK || c == TAB) /* compress many blanks to one */
-            c = ngetch(&c, fp);
+            c = ngetch(fp);
         if (c == PERCENT) {
             outasis(fp); /* copy direct to output if % */
             c = NEWLINE;
@@ -141,13 +141,13 @@ gtok(char lexstr[], int toksiz, FILE *fp)
               c = NEWLINE;
             }
             else
-                while (ngetch(&c, fp) != NEWLINE) /* strip comments */
+                while ((c = ngetch(fp)) != NEWLINE) /* strip comments */
                     /* empty body */;
         }
 /*
         if (c == UNDERLINE)
-            if(ngetch(&c, fp) == NEWLINE)
-                while(ngetch(&c, fp) == NEWLINE)
+            if ((c = ngetch(fp)) == NEWLINE)
+                while ((c = ngetch(fp)) == NEWLINE)
                     ;
             else
             {
@@ -166,7 +166,8 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     tok = type(c);
     if (tok == LETTER) { /* alpha */
         for (i = 0; i < toksiz - 3; i++) {
-            tok = type(ngetch(&lexstr[i+1], fp));
+            lexstr[i+1] = ngetch(fp);
+            tok = type(lexstr[i+1]);
             /* Test for DOLLAR added by BM, 7-15-80 */
             if (tok != LETTER && tok != DIGIT
                 && tok != UNDERLINE && tok!=DOLLAR
@@ -179,14 +180,15 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     else if (tok == DIGIT) { /* digits */
         b = c - DIG0; /* in case alternate base number */
         for (i = 0; i < toksiz - 3; i++) {
-            if (type(ngetch(&lexstr[i+1], fp)) != DIGIT)
+            lexstr[i+1] = ngetch(fp);
+            if (type(lexstr[i+1]) != DIGIT)
                 break;
             b = 10*b + lexstr[i+1] - DIG0;
         }
         if (lexstr[i+1] == RADIX && b >= 2 && b <= 36) {
             /* n%ddd... */
             for (n = 0;; n = b*n + c) {
-                c = ngetch(&lexstr[0], fp);
+                c= lexstr[0] = ngetch(fp);
                 if (c >= 'a' && c <= 'z')
                     c = c - 'a' + DIG9 + 1;
                 else if (c >= 'A' && c <= 'Z')
@@ -213,11 +215,11 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     }
 #endif
     else if (c == SQUOTE || c == DQUOTE) {
-        for (i = 1; ngetch(&lexstr[i], fp) != lexstr[0]; i++) {
+        for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
             if (lexstr[i] == UNDERLINE)
-                if (ngetch(&c, fp) == NEWLINE) {
+                if ((c = ngetch(fp)) == NEWLINE) {
                     while (c == NEWLINE || c == BLANK || c == TAB)
-                        c = ngetch(&c, fp);
+                        c = ngetch(fp);
                     lexstr[i] = c;
                 }
                 else
@@ -234,12 +236,12 @@ gtok(char lexstr[], int toksiz, FILE *fp)
         outasis(fp);        /* direct copy of protected */
         tok = NEWLINE;
     }
-    else if (c == SHARP) { 
+    else if (c == SHARP) {
         if(leaveC == YES)
           outcmnt(fp);      /* copy comments to output */
         else
-          while (ngetch(&lexstr[0], fp) != NEWLINE) /* strip comments */
-            /* empty body */;
+          while ((lexstr[0] = ngetch(fp)) != NEWLINE)
+            /* strip comments */;
           tok = NEWLINE;
     }
     else if (c == GREATER || c == LESS || c == NOT
@@ -297,7 +299,7 @@ getdef(char token[], int toksiz, char defn[], int defsiz, FILE *fp)
         pbstr(ptoken);
         i = 0;
         do {
-            c = ngetch(&c, fp);
+            c = ngetch(fp);
             if (i > defsiz)
                 baderr("definition too long.");
             defn[i++] = c;
@@ -313,7 +315,7 @@ getdef(char token[], int toksiz, char defn[], int defsiz, FILE *fp)
         for (i = 0; nlpar >= 0; i++)
             if (i > defsiz)
                 baderr("definition too long.");
-            else if (ngetch(&defn[i], fp) == EOF)
+            else if ((defn[i] = ngetch(fp)) == EOF)
                 baderr("missing right paren.");
             else if (defn[i] == LPAREN)
                 nlpar++;

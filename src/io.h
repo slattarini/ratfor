@@ -1,7 +1,7 @@
 #ifndef RAT4_IO_H 
 #  define RAT4_IO_H 1
 
-int ngetch(char *, FILE *);
+int ngetch(FILE *);
 void pbstr(const char []);
 void putbak(char c);
 
