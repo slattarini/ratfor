@@ -15,6 +15,6 @@ ratfor_SOURCES = \
 	lexer.c lexer.h \
 	parse.c parse.h \
 	rat4.c rat4.h \
-    rat4-global.h ratdef.h lex-symbols.h
+    rat4-global.h rat4-common.h lex-symbols.h
 
 ## vim: ft=automake noet sw=4 ts=4

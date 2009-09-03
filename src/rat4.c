@@ -1,4 +1,4 @@
-#include <config.h>
+#include "rat4-common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -11,7 +11,6 @@
 #include "lex-symbols.h"
 #include "rat4.h"
 
-#include "ratdef.h"
 #include "rat4-global.h"
 
 

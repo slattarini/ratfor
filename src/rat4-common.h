@@ -1,7 +1,9 @@
-/* Common macros for the ratfor preprocessor */
-#ifndef RAT4_RATDEF_H
-#  define RAT4_RATDEF_H 1
+/* Common macros & includes for the ratfor preprocessor */
+#ifndef RAT4_COMMON_H
+#  define RAT4_COMMON_H 1
 
+#include <config.h>
+#include <stdio.h>
 #include <string.h>
 #define STREQ(x, y) (strcmp((x),(y)) == 0)
 

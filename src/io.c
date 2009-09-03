@@ -1,6 +1,4 @@
-#include <config.h>
-
-#include "ratdef.h"
+#include "rat4-common.h"
 #include "error.h"
 #include "io.h"
 
