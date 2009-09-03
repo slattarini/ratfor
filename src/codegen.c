@@ -9,7 +9,7 @@
 #include "error.h"
 #include "tokenizer.h"
 #include "lex-symbols.h"
-#include "rat4.h"
+#include "codegen.h"
 
 #include "rat4-global.h"
 

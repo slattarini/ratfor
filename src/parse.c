@@ -4,8 +4,8 @@
 #include "error.h"
 #include "tokenizer.h"
 #include "lexer.h"
+#include "codegen.h"
 #include "parse.h"
-#include "rat4.h"
 
 
 /*
