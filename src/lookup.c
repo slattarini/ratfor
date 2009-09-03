@@ -2,10 +2,9 @@
  * from K&R "The C Programming language"
  * Table lookup routines
  */
+#include "rat4-common.h"
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
 #include "utils.h"
 #include "lookup.h"
@@ -17,7 +16,7 @@ static struct hashlist *hashtab[HASHMAX];
  *
  */
 static int
-hash(char *s)
+hash(const char *s)
 {
     int hashval;
 
@@ -30,13 +29,13 @@ hash(char *s)
  * lookup - lookup for a string s in the hash table
  *
  */
-struct hashlist
-*lookup(char *s)
+struct hashlist *
+lookup(const char *s)
 {
     struct hashlist *np;
 
     for (np = hashtab[hash(s)]; np != NULL; np = np->next)
-        if (strcmp(s, np->name) == 0)
+        if (STREQ(s, np->name))
             return(np); /* found     */
     return(NULL);       /* not found */
 }
@@ -45,14 +44,14 @@ struct hashlist
  * install - install a string name in hashtable and its value def
  *
  */
-struct hashlist
-*install(char *name, char *def)
+struct hashlist*
+install(const char *name, const char *def)
 {
     int hashval;
-    struct hashlist *np, *lookup();
+    struct hashlist *np;
 
     if ((np = lookup(name)) == NULL) { /* not found.. */
-        np = (struct hashlist *) malloc(sizeof(*np));
+        np = malloc(sizeof(*np));
         if (np == NULL)
             return(NULL);
         if ((np->name = strsave(name)) == NULL)
@@ -60,8 +59,10 @@ struct hashlist
         hashval = hash(np->name);
         np->next = hashtab[hashval];
         hashtab[hashval] = np;
-    } else /* found..     */
-        free(np->def); /* free prev.  */
+    } else { /* found.. */
+        /* cast needed to avoid compiler warning */
+        free((void *)np->def); /* free prev.. */
+    }
     if ((np->def = strsave(def)) == NULL)
         return(NULL);
     return(np);
