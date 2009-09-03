@@ -1,276 +1,49 @@
-/* Big scary code of ratfor preprocessor */
-
 #include <config.h>
 
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <ctype.h>
 
 #include "ratdef.h"
 #include "ratcom.h"
 #include "utils.h"
-#include "error.h"
 #include "io.h"
-#include "lex.h"
+#include "error.h"
+#include "tokenizer.h"
+#include "lex-symbols.h"
 #include "rat4.h"
 
 
-/* KEYWORDS */
+/*
+ *  C O N S T A N T  S T R I N G S
+ */
 
-static const char sdo[] = "do";
-static const char vdo[] = { LEXDO, EOS };
-
-static const char sif[] = "if";
-static const char vif[] = { LEXIF, EOS };
-
-static const char selse[] = "else";
-static const char velse[] = { LEXELSE, EOS };
-
+static const char scontinue[]   = "continue";
+static const char sdata[]       = "data";
+static const char sdo[]         = "do";
+static const char sif[]         = "if(";
+static const char sifnot[]      = "if(.not.";
 #ifdef F77
-static const char sthen[] = "then";
-static const char sendif[] = "endif";
+static const char sthen[]       = "then";
+static const char sendif[]      = "endif";
 #endif /* F77 */
+static const char sgoto[]       = "goto ";
+static const char sreturn[]     = "return";
+static const char eoss[]        = "EOS/";
 
-static const char swhile[] = "while";
-static const char vwhile[] = { LEXWHILE, EOS };
-
-static const char ssbreak[] = "break";
-static const char vbreak[] = { LEXBREAK, EOS };
-
-static const char snext[] = "next";
-static const char vnext[] = { LEXNEXT, EOS };
-
-static const char sfor[] = "for"; 
-static const char vfor[] = { LEXFOR, EOS };
-
-static const char srept[] = "repeat";
-static const char vrept[] = { LEXREPEAT, EOS };
-
-static const char suntil[] = "until";
-static const char vuntil[] = { LEXUNTIL, EOS };
-
-static const char sswitch[] = "switch";
-static const char vswitch[] = { LEXSWITCH, EOS };
-
-static const char scase[] = "case";
-static const char vcase[] = { LEXCASE, EOS };
-
-static const char sdefault[] = "default";
-static const char vdefault[] = { LEXDEFAULT, EOS };
-
-static const char sret[] = "return";
-static const char vret[] = { LEXRETURN, EOS };
-
-static const char sstr[] = "string";
-static const char vstr[] = { LEXSTRING, EOS };
-
-
-/* CONSTANT STRINGS */
-
-static const char ifnot[]  = "if(.not.";
-static const char contin[] = "continue";
-static const char rgoto[]  = "goto ";
-static const char dat[]    = "data ";
-static const char eoss[]   = "EOS/";
 
 
 /*
- * initialisation
- */
-void
-init(int xstartlab, int xleaveC, char *xfilename)
-{
-    int i;
-    FILE *in;
-    
-    startlab = xstartlab;
-    leaveC = xleaveC;
-    
-    /* XXX wrap this in a function */
-    if (STREQ(xfilename, "-"))
-        in = stdin;
-    else if ((in = fopen(xfilename, "r")) == NULL)
-        error("%s: cannot open for reading\n", xfilename); /*XXX: perror?*/
-
-    level = 0;                  /* file control */
-    linect[0] = 1;              /* line count of first file */
-    filename[0] = xfilename;    /* filename of first file */
-    infile[0] = in;             /* file handle of first file */
-    fordep = 0;                 /* for stack */
-    swtop = 0;                  /* switch stack index */
-    swlast = 1;                 /* switch stack index */
-    
-    for (i = 0; i <= 126; i++)
-        tabptr[i] = 0;
-    
-    fcname[0] = EOS;  /* current function name */
-    label = startlab; /* next generated label */
-}
-
-
-/*
- * P A R S E R
+ *  C O D E  G E N E R A T I O N
  */
 
-void
-parse(void)
-{
-    char lexstr[MAXTOK];
-    int lab, labval[MAXSTACK], lextyp[MAXSTACK], sp, i, token;
-
-    sp = 0;
-    lextyp[0] = EOF;
-    for (token = lex(lexstr); token != EOF; token = lex(lexstr)) {
-        if (token == LEXIF)
-            ifcode(&lab);
-        else if (token == LEXDO)
-            docode(&lab);
-        else if (token == LEXWHILE)
-            whilec(&lab);
-        else if (token == LEXFOR)
-            forcod(&lab);
-        else if (token == LEXREPEAT)
-            repcod(&lab);
-        else if (token == LEXSWITCH)
-            swcode(&lab);
-        else if (token == LEXCASE || token == LEXDEFAULT) {
-            for (i = sp; i >= 0; i--)
-                if (lextyp[i] == LEXSWITCH)
-                    break;
-            if (i < 0)
-                synerr("illegal case of default.");
-            else
-                cascod(labval[i], token);
-        }
-        else if (token == LEXDIGITS)
-            labelc(lexstr);
-        else if (token == LEXELSE) {
-            if (lextyp[sp] == LEXIF)
-                elseif(labval[sp]);
-            else
-                synerr("illegal else.");
-        }
-        if (token == LEXIF || token == LEXELSE || token == LEXWHILE
-            || token == LEXFOR || token == LEXREPEAT
-            || token == LEXDO || token == LEXDIGITS
-            || token == LEXSWITCH || token == LBRACE) {
-            sp++;         /* beginning of statement */
-            if (sp > MAXSTACK)
-                baderr("stack overflow in parser.");
-            lextyp[sp] = token;     /* stack type and value */
-            labval[sp] = lab;
-        }
-        else if (token != LEXCASE && token != LEXDEFAULT) {
-            /*
-             * end of statement - prepare to unstack
-             */
-            if (token == RBRACE) {
-                if (lextyp[sp] == LBRACE)
-                    sp--;
-                else if (lextyp[sp] == LEXSWITCH) {
-                    swend(labval[sp]);
-                    sp--;
-                }
-                else
-                    synerr("illegal right brace.");
-            }
-            else if (token == LEXOTHER)
-                otherc(lexstr);
-            else if (token == LEXBREAK || token == LEXNEXT)
-                brknxt(sp, lextyp, labval, token);
-            else if (token == LEXRETURN)
-                retcod();
-            else if (token == LEXSTRING)
-                strdcl();
-            token = lex(lexstr);      /* peek at next token */
-            pbstr(lexstr);
-            unstak(&sp, lextyp, labval, token);
-        }
-    }
-    if (sp != 0)
-        synerr_eof();
-}
-
-
-/*
- *  L E X I C A L  A N A L Y S E R
- */
-
-
-/*
- *  alldig - return YES if str is all digits
- *
- */
-int
-alldig(const char str[])
-{
-    int i;
-
-    if (str[0] == EOS)
-        return(NO);
-    for (i = 0; str[i] != EOS; i++)
-        if (!isdigit(str[i]))
-            return(NO);
-    return(YES);
-}
-
-/*
- * lex - return lexical type of token
- *
- */
-int
-lex(lexstr)
-char lexstr[];
-{
-
-    int tok;
-
-    for (tok = gnbtok(lexstr, MAXTOK);
-         tok == NEWLINE; tok = gnbtok(lexstr, MAXTOK))
-            /* empty body */;
-    if (tok == EOF || tok == SEMICOL || tok == LBRACE || tok == RBRACE)
-        return(tok);
-    if (tok == DIGIT)
-        tok = LEXDIGITS;
-    else if (STREQ(lexstr, sif) == YES)
-        tok = vif[0];
-    else if (STREQ(lexstr, selse) == YES)
-        tok = velse[0];
-    else if (STREQ(lexstr, swhile) == YES)
-        tok = vwhile[0];
-    else if (STREQ(lexstr, sdo) == YES)
-        tok = vdo[0];
-    else if (STREQ(lexstr, ssbreak) == YES)
-        tok = vbreak[0];
-    else if (STREQ(lexstr, snext) == YES)
-        tok = vnext[0];
-    else if (STREQ(lexstr, sfor) == YES)
-        tok = vfor[0];
-    else if (STREQ(lexstr, srept) == YES)
-        tok = vrept[0];
-    else if (STREQ(lexstr, suntil) == YES)
-        tok = vuntil[0];
-    else if (STREQ(lexstr, sswitch) == YES)
-        tok = vswitch[0];
-    else if (STREQ(lexstr, scase) == YES)
-        tok = vcase[0];
-    else if (STREQ(lexstr, sdefault) == YES)
-        tok = vdefault[0];
-    else if (STREQ(lexstr, sret) == YES)
-        tok = vret[0];
-    else if (STREQ(lexstr, sstr) == YES)
-        tok = vstr[0];
-    else
-        tok = LEXOTHER;
-    return(tok);
-}
 
 /*
  * balpar - copy balanced paren string
  *
  */
-balpar()
+static void
+balpar(void)
 {
     char token[MAXTOK];
     int t, nlpar;
@@ -304,8 +77,8 @@ balpar()
  * eatup - process rest of statement; interpret continuations
  *
  */
-void
-eatup()
+static void
+eatup(void)
 {
 
     char ptoken[MAXTOK], token[MAXTOK];
@@ -348,17 +121,57 @@ eatup()
 
 
 /*
- *  C O D E  G E N E R A T I O N
+ *  alldig - return YES if str is all digits
+ *
  */
+static int
+alldig(const char str[])
+{
+    int i;
+
+    if (str[0] == EOS)
+        return(NO);
+    for (i = 0; str[i] != EOS; i++)
+        if (str[i] < DIG0 || str[i] > DIG9)
+            return(NO);
+    return(YES);
+}
+
+/*
+ * labgen - generate  n  consecutive labels, return first one
+ *
+ */
+static int
+labgen(int n)
+{
+    int i;
+
+    i = label;
+    label = label + n;
+    return(i);
+}
+
+/*
+ * outgo - output "goto  n"
+ *
+ */
+static void
+outgo(int n)
+{
+    if (xfer == YES)
+        return;
+    outtab();
+    outstr(sgoto);
+    outch(BLANK);
+    outnum(n);
+    outdon();
+}
 
 /*
  * brknxt - generate code for break n and next n; n = 1 is default
  */
-brknxt(sp, lextyp, labval, token)
-int sp;
-int lextyp[];
-int labval[];
-int token;
+void
+brknxt(int sp, int lextyp[], int labval[], int token)
 {
     int i, n;
     char t, ptoken[MAXTOK];
@@ -399,8 +212,8 @@ int token;
  * docode - generate code for beginning of do
  *
  */
-docode(lab)
-int *lab;
+void
+docode(int *lab)
 {
     xfer = NO;
     outtab();
@@ -415,19 +228,19 @@ int *lab;
  * dostat - generate code for end of do statement
  *
  */
-dostat(lab)
-int lab;
+void
+dostat(int lab)
 {
     outcon(lab);
     outcon(lab+1);
 }
 
 /*
- * elseif - generate code for end of if before else
+ * elseifc - generate code for end of if before else
  *
  */
-elseif(lab)
-int lab;
+void
+elseifc(int lab)
 {
 
 #ifdef F77
@@ -441,11 +254,11 @@ int lab;
 }
 
 /*
- * forcod - beginning of for statement
+ * forcode - beginning of for statement
  *
  */
-forcod(lab)
-int *lab;
+void
+forcode(int *lab)
 {
     char t, token[MAXTOK];
     int i, j, nlpar,tlab;
@@ -469,7 +282,7 @@ int *lab;
         pbstr(token);
         outnum(tlab);
         outtab();
-        outstr(ifnot);
+        outstr(sifnot);
         outch(LPAREN);
         nlpar = 0;
         while (nlpar >= 0) {
@@ -526,8 +339,8 @@ int *lab;
  * fors - process end of for statement
  *
  */
-fors(lab)
-int lab;
+void
+fors(int lab)
 {
     int i, j;
 
@@ -547,17 +360,32 @@ int lab;
 }
 
 /*
+ * ifgo - generate "if(.not.(...))goto lab"
+ *
+ */
+static void
+ifgo(int lab)
+{
+
+    outtab();       /* get to column 7 */
+    outstr(sifnot); /* " if(.not. " */
+    balpar();       /* collect and output condition */
+    outch(RPAREN);  /* " ) " */
+    outgo(lab);     /* " goto lab " */
+}
+
+/*
  * ifcode - generate initial code for if
  *
  */
-ifcode(lab)
-int *lab;
+void
+ifcode(int *lab)
 {
 
     xfer = NO;
     *lab = labgen(2);
 #ifdef F77
-    ifthen();
+    ifthenc();
 #else
     ifgo(*lab);
 #endif /* F77 */
@@ -568,35 +396,20 @@ int *lab;
  * ifend - generate code for end of if
  *
  */
-ifend()
+void
+ifend(void)
 {
     outtab();
     outstr(sendif);
     outdon();
 }
-#endif /* F77 */
 
 /*
- * ifgo - generate "if(.not.(...))goto lab"
+ * ifthenc - generate "if((...))then"
  *
  */
-ifgo(lab)
-int lab;
-{
-
-    outtab();      /* get to column 7 */
-    outstr(ifnot); /* " if(.not. " */
-    balpar();      /* collect and output condition */
-    outch(RPAREN); /* " ) " */
-    outgo(lab);    /* " goto lab " */
-}
-
-#ifdef F77
-/*
- * ifthen - generate "if((...))then"
- *
- */
-ifthen()
+void
+ifthenc(void)
 {
     outtab();
     outstr(sif);
@@ -610,39 +423,23 @@ ifthen()
  * labelc - output statement number
  *
  */
-labelc(lexstr)
-char lexstr[];
+void
+labelc(char lexstr[])
 {
 
     xfer = NO;   /* can't suppress goto's now */
-    if (strlen(lexstr) == 5)   /* warn about 23xxx labels */
-        if (atoi(lexstr) >= startlab)
-            synerr("warning: possible label conflict.");
+    if (atoi(lexstr) >= startlab)
+        synerr("warning: possible label conflict.");
     outstr(lexstr);
     outtab();
 }
 
 /*
- * labgen - generate  n  consecutive labels, return first one
+ * otherstmt - output ordinary Fortran statement
  *
  */
-int
-labgen(n)
-int n;
-{
-    int i;
-
-    i = label;
-    label = label + n;
-    return(i);
-}
-
-/*
- * otherc - output ordinary Fortran statement
- *
- */
-otherc(lexstr)
-char lexstr[];
+void
+otherstmt(char lexstr[])
 {
     xfer = NO;
     outtab();
@@ -652,36 +449,21 @@ char lexstr[];
 }
 
 /*
- * outcon - output "n   continue"
+ * outcon - output "lab   continue"
  *
  */
-outcon(n)
-int n;
+void
+outcon(int lab)
 {
     xfer = NO;
 #if 0
     if (n <= 0 && outp == 0)
         return; /* don't need unlabeled continues */
 #endif
-    if (n > 0)
-        outnum(n);
+    if (lab > 0)
+        outnum(lab);
     outtab();
-    outstr(contin);
-    outdon();
-}
-
-/*
- * outgo - output "goto  n"
- *
- */
-outgo(n)
-int n;
-{
-    if (xfer == YES)
-        return;
-    outtab();
-    outstr(rgoto);
-    outnum(n);
+    outstr(scontinue);
     outdon();
 }
 
@@ -689,8 +471,7 @@ int n;
  * repcod - generate code for beginning of repeat
  *
  */
-repcod(lab)
-int *lab;
+void repcode(int *lab)
 {
 
     int tlab;
@@ -703,10 +484,11 @@ int *lab;
 }
 
 /*
- * retcod - generate code for return
+ * retcode - generate code for return
  *
  */
-retcod()
+void
+retcode(void)
 {
     char token[MAXTOK], t;
 
@@ -722,14 +504,15 @@ retcod()
     else if (t == RBRACE)
         pbstr(token);
     outtab();
-    outstr(sret);
+    outstr(sreturn);
     outdon();
     xfer = YES;
 }
 
 
 /* strdcl - generate code for string declaration */
-strdcl()
+void
+strdcl(void)
 {
     char t, name[MAXNAME], init[MAXTOK];
     int i, len;
@@ -764,7 +547,8 @@ strdcl()
     outch(RPAREN);
     outdon();
     outtab();
-    outstr(dat);
+    outstr(sdata);
+    outch(BLANK);
     len = strlen(init) + 1;
     if (init[0] == SQUOTE || init[0] == DQUOTE) {
         init[len-1] = EOS;
@@ -788,71 +572,24 @@ strdcl()
         outnum(init[i]);
         outch(COMMA);
     }
-    pbstr(eoss); /* push back EOS for subsequent substitution */
+    pbstr(eoss); /* push back "EOS/" for subsequent substitution */
 }
 
-
-/*
- * unstak - unstack at end of statement
- *
- */
-unstak(sp, lextyp, labval, token)
-int *sp;
-int lextyp[];
-int labval[];
-char token;
-{
-    int tp;
-
-    tp = *sp;
-    for ( ; tp > 0; tp--) {
-        if (lextyp[tp] == LBRACE)
-            break;
-        if (lextyp[tp] == LEXSWITCH)
-            break;
-        if (lextyp[tp] == LEXIF && token == LEXELSE)
-            break;
-        if (lextyp[tp] == LEXIF)
-#ifdef F77
-            ifend();
-#else
-            outcon(labval[tp]);
-#endif /* F77 */
-        else if (lextyp[tp] == LEXELSE) {
-            if (*sp > 1)
-                tp--;
-#ifdef F77
-            ifend();
-#else
-            outcon(labval[tp]+1);
-#endif /* F77 */
-        }
-        else if (lextyp[tp] == LEXDO)
-            dostat(labval[tp]);
-        else if (lextyp[tp] == LEXWHILE)
-            whiles(labval[tp]);
-        else if (lextyp[tp] == LEXFOR)
-            fors(labval[tp]);
-        else if (lextyp[tp] == LEXREPEAT)
-            untils(labval[tp], token);
-    }
-    *sp = tp;
-}
 
 /*
  * untils - generate code for until or end of repeat
  *
  */
-untils(lab, token)
-int lab;
-int token;
+void
+untils(int lab, int token)
 {
     char ptoken[MAXTOK];
 
     xfer = NO;
     outnum(lab);
     if (token == LEXUNTIL) {
-        lex(ptoken);
+        while (gnbtok(ptoken, MAXTOK) == NEWLINE)
+            /* skip empty lines, get next token */;
         ifgo(lab-1);
     }
     else
@@ -861,11 +598,11 @@ int token;
 }
 
 /*
- * whilec - generate code for beginning of while
+ * whilecode - generate code for beginning of while
  *
  */
-whilec(lab)
-int *lab;
+void
+whilecode(int *lab)
 {
     int tlab;
 
@@ -874,7 +611,7 @@ int *lab;
     tlab = labgen(2);
     outnum(tlab);
 #ifdef F77
-    ifthen();
+    ifthenc();
 #else
     ifgo(tlab+1);
 #endif /* F77 */
@@ -885,8 +622,8 @@ int *lab;
  * whiles - generate code for end of while
  *
  */
-whiles(lab)
-int lab;
+void
+whiles(int lab)
 {
 
     outgo(lab);
@@ -897,12 +634,45 @@ int lab;
 }
 
 /*
- * cascod - generate code for case or default label
+ * caslab - get one case label
  *
  */
-cascod (lab, token)
-int lab;
-int token;
+static int
+caslab (int *n, int *t)
+{
+    char tok[MAXTOK];
+    int i, s;
+
+    *t = gnbtok (tok, MAXTOK);
+    while (*t == NEWLINE)
+        *t = gnbtok (tok, MAXTOK);
+    if (*t == EOF)
+        return(*t);
+    if (*t == MINUS)
+        s = -1;
+    else
+        s = 1;
+    if (*t == MINUS || *t == PLUS)
+        *t = gnbtok (tok, MAXTOK);
+    if (*t != DIGIT) {
+        synerr ("invalid case label.");
+        *n = 0;
+    }
+    else {
+        i = 0;
+        *n = s * ctoi (tok, &i);
+    }
+    while ((*t = gnbtok (tok, MAXTOK)) == NEWLINE)
+        /* ignore blank lines */;
+    return(0); /* expected to be ignored */
+}
+
+/*
+ * cascode - generate code for case or default label
+ *
+ */
+void
+cascode(int lab, int token)
 {
     int t, l, lb, ub, i, j, junk;
     char scrtok[MAXTOK];
@@ -925,7 +695,7 @@ int token;
             }
             if (swlast + 3 > MAXSWITCH)
                 baderr ("switch table overflow.");
-            for (i = swtop + 3; i < swlast; i = i + 3)
+            for (i = swtop + 3; i < swlast; i += 3)
                 if (lb <= swstak[i])
                     break;
                 else if (lb <= swstak[i+1])
@@ -935,9 +705,9 @@ int token;
             for (j = swlast; j > i; j--) /* # insert new entry */
                 swstak[j+2] = swstak[j-1];
             swstak[i] = lb;
-            swstak[i + 1] = ub;
-            swstak[i + 2] = l;
-            swstak[swtop + 1] = swstak[swtop + 1]  +  1;
+            swstak[i+1] = ub;
+            swstak[i+2] = l;
+            swstak[swtop + 1]++;
             swlast = swlast + 3;
             if (t == COLON)
                 break;
@@ -963,47 +733,21 @@ int token;
 }
 
 /*
- * caslab - get one case label
- *
+ * swvar  - output switch variable Innn, where nnn = lab
  */
-int
-caslab (n, t)
-int *n;
-int *t;
+static void
+swvar(int lab)
 {
-    char tok[MAXTOK];
-    int i, s;
-
-    *t = gnbtok (tok, MAXTOK);
-    while (*t == NEWLINE)
-        *t = gnbtok (tok, MAXTOK);
-    if (*t == EOF)
-        return(*t);
-    if (*t == MINUS)
-        s = -1;
-    else
-        s = 1;
-    if (*t == MINUS || *t == PLUS)
-        *t = gnbtok (tok, MAXTOK);
-    if (*t != DIGIT) {
-        synerr ("invalid case label.");
-        *n = 0;
-    }
-    else {
-        i = 0;
-        *n = s * ctoi (tok, &i);
-    }
-    *t = gnbtok (tok, MAXTOK);
-    while (*t == NEWLINE)
-        *t = gnbtok (tok, MAXTOK);
+    outch('I');
+    outnum(lab);
 }
 
 /*
  * swcode - generate code for switch stmt.
  *
  */
-swcode (lab)
-int *lab;
+void
+swcode(int *lab)
 {
     char scrtok[MAXTOK];
 
@@ -1024,7 +768,7 @@ int *lab;
     outgo(*lab); /* # goto L */
     xfer = YES;
     while (gnbtok(scrtok, MAXTOK) == NEWLINE)
-        /* empty body */;
+        /* skip empty lines, get next token */;
     if (scrtok[0] != LBRACE) {
         synerr ("missing left brace in switch statement.");
         pbstr (scrtok);
@@ -1035,19 +779,15 @@ int *lab;
  * swend  - finish off switch statement; generate dispatch code
  *
  */
-swend(lab)
-int lab;
+void
+swend(int lab)
 {
-    int lb, ub, n, i, j;
+    int lb, ub, n, i;
 
-    static char *sif    = "if (";
-    static char *slt    = ".lt.1.or.";
-    static char *sgt    = ".gt.";
-    static char *sgoto  = "goto (";
-    static char *seq    = ".eq.";
-    static char *sge    = ".ge.";
-    static char *sle    = ".le.";
-    static char *sand   = ".and.";
+    static const char eq[]  = ".eq.";
+    static const char ge[]  = ".ge.";
+    static const char le[]  = ".le.";
+    static const char and[] = ".and.";
 
     lb = swstak[swtop + 3];
     ub = swstak[swlast - 2];
@@ -1058,65 +798,21 @@ int lab;
     xfer = NO;
     outcon (lab); /*  L continue */
     /* output branch table */
-#if 0
-    if (n >= CUTOFF && ub - lb < DENSITY * n) {
-        if (lb != 0) {  /* L  Innn=Innn-lb */
-            outtab();
-            swvar  (lab);
-            outch (EQUALS);
-            swvar  (lab);
-            if (lb < 0)
-                outch (PLUS);
-            outnum (-lb + 1);
-            outdon();
-        }
-        outtab(); /*  if (Innn.lt.1.or.Innn.gt.ub-lb+1)goto default */
-        outstr (sif);
-        swvar  (lab);
-        outstr (slt);
-        swvar  (lab);
-        outstr (sgt);
-        outnum (ub - lb + 1);
-        outch (RPAREN);
-        outgo (swstak[swtop + 2]);
-        outtab();
-        outstr (sgoto); /* goto ... */
-        j = lb;
-        for (i = swtop + 3; i < swlast; i = i + 3) {
-            /* # fill in vacancies */
-            for ( ; j < swstak[i]; j++) {
-                outnum(swstak[swtop + 2]);
-                outch(COMMA);
-            }
-            for (j = swstak[i + 1] - swstak[i]; j >= 0; j--)
-                outnum(swstak[i + 2]); /* # fill in range */
-            j = swstak[i + 1] + 1;
-            if (i < swlast - 3)
-                outch(COMMA);
-        }
-        outch(RPAREN);
-        outch(COMMA);
-        swvar(lab);
-        outdon();
-    }
-    else if (n > 0) { /* # output linear search form */
-#else
     if (n > 0) { /* # output linear search form */
-#endif
         for (i = swtop + 3; i < swlast; i = i + 3) {
             outtab(); /* # if (Innn */
             outstr (sif);
             swvar  (lab);
             if (swstak[i] == swstak[i+1]) {
-                outstr (seq); /* #   .eq....*/
+                outstr (eq); /* #   .eq....*/
                 outnum (swstak[i]);
             }
             else {
-                outstr (sge); /* #   .ge.lb.and.Innn.le.ub */
+                outstr (ge); /* #   .ge.lb.and.Innn.le.ub */
                 outnum (swstak[i]);
-                outstr (sand);
+                outstr (and);
                 swvar  (lab);
-                outstr (sle);
+                outstr (le);
                 outnum (swstak[i + 1]);
             }
             outch (RPAREN); /* #    ) goto ... */
@@ -1128,16 +824,6 @@ int lab;
     outcon (lab + 1); /* # L+1  continue */
     swlast = swtop;   /* # pop switch stack */
     swtop = swstak[swtop];
-}
-
-/*
- * swvar  - output switch variable Innn, where nnn = lab
- */
-swvar  (lab)
-int lab;
-{
-    outch ('I');
-    outnum (lab);
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */

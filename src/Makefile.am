@@ -6,13 +6,15 @@
 bin_PROGRAMS = ratfor
 
 ratfor_SOURCES = \
+	main.c \
+	utils.c utils.h \
 	error.c error.h \
 	io.c io.h \
 	lookup.c lookup.h \
-	main.c main.h \
-	rat4.c rat4.h \
-	utils.c utils.h \
 	tokenizer.c tokenizer.h \
-    ratcom.h ratdef.h lex.h
+	lexer.c lexer.h \
+	parse.c parse.h \
+	rat4.c rat4.h \
+    ratcom.h ratdef.h lex-symbols.h
 
 ## vim: ft=automake noet sw=4 ts=4
