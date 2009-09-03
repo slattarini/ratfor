@@ -17,7 +17,7 @@
  * strsave - save string s somewhere, by malloc'ing memory
  */
 char
-*strsave(char *s)
+*strsave(const char *s)
 {
     char *p;
     if ((p = malloc(strlen(s)+1)) != NULL)
@@ -29,7 +29,7 @@ char
  * ctoi - convert string at in[*i] to int, increment i
  */
 int
-ctoi(char in[], int *i)
+ctoi(const char in[], int *i)
 {
     int k, j;
 
@@ -92,7 +92,7 @@ fold(char token[])
  *
  */
 void
-scopy(char from[], int i, char to[], int j)
+scopy(const char from[], int i, char to[], int j)
 {
     int k1, k2;
 
@@ -109,7 +109,7 @@ scopy(char from[], int i, char to[], int j)
  *
  */
 int
-look(char name[], char defn[])
+look(const char name[], char defn[])
 {
     struct hashlist *p;
     if ((p = lookup(name)) == NULL)

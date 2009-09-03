@@ -249,10 +249,10 @@ gtok(char lexstr[], int toksiz, FILE *fp)
  *
  */
 static void
-getdef(char token[], int toksiz, char def[], int defsiz, FILE *fp)
+getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
 {
     int i, nlpar, t, t2;
-    char c, ptoken[MAXTOK];
+    char c, ptoken[MAXTOK]; /* temporary buffer for token */
 
     skpblk(fp);
     /*
@@ -265,7 +265,7 @@ getdef(char token[], int toksiz, char def[], int defsiz, FILE *fp)
         pbstr(ptoken);
     }
     skpblk(fp);
-    t2 = gtok(token, toksiz, fp); /* name */
+    t2 = gtok(name, namesiz, fp); /* name */
     if (t == BLANK && (t2 == NEWLINE || t2 == SEMICOL)) {
         /* stray `define', as in `...; define; ...' */
         baderr("empty name.");
@@ -347,7 +347,7 @@ deftok(char token[], int toksiz, FILE *fp)
 
 
 /*
- * gettok - get token. Handles file inclusion and line numbers
+ * gettok - get token; handles file inclusion and line numbers
  *
  */
 int
