@@ -29,7 +29,7 @@ Copyright
 
 >*/
 
-#include <config.h>
+#include "rat4-common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -37,7 +37,6 @@ Copyright
 
 #include "error.h"
 #include "parse.h"
-#include "ratdef.h"
 
 static void init(int, int, char *); /* XXX: move out */
 

@@ -1,6 +1,6 @@
 /* Get tokens for the ratfor preprocessor. */
 
-#include <config.h>
+#include "rat4-common.h"
 
 #include <stdlib.h>
 #include <ctype.h>
@@ -10,8 +10,6 @@
 #include "error.h"
 #include "lookup.h"
 #include "lex-symbols.h"
-
-#include "ratdef.h"
 #include "rat4-global.h"
 
 

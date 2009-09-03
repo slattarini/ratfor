@@ -1,11 +1,10 @@
-#include <config.h>
+#include "rat4-common.h"
 
 #include <stdio.h>
 #include <stdlib.h>
+
 #include "utils.h"
 #include "error.h"
-
-#include "ratdef.h"
 #include "rat4-global.h"
 
 /* Global program exit status, declared in error.h */

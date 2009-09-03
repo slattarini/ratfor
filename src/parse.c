@@ -1,6 +1,5 @@
-#include <config.h>
+#include "rat4-common.h"
 
-#include "ratdef.h"
 #include "io.h"
 #include "error.h"
 #include "tokenizer.h"
