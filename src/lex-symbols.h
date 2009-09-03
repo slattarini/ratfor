@@ -1,12 +1,20 @@
 #ifndef RAT4_LEX_H
 #  define RAT4_LEX_H 1
+
 /*
- * lexical analyser symbols
+ * L E X I C A L  A N A L Y S E R  S Y M B O L S
  *
+ */
+
+/* 
+ * WARNING: the values of all these three macros must be smaller than
+ * the numerical value of any ascii character that might be used in the
+ * input.
  */
 #define LETTER          1
 #define DIGIT           2
 #define ALPHA           3
+
 #define LEXBREAK        4
 #define LEXDIGITS       5
 #define LEXDO           6
