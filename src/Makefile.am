@@ -13,7 +13,7 @@ ratfor_SOURCES = \
 	lookup.c lookup.h \
 	tokenizer.c tokenizer.h \
 	lexer.c lexer.h \
-	parse.c parse.h \
+	parser.c parser.h \
 	codegen.c codegen.h \
     rat4-global.h rat4-common.h lex-symbols.h
 
