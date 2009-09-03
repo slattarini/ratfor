@@ -71,11 +71,8 @@ strict_distcheck_f77_compilers ?= fort77 gfortran
 
 # Command line arguments for configure as called by `strict-distcheck'.
 strict_distcheck_configure_flags = \
-	CFLAGS='$(CFLAGS) -Wall -Wshadow -pedantic' \
-	FFLAGS='$(FFLAGS) -Wall'
-#XXX: use this once the rat4 source code will be fixed
-#	CFLAGS='$(CFLAGS) -Wall -Werror -Wshadow -pedantic' \
-#	FFLAGS='$(FFLAGS) -Wall -Werror'
+	CFLAGS='$(CFLAGS) -Wall -Werror -Wshadow -pedantic' \
+	FFLAGS='$(FFLAGS) -Wall -Werror'
 
 .PHONY: vc-nodiff-check
 vc-nodiff-check: git-no-diff-check git-no-diff-cached-check

@@ -2,6 +2,9 @@
 #ifndef RAT4_RATDEF_H
 #  define RAT4_RATDEF_H 1
 
+#include <string.h>
+#define STREQ(x, y) (strcmp((x),(y)) == 0)
+
 #define ACCENT  96
 #define AND     38
 #define APPEND  /*empty*/

@@ -1,8 +1,5 @@
 #include <config.h>
 
-#include <stdio.h>  /* for getc() */
-#include <string.h> /* for strlen() */
-
 #include "ratdef.h"
 #include "error.h"
 #include "io.h"
@@ -182,8 +179,8 @@ void
 outcmnt(FILE * fp)
 {
     char c;
-    char comout[81];
-    int i, comoutp = 0;
+    char comout[82];
+    int comoutp = 0;
 
     comout[0] = 'c';
     comoutp = 1;

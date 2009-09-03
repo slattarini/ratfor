@@ -1,7 +1,5 @@
 #ifndef RAT4_UTILS_H
 #  define RAT4_UTILS_H 1
-#include <string.h>
-#define STREQ(x, y) (strcmp((x),(y)) == 0)
 char *strsave(char *);
 int ctoi(char[], int*);
 int itoc(int, char[], int size);

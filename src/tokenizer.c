@@ -2,18 +2,16 @@
 
 #include <config.h>
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <ctype.h>
 
 #include "ratdef.h"
 #include "ratcom.h"
 #include "utils.h"
-#include "lookup.h"
-#include "error.h"
 #include "io.h"
-#include "lex.h"
+#include "error.h"
+#include "lookup.h"
+#include "lex-symbols.h"
 
 
 /*
@@ -219,14 +217,16 @@ gtok(char lexstr[], int toksiz, FILE *fp)
 #endif
     else if (c == SQUOTE || c == DQUOTE) {
         for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
-            if (lexstr[i] == UNDERLINE)
+            if (lexstr[i] == UNDERLINE) {
                 if ((c = ngetch(fp)) == NEWLINE) {
                     while (c == NEWLINE || c == BLANK || c == TAB)
                         c = ngetch(fp);
                     lexstr[i] = c;
                 }
-                else
+                else {
                     putbak(c);
+                }
+            }
             if (lexstr[i] == NEWLINE || i >= toksiz-1) {
                 synerr("missing quote.");
                 lexstr[i] = lexstr[0];
@@ -270,19 +270,19 @@ gtok(char lexstr[], int toksiz, FILE *fp)
  *
  */
 static void
-getdef(char token[], int toksiz, char defn[], int defsiz, FILE *fp)
+getdef(char token[], int toksiz, char def[], int defsiz, FILE *fp)
 {
     int i, nlpar, t, t2;
     char c, ptoken[MAXTOK];
 
     skpblk(fp);
     /*
-     * define(name,defn) or
-     * define name defn
+     * define(name,def) or
+     * define name def
      *
      */
     if ((t = gtok(ptoken, MAXTOK, fp)) != LPAREN) {;
-        t = BLANK; /* define name defn */
+        t = BLANK; /* define name def */
         pbstr(ptoken);
     }
     skpblk(fp);
@@ -291,26 +291,26 @@ getdef(char token[], int toksiz, char defn[], int defsiz, FILE *fp)
         /* stray `define', as in `...; define; ...' */
         baderr("empty name.");
     } else if (t == LPAREN && t2 == COMMA) {
-        /* `define (name, defn)' with empty name */
+        /* `define (name, def)' with empty name */
         baderr("empty name.");
     } else if (t2 != ALPHA) {
         baderr("non-alphanumeric name.");
     }
     skpblk(fp);
     c = gtok(ptoken, MAXTOK, fp);
-    if (t == BLANK) { /* define name defn */
+    if (t == BLANK) { /* define name def */
         pbstr(ptoken);
         i = 0;
         do {
             c = ngetch(fp);
             if (i > defsiz)
                 baderr("definition too long.");
-            defn[i++] = c;
+            def[i++] = c;
         } while (c != SHARP && c != NEWLINE && c != EOF && c != PERCENT);
         if (c == SHARP || c == PERCENT)
             putbak(c);
     }
-    else if (t == LPAREN) { /* define (name, defn) */
+    else if (t == LPAREN) { /* define (name, def) */
         if (c != COMMA)
             baderr("missing comma in define.");
         /* else got (name, */
@@ -318,17 +318,17 @@ getdef(char token[], int toksiz, char defn[], int defsiz, FILE *fp)
         for (i = 0; nlpar >= 0; i++)
             if (i > defsiz)
                 baderr("definition too long.");
-            else if ((defn[i] = ngetch(fp)) == EOF)
+            else if ((def[i] = ngetch(fp)) == EOF)
                 baderr("missing right paren.");
-            else if (defn[i] == LPAREN)
+            else if (def[i] == LPAREN)
                 nlpar++;
-            else if (defn[i] == RPAREN)
+            else if (def[i] == RPAREN)
                 nlpar--;
-        /* else normal character in defn[i] */
+        /* else normal character in def[i] */
     }
     else
         baderr("getdef is confused.");
-    defn[i-1] = EOS;
+    def[i-1] = EOS;
 }
 
 /*
