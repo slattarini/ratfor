@@ -13,7 +13,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 AC_PREREQ([2.64])
 AC_INIT([ratfor], [1.0h], [stefano.lattarini@gmail.com])
 
-AC_CONFIG_SRCDIR([src/rat4.c])
+AC_CONFIG_SRCDIR([src/rat4-common.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])

@@ -14,7 +14,7 @@ ratfor_SOURCES = \
 	tokenizer.c tokenizer.h \
 	lexer.c lexer.h \
 	parse.c parse.h \
-	rat4.c rat4.h \
+	codegen.c codegen.h \
     rat4-global.h rat4-common.h lex-symbols.h
 
 ## vim: ft=automake noet sw=4 ts=4

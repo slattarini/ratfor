@@ -1,5 +1,5 @@
-#ifndef RAT4_RAT4_H
-#  define RAT4_RAT4_H 1
+#ifndef RAT4_CODEGEN_H
+#  define RAT4_CODEGEN_H 1
 /* subroutines for code generation */
 
 void brknxt(int, int [], int [], int);
