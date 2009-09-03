@@ -38,12 +38,12 @@ skpblk(FILE *fp)
     char c;
 
     for (c = ngetch(fp); c == BLANK || c == TAB; c = ngetch(fp))
-        /* empty body */;
+        /* skip blank characters */;
     putbak(c);
 }
 
 /*
- * type - return LETTER, DIGIT or char
+ * type - return LETTER, DIGIT or char itslef if it's neither
  *
  */
 static int
@@ -68,51 +68,59 @@ static int
 relate(char token[], FILE *fp)
 {
 
-    if ((token[1] = ngetch(fp)) != EQUALS) {
+    if ((token[1] = ngetch(fp)) == EQUALS) {
+        token[2] = 'e';
+    } else {
         putbak(token[1]);
         token[2] = 't';
-    } else {
-        token[2] = 'e';
     }
     token[3] = PERIOD;
     token[4] = EOS;
     token[5] = EOS; /* for .not. and .and. */
-    if (token[0] == GREATER)
-        token[1] = 'g';
-    else if (token[0] == LESS)
-        token[1] = 'l';
-    else if (token[0] == NOT || token[0] == BANG || token[0] == CARET) {
-        if (token[1] != EQUALS) {
-            token[2] = 'o';
-            token[3] = 't';
+    
+    switch(token[0]) {
+        case GREATER:
+            token[1] = 'g';
+            break;
+        case LESS:
+            token[1] = 'l';
+            break;
+        case NOT:
+        case BANG:
+        case CARET:
+            if (token[1] != EQUALS) {
+                token[2] = 'o';
+                token[3] = 't';
+                token[4] = PERIOD;
+            }
+            token[1] = 'n';
+            break;
+        case EQUALS:
+            if (token[1] != EQUALS) { /* variable assignement */
+                token[2] = EOS;
+                return(0);
+            }
+            token[1] = 'e';
+            token[2] = 'q';
+            break;
+        case AND:
+            if ((token[1] = ngetch(fp)) != AND) /* look for && or & */ 
+                putbak(token[1]);
+            token[1] = 'a';
+            token[2] = 'n';
+            token[3] = 'd';
             token[4] = PERIOD;
-        }
-        token[1] = 'n';
-    }
-    else if (token[0] == EQUALS) {
-        if (token[1] != EQUALS) {
-            token[2] = EOS;
-            return(0);
-        }
-        token[1] = 'e';
-        token[2] = 'q';
-    }
-    else if (token[0] == AND) { /* look for && or & */
-        if ((token[1] = ngetch(fp)) != AND)
-            putbak(token[1]);
-        token[1] = 'a';
-        token[2] = 'n';
-        token[3] = 'd';
-        token[4] = PERIOD;
-    }
-    else if (token[0] == OR) {
-        if ((token[1] = ngetch(fp)) != OR) /* look for || or | */
-            putbak(token[1]);
-        token[1] = 'o';
-        token[2] = 'r';
-    }
-    else   /* can't happen */
-        token[1] = EOS;
+            break;
+        case OR:
+            if ((token[1] = ngetch(fp)) != OR) /* look for || or | */
+                putbak(token[1]);
+            token[1] = 'o';
+            token[2] = 'r';
+            break;
+        default: /* can't happen */ 
+            token[1] = EOS;
+            break;
+    }  /* switch(token[0]) */
     token[0] = PERIOD;
     return(strlen(token)-1);
 }
@@ -136,48 +144,35 @@ gtok(char lexstr[], int toksiz, FILE *fp)
             c = NEWLINE;
         }
         if (c == SHARP) {
-            if (leaveC == YES) {
-              outcmnt(fp); /* copy comments to output */
-              c = NEWLINE;
-            }
+            if (leaveC == YES)
+                outcmnt(fp); /* copy comments to output */
             else
                 while ((c = ngetch(fp)) != NEWLINE) /* strip comments */
                     /* empty body */;
+            c = NEWLINE;
         }
-/*
-        if (c == UNDERLINE)
-            if ((c = ngetch(fp)) == NEWLINE)
-                while ((c = ngetch(fp)) == NEWLINE)
-                    ;
-            else
-            {
-                putbak(c);
-                c = UNDERLINE;
-            }
-*/
         if (c != NEWLINE)
             putbak(c);
         else
             lexstr[0] = NEWLINE;
         lexstr[1] = EOS;
-        return((int)lexstr[0]);
+        return(lexstr[0]);
     }
     i = 0;
     tok = type(c);
-    if (tok == LETTER) { /* alpha */
+    if (tok == LETTER) { /* alphanumeric token */
         for (i = 0; i < toksiz - 3; i++) {
             lexstr[i+1] = ngetch(fp);
             tok = type(lexstr[i+1]);
             /* Test for DOLLAR added by BM, 7-15-80 */
-            if (tok != LETTER && tok != DIGIT
-                && tok != UNDERLINE && tok!=DOLLAR
-                && tok != PERIOD)
+            if (tok != LETTER && tok != DIGIT && tok != UNDERLINE
+                && tok != DOLLAR && tok != PERIOD)
                 break;
         }
         putbak(lexstr[i+1]);
         tok = ALPHA;
     }
-    else if (tok == DIGIT) { /* digits */
+    else if (tok == DIGIT) { /* number */
         b = c - DIG0; /* in case alternate base number */
         for (i = 0; i < toksiz - 3; i++) {
             lexstr[i+1] = ngetch(fp);
@@ -187,8 +182,8 @@ gtok(char lexstr[], int toksiz, FILE *fp)
         }
         if (lexstr[i+1] == RADIX && b >= 2 && b <= 36) {
             /* n%ddd... */
-            for (n = 0;; n = b*n + c) {
-                c= lexstr[0] = ngetch(fp);
+            for (n = 0; ; n = b*n + c) {
+                c = lexstr[0] = ngetch(fp);
                 if (c >= 'a' && c <= 'z')
                     c = c - 'a' + DIG9 + 1;
                 else if (c >= 'A' && c <= 'Z')
@@ -204,25 +199,14 @@ gtok(char lexstr[], int toksiz, FILE *fp)
             putbak(lexstr[i+1]);
         tok = DIGIT;
     }
-#ifdef SQUAREB
-    else if (c == LBRACK) { /* allow [ for { */
-        lexstr[0] = LBRACE;
-        tok = LBRACE;
-    }
-    else if (c == RBRACK) { /* allow ] for } */
-        lexstr[0] = RBRACE;
-        tok = RBRACE;
-    }
-#endif
     else if (c == SQUOTE || c == DQUOTE) {
+        /* XXX: handle esacepd quotes inside a string */
         for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
             if (lexstr[i] == UNDERLINE) {
                 if ((c = ngetch(fp)) == NEWLINE) {
-                    while (c == NEWLINE || c == BLANK || c == TAB)
-                        c = ngetch(fp);
+                    c = ngetch(fp);
                     lexstr[i] = c;
-                }
-                else {
+                } else {
                     putbak(c);
                 }
             }
@@ -239,27 +223,23 @@ gtok(char lexstr[], int toksiz, FILE *fp)
         tok = NEWLINE;
     }
     else if (c == SHARP) {
-        if(leaveC == YES)
-          outcmnt(fp);      /* copy comments to output */
+        if (leaveC == YES)
+            outcmnt(fp); /* copy comments to output */
         else
-          while ((lexstr[0] = ngetch(fp)) != NEWLINE)
-            /* strip comments */;
-          tok = NEWLINE;
+            while ((lexstr[0] = ngetch(fp)) != NEWLINE)
+                /* strip comments */;
+        tok = NEWLINE;
     }
     else if (c == GREATER || c == LESS || c == NOT
              || c == BANG || c == CARET || c == EQUALS
              || c == AND || c == OR)
         i = relate(lexstr, fp);
-    if (i >= toksiz-1)
+    
+    if (i >= toksiz - 1)
         synerr("token too long.");
     lexstr[i+1] = EOS;
     if (lexstr[0] == NEWLINE)
-        linect[level] = linect[level] + 1;
-
-    /* cray cannot compare char and ints, since EOF is an int we check
-       with feof */
-    if (feof(fp))
-        tok = EOF;
+        linect[level]++;
 
     return(tok);
 }
@@ -340,11 +320,11 @@ deftok(char token[], int toksiz, FILE *fp)
     char tkdefn[MAXDEF];
     int t;
 
-    for (t=gtok(token, toksiz, fp); t!=EOF; t=gtok(token, toksiz, fp)) {
+    while ((t = gtok(token, toksiz, fp)) != EOF) {
         if (t != ALPHA) {
             break;  /* non-alpha */
         } else if (STREQ(token, defn) || STREQ(token, bdefn)) {
-            /* get definition for token */
+            /* get definition for token, save it in tkdefn */
             getdef(token, toksiz, tkdefn, MAXDEF, fp);
             install(token, tkdefn);
         } else if (look(token, tkdefn) == NO) {
@@ -353,6 +333,8 @@ deftok(char token[], int toksiz, FILE *fp)
             pbstr(tkdefn);  /* push replacement onto input */
         }
     }
+    /* XXX: better to move this in fortran-generating code, or something
+     * like that... */
     if (t == ALPHA) /* convert to single case */
         fold(token);
     return(t);
@@ -376,9 +358,7 @@ gettok(char token[], int toksiz)
     char name[MAXNAME];
 
     for ( ; level >= 0; level--) {
-        for (tok = deftok(token, toksiz, infile[level]); tok != EOF;
-             tok = deftok(token, toksiz, infile[level]))
-        {
+        while((tok = deftok(token, toksiz, infile[level])) != EOF) {
             if (STREQ(token, fncn)) {
                 skpblk(infile[level]);
                 t = deftok(fcname, MAXNAME, infile[level]);
@@ -400,16 +380,6 @@ gettok(char token[], int toksiz)
                 }
             }
             name[i] = EOS;
-/*WSB 6-25-91
-            if (name[1] == SQUOTE) {
-                outtab();
-                outstr(token);
-                outstr(name);
-                outdon();
-                eatup();
-                return(tok);
-            }
-*/
             if (level >= NFILES)
                 synerr("includes nested too deeply.");
             else {
