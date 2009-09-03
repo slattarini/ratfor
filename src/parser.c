@@ -5,7 +5,7 @@
 #include "tokenizer.h"
 #include "lexer.h"
 #include "codegen.h"
-#include "parse.h"
+#include "parser.h"
 
 
 /*

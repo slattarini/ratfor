@@ -36,7 +36,7 @@ Copyright
 #include <unistd.h>
 
 #include "error.h"
-#include "parse.h"
+#include "parser.h"
 
 static void init(int, int, char *); /* XXX: move out */
 
