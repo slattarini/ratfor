@@ -1,6 +1,6 @@
-#ifndef RAT4_RATCOM_H
-#  define RAT4_RATCOM_H 1
-#include <stdio.h> /* for `*FILE' */
+#ifndef RAT4_GLOBAL_H
+#  define RAT4_GLOBAL_H 1
+#include "ratdef.h"
 int startlab;                   /*  start label (configurable with `-l' switch)  */
 char fcname[MAXNAME];           /*  text of current function name                */
 int fordep;                     /*  current depth of for statements              */

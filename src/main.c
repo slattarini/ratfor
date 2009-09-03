@@ -35,9 +35,9 @@ Copyright
 #include <stdlib.h>
 #include <unistd.h>
 
-#include "ratdef.h"
 #include "error.h"
 #include "parse.h"
+#include "ratdef.h"
 
 static void init(int, int, char *); /* XXX: move out */
 
@@ -87,7 +87,7 @@ main(int argc, char *argv[])
     exit(exit_status); /* TODO: check stdout for write errors? */
 }
 
-#include "ratcom.h"
+#include "rat4-global.h"
 
 /*
  * initialisation

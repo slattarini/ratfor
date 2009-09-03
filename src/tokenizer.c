@@ -5,13 +5,14 @@
 #include <stdlib.h>
 #include <ctype.h>
 
-#include "ratdef.h"
-#include "ratcom.h"
 #include "utils.h"
 #include "io.h"
 #include "error.h"
 #include "lookup.h"
 #include "lex-symbols.h"
+
+#include "ratdef.h"
+#include "rat4-global.h"
 
 
 /*
