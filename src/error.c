@@ -4,8 +4,9 @@
 #include <stdlib.h>
 #include "utils.h"
 #include "error.h"
+
 #include "ratdef.h"
-#include "ratcom.h" /* this must go last */
+#include "rat4-global.h"
 
 /* Global program exit status, declared in error.h */
 int exit_status = 0;

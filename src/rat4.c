@@ -4,14 +4,15 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "ratdef.h"
-#include "ratcom.h"
 #include "utils.h"
 #include "io.h"
 #include "error.h"
 #include "tokenizer.h"
 #include "lex-symbols.h"
 #include "rat4.h"
+
+#include "ratdef.h"
+#include "rat4-global.h"
 
 
 /*
