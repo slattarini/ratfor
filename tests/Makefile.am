@@ -30,6 +30,10 @@ XFAIL_TESTS += define-case-sensibility.test
 # this should be fixed soon
 XFAIL_TESTS += define-underscores.test
 
+# Currently, `%'-escaping is recognized also after blank spaces, and this
+# behaviour (which should be fixed in a later release) break this test.
+XFAIL_TESTS += verbatim-in-define.test
+
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
@@ -88,6 +92,7 @@ ALL_TESTS = \
   synerr-nonfatal_f77.test \
   underscore.test \
   underscore_f77.test \
+  verbatim-in-define.test \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim.test \

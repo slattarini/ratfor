@@ -1,0 +1,35 @@
+#!/bin/sh
+
+# Test that `%'-escaping plays well with define builtin
+# at the beginning of a line
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+define(x,%||)
+define y %&&
+x
+y
+EOF
+
+cat >exp <<EOF
+||
+&&
+EOF
+
+cat tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP -v '^[cC]' stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || {
+    (echo ===) 2>/dev/null
+    testcase_FAIL
+}
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
