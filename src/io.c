@@ -163,7 +163,6 @@ outasis(FILE * fp)
      * must be as unobtrusive as possible)
      */
     char c;
-    outdon(); /* properly terminate the previous fortran output line */
     while ((c = ngetch(fp)) != NEWLINE)
         putchar(c);
     putchar(NEWLINE);

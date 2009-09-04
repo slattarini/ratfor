@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Check tha no extra newline is printed before an `%'-escaped line.
+
+. ./defs.sh || exit 99
+
+
+echo '%123' >tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP "^[ $TAB]*$" stdout && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
