@@ -77,7 +77,7 @@ parse(void)
                 if (lextyp[i] == LEXSWITCH)
                     break;
             if (i < 0)
-                synerr("illegal case of default.");
+                synerr("illegal case or default.");
             else
                 cascode(labval[i], token);
         }

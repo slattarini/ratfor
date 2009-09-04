@@ -260,7 +260,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
      * define name def
      *
      */
-    if ((t = gtok(ptoken, MAXTOK, fp)) != LPAREN) {;
+    if ((t = gtok(ptoken, MAXTOK, fp)) != LPAREN) {
         t = BLANK; /* define name def */
         pbstr(ptoken);
     }
@@ -294,7 +294,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
             baderr("missing comma in define.");
         /* else got (name, */
         nlpar = 0;
-        for (i = 0; nlpar >= 0; i++)
+        for (i = 0; nlpar >= 0; i++) {
             if (i > defsiz)
                 baderr("definition too long.");
             else if ((def[i] = ngetch(fp)) == EOF)
@@ -303,7 +303,8 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
                 nlpar++;
             else if (def[i] == RPAREN)
                 nlpar--;
-        /* else normal character in def[i] */
+            /* else normal character in def[i] */
+        }
     }
     else
         baderr("getdef is confused.");

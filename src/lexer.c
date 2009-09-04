@@ -6,10 +6,6 @@
 
 
 /*
- *  K E Y W O R D S
- */
-
-/*
  *  L E X I C A L  A N A L Y S E R
  */
 
