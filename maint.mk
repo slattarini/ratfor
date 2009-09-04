@@ -114,7 +114,7 @@ vc-diff-check:
 	}
 
 .PHONY: strict-distcheck
-strict-distcheck: distcheck
+strict-distcheck: all check distcheck
 	@set -e; \
 	 xrun() { \
 	   echo "+ $$*"; \
