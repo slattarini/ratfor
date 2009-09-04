@@ -89,6 +89,7 @@ ALL_TESTS = \
   underscore.test \
   underscore_f77.test \
   verbatim-long-line.test \
+  verbatim-no-extra-new-line.test \
   verbatim.test \
   verbatim_f77.test
 
