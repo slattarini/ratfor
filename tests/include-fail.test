@@ -39,6 +39,7 @@ cat > tst3.r <<EOF
 include none.r
 #4
 include nest.r
+stillalive1
 EOF
 
 cat > nest.r <<EOF
@@ -46,6 +47,7 @@ cat > nest.r <<EOF
 #2
 #3
 include none.r
+stillalive2
 EOF
 
 run_RATFOR -e 1 tst1.r || testcase_FAIL
@@ -58,9 +60,17 @@ $FGREP 'stillalive' stdout1 || testcase_FAIL
 run_RATFOR -e 1 tst2.r || testcase_FAIL
 mv stdout stdout2
 mv stderr stderr2
-$FGREP 'tst1.r:1: cannot open include: I/O error' stderr1 || testcase_FAIL
-$FGREP 'tst1.r:6: cannot open include: I/O error' stderr1 || testcase_FAIL
-$FGREP 'stillalive' stdout1 || testcase_FAIL
+$FGREP 'tst2.r:1: cannot open include: I/O error' stderr2 || testcase_FAIL
+$FGREP 'tst2.r:6: cannot open include: I/O error' stderr2 || testcase_FAIL
+$FGREP 'stillalive' stdout2 || testcase_FAIL
+
+run_RATFOR -e 1 tst3.r || testcase_FAIL
+mv stdout stdout3
+mv stderr stderr3
+$FGREP 'tst3.r:3: cannot open include: I/O error' stderr3 || testcase_FAIL
+$FGREP 'nest.r:4: cannot open include: I/O error' stderr3 || testcase_FAIL
+$FGREP 'stillalive1' stdout3 || testcase_FAIL
+$FGREP 'stillalive2' stdout3 || testcase_FAIL
 
 testcase_PASS
 

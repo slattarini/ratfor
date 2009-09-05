@@ -3,6 +3,7 @@
 void error(char *, char *);
 void synerr(char *);
 void synerr_eof(void);
+void synerr_inc(char *);
 void baderr(char *);
 extern int exit_status;
 #endif

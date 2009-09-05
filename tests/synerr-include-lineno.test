@@ -8,23 +8,64 @@ cat > top.r <<EOF
 #1
 #2
 } #3
-#4
-include inc.r
-#5
-} #6
+} #4
+# 5
+include in1.r #6
+#7
+} #8
+#9
+} #10
 EOF
 
-echo > inc.r <<EOF
+cat > in1.r <<EOF
 } #1
 #2
-} #3
+include in2.r; } #3
+include in2.r; #4
+} #5
+include in3.r; } #6
 EOF
 
+cat > in2.r <<EOF
+l1; l1; l1; #1
+} #2
+#3
+#4
+#5
+#6
+} } #7
+EOF
+
+cat > in3.r <<EOF
+l1
+l2
+l3
+EOF
+
+cat top.r
+cat in1.r
+cat in2.r
+cat in3.r
+
 run_RATFOR -e 1 top.r   || testcase_FAIL
-$FGREP 'top.r:3:' stderr || testcase_FAIL
-$FGREP 'inc.r:1:' stderr || testcase_FAIL
-$FGREP 'inc.r:3:' stderr || testcase_FAIL
-$FGREP 'top.r:6:' stderr || testcase_FAIL
+
+$FGREP 'top.r:3:'  stderr || testcase_FAIL
+$FGREP 'top.r:4:'  stderr || testcase_FAIL
+$FGREP 'top.r:8:'  stderr || testcase_FAIL
+$FGREP 'top.r:10:' stderr || testcase_FAIL
+$FGREP 'in1.r:1:'  stderr || testcase_FAIL
+$FGREP 'in1.r:3:'  stderr || testcase_FAIL
+$FGREP 'in1.r:5:'  stderr || testcase_FAIL
+$FGREP 'in1.r:6:'  stderr || testcase_FAIL
+$FGREP 'in2.r:2:'  stderr || testcase_FAIL
+$FGREP 'in2.r:7:'  stderr || testcase_FAIL
+$FGREP 'in3.r:'    stderr && testcase_FAIL
+
+c2=`$FGREP 'in2.r:2:' stderr | wc -l` || testcase_HARDERROR
+c7=`$FGREP 'in2.r:7:' stderr | wc -l` || testcase_HARDERROR
+
+test 2 -eq "$c2" || testcase_FAIL
+test 4 -eq "$c7" || testcase_FAIL
 
 testcase_PASS
 

@@ -11,13 +11,6 @@ TEST_EXTENSIONS = .test
 
 XFAIL_TESTS = # updated later
 
-# Currently, messages about syntax errors are *not* dispalyed if the error
-# occur in an included file. Sigh. To be fixed ASAP.
-XFAIL_TESTS += \
-  synerr-include-lineno.test \
-  include-fail.test \
-  include-synerr.test
-  
 # Currently, ratfor output strings with the same quoting they are input
 # with; this should be changed, and only single-quoted strings (e.g. 'foo')
 # should be outputted.
@@ -72,7 +65,6 @@ ALL_TESTS = \
   include-nested.test \
   include-recursive.test \
   include-stress.test \
-  include-synerr.test \
   integers-many-bases.test \
   integers-many-bases_f77.test \
   keepcomment.test \
@@ -147,7 +139,7 @@ MOSTLYCLEANFILES =
 check_SCRIPTS = ratfor$(EXEEXT) defs.sh
 
 # Let a call to `make all' rebuild all the scripts/programs needed by the
-# testsuite
+# testsuite.
 all-local: $(check_SCRIPTS)
 
 # Real ratfor binary.
@@ -202,7 +194,7 @@ clean-local: clean-local-ratfor
 # by the testsuite.
 clean-local-testdirs:
 	: we are not interested in errors of find, just in those of rm
-	find *.dir -type d '!' -perm -200 -exec chmod u+w {} ";" || :
+	find *.dir -type d '!' -perm -200 -exec chmod u+w {} ';' || :
 	rm -rf *.dir
 .PHONY: clean-local-testdirs
 clean-local: clean-local-testdirs
