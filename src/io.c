@@ -1,4 +1,5 @@
 #include "rat4-common.h"
+#include "rat4-global.h"
 #include "error.h"
 #include "io.h"
 
@@ -12,7 +13,7 @@ static char buf[BUFSIZE];   /* pushed-back chars */
 static int bp = -1;         /* pushback buffer pointer */
 
 /* get next char (either pushed back or new from the stream) */
-#define ngetch_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
+#define ngetc_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
     
 /*
  * ngetch - get a (possibly pushed back) character
@@ -23,22 +24,25 @@ ngetch(FILE *fp)
 {
     int c;
     
-    /* check for a continuation '_\n';  also removes UNDERLINES from
-     * variable names */
-    if ((c = ngetch_(fp)) == UNDERLINE) {
-        c = ngetch_(fp);
+    /* check for a continuation '_\n' */
+    c = ngetc_(fp);
+    if (c == NEWLINE) {
+        ++linect[level];
+    } else if (c == UNDERLINE) {
+        c = ngetc_(fp);
         if (c != NEWLINE) {
             putbak(c);
             c = UNDERLINE;
         } else {
-            c = ngetch_(fp);
+            ++linect[level];
+            c = ngetc_(fp);
         }
     }
     
     return(c);
 }
 
-#undef ngetch_
+#undef ngetc_
 
 /*
  * pbstr - push string back onto input
@@ -59,8 +63,10 @@ pbstr(const char in[])
 void
 putbak(char c)
 {
-    if (++bp > BUFSIZE)
+    if (++bp >= BUFSIZE)
         baderr("too many characters pushed back.");
+    if (c == NEWLINE)
+        --linect[level];
     buf[bp] = c;
 }
 

@@ -2,13 +2,8 @@ List of BUGS for the public domain ratfor preprocessor.
 
  ---
 
-The sytanx errors seems not to be reported if found inside files included
-with the `include' directive. Must be fixed ASAP.
-
- ---
-
-The `include' stateent coerce the name of the file to include to lowercase.
-This crazy on case-senible file-systems. Must be fixed ASAP.
+The `include' statement coerce the name of the file to include to lowercase.
+This crazy on case-sensible file-systems. Must be fixed ASAP.
 
  ---
 

@@ -15,7 +15,7 @@ int exit_status = 0;
  */
 
 /*
- * synerr_ - interla function to report Ratfor syntax error
+ * synerr_ - internal function to report Ratfor syntax error
  */
 static void
 synerr_(int offset, char *msg)
@@ -44,6 +44,17 @@ synerr(char *msg)
 {
     synerr_(0, msg);
 }
+
+/*
+ * synerr - report error about file inclusion, taking care of not having
+ *          line number in error message off by one.
+ */
+void
+synerr_inc(char *msg)
+{
+    synerr_(-1, msg);
+}
+
 
 /*
  * synerr_eof() - report Ratfor syntax error about unexpected end-of-file,

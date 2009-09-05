@@ -238,8 +238,9 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     if (i >= toksiz - 1)
         synerr("token too long.");
     lexstr[i+1] = EOS;
+    /* XXX: move count to ngetch()
     if (lexstr[0] == NEWLINE)
-        linect[level]++;
+        linect[level]++; */
 
     return(tok);
 }
@@ -348,7 +349,7 @@ deftok(char token[], int toksiz, FILE *fp)
 
 
 /*
- * gettok - get token; handles file inclusion and line numbers
+ * gettok - get token; handles file inclusion and fix line numbers
  *
  */
 int
@@ -375,14 +376,12 @@ gettok(char token[], int toksiz)
             /* deal with file inclusion */
             for (i = 0; ; i = strlen(name)) {
                 t = deftok(&name[i], MAXNAME, infile[level]);
-                if (t == NEWLINE || t == SEMICOL) {
-                    pbstr(&name[i]);
+                if (t == SEMICOL || t == NEWLINE)
                     break;
-                }
             }
             name[i] = EOS;
             if (level >= NFILES)
-                synerr("includes nested too deeply.");
+                synerr_inc("includes nested too deeply.");
             else {
 /*XXX re-add support for quoted filenames, sooner or later
                 name[i-1]=EOS;
@@ -393,12 +392,12 @@ gettok(char token[], int toksiz)
                     /* empty body */;
                 filename[level+1] = strsave(&name[j]);
                 if (filename[level+1] == NULL) {
-                    synerr("cannot open include: memory error."); /*XXX improve errmsg */
+                    synerr_inc("cannot open include: memory error."); /*XXX improve errmsg */
                     goto include_done;
                 }
                 infile[level+1] = fopen(filename[level+1], "r");
                 if (infile[level+1] == NULL) {
-                    synerr("cannot open include: I/O error."); /*XXX improve errmsg */
+                    synerr_inc("cannot open include: I/O error."); /*XXX improve errmsg */
                     goto include_done;
                 }
                 linect[level+1] = 1;
