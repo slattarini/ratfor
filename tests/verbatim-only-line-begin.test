@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Test that `%' to output lines verbatim is recognized only if placed
+# at the beginning of a line
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+a = 1 %&&
+b = 1; %&&
+ %&&
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$FGREP "&&" stdout && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
