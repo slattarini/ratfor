@@ -28,7 +28,7 @@ XFAIL_TESTS += define-underscores.test
 XFAIL_TESTS += \
   verbatim-in-define.test \
   verbatim-only-line-begin.test \
-  stress-percent.test
+  verbatim-stress.test
 
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
@@ -78,7 +78,6 @@ ALL_TESTS = \
   rel-transl.test \
   startlabel-default.test \
   startlabel-user-choice.test \
-  stress-percent.test \
   stress1_f77.test \
   stress2_f77.test \
   synerr-basic.test \
@@ -92,6 +91,7 @@ ALL_TESTS = \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim-only-line-begin.test \
+  verbatim-stress.test \
   verbatim.test \
   verbatim_f77.test
 
