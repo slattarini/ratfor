@@ -37,7 +37,7 @@ skpblk(FILE *fp)
 {
     char c;
 
-    for (c = ngetch(fp); c == BLANK || c == TAB; c = ngetch(fp))
+    for (c = ngetch(fp); is_blank(c); c = ngetch(fp))
         /* skip blank characters */;
     putbak(c);
 }

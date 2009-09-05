@@ -26,7 +26,7 @@ lex(char lexstr[])
     static const char swhile[] = "while";
     static const char sbreak[] = "break";
     static const char snext[] = "next";
-    static const char sfor[] = "for"; 
+    static const char sfor[] = "for";
     static const char srepeat[] = "repeat";
     static const char suntil[] = "until";
     static const char sswitch[] = "switch";
@@ -35,9 +35,11 @@ lex(char lexstr[])
     static const char sreturn[] = "return";
     static const char sstring[] = "string";
 
-    while ((tok = gnbtok(lexstr, MAXTOK)) == NEWLINE)
-            /* skip empty lines */;
-    if (tok == EOF || tok == SEMICOL || tok == LBRACE || tok == RBRACE)
+    do { /* skip empty lines, get next token */;
+        tok = gnbtok(lexstr, MAXTOK);
+    } while (is_newline(tok));
+
+    if (tok == EOF || is_stmt_ending(tok) || tok == LBRACE || tok == RBRACE)
         /* nothing to do */;
     else if (tok == DIGIT)
         tok = LEXDIGITS;

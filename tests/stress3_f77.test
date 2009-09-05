@@ -1,0 +1,43 @@
+#!/bin/sh
+
+# Stress test for ratfor (by compiling and running generated fortran code)
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+tr '%@' "${NEWLINE}${TAB}" > tst.r <<EOF
+subroutine ok(n){{integer n;write(*,100)n; 100%@@@@@ format(%'ok',%%I1 @@)}
+@%@%@%@%end
+%%;%;%%%%%%%%%%%%%%%%;%;%%%%%%%%@@;@;@@@@@@@@ %@  % @ @@% %@%@%;;;;;;;;;;;}
+program stess3;implicit@none;integer@@@x,@y,%@%@%  %%  @@  @ z,t
+x=100;y=10   @@ %%%%%%%%%%%%%%%%%%%%%%% z@@=%%%%1
+if(%%%%%%%%%%%%%%x%%%%%%+1%%%%%%==101){call@@@@@@@@@@@@ok(1)} @ @ @ @ @ @ @
+if@(y@@@*10==%%%%%%%%%%%x){{{{;;;;call ok( 2 ); ;}}@@@}%%%%%%%%%%%%%%%%%%%}
+for (t=1;t<=%@z;%@t@%@=@%@t@%@+@%@1@)%%%call ok(t+@@2); stop; end #stress3
+EOF
+
+cat >exp <<EOF
+ok1
+ok2
+ok3
+EOF
+
+$SED 's/$/$/' tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+mv stdout got
+
+cat got
+cat exp
+
+test -s stderr && testcase_FAIL
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

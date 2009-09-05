@@ -5,7 +5,6 @@
 #include <config.h>
 #include <stdio.h>
 #include <string.h>
-#define STREQ(x, y) (strcmp((x),(y)) == 0)
 
 #define ACCENT      '`' /* backtick */
 #define AND         '&'
@@ -58,9 +57,29 @@
 #define TILDE       '~'
 #define UNDERLINE   '_'
 
+#define STREQ(x, y) (strcmp((x),(y)) == 0)
+
 /* simulate booleans */
 #define NO      0
 #define YES     1
+
+static inline int
+is_blank(int c)
+{
+    return((c == BLANK || c == TAB) ? YES : NO);
+}
+
+static inline int
+is_newline(int c)
+{
+    return((c == NEWLINE) ? YES : NO);
+}
+
+static inline int
+is_stmt_ending(int c)
+{
+    return((is_newline(c) || c == SEMICOL) ? YES : NO);
+}
 
 #define MAXCHARS        10      /* characters for outnum */
 #define MAXDEF          2048    /* max chars in a defn */
