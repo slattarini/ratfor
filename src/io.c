@@ -26,11 +26,11 @@ ngetch(FILE *fp)
     
     /* check for a continuation '_\n' */
     c = ngetc_(fp);
-    if (c == NEWLINE) {
+    if (is_newline(c)) {
         ++linect[level];
     } else if (c == UNDERLINE) {
         c = ngetc_(fp);
-        if (c != NEWLINE) {
+        if (!is_newline(c)) {
             putbak(c);
             c = UNDERLINE;
         } else {
@@ -65,7 +65,7 @@ putbak(char c)
 {
     if (++bp >= BUFSIZE)
         baderr("too many characters pushed back.");
-    if (c == NEWLINE)
+    if (is_newline(c))
         --linect[level];
     buf[bp] = c;
 }
@@ -169,7 +169,7 @@ outasis(FILE * fp)
      * must be as unobtrusive as possible)
      */
     char c;
-    while ((c = ngetch(fp)) != NEWLINE)
+    for (c = ngetch(fp); !is_newline(c); c = ngetch(fp))
         putchar(c);
     putchar(NEWLINE);
 }
@@ -187,7 +187,7 @@ outcmnt(FILE * fp)
 
     comout[0] = 'c';
     comoutp = 1;
-    while ((c = ngetch(fp)) != NEWLINE) {
+    for (c = ngetch(fp); !is_newline(c); c = ngetch(fp)) {
         if (comoutp > 79) {
             comout[80] = NEWLINE;
             comout[81] = EOS;

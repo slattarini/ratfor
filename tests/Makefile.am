@@ -80,6 +80,7 @@ ALL_TESTS = \
   startlabel-user-choice.test \
   stress1_f77.test \
   stress2_f77.test \
+  stress3_f77.test \
   synerr-basic.test \
   synerr-include-lineno.test \
   synerr-lineno.test \
@@ -92,6 +93,7 @@ ALL_TESTS = \
   verbatim-no-extra-new-line.test \
   verbatim-only-line-begin.test \
   verbatim-stress.test \
+  verbatim-stress_f77.test \
   verbatim.test \
   verbatim_f77.test
 

@@ -34,7 +34,7 @@ ctoi(const char in[], int *i)
     int k, j;
 
     j = *i;
-    while (in[j] == BLANK || in[j] == TAB)
+    while (is_blank(in[j]))
         j++;
     for (k = 0; in[j] != EOS; j++) {
         if (in[j] < DIG0 || in[j] > DIG9)
