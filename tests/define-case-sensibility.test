@@ -8,20 +8,23 @@ cat >tst.r <<EOF
 define sym1 foo
 define sym2 bar
 define SYM2 quux
-l1:sym1
-U1:SYM1
-l2:sym2
-U2:SYM2
+sym1
+SYM1
+sym2
+SYM2
+EOF
+
+cat >exp <<EOF
+foo
+sym1
+bar
+quux
 EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP -v '^[cC]' <stdout | ws_normalize >got
 
-$FGREP define stdout && testcase_FAIL
-
-$FGREP -i 'l1:foo'  stdout || testcase_FAIL
-$FGREP -i 'U1:SYM1' stdout || testcase_FAIL
-$FGREP -i 'l1:bar'  stdout || testcase_FAIL
-$FGREP -i 'U2:quux' stdout || testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
 
 testcase_PASS
 
