@@ -202,14 +202,14 @@ outcmnt(FILE * fp)
     char comout[82];
     int comoutp = 0;
 
-    comout[0] = 'c';
+    comout[0] = 'C';
     comoutp = 1;
     for (c = ngetch(fp); !is_newline(c); c = ngetch(fp)) {
         if (comoutp > 79) {
             comout[80] = NEWLINE;
             comout[81] = EOS;
             puts_(comout);
-            comout[0] = 'c';
+            comout[0] = 'C';
             comoutp = 1;
         }
         comout[comoutp++] = (c == TAB ? BLANK : c);
