@@ -53,8 +53,17 @@ quoted-version = $(subst .,\.,$(VERSION))
 
 GIT = git
 
-# we assume $(MAKE) to be GNU make, of course, so this is legitimate
+# do not assume $(MAKE) to be GNU make, since it is sometimes useful to
+# ovverride it from the command line for testing purposes.
+is_gnu_make := $(shell \
+  $(MAKE) -f /dev/null --version nil 2>/dev/null | grep GNU \
+    && echo yes || echo no)
+
+ifeq ($(is_gnu_make),yes)
 xmake = $(MAKE) --no-print-directory
+else
+xmake = $(MAKE)
+endif
 
 # Use this to make sure we don't run these programs when building
 # from a virgin tgz file, below.
