@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Test line continuation by `_' (more complex usages).
+
+. ./defs.sh || exit 99
+
+cat > tst.r <<\EOF
+define TEN 10
+define(ELEVEN,11)
+for(x = 1; x < TEN; x = x + 2)
+    print(x)
+%1&2&3&4
+# this is a comment
+y = 0
+while(y < ELEVEN) {
+    y = y + foo(y)
+    if (y > 100) {
+        y = 3
+    }
+}
+EOF
+
+$SED 's/\(.\)/\1_@/g' <tst.r | tr '@' "$NEWLINE" >tst_.r
+
+cat tst.r
+cat tst_.r
+
+run_RATFOR -e 0 tst.r || testcase_HARDERROR
+mv stdout exp
+run_RATFOR -e 0 tst_.r || testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

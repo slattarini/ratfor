@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Test line continuation by `_'.
+# Test line continuation by `_' (more complex usages).
 
 . ./defs.sh || exit 99
 
@@ -20,7 +20,8 @@ def
 #-------------------------------
 x_
 y_
-z
+z_
+t
 #-------------------------------
 x_@
 y
@@ -28,10 +29,6 @@ y
 x_
 
 y
-#-------------------------------
-"bl_
-ah"
-"bl_ah"
 #-------------------------------
 define sym1 r_
 s_
@@ -64,13 +61,11 @@ abcdef
 abc def
 abc__def
 abc_ def
-xyz
+xyzt
 x_
 y
 x
 y
-"blah"
-"bl_ah"
 rst
 uvw
 foo
@@ -78,11 +73,11 @@ bar
 EOF
 
 cat tst.r
-cat exp
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
-$GREP -v '^[cC]' <stdout | $SED 's/^      //' >got
+$GREP -v '^[cC]' <stdout | ws_strip >got
 
+cat exp
 cat got
 
 $DIFF_U exp got || testcase_FAIL
