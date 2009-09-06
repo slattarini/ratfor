@@ -36,6 +36,7 @@ XFAIL_TESTS += \
 # in `CheckTestList.am'.
 ALL_TESTS = \
   000sanity.test \
+  comments-no-hang.test \
   comments.test \
   define-balanced-paren.test \
   define-balanced-paren_f77.test \
