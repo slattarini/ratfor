@@ -3,7 +3,7 @@ List of BUGS for the public domain ratfor preprocessor.
  ---
 
 The `include' statement coerce the name of the file to include to lowercase.
-This crazy on case-sensible file-systems. Must be fixed ASAP.
+This is crazy on case-sensible file-systems. Must be fixed ASAP.
 
  ---
 
@@ -57,5 +57,12 @@ The reason is that
 is unusable because the switch is done on a new variable that
 is not declared or declarable by the programmer who cannot guess
 its name.
+
+ ---
+
+This is a limitation rather than a bug.
+
+Ratfor *absolutely* does not work on non-text input: if feeded such an
+input, it might output gibberish, crash or even hang indefinitely (!)
 
  ---

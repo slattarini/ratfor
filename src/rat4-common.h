@@ -32,6 +32,7 @@
 #define EOS         '\0'
 #define EQUALS      '='
 #define ESCAPE      ATSIGN
+#define FKNEWLINE   '\007'  /* "fake" newline */
 #define GREATER     '>'
 #define LBRACE      '{'
 #define LBRACK      '['
@@ -70,9 +71,18 @@ is_blank(int c)
 }
 
 static inline int
-is_newline(int c)
+is_strict_newline(int c)
 {
     return((c == NEWLINE) ? YES : NO);
+}
+
+static inline int
+is_newline(int c)
+{
+    /* hack needed to keep the count of line numbers correct even when
+     * expansion of multiline macros (defined through the `define'
+     * builtin) is involved */
+    return((c == NEWLINE || c == FKNEWLINE) ? YES : NO);
 }
 
 static inline int
