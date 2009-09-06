@@ -1,0 +1,39 @@
+#!/bin/sh
+
+# Test line continuation by `_'.
+
+. ./defs.sh || exit 99
+
+cat > tst.r <<\EOF
+#-------------------------------
+a_
+_
+b
+#-------------------------------
+x_
+_
+_
+_
+_
+_
+y
+EOF
+
+cat > exp <<\EOF
+ab
+xy
+EOF
+
+cat tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP -v '^[cC]' <stdout | ws_strip >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

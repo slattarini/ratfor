@@ -29,6 +29,10 @@ XFAIL_TESTS += \
   verbatim-in-define.test \
   verbatim-only-line-begin.test \
   verbatim-stress.test
+  
+# Fails for a bug in io.c:ngetc() (which fails to do more than one
+# *consecutive* line continuation).
+XFAIL_TESTS += line-continuation-multiple.test
 
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
@@ -70,6 +74,11 @@ ALL_TESTS = \
   integers-many-bases_f77.test \
   keepcomment.test \
   keepcomment_f77.test \
+  line-continuation-basic.test \
+  line-continuation-multiple.test \
+  line-continuation-stress1.test \
+  line-continuation-stress2.test \
+  line-continuation_f77.test \
   long-infile.test \
   long-infile_f77.test \
   no-curly-brackets.test \
@@ -88,8 +97,6 @@ ALL_TESTS = \
   synerr-lineno.test \
   synerr-nonfatal.test \
   synerr-nonfatal_f77.test \
-  underscore.test \
-  underscore_f77.test \
   verbatim-in-define.test \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
