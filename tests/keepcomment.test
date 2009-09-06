@@ -9,8 +9,8 @@ cat >tst.r <<EOF
 blah blah blah
 EOF
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
-$GREP -i "^c.*\"%c@mm3nt%'!" stdout && testcase_FAIL
+run_RATFOR -e 0 -- -C tst.r || testcase_FAIL
+$GREP "^[cC].*\"%c@mm3nt%'!" stdout || testcase_FAIL
 testcase_PASS
 
 # vim: ft=sh ts=4 sw=4 et
