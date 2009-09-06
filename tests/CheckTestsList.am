@@ -10,7 +10,9 @@ tdiffs = diff-in-tests-lists.tmp
 # list of all *.test scripts
 check-list-of-tests:
 	@set -e; \
-	 export LC_ALL=C; \
+	 LANG=C; export LANG; \
+	 LANGUAGE=C; export LANGUAGE; \
+	 LC_ALL=C; export LC_ALL; \
 	 echo "****--------------------------------------------"; \
 	 echo "** Checking consistency of list of tests..."; \
 	 for t in $(ALL_TESTS); do \
