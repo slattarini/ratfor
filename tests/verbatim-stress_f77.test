@@ -10,6 +10,7 @@ cat > tst.r <<EOF
 program VerbatimStress
     implicit none
     integer i, j, sum, realsum, fakesum, lastsum
+    sum = 0
     define sum fakesum
     define PRINT write
     realsum = 0
