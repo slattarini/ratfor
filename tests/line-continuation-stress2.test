@@ -20,7 +20,27 @@ while(y < ELEVEN) {
 }
 EOF
 
-$SED 's/\(.\)/\1_@/g' <tst.r | tr '@' "$NEWLINE" >tst_.r
+inject_line_continuations() {
+    $SED 's/\(.\)/\1_@/g' | tr '@' "$NEWLINE" | $AWK '
+        BEGIN {
+            i = 1
+            MOD = 15
+        }
+        (NR % MOD == 0) {
+            print $0
+            for(j = 0; j < i; j++) {
+                print "_"
+            }
+            if (i <= 32)
+                i *= 2
+        }
+        (NR % MOD != 0) {
+            print $0
+        }
+    '
+}
+
+inject_line_continuations <tst.r >tst_.r
 
 cat tst.r
 cat tst_.r

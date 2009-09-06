@@ -30,10 +30,6 @@ XFAIL_TESTS += \
   verbatim-only-line-begin.test \
   verbatim-stress.test
   
-# Fails for a bug in io.c:ngetc() (which fails to do more than one
-# *consecutive* line continuation).
-XFAIL_TESTS += line-continuation-multiple.test
-
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined

@@ -13,9 +13,9 @@ static char buf[BUFSIZE];   /* pushed-back chars */
 static int bp = -1;         /* pushback buffer pointer */
 
 /*
- * the two following subroutines are part of an hack needed to keep the
+ * The two following subroutines are part of an hack needed to keep the
  * count of line numbers correct even when expansion multiline macros
- * (defined through the `define' builtin) is involved 
+ * (defined through the `define' builtin) is involved .
  */
 
 static inline
@@ -35,8 +35,8 @@ void puts_(const char *s)
 #define ngetc_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
     
 /*
- * ngetch - get a (possibly pushed back) character
- *
+ * ngetch - get a (possibly pushed back) character, dealing with line
+ *          continuation and keeping the count of line number.
  */
 int
 ngetch(FILE *fp)
@@ -44,18 +44,18 @@ ngetch(FILE *fp)
     int c;
     
     /* check for a continuation '_\n' */
-    c = ngetc_(fp);
-    if (is_strict_newline(c)) {
-        ++linect[level];
-    } else if (c == UNDERLINE) {
+    while ((c = ngetc_(fp)) == UNDERLINE) {
         c = ngetc_(fp);
         if (!is_strict_newline(c)) {
             putbak(c);
             c = UNDERLINE;
+            break;
         } else {
             ++linect[level];
-            c = ngetc_(fp);
         }
+    }
+    if (is_strict_newline(c)) {
+        ++linect[level];
     }
     
     return(c);
