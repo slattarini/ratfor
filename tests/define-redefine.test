@@ -9,11 +9,16 @@ define sym foo
 sym
 define sym bar
 sym
+define foo quux
+sym
+foo
 EOF
 
 cat >exp <<EOF
 foo
 bar
+bar
+quux
 EOF
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
