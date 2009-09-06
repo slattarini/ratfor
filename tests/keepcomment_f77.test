@@ -18,17 +18,18 @@ program testprog
     x = 2
     # x = 3
     write(*,100) x
+    x = 4
+    write(*,100) x; # write(*,100) 5
 #write(*,100) 7
     stop
-end # testprogram
+end
 EOF
 
 cat > exp <<EOF
 1
 2
+4
 EOF
-
-testcase_SKIP "unknown bug in ratfor make the testcase hang"
 
 run_RATFOR -e 0 -- -C tst.r || testcase_FAIL
 mv stdout tst.f

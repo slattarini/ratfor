@@ -28,6 +28,17 @@ static const char bdefn[] = "DEFINE";
  */
 
 
+static void
+dispatch_comment(FILE *fp)
+{
+    int i;
+    if (leaveC == YES)
+        outcmnt(fp); /* copy comments to output */
+    else
+        for (i = ngetch(fp); !is_newline(i); i = ngetch(fp))
+            /* strip comments */;
+}
+
 /*
  * skpblk - skip blanks and tabs in file fp
  *
@@ -144,13 +155,9 @@ gtok(char lexstr[], int toksiz, FILE *fp)
             outasis(fp); /* copy direct to output if % */
             c = NEWLINE;
         }
-        if (c == SHARP) {
-            /* XXX: make this lazily done */
-            if (leaveC == YES)
-                outcmnt(fp); /* copy comments to output */
-            else
-                for(c = ngetch(fp); !is_newline(c); c = ngetch(fp))
-                    /* strip comments */;
+        else if (c == SHARP) {
+            dispatch_comment(fp);
+            c = NEWLINE;
         }
         if (!is_newline(c))
             putbak(c);
@@ -226,15 +233,8 @@ gtok(char lexstr[], int toksiz, FILE *fp)
         tok = NEWLINE;
     }
     else if (c == SHARP) {
-        /* XXX: make this lazily done */
-        if (leaveC == YES) {
-            outcmnt(fp); /* copy comments to output */
-        } else {
-            for(c = ngetch(fp); !is_newline(c); c = ngetch(fp))
-                /* strip comments */;
-            lexstr[0] = c;
-        }
-        tok = NEWLINE;
+        dispatch_comment(fp);
+        tok = lexstr[0] = NEWLINE;
     }
     else if (c == GREATER || c == LESS || c == NOT
              || c == BANG || c == CARET || c == EQUALS
