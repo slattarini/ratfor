@@ -135,26 +135,27 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     int i, b, n, tok;
     char c;
     c = lexstr[0] = ngetch(fp);
-    if (c == BLANK || c == TAB) {
+    if (is_blank(c)) {
         lexstr[0] = BLANK;
-        while (c == BLANK || c == TAB) /* compress many blanks to one */
+        while (is_blank(c)) /* compress many blanks to one */
             c = ngetch(fp);
         if (c == PERCENT) {
+            /* XXX: make this lazily done */
             outasis(fp); /* copy direct to output if % */
             c = NEWLINE;
         }
         if (c == SHARP) {
+            /* XXX: make this lazily done */
             if (leaveC == YES)
                 outcmnt(fp); /* copy comments to output */
             else
-                while ((c = ngetch(fp)) != NEWLINE) /* strip comments */
-                    /* empty body */;
-            c = NEWLINE;
+                for(c = ngetch(fp); !is_newline(c); c = ngetch(fp))
+                    /* strip comments */;
         }
-        if (c != NEWLINE)
+        if (!is_newline(c))
             putbak(c);
         else
-            lexstr[0] = NEWLINE;
+            lexstr[0] = c;
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
@@ -200,34 +201,39 @@ gtok(char lexstr[], int toksiz, FILE *fp)
         tok = DIGIT;
     }
     else if (c == SQUOTE || c == DQUOTE) {
-        /* XXX: handle esacepd quotes inside a string */
+        /* XXX: handle escaepd quotes inside a string */
         for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
             if (lexstr[i] == UNDERLINE) {
-                if ((c = ngetch(fp)) == NEWLINE) {
+                c = ngetch(fp);
+                if (is_newline(c)) {
                     c = ngetch(fp);
                     lexstr[i] = c;
                 } else {
                     putbak(c);
                 }
             }
-            if (lexstr[i] == NEWLINE || i >= toksiz-1) {
+            if (is_newline(lexstr[i]) || i >= toksiz-1) {
                 synerr("missing quote.");
+                putbak(lexstr[i]);
                 lexstr[i] = lexstr[0];
-                putbak(NEWLINE);
                 break;
             }
         }
     }
     else if (c == PERCENT) {
+        /* XXX: make this lazily done */
         outasis(fp);  /* direct copy of protected */
         tok = NEWLINE;
     }
     else if (c == SHARP) {
-        if (leaveC == YES)
+        /* XXX: make this lazily done */
+        if (leaveC == YES) {
             outcmnt(fp); /* copy comments to output */
-        else
-            while ((lexstr[0] = ngetch(fp)) != NEWLINE)
+        } else {
+            for(c = ngetch(fp); !is_newline(c); c = ngetch(fp))
                 /* strip comments */;
+            lexstr[0] = c;
+        }
         tok = NEWLINE;
     }
     else if (c == GREATER || c == LESS || c == NOT
@@ -238,9 +244,6 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     if (i >= toksiz - 1)
         synerr("token too long.");
     lexstr[i+1] = EOS;
-    /* XXX: move count to ngetch()
-    if (lexstr[0] == NEWLINE)
-        linect[level]++; */
 
     return(tok);
 }
@@ -252,33 +255,30 @@ gtok(char lexstr[], int toksiz, FILE *fp)
 static void
 getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
 {
-    int i, nlpar, t, t2;
+    int i, nlpar, t, t2, defn_with_paren;
     char c, ptoken[MAXTOK]; /* temporary buffer for token */
 
     skpblk(fp);
-    /*
-     * define(name,def) or
-     * define name def
-     *
-     */
     if ((t = gtok(ptoken, MAXTOK, fp)) != LPAREN) {
-        t = BLANK; /* define name def */
+        defn_with_paren = NO; /* define name def */
         pbstr(ptoken);
+    } else {
+        defn_with_paren = YES; /* define(name,def) */
     }
     skpblk(fp);
     t2 = gtok(name, namesiz, fp); /* name */
-    if (t == BLANK && (t2 == NEWLINE || t2 == SEMICOL)) {
+    if (!defn_with_paren && is_stmt_ending(t2)) {
         /* stray `define', as in `...; define; ...' */
         baderr("empty name.");
-    } else if (t == LPAREN && t2 == COMMA) {
-        /* `define (name, def)' with empty name */
+    } else if (defn_with_paren && t2 == COMMA) {
+        /* `define(name, def)' with empty name */
         baderr("empty name.");
     } else if (t2 != ALPHA) {
         baderr("non-alphanumeric name.");
     }
     skpblk(fp);
     c = gtok(ptoken, MAXTOK, fp);
-    if (t == BLANK) { /* define name def */
+    if (!defn_with_paren) { /* define name def */
         pbstr(ptoken);
         i = 0;
         do {
@@ -286,11 +286,11 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
             if (i > defsiz)
                 baderr("definition too long.");
             def[i++] = c;
-        } while (c != SHARP && c != NEWLINE && c != EOF && c != PERCENT);
+        } while (c != SHARP && !is_newline(c) && c != EOF && c != PERCENT);
         if (c == SHARP || c == PERCENT)
             putbak(c);
     }
-    else if (t == LPAREN) { /* define (name, def) */
+    else { /* define (name, def) */
         if (c != COMMA)
             baderr("missing comma in define.");
         /* else got (name, */
@@ -307,8 +307,6 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
             /* else normal character in def[i] */
         }
     }
-    else
-        baderr("getdef is confused.");
     def[i-1] = EOS;
 }
 
@@ -320,7 +318,7 @@ static int
 deftok(char token[], int toksiz, FILE *fp)
 {
     char tkdefn[MAXDEF];
-    int t;
+    int i, t;
 
     while ((t = gtok(token, toksiz, fp)) != EOF) {
         if (t != ALPHA) {
@@ -332,7 +330,16 @@ deftok(char token[], int toksiz, FILE *fp)
         } else if (look(token, tkdefn) == NO) {
             break;  /* undefined */
         } else {
-            pbstr(tkdefn);  /* push replacement onto input */
+            /* Push replacement onto input, with newlines substituted
+             * by "bell" characters (ascii 007). This hack is needed to
+             * keep the count of line in input correct even if expansion
+             * of multiline macros is involved. */
+            for (i = strlen(tkdefn) - 1; i >= 0; i--) {
+                if (is_newline(tkdefn[i]))
+                    putbak(FKNEWLINE);
+                else
+                    putbak(tkdefn[i]);
+            }
         }
     }
     /* XXX: better to move this in fortran-generating code, or something
@@ -376,7 +383,7 @@ gettok(char token[], int toksiz)
             /* deal with file inclusion */
             for (i = 0; ; i = strlen(name)) {
                 t = deftok(&name[i], MAXNAME, infile[level]);
-                if (t == SEMICOL || t == NEWLINE)
+                if (is_stmt_ending(t))
                     break;
             }
             name[i] = EOS;
@@ -388,7 +395,7 @@ gettok(char token[], int toksiz)
                 infile[level+1] = fopen(&name[2], "r");
 */
                 /* skip leading white space in name */
-                for (j = 0; name[j] == BLANK || name[j] == TAB; j++)
+                for (j = 0; is_blank(name[j]); j++)
                     /* empty body */;
                 filename[level+1] = strsave(&name[j]);
                 if (filename[level+1] == NULL) {

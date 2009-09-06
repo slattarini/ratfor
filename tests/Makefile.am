@@ -45,6 +45,7 @@ ALL_TESTS = \
   define-fail.test \
   define-long-definition.test \
   define-long-name.test \
+  define-multiline-with-comment.test \
   define-multiline.test \
   define-multiline_f77.test \
   define-nested.test \
@@ -82,6 +83,7 @@ ALL_TESTS = \
   stress2_f77.test \
   stress3_f77.test \
   synerr-basic.test \
+  synerr-define-lineno.test \
   synerr-include-lineno.test \
   synerr-lineno.test \
   synerr-nonfatal.test \

@@ -12,6 +12,25 @@
 static char buf[BUFSIZE];   /* pushed-back chars */
 static int bp = -1;         /* pushback buffer pointer */
 
+/*
+ * the two following subroutines are part of an hack needed to keep the
+ * count of line numbers correct even when expansion multiline macros
+ * (defined through the `define' builtin) is involved 
+ */
+
+static inline
+void putc_(const char c)
+{
+    putchar((c == FKNEWLINE) ? NEWLINE : c);
+}
+
+static inline
+void puts_(const char *s)
+{
+    while (*s != EOS)
+        putc_(*s++);
+}
+
 /* get next char (either pushed back or new from the stream) */
 #define ngetc_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
     
@@ -26,11 +45,11 @@ ngetch(FILE *fp)
     
     /* check for a continuation '_\n' */
     c = ngetc_(fp);
-    if (is_newline(c)) {
+    if (is_strict_newline(c)) {
         ++linect[level];
     } else if (c == UNDERLINE) {
         c = ngetc_(fp);
-        if (!is_newline(c)) {
+        if (!is_strict_newline(c)) {
             putbak(c);
             c = UNDERLINE;
         } else {
@@ -65,7 +84,7 @@ putbak(char c)
 {
     if (++bp >= BUFSIZE)
         baderr("too many characters pushed back.");
-    if (is_newline(c))
+    if (is_strict_newline(c))
         --linect[level];
     buf[bp] = c;
 }
@@ -126,10 +145,9 @@ outtab(void)
 void
 outdon(void)
 {
-
     outbuf[outp] = NEWLINE;
     outbuf[outp+1] = EOS;
-    printf("%s", outbuf);
+    puts_( outbuf);
     outp = 0;
 }
 
@@ -166,12 +184,11 @@ outasis(FILE * fp)
     /* we can't use `outch(c)' here, since we want to output the text
      * really verbatim, with no line folding (if the user want to output
      * raw fortran code, we expect him to know what he's doing, so we
-     * must be as unobtrusive as possible)
-     */
+     * must be as unobtrusive as possible) */
     char c;
     for (c = ngetch(fp); !is_newline(c); c = ngetch(fp))
-        putchar(c);
-    putchar(NEWLINE);
+        putc_(c);
+    putc_(NEWLINE);
 }
 
 /*
@@ -191,7 +208,7 @@ outcmnt(FILE * fp)
         if (comoutp > 79) {
             comout[80] = NEWLINE;
             comout[81] = EOS;
-            printf("%s", comout);
+            puts_(comout);
             comout[0] = 'c';
             comoutp = 1;
         }
@@ -199,7 +216,7 @@ outcmnt(FILE * fp)
     }
     comout[comoutp] = NEWLINE;
     comout[comoutp+1] = EOS;
-    printf("%s", comout);
+    puts_(comout);
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */
