@@ -267,18 +267,20 @@ NOT() {
 
 # run_CMD COMMAND [-e STATUS] [-i FILE] [ARGUMENTS..]
 # ---------------------------------------------------
-# Run the given COMMAND (can be a shell function or shell builtin) with
-# ARGUMENTS (and with standard input taken from FILE, if option `-i' is
-# given), and fail if it does not exit with STATUS (default: 0). Note
-# that if status is VOID or IGNORE, any exit value of the command will
-# be acceptable.
-# Also, save standard output and standard error from the COMMAND
-# respectively in files `stdout' and `stderr'.
+# Run the given COMMAND (can be an external commnds, a shell function or
+# shell builtin) with ARGUMENTS (and with standard input taken from FILE,
+# if option `-i' is given), and fail if COMMAND does not exit with STATUS
+# (default: 0). Note that if status is VOID or IGNORE, any exit value of
+# the command will be acceptable.
+# Also, save standard output and standard error from COMMAND respectively
+# in files `stdout' and `stderr' (in the current directory).
 run_CMD() {
-    # WARNING: Solaris /bin/sh does not like `{ a=1; } 2>/dev/null'
+    # NOTE: all internal variables used here starts with the `_run'
+    # prefix, to minimize possibility of name clashes with global
+    # variables defined in user code.
     : 'entering run_CMD(): save -x flag, become quiet'
     _run_prev_dollarminus=$-
-    set +x
+    set +x # xtrace verbosity stops here
     case ${_run_prev_dollarminus} in
         *x*) _run_reset_x='set -x';;
           *) _run_reset_x=':';;
@@ -312,7 +314,7 @@ run_CMD() {
         VOID|void|IGNORE|ignore|"${_run_exitcode}") _run_rc=0;;
         *) _run_rc=1;;
     esac
-    ${_run_reset_x}
+    ${_run_reset_x} # xtrace verbosity restart here
     : "exit status ${_run_exitcode} (expecting ${_run_expected_exitcode})"
     : 'leaving run_CMD(): restored -x flag, reset to previous verbosity'
     return ${_run_rc}
