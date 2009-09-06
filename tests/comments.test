@@ -5,7 +5,7 @@
 . ./defs.sh || exit 99
 
 cat > tst.r <<EOF
-# thow me away
+# throw me away
 "# keep me"
 EOF
 
