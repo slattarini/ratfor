@@ -226,9 +226,9 @@ Do not
     [GOOD]   run_CMD PROG; mv stderr foo.txt
   You can't use the apparently simpler form `PROG 2>stderr.txt' because of
   a nasty bug of the zsh shell (at least of some 4.x versions).
-  In details: if a command which is run when `set -x' is active has its
-  standard error redirected to a file, then zsh writes also the *trace* for
-  the command into that file, instead that into the original standard error.
+  In details: if you run command when `set -x' is active, and redirect its
+  standard error to a file, then zsh writes also the *trace* for the
+  command into that file, instead that into the original standard error.
   For example:
     $ zsh -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"
     SHOULD BE EMPTY: +zsh:1> true
