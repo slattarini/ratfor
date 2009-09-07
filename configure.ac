@@ -7,7 +7,7 @@ m4_pattern_forbid([^_?RAT4_])
 m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 
 #
-# Autoconf's and Automake's initializations
+# Autoconf's and Automake's initializations.
 #
 
 AC_PREREQ([2.64])
@@ -23,21 +23,21 @@ AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
 AM_SILENT_RULES([yes]) # make `--enable-silent-rules' the default
 
 #
-# Check for C support
+# Checks for C support.
 #
 
 AC_PROG_CC_STDC
 AM_PROG_CC_C_O
 
 #
-# Check for programs
+# Checks for programs.
 #
 
 AC_PROG_INSTALL
 AC_PROG_MKDIR_P
 
 #
-# Check for headers
+# Checks for headers.
 #
 
 for header in unistd stdlib string; do
@@ -48,14 +48,21 @@ for header in unistd stdlib string; do
 done
 
 #
-# Check for functions
+# Checks for typedefs, structures, and compiler characteristics.
+#
+
+AC_C_CONST
+AC_C_INLINE
+
+#
+# Checks for library functions.
 #
 
 AC_CHECK_FUNC([getopt], [:],
               [AC_MSG_ERROR([No proper `getopt' subroutine found])])
 
 #
-# Check for things needed by the test suite.
+# Checks for things needed by the test suite.
 #
 
 # Common utilities.
