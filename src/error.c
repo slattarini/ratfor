@@ -52,7 +52,11 @@ synerr(char *msg)
 void
 synerr_inc(char *msg)
 {
-    synerr_(-1, msg);
+    /* XXX temporary hack */
+    char xmsg[1000];
+    scopy("include: ", 0, xmsg, 0);
+    scopy(msg, 0, xmsg, 9);
+    synerr_(-1, xmsg);
 }
 
 

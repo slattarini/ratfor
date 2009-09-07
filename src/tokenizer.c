@@ -399,16 +399,16 @@ gettok(char token[], int toksiz)
                     /* empty body */;
                 filename[level+1] = strsave(&name[j]);
                 if (filename[level+1] == NULL) {
-                    synerr_inc("cannot open include: memory error."); /*XXX improve errmsg */
+                    synerr_inc("memory error.");
                     goto include_done;
                 }
                 if (*filename[level+1] == EOS) {
-                    synerr_inc("include: missing filename."); /*XXX improve errmsg */
+                    synerr_inc("missing filename.");
                     goto include_done;
                 }
                 infile[level+1] = fopen(filename[level+1], "r");
                 if (infile[level+1] == NULL) {
-                    synerr_inc("cannot open include: I/O error."); /*XXX improve errmsg */
+                    synerr_inc("I/O error.");
                     goto include_done;
                 }
                 linect[level+1] = 1;
