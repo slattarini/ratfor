@@ -7,8 +7,8 @@
 tr '_' "$TAB" >tst.r <<EOF
 define sym1 text1
 define(sym2,text2)
-DEFINE sym3  _"text3" _
-DEFINE (sym4,text4)
+define sym3  _"text3" _
+define (sym4,text4)_ _
 x1 sym1
 sym 1
 x2:sym2

@@ -29,7 +29,12 @@ XFAIL_TESTS += \
   verbatim-in-define.test \
   verbatim-only-line-begin.test \
   verbatim-stress.test
-  
+
+# This test still fails; this is due to the folding to lowercase of output
+# characters done at the wrong time -- a problem which is causing many
+# others failures and bugs, and that will be hopefully fixed soon.
+XFAIL_TESTS += define-no-uppercase-alias.test
+ 
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
@@ -51,6 +56,7 @@ ALL_TESTS = \
   define-multiline_f77.test \
   define-nested.test \
   define-nested_f77.test \
+  define-no-uppercase-alias.test \
   define-redefine.test \
   define-semicolon.test \
   define-semicolon_f77.test \

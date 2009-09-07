@@ -17,10 +17,10 @@
  *  P R I V A T E  V A R I A B L E S
  */
 
+
 static const char incl[] = "include";
-static const char fncn[]  = "function";
+static const char fncn[] = "function";
 static const char defn[] = "define";
-static const char bdefn[] = "DEFINE";
 
 
 /*
@@ -323,7 +323,7 @@ deftok(char token[], int toksiz, FILE *fp)
     while ((t = gtok(token, toksiz, fp)) != EOF) {
         if (t != ALPHA) {
             break;  /* non-alpha */
-        } else if (STREQ(token, defn) || STREQ(token, bdefn)) {
+        } else if (STREQ(token, defn)) {
             /* get definition for token, save it in tkdefn */
             getdef(token, toksiz, tkdefn, MAXDEF, fp);
             install(token, tkdefn);
