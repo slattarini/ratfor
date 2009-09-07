@@ -182,7 +182,7 @@ void
 outasis(FILE * fp)
 {
     /* we can't use `outch(c)' here, since we want to output the text
-     * really verbatim, with no line folding (if the user want to output
+     * really verbatim, with no line wrapping (if the user want to output
      * raw fortran code, we expect him to know what he's doing, so we
      * must be as unobtrusive as possible) */
     char c;
