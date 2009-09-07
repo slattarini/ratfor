@@ -255,16 +255,6 @@ rm_rf() {
     rm -rf "$1"
 }
 
-# Invert exit status of the given command
-NOT() {
-    test $# -gt 0 || set ':'
-    if "$@"; then
-        return 1
-    else
-        return 0
-    fi
-}
-
 # run_CMD COMMAND [-e STATUS] [-i FILE] [-m] [--] [ARGUMENTS..]
 # -------------------------------------------------------------
 # Run the given COMMAND (can be an external commnds, a shell function or
@@ -343,13 +333,13 @@ run_CMD ()
     return ${_run_rc}
 }
 
-# Usage: run_RATFOR [-e STATUS] [-i INFILE] [ARGUMENTS..]
+# Usage: run_RATFOR [-e STATUS] [-i INFILE] [-m] [ARGUMENTS..]
 # See documentation of `run_CMD()' for more info.
 run_RATFOR() {
     run_CMD "$RATFOR" ${1+"$@"}
 }
 
-# Usage: run_FORTRAN [-e STATUS] [ARGUMENTS..]
+# Usage: run_F77 [-e STATUS] [-i INFILE] [-m] [ARGUMENTS..]
 # See documentation of `run_CMD()' for more info.
 run_F77() {
     run_CMD "$F77" ${1+"$@"}
