@@ -13,7 +13,9 @@ echo 'abc # comment after another token, as the last line of file' > tst.r
   trap '' 2
   # The bug that caused ratfor to hang also caused it to produce tons of
   # gibberish on stdout, so, to avoid the risk of filling up the user's
-  # disk with trash, we redirect everithing to /dev/null.
+  # disk with trash, we redirect everithing to /dev/null. For this
+  # redirection to be effective, we cannot use `run_RATFOR()' here, but we
+  # must resort to the bare `$RATFOR'.
   if $RATFOR -C tst.r >/dev/null 2>&1; then
     echo ok > status
   else
