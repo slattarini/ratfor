@@ -4,8 +4,6 @@
 
 . ./defs.sh || exit 99
 
-set +x
-
 cat > foo.r <<EOF
 foo1
 foo2
@@ -25,13 +23,15 @@ foo2
 main2
 EOF
 
-set -x
-
 cat tst.r
 cat foo.r
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
+cat got
+
 $DIFF_U exp got || testcase_FAIL
 
 testcase_PASS

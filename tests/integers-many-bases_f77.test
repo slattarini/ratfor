@@ -16,11 +16,12 @@ program testprog
 100 format(A30, " ==> ", I30)
 EOF
 
+: NOW WILL READ TEST DATA
+
 # since a redirected while loop might take place in a subshell in some
 # shells, we need thew following hack
 exec 5<&1
 exec <"$srcdir"/integers-many-bases.data
-set +x
 echo "** reading data from $srcdir/integers-many-bases.data"
 while read LINE; do
     case "$LINE" in
@@ -41,8 +42,9 @@ while read LINE; do
     echo "    write(*,100) '$in', $in" >> tst.r
     echo "$in ==> $out" >> exp
 done
-set -x
 exec 5<&-
+
+: TEST DATA READ
 
 cat >>tst.r <<EOF
     stop

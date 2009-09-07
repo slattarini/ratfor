@@ -14,14 +14,15 @@ makeup() {
     done
 }
 
+: NOW WILL READ TEST DATA
+
 # since a redirected while loop might take place in a subshell in some
 # shells, we need thew following hack
 exec 5<&1
 exec <"$srcdir"/integers-many-bases.data
 : >exp
 : >tst.r
-set +x
-echo "** reading data from $srcdir/integers-many-bases.data"
+: "** reading data from $srcdir/integers-many-bases.data"
 while read LINE; do
     case "$LINE" in
       \#*|"")
@@ -43,6 +44,8 @@ while read LINE; do
 done
 set -x
 exec 5<&-
+
+: TEST DATA READ
 
 cat tst.r
 run_RATFOR -e 0 tst.r || testcase_FAIL
