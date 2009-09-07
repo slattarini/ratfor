@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Check that 'include' fail unredable/non-existent files
+# Check that `include' fail unredable/non-existent files
 
 # WARNING: ratfor must not abort on failed include. Check for this, too.
 
