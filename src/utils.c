@@ -59,8 +59,7 @@ itoc(int n, char str[], int size)
     i = 0;
     do {
         str[i++] = n % 10 + DIG0;
-    }
-    while ((n /= 10) > 0 && i < size-2);
+    } while ((n /= 10) > 0 && i < size-2);
     if (sign < 0 && i < size-1)
         str[i++] = '-';
     str[i] = EOS;
