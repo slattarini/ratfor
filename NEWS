@@ -3,6 +3,9 @@ List of user-visible changes of Public Domain Ratfor.
 New in XXX
 -----------
  
+ * The uppercase `DEFINE' is no more recognized as an alias for the builtin
+   `define' (WARNING: presently, this is only half-true, do to a bug caused
+   by character folding to lowercase done at a wrong time).
  * The line numbers in error messages should now be always correct, even
    when inclusion of files or expansion of macros are involved. Alas, this
    was not the case before.
