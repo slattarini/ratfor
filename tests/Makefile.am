@@ -34,6 +34,9 @@ XFAIL_TESTS += \
 # characters done at the wrong time -- a problem which is causing many
 # others failures and bugs, and that will be hopefully fixed soon.
 XFAIL_TESTS += define-no-uppercase-alias.test
+
+# The ratfor diagnastics w.r.t. include is still a bit rough
+XFAIL_TESTS += include-missing-filename.test
  
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
@@ -67,8 +70,10 @@ ALL_TESTS = \
   empty-input.test \
   include-abspath.test \
   include-basic.test \
+  include-cornercase.test \
   include-defined.test \
   include-fail.test \
+  include-missing-filename.test \
   include-nested-deep.test \
   include-nested.test \
   include-recursive.test \
