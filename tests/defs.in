@@ -265,65 +265,88 @@ NOT() {
     fi
 }
 
-# run_CMD COMMAND [-e STATUS] [-i FILE] [ARGUMENTS..]
-# ---------------------------------------------------
+# run_CMD COMMAND [-e STATUS] [-i FILE] [-m] [--] [ARGUMENTS..]
+# -------------------------------------------------------------
 # Run the given COMMAND (can be an external commnds, a shell function or
 # shell builtin) with ARGUMENTS (and with standard input taken from FILE,
-# if option `-i' is given), and fail if COMMAND does not exit with STATUS
-# (default: 0). Note that if status is VOID or IGNORE, any exit value of
-# the command will be acceptable.
-# Also, save standard output and standard error from COMMAND respectively
-# in files `stdout' and `stderr' (in the current directory).
-run_CMD() {
-    # NOTE: all internal variables used here starts with the `_run'
-    # prefix, to minimize possibility of name clashes with global
-    # variables defined in user code.
-    : 'entering run_CMD(): save -x flag, become quiet'
-    _run_prev_dollarminus=$-
+# if option `-i' is given), and fail if COMMAND does not exit with STATUS.
+# If status is "VOID" or "IGNORE", any exit value of the command is
+# acceptable.  If STATUS is "FAIL", then any exit value of the command
+# *but 0* is acceptable.  Default STATUS is "IGNORED".
+# Also, save standard output and standard error from COMMAND, by default
+# respectively in files `stdout' and `stderr' (in the current directory),
+# or togheter in the file `stdall' (in the current directory) if the `-m'
+# option is given.  All the redirections are done without triggering the
+# zsh4 bug related to `-x' shell switch (described in details in the
+# tests/README file).
+run_CMD ()
+{
+    # NOTE: all internal variables used here starts with the `_run' prefix,
+    # to minimize possibility of name clashes with global variables defined
+    # in user code.
+    : 'entering run_CMD(): become quiet'
     set +x # xtrace verbosity stops here
-    case ${_run_prev_dollarminus} in
-        *x*) _run_reset_x='set -x';;
-          *) _run_reset_x=':';;
+    case $# in
+        0) testcase_HARDERROR "run_CMD(): missing COMMAND argument";;
+        *) _run_cmd=$1; shift;;
     esac
     _run_stdin=-
     _run_expected_exitcode=0
-    _run_cmd=$1
-    shift
+    _run_mix_stdout_and_stderr=no
     while test $# -gt 0; do
         case "$1" in
             -e) _run_expected_exitcode=$2; shift;;
             -i) _run_stdin=$2; shift;;
+            -m) _run_mix_stdout_and_stderr=yes;;
             --) shift; break;;
+            -?) testcase_HARDERROR "run_CMD(): invalid switch '$1'";;
              *) break;;
         esac
         shift
     done
     _run_exitcode=0
-    _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdout 2>stderr'
+    if test x"${_run_mix_stdout_and_stderr}" = x"yes"; then
+        _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdall 2>&1'
+    else
+        _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdout 2>stderr'
+    fi
     if test x"${_run_stdin}" != x"-"; then
         _run_evald_cmd="${_run_evald_cmd}"' <"${_run_stdin}"'
     fi
     _run_evald_cmd="${_run_evald_cmd} || _run_exitcode=\$?"
     eval "${_run_evald_cmd}"
-    echo "=== stderr" >&2
-    cat stderr >&2
-    echo "=== stdout"
-    cat stdout
-    echo "==="
+    if test x"${_run_mix_stdout_and_stderr}" = x"yes"; then
+        echo "=== stdout and stderr"
+        cat stdall
+        echo "==="
+    else
+        echo "=== stderr"
+        cat stderr
+        echo "=== stdout"
+        cat stdout
+        echo "==="
+    fi
     case ${_run_expected_exitcode} in
-        VOID|void|IGNORE|ignore|"${_run_exitcode}") _run_rc=0;;
-        *) _run_rc=1;;
+        VOID|void|IGNORE|ignore|${_run_exitcode})
+            _run_rc=0
+            ;;
+        FAIL|fail|FAILURE|failure)
+            test ${_run_exitcode} -gt 0 && _run_rc=0 || _run_rc=1
+            ;;
+        *)
+            _run_rc=1
+            ;;
     esac
-    ${_run_reset_x} # xtrace verbosity restart here
+    set -x # xtrace verbosity restart here
     : "exit status ${_run_exitcode} (expecting ${_run_expected_exitcode})"
-    : 'leaving run_CMD(): restored -x flag, reset to previous verbosity'
+    : "leaving run_CMD()"
     return ${_run_rc}
 }
 
 # Usage: run_RATFOR [-e STATUS] [-i INFILE] [ARGUMENTS..]
 # See documentation of `run_CMD()' for more info.
 run_RATFOR() {
-    run_CMD $RATFOR ${1+"$@"}
+    run_CMD "$RATFOR" ${1+"$@"}
 }
 
 # Usage: run_FORTRAN [-e STATUS] [ARGUMENTS..]
