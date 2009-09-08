@@ -31,9 +31,8 @@ Copyright
 
 #include "rat4-common.h"
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <unistd.h>
+#include <unistd.h> /* for getopt */
 
 #include "error.h"
 #include "parser.h"
