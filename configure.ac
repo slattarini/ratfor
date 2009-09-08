@@ -40,7 +40,7 @@ AC_PROG_MKDIR_P
 # Checks for headers.
 #
 
-for header in unistd stdlib string; do
+for header in errno unistd stdlib string; do
     AC_CHECK_HEADER(
         [$header.h],
         [:],
@@ -58,8 +58,26 @@ AC_C_INLINE
 # Checks for library functions.
 #
 
-AC_CHECK_FUNC([getopt], [:],
-              [AC_MSG_ERROR([No proper `getopt' subroutine found])])
+for func in getopt strerror; do
+    AC_CHECK_FUNC(
+        [$func],
+        [:],
+        [AC_MSG_ERROR([No proper `$func' subroutine found])])
+done
+
+# Sigh! Checks for vfprintf don't work with GCC if `-Werror' is active.
+rat4_fn_prune_Werror() {
+    echo " $1 " | sed -e 's/[[ 	]]-Werror[[ 	]]/ /g'
+}
+for v in CC CFLAGS CCFLAGS CPPFLAGS LDFLAGS; do
+    eval save_$v=\$$v
+    eval $v=\`rat4_fn_prune_Werror \"\$$v\"\`
+done
+AC_CHECK_FUNC([vfprintf],[:],
+              [AC_MSG_ERROR([No proper `vfprintf' subroutine found])])
+for v in CC CFLAGS CCFLAGS CPPFLAGS LDFLAGS; do
+    eval $v=\$save_$v
+done
 
 #
 # Checks for things needed by the test suite.

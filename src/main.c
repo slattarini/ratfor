@@ -59,7 +59,7 @@ main(int argc, char *argv[])
             case 'o':
                 /* XXX make this "lazily" executed later */
                 if ((freopen(optarg, "w", stdout)) == NULL)
-                    error("%s: cannot open for writing\n", optarg); /*XXX: perror*/
+                    fatal("%s: cannot open for writing", optarg); /*XXX: perror*/
                 break;
             default:
                 errflg = YES;
@@ -100,11 +100,10 @@ init(int xstartlab, int xleaveC, char *xfilename)
     startlab = xstartlab;
     leaveC = xleaveC;
     
-    /* XXX wrap this in a function */
     if (STREQ(xfilename, "-"))
         in = stdin;
     else if ((in = fopen(xfilename, "r")) == NULL)
-        error("%s: cannot open for reading\n", xfilename); /*XXX: perror?*/
+        fatal("%s: cannot open for reading\n", xfilename); /*XXX: perror?*/
 
     level = 0;                  /* file control */
     linect[0] = 1;              /* line count of first file */
