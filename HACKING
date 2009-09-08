@@ -27,7 +27,17 @@ C Coding Style
 --------------
 
   Mostly K&R style.
+
+  For variables: do not use CamelCase or mixedCase, but use only
+  names_with_undercores.
   
+  Names of constants defined with `enum' and of constants or macros
+  defined witg `#define' must be written in UPPERCASE.
+  
+  Do not use typedefs (apart the already exising typedef `bool' for
+  booleans): it's better know the real type of what is being declared
+  and used, even if that means a bit more typing.
+
   Do not write function definitions like this:
     ...
     int foo(void) {
