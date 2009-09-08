@@ -52,13 +52,13 @@ unstak(int *sp, int lextyp[], int labval[], char token)
 }
 
 void
-init(int xstartlab, int xleaveC, char *xfilename)
+init(int xstartlab, int xleaveC, const char *xfilename)
 {
     FILE *xinfile;
-    
+
     startlab = xstartlab;
     leaveC = xleaveC;
-    
+
     if (STREQ(xfilename, "-")) {
         xinfile = stdin;
         xfilename = "(stdin)";
