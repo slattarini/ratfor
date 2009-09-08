@@ -3,12 +3,6 @@
 #include "rat4-common.h"
 int startlab;                   /*  start label (configurable with `-l' switch)  */
 char fcname[MAXNAME];           /*  text of current function name                */
-int fordep;                     /*  current depth of for statements              */
-char forstk[MAXFORSTK];         /*  stack of reinit strings                      */
-int swtop;                      /*  current switch entry; init=0                 */
-int swlast;                     /*  next available position; init=1              */
-int swstak[MAXSWITCH];          /*  switch information stack                     */
-int xfer;                       /*  YES if just made transfer, NO otherwise      */
 int leaveC;                     /*  YES if comments should be kept, NO otherwise */
 int label;                      /*  next label returned by labgen                */
 int level;                      /*  level of file inclusion; init = 1            */

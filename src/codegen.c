@@ -31,7 +31,18 @@ static const char sgoto[]       = "goto ";
 static const char sreturn[]     = "return";
 static const char eoss[]        = "EOS/";
 
+/*
+ *  G L O B A L  V A R I A B L E S
+ */
 
+static int swtop = 0;   /* switch stack index */
+static int swlast = 1;  /* switch stack index */
+static int fordep = 0;  /* for stack */
+static int xfer;  /*  YES if just made transfer, NO otherwise */
+                  /* XXX how to initialize it? */
+
+static int swstak[MAXSWITCH];   /* switch information stack */
+static char forstk[MAXFORSTK];  /* stack of reinit strings  */
 
 /*
  *  C O D E  G E N E R A T I O N
@@ -312,7 +323,7 @@ forcode(int *lab)
     fordep++; /* stack reinit clause */
     j = 0;
     for (i = 1; i < fordep; i++) /* find end *** should i = 1 ??? *** */
-        j = j + strlen(&forstk[j]) + 1;
+        j += strlen(&forstk[j]) + 1;
     forstk[j] = EOS; /* null, in case no reinit */
     nlpar = 0;
     t = gnbtok(token, MAXTOK);
@@ -331,7 +342,7 @@ forcode(int *lab)
             if ((j + strlen(token)) >= MAXFORSTK)
                 synerr_fatal("for clause too long.");
             scopy(token, 0, forstk, j);
-            j = j + strlen(token);
+            j += strlen(token);
         }
     }
     tlab++; /* label for next's */

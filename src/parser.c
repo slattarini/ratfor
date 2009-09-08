@@ -70,10 +70,7 @@ init(int xstartlab, int xleaveC, const char *xfilename)
     linect[0] = 1;              /* line count of first file */
     filename[0] = xfilename;    /* filename of first file */
     infile[0] = xinfile;        /* file handle of first file */
-    fordep = 0;                 /* for stack */
-    swtop = 0;                  /* switch stack index */
-    swlast = 1;                 /* switch stack index */
-    
+
     fcname[0] = EOS;  /* current function name */
     label = startlab; /* next generated label */
 }
