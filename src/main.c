@@ -94,7 +94,6 @@ main(int argc, char *argv[])
 static void
 init(int xstartlab, int xleaveC, char *xfilename)
 {
-    int i;
     FILE *xinfile;
     
     startlab = xstartlab;
@@ -114,9 +113,6 @@ init(int xstartlab, int xleaveC, char *xfilename)
     fordep = 0;                 /* for stack */
     swtop = 0;                  /* switch stack index */
     swlast = 1;                 /* switch stack index */
-    
-    for (i = 0; i <= 126; i++)
-        tabptr[i] = 0;
     
     fcname[0] = EOS;  /* current function name */
     label = startlab; /* next generated label */
