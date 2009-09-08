@@ -1,4 +1,5 @@
 #include "rat4-common.h"
+#include "rat4-global.h"
 
 #include "io.h"
 #include "error.h"
@@ -6,7 +7,6 @@
 #include "lexer.h"
 #include "codegen.h"
 #include "parser.h"
-
 
 /*
  * P A R S E R
@@ -49,6 +49,33 @@ unstak(int *sp, int lextyp[], int labval[], char token)
             untils(labval[tp], token);
     }
     *sp = tp;
+}
+
+void
+init(int xstartlab, int xleaveC, char *xfilename)
+{
+    FILE *xinfile;
+    
+    startlab = xstartlab;
+    leaveC = xleaveC;
+    
+    if (STREQ(xfilename, "-")) {
+        xinfile = stdin;
+        xfilename = "(stdin)";
+    } else if ((xinfile = fopen(xfilename, "r")) == NULL) {
+        fatal("%s: cannot open for reading\n", xfilename); /*XXX: perror?*/
+    }
+
+    level = 0;                  /* file control */
+    linect[0] = 1;              /* line count of first file */
+    filename[0] = xfilename;    /* filename of first file */
+    infile[0] = xinfile;        /* file handle of first file */
+    fordep = 0;                 /* for stack */
+    swtop = 0;                  /* switch stack index */
+    swlast = 1;                 /* switch stack index */
+    
+    fcname[0] = EOS;  /* current function name */
+    label = startlab; /* next generated label */
 }
 
 void

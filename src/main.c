@@ -38,13 +38,11 @@ Copyright
 #include "error.h"
 #include "parser.h"
 
-static void init(int, int, char *); /* XXX: move out */
-
 int
 main(int argc, char *argv[])
 {
     int c, errflg = NO;
-    char *progname = argv[0], *infile = "-";
+    const char *progname = argv[0], *infile = "-";
     
     int startlab = 23000; /* default start label */
     int leaveC = NO;
@@ -85,38 +83,5 @@ main(int argc, char *argv[])
     /* return program global exit status, declared in error.h */
     exit(exit_status); /* TODO: check stdout for write errors? */
 }
-
-#include "rat4-global.h"
-
-/*
- * initialisation
- */
-static void
-init(int xstartlab, int xleaveC, char *xfilename)
-{
-    FILE *xinfile;
-    
-    startlab = xstartlab;
-    leaveC = xleaveC;
-    
-    if (STREQ(xfilename, "-")) {
-        xinfile = stdin;
-        xfilename = "(stdin)";
-    } else if ((xinfile = fopen(xfilename, "r")) == NULL) {
-        fatal("%s: cannot open for reading\n", xfilename); /*XXX: perror?*/
-    }
-
-    level = 0;                  /* file control */
-    linect[0] = 1;              /* line count of first file */
-    filename[0] = xfilename;    /* filename of first file */
-    infile[0] = xinfile;        /* file handle of first file */
-    fordep = 0;                 /* for stack */
-    swtop = 0;                  /* switch stack index */
-    swlast = 1;                 /* switch stack index */
-    
-    fcname[0] = EOS;  /* current function name */
-    label = startlab; /* next generated label */
-}
-
 
 /* vim: set ft=c ts=4 sw=4 et : */
