@@ -329,7 +329,7 @@ forcode(int *lab)
         }
         if (nlpar >= 0 && !is_newline(t) && t != UNDERLINE) { /* XXX: underline? */
             if ((j + strlen(token)) >= MAXFORSTK)
-                baderr("for clause too long.");
+                synerr_fatal("for clause too long.");
             scopy(token, 0, forstk, j);
             j = j + strlen(token);
         }
@@ -698,7 +698,7 @@ cascode(int lab, int token)
                 ub = lb;
             }
             if (swlast + 3 > MAXSWITCH)
-                baderr ("switch table overflow.");
+                synerr_fatal ("switch table overflow.");
             for (i = swtop + 3; i < swlast; i += 3)
                 if (lb <= swstak[i])
                     break;
@@ -722,7 +722,7 @@ cascode(int lab, int token)
     else { /* # default : ... */
         t = gnbtok (scrtok, MAXTOK);
         if (swstak[swtop + 2] != 0)
-            baderr ("multiple defaults in switch statement.");
+            synerr_fatal ("multiple defaults in switch statement.");
         else
             swstak[swtop + 2] = l;
     }
@@ -730,7 +730,7 @@ cascode(int lab, int token)
     if (t == EOF)
         synerr_eof();
     else if (t != COLON)
-        baderr ("missing colon in case or default label.");
+        synerr_fatal ("missing colon in case or default label.");
 
     xfer = NO;
     outcon (l);
@@ -757,7 +757,7 @@ swcode(int *lab)
 
     *lab = labgen (2);
     if (swlast + 3 > MAXSWITCH)
-        baderr ("switch table overflow.");
+        synerr_fatal ("switch table overflow.");
     swstak[swlast] = swtop;
     swstak[swlast + 1] = 0;
     swstak[swlast + 2] = 0;

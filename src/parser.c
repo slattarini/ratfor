@@ -96,7 +96,7 @@ parse(void)
         {
             sp++; /* beginning of statement */
             if (sp > MAXSTACK)
-                baderr("stack overflow in parser.");
+                synerr_fatal("stack overflow in parser.");
             lextyp[sp] = token; /* stack type and value */
             labval[sp] = lab;
         }

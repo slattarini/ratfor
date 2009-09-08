@@ -269,12 +269,12 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
     t2 = gtok(name, namesiz, fp); /* name */
     if (!defn_with_paren && is_stmt_ending(t2)) {
         /* stray `define', as in `...; define; ...' */
-        baderr("empty name.");
+        synerr_fatal("empty name.");
     } else if (defn_with_paren && t2 == COMMA) {
         /* `define(name, def)' with empty name */
-        baderr("empty name.");
+        synerr_fatal("empty name.");
     } else if (t2 != ALPHA) {
-        baderr("non-alphanumeric name.");
+        synerr_fatal("non-alphanumeric name.");
     }
     skpblk(fp);
     c = gtok(ptoken, MAXTOK, fp);
@@ -284,7 +284,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         do {
             c = ngetch(fp);
             if (i > defsiz)
-                baderr("definition too long.");
+                synerr_fatal("definition too long.");
             def[i++] = c;
         } while (c != SHARP && !is_newline(c) && c != EOF && c != PERCENT);
         if (c == SHARP || c == PERCENT)
@@ -292,14 +292,14 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
     }
     else { /* define (name, def) */
         if (c != COMMA)
-            baderr("missing comma in define.");
+            synerr_fatal("missing comma in define.");
         /* else got (name, */
         nlpar = 0;
         for (i = 0; nlpar >= 0; i++) {
             if (i > defsiz)
-                baderr("definition too long.");
+                synerr_fatal("definition too long.");
             else if ((def[i] = ngetch(fp)) == EOF)
-                baderr("missing right paren.");
+                synerr_fatal("missing right paren.");
             else if (def[i] == LPAREN)
                 nlpar++;
             else if (def[i] == RPAREN)
@@ -388,7 +388,7 @@ gettok(char token[], int toksiz)
             }
             name[i] = EOS;
             if (level >= NFILES)
-                synerr_inc("includes nested too deeply.");
+                synerr_include("includes nested too deeply.");
             else {
 /*XXX re-add support for quoted filenames, sooner or later
                 name[i-1]=EOS;
@@ -399,16 +399,16 @@ gettok(char token[], int toksiz)
                     /* empty body */;
                 filename[level+1] = strsave(&name[j]);
                 if (filename[level+1] == NULL) {
-                    synerr_inc("memory error.");
+                    synerr_include("memory error.");
                     goto include_done;
                 }
                 if (*filename[level+1] == EOS) {
-                    synerr_inc("missing filename.");
+                    synerr_include("missing filename.");
                     goto include_done;
                 }
                 infile[level+1] = fopen(filename[level+1], "r");
                 if (infile[level+1] == NULL) {
-                    synerr_inc("I/O error.");
+                    synerr_include("I/O error.");
                     goto include_done;
                 }
                 linect[level+1] = 1;

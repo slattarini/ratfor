@@ -83,7 +83,7 @@ void
 putbak(char c)
 {
     if (++bp >= BUFSIZE)
-        baderr("too many characters pushed back.");
+        synerr_fatal("too many characters pushed back.");
     if (is_strict_newline(c))
         --linect[level];
     buf[bp] = c;
