@@ -14,6 +14,6 @@ int label;                      /*  next label returned by labgen               
 int level;                      /*  level of file inclusion; init = 1            */
 int linect[NFILES];             /*  line count on input file[level]; init = 1    */
 FILE *infile[NFILES];           /*  file number[level]; init infile[1] = STDIN   */
-char *filename[NFILES];         /*  filename of input file[level]                */
+const char *filename[NFILES];   /*  filename of input file[level]                */
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

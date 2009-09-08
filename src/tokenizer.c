@@ -420,7 +420,7 @@ include_done:
         if (level > 0) {  /* close include and pop file name stack */
             fclose(infile[level]);
             infile[level] = NULL; /* just to be sure */
-            free(filename[level]);
+            free((void *)filename[level]);
             filename[level] = NULL; /* just to be sure */
         }
     }
