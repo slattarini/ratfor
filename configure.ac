@@ -66,18 +66,10 @@ for func in getopt strerror; do
 done
 
 # Sigh! Checks for vfprintf don't work with GCC if `-Werror' is active.
-rat4_fn_prune_Werror() {
-    echo " $1 " | sed -e 's/[[ 	]]-Werror[[ 	]]/ /g'
-}
-for v in CC CFLAGS CCFLAGS CPPFLAGS LDFLAGS; do
-    eval save_$v=\$$v
-    eval $v=\`rat4_fn_prune_Werror \"\$$v\"\`
-done
-AC_CHECK_FUNC([vfprintf],[:],
-              [AC_MSG_ERROR([No proper `vfprintf' subroutine found])])
-for v in CC CFLAGS CCFLAGS CPPFLAGS LDFLAGS; do
-    eval $v=\$save_$v
-done
+RAT4_CHECK_FUNC_NO_WERROR(
+    [vfprintf],
+    [:],
+    [AC_MSG_ERROR([No proper `vfprintf' subroutine found])])
 
 #
 # Checks for things needed by the test suite.
