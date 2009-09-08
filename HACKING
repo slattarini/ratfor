@@ -31,8 +31,8 @@ C Coding Style
   For variables: do not use CamelCase or mixedCase, but use only
   names_with_undercores.
 
-  Names of constants defined with `enum' and of constants or macros
-  defined witg `#define' must be written in UPPERCASE.
+  Names of constants defined with `enum' and names of constants or
+  macros defined witg `#define' must be written in UPPERCASE.
 
   Do not use typedefs (apart the already exising typedef `bool' for
   booleans): it's better know the real type of what is being declared
