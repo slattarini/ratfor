@@ -102,6 +102,7 @@ ALL_TESTS = \
   synerr-lineno.test \
   synerr-nonfatal.test \
   synerr-nonfatal_f77.test \
+  synerr-stdin.test \
   verbatim-in-define.test \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
