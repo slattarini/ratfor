@@ -9,6 +9,7 @@
 #include "error.h"
 #include "tokenizer.h"
 #include "lex-symbols.h"
+#include "labgen.h"
 #include "codegen.h"
 
 #include "rat4-global.h"
@@ -149,20 +150,6 @@ alldig(const char str[])
         if (str[i] < DIG0 || str[i] > DIG9)
             return(NO);
     return(YES);
-}
-
-/*
- * labgen - generate  n  consecutive labels, return first one
- *
- */
-static int
-labgen(int n)
-{
-    int i;
-
-    i = label;
-    label = label + n;
-    return(i);
 }
 
 /*
@@ -442,8 +429,8 @@ labelc(char lexstr[])
 {
 
     xfer = NO;   /* can't suppress goto's now */
-    if (atoi(lexstr) >= startlab)
-        synerr("warning: possible label conflict.");
+    if (can_label_conflict(atoi(lexstr)))
+        synerr("possible label conflict.");
     outstr(lexstr);
     outtab();
 }

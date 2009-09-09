@@ -1,10 +1,8 @@
 #ifndef RAT4_GLOBAL_H
 #  define RAT4_GLOBAL_H 1
 #include "rat4-common.h"
-int startlab;                   /*  start label (configurable with `-l' switch)  */
 char fcname[MAXNAME];           /*  text of current function name                */
 int leaveC;                     /*  YES if comments should be kept, NO otherwise */
-int label;                      /*  next label returned by labgen                */
 int level;                      /*  level of file inclusion; init = 1            */
 int linect[NFILES];             /*  line count on input file[level]; init = 1    */
 FILE *infile[NFILES];           /*  file number[level]; init infile[1] = STDIN   */

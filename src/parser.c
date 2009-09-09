@@ -5,7 +5,8 @@
 #include "error.h"
 #include "tokenizer.h"
 #include "lexer.h"
-#include "codegen.h"
+#include "labgen.h"
+#include "codegen.h" /* we need to set the starting label */
 #include "parser.h"
 
 /*
@@ -56,7 +57,6 @@ init(int xstartlab, int xleaveC, const char *xfilename)
 {
     FILE *xinfile;
 
-    startlab = xstartlab;
     leaveC = xleaveC;
 
     if (STREQ(xfilename, "-")) {
@@ -72,7 +72,7 @@ init(int xstartlab, int xleaveC, const char *xfilename)
     infile[0] = xinfile;        /* file handle of first file */
 
     fcname[0] = EOS;  /* current function name */
-    label = startlab; /* next generated label */
+    set_starting_label(xstartlab);
 }
 
 void
