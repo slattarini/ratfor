@@ -14,6 +14,7 @@ ratfor_SOURCES = \
 	tokenizer.c tokenizer.h \
 	lexer.c lexer.h \
 	parser.c parser.h \
+	labgen.c labgen.h \
 	codegen.c codegen.h \
     rat4-global.h rat4-common.h lex-symbols.h
 
