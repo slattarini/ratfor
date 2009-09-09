@@ -42,13 +42,13 @@ main(int argc, char *argv[])
 {
     int c, errflg = NO;
     const char *progname = argv[0], *infile = "-";
-    
+
     int startlab = 23000; /* default start label */
-    int leaveC = NO;
+    int keep_comments = NO;
     while ((c = getopt(argc, argv, "Cl:o:")) != EOF) {
         switch (c) {
             case 'C':
-                leaveC = YES; /* keep comments in src */
+                keep_comments = YES; /* keep comments in src */
                 break;
             case 'l': /* user sets label */
                 startlab = atoi(optarg);
@@ -71,14 +71,18 @@ main(int argc, char *argv[])
     }
 
     /* TODO error if two or more args given */
-    
+
     if (optind < argc)
         infile = argv[optind];
-    init(startlab, leaveC, infile); /* intialize preprocessor status */
+
+    /* intialize preprocessor status */
+    init(startlab, keep_comments, infile);
+    /* leave our fingerprint in the generated output */
     printf("C Output from Public Domain Ratfor, version %s\n",
            PACKAGE_VERSION);
-    parse(); /* call parser and do the real work */
-    
+    /* call parser and do the real work */
+    parse();
+
     /* return program global exit status, declared in error.h */
     exit(exit_status); /* TODO: check stdout for write errors? */
 }

@@ -53,11 +53,11 @@ unstak(int *sp, int lextyp[], int labval[], char token)
 }
 
 void
-init(int xstartlab, int xleaveC, const char *xfilename)
+init(int xstartlab, int xkeepcomments, const char *xfilename)
 {
     FILE *xinfile;
 
-    leaveC = xleaveC;
+    keep_comments = xkeepcomments;
 
     if (STREQ(xfilename, "-")) {
         xinfile = stdin;

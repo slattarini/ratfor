@@ -32,7 +32,7 @@ static void
 dispatch_comment(FILE *fp)
 {
     int i;
-    if (leaveC == YES)
+    if (keep_comments)
         outcmnt(fp); /* copy comments to output */
     else
         for (i = ngetch(fp); !is_newline(i); i = ngetch(fp))
