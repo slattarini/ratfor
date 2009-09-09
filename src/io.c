@@ -7,7 +7,7 @@
  *   I / O   W R A P P E R S
  */
 
-#define BUFSIZE 2048 /* mostly arbitrary */
+#define BUFSIZE 2048        /* mostly arbitrary */
 
 static char buf[BUFSIZE];   /* pushed-back chars */
 static int bp = -1;         /* pushback buffer pointer */
@@ -32,7 +32,7 @@ void puts_(const char *s)
 }
 
 /* get next char (either pushed back or new from the stream) */
-#define ngetc_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
+#define NGETC_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
     
 /*
  * ngetch - get a (possibly pushed back) character, dealing with line
@@ -44,8 +44,8 @@ ngetch(FILE *fp)
     int c;
     
     /* check for a continuation '_\n' */
-    while ((c = ngetc_(fp)) == UNDERLINE) {
-        c = ngetc_(fp);
+    while ((c = NGETC_(fp)) == UNDERLINE) {
+        c = NGETC_(fp);
         if (!is_strict_newline(c)) {
             putbak(c);
             c = UNDERLINE;
@@ -61,7 +61,7 @@ ngetch(FILE *fp)
     return(c);
 }
 
-#undef ngetc_
+#undef NGETC_
 
 /*
  * pbstr - push string back onto input
