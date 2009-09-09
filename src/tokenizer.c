@@ -387,7 +387,7 @@ gettok(char token[], int toksiz)
                     break;
             }
             name[i] = EOS;
-            if (level >= NFILES)
+            if (level >= NFILES - 1)
                 synerr_include("includes nested too deeply.");
             else {
 /*XXX re-add support for quoted filenames, sooner or later
