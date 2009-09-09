@@ -28,7 +28,7 @@ int exit_status = 0;
     xlevel = (level >= 0) ? level : 0; \
     fflush(stdout); \
     fprintf(stderr, "%s:%d: ", filename[xlevel], \
-                    linect[xlevel] + lineno_offset) /* do not add `;' */
+                    lineno[xlevel] + lineno_offset) /* do not add `;' */
 
 #define SYNERR_POSTAMBLE() \
     fputc('\n', stderr); \

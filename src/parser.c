@@ -67,7 +67,7 @@ init(int xstartlab, int xkeepcomments, const char *xfilename)
     }
 
     level = 0;                  /* file control */
-    linect[0] = 1;              /* line count of first file */
+    lineno[0] = 1;              /* line count of first file */
     filename[0] = xfilename;    /* filename of first file */
     infile[0] = xinfile;        /* file handle of first file */
 
