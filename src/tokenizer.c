@@ -411,7 +411,7 @@ gettok(char token[], int toksiz)
                     synerr_include("I/O error.");
                     goto include_done;
                 }
-                linect[level+1] = 1;
+                lineno[level+1] = 1;
                 ++level;
 include_done:
                 /* nothing else to do */;

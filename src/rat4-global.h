@@ -4,7 +4,7 @@
 char fcname[MAXNAME];           /*  text of current function name                */
 int keep_comments;              /*  YES if comments should be kept, NO otherwise */
 int level;                      /*  level of file inclusion; init = 1            */
-int linect[NFILES];             /*  line count on input file[level]; init = 1    */
+int lineno[NFILES];             /*  line count on input file[level]; init = 1    */
 FILE *infile[NFILES];           /*  file number[level]; init infile[1] = STDIN   */
 const char *filename[NFILES];   /*  filename of input file[level]                */
 #endif

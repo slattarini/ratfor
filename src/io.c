@@ -51,11 +51,11 @@ ngetch(FILE *fp)
             c = UNDERLINE;
             break;
         } else {
-            ++linect[level];
+            ++lineno[level];
         }
     }
     if (is_strict_newline(c)) {
-        ++linect[level];
+        ++lineno[level];
     }
     
     return(c);
@@ -85,7 +85,7 @@ putbak(char c)
     if (++bp >= BUFSIZE)
         synerr_fatal("too many characters pushed back.");
     if (is_strict_newline(c))
-        --linect[level];
+        --lineno[level];
     buf[bp] = c;
 }
 
