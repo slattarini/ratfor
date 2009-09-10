@@ -12,6 +12,11 @@
 #include "lex-symbols.h"
 #include "rat4-global.h"
 
+#define MAXPATH     1024    /* max length of the name of a file included */
+#define MAXDEFLEN   2048    /* max length of a ratfor macro's definition */
+
+/* NOTE: due to implemntation details, it is pointless to have MAXDEFLEN
+         here greater than BUFSIZE in io.c */
 
 /*
  *  P R I V A T E  V A R I A B L E S
@@ -317,7 +322,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
 static int
 deftok(char token[], int toksiz, FILE *fp)
 {
-    char tkdefn[MAXDEF];
+    char tkdefn[MAXDEFLEN];
     int i, t;
 
     while ((t = gtok(token, toksiz, fp)) != EOF) {
@@ -325,7 +330,7 @@ deftok(char token[], int toksiz, FILE *fp)
             break;  /* non-alpha */
         } else if (STREQ(token, defn)) {
             /* get definition for token, save it in tkdefn */
-            getdef(token, toksiz, tkdefn, MAXDEF, fp);
+            getdef(token, toksiz, tkdefn, MAXDEFLEN, fp);
             install(token, tkdefn);
         } else if (look(token, tkdefn) == NO) {
             break;  /* undefined */
@@ -364,13 +369,13 @@ gettok(char token[], int toksiz)
 {
     int t, i, j;
     int tok;
-    char name[MAXNAME];
+    char path[MAXPATH];
 
     for ( ; level >= 0; level--) {
         while((tok = deftok(token, toksiz, infile[level])) != EOF) {
             if (STREQ(token, fncn)) {
                 skpblk(infile[level]);
-                t = deftok(fcname, MAXNAME, infile[level]);
+                t = deftok(fcname, MAXFUNCNAME, infile[level]);
                 pbstr(fcname);
                 if (t != ALPHA)
                     synerr("missing function name.");
@@ -381,23 +386,24 @@ gettok(char token[], int toksiz)
                 return(tok);
             }
             /* deal with file inclusion */
-            for (i = 0; ; i = strlen(name)) {
-                t = deftok(&name[i], MAXNAME, infile[level]);
+            for (i = 0; ; i = strlen(path)) {
+                /* XXX possible segfault here */
+                t = deftok(&path[i], MAXPATH, infile[level]);
                 if (is_stmt_ending(t))
                     break;
             }
-            name[i] = EOS;
+            path[i] = EOS;
             if (level >= NFILES - 1)
                 synerr_include("includes nested too deeply.");
             else {
 /*XXX re-add support for quoted filenames, sooner or later
-                name[i-1]=EOS;
-                infile[level+1] = fopen(&name[2], "r");
+                path[i-1]=EOS;
+                infile[level+1] = fopen(&path[2], "r");
 */
-                /* skip leading white space in name */
-                for (j = 0; is_blank(name[j]); j++)
+                /* skip leading white space in path */
+                for (j = 0; is_blank(path[j]); j++)
                     /* empty body */;
-                filename[level+1] = strsave(&name[j]);
+                filename[level+1] = strsave(&path[j]);
                 if (filename[level+1] == NULL) {
                     synerr_include("memory error.");
                     goto include_done;
@@ -417,7 +423,7 @@ include_done:
                 /* nothing else to do */;
             }
         }
-        if (level > 0) {  /* close include and pop file name stack */
+        if (level > 0) { /* close include and pop file name stack */
             fclose(infile[level]);
             infile[level] = NULL; /* just to be sure */
             free((void *)filename[level]);

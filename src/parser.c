@@ -9,6 +9,8 @@
 #include "codegen.h" /* we need to set the starting label */
 #include "parser.h"
 
+#define MAXSTACK 100  /* max stack depth for parser XXX better value? */
+
 /*
  * P A R S E R
  */

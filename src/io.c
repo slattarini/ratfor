@@ -158,8 +158,8 @@ outdon(void)
 void 
 outnum(int n)
 {
-
-    char chars[MAXCHARS];
+#define MAXCHARS_ 10
+    char chars[MAXCHARS_];
     int i, m;
 
     m = n > 0 ? (n) : (-n); /* abs value of n */
@@ -167,11 +167,12 @@ outnum(int n)
     do {
         chars[++i] = (m % 10) + DIG0;
         m = m / 10;
-    } while (m > 0 && i < MAXCHARS);
+    } while (m > 0 && i < MAXCHARS_);
     if (n < 0)
         outch(MINUS);
     for (; i >= 0; i--)
         outch(chars[i]);
+#undef MAXCHARS_
 }
 
 /*
