@@ -12,7 +12,7 @@ cat > bar.r <<EOF
 include foo.r
 EOF
 
-timer 15 run_RATFOR -e 1 foo.r
+timer 15 run_RATFOR -e 1 foo.r || :
 
 case `cat 'timer-exitstatus'` in
   0) if test -s stderr; then
@@ -25,7 +25,7 @@ case `cat 'timer-exitstatus'` in
   1)
     testcase_FAIL "ratfor succceded on recursive include"
     ;;
-  "")
+  TIMEOUT)
     testcase_FAIL "ratfor hanged on recursive include"
     ;;
   *)
