@@ -351,7 +351,9 @@ run_F77() {
 # eval COMMAND rather then simply executing it (in this case, no ARGS
 # is accepted).  The exit status of COMMAND is saved in the file
 # `timer-exitstatus' in the current directory; if the command has timed
-# out, that file will contain the string "TIMEOUT".
+# out, that file will contain the string "TIMEOUT".  Return status of
+# timer() is 255 if COMMAND timed out, and the return status of COMMAND
+# otherwise.
 timerExitStatusFile=timer-exitstatus
 timer() {
     if test x"${1-}" = x"-e"; then
@@ -402,6 +404,11 @@ timer() {
             break
         fi
     done
+    _timer_e=`cat $timerExitStatusFile`
+    case ${_timer_e} in
+        TIMEOUT) return 255;;
+        *) return ${_timer_e};;
+    esac
 }
 
 # Setup cleanup traps.
