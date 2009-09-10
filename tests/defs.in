@@ -377,9 +377,9 @@ timer() {
       echo TIMEOUT >$timerExitStatusFile
       _timer_e=0
       if test x"${_timer_eval}" = x"yes"; then
-        (eval "${_timer_cmd}") || _timer_e=$?
+        eval "${_timer_cmd}" || _timer_e=$?
       else
-        ("${_timer_cmd}" ${1+"$@"}) || _timer_e=$?
+        "${_timer_cmd}" ${1+"$@"} || _timer_e=$?
       fi
       echo ${_timer_e} >$timerExitStatusFile
     ) & # background
@@ -387,7 +387,7 @@ timer() {
     _timer_i=0
     while :; do
         _timer_i=`expr ${_timer_i} + 1`
-        kill -3 ${_timer_pid} || break # process finished bu itslef
+        kill -3 ${_timer_pid} || break # process finished by itslef
         sleep 1
         if test ${_timer_i} -lt ${_timer_time}; then
             continue
