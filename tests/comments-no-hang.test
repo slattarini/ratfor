@@ -7,11 +7,10 @@
 
 echo 'abc # comment after another token, as the last line of file' > tst.r
 
-timer -e 12 '$RATFOR -C tst.r >/dev/null 2>&1'
-
-e=`cat timer-exitstatus`
+e=0
+timer -e 12 '$RATFOR -C tst.r >/dev/null 2>&1' || e=$?
 case $e in
-    TIMEOUT) testcase_FAIL "ratfor hanged!";;
+    255) testcase_FAIL "ratfor hanged!";;
     0) testcase_PASS;;
     *) testcase_FAIL "ratfor failed with status $e";;
 esac
