@@ -12,52 +12,21 @@ cat > bar.r <<EOF
 include foo.r
 EOF
 
-: > 'exit.status'
+timer 15 run_RATFOR -e 1 foo.r
 
-# this mess is needed in case ratfor hangs
-(
-  trap "" 2;
-  if run_RATFOR -e 1 foo.r; then
-    echo 0 >'exit.status'
-  else
-    echo 0 >'exit.status'
-  fi
-) &
-pid=$!
-i=0
-while :; do
-    i=`expr $i + 1`
-    kill -2 $pid || break # process died out
-    sleep 1
-    if test $i -lt 15; then
-        continue
-    else
-        kill -15 $pid || :
-        sleep 3 # give the process the time to die gracefully
-        if kill -2 $pid; then
-            # sigh, process still alive... and we don't want to leave
-            # stray processes lingering around.
-            kill -9 $pid || testcase_HARDERROR "failed to kill hanged" \
-                                               "ratfor process (PID: $pid)"
-        fi
-        break
-    fi
-done
-case `cat 'exit.status'` in
+case `cat 'timer-exitstatus'` in
   0) if test -s stderr; then
         testcase_PASS
     else
-        : ratfor did not print error any message on recursive include
-        testcase_FAIL
+        testcase_FAIL "ratfor did not print error any message on" \
+                      "recursive include"
     fi
     ;;
   1)
-    : ratfor succceded on recursive include
-    testcase_FAIL
+    testcase_FAIL "ratfor succceded on recursive include"
     ;;
   "")
-    : ratfor hanged on recursive include
-    testcase_FAIL
+    testcase_FAIL "ratfor hanged on recursive include"
     ;;
   *)
     testcase_HARDERROR "unexpected exit status value from run_RATFOR()"

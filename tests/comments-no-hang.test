@@ -7,45 +7,13 @@
 
 echo 'abc # comment after another token, as the last line of file' > tst.r
 
-(
-  # We need this to `ping' portably the subshell's PID to see if ratfor
-  # is still active.
-  trap '' 2
-  # The bug that caused ratfor to hang also caused it to produce tons of
-  # gibberish on stdout, so, to avoid the risk of filling up the user's
-  # disk with trash, we redirect everithing to /dev/null. For this
-  # redirection to be effective, we cannot use `run_RATFOR()' here, but we
-  # must resort to the bare `$RATFOR'.
-  if $RATFOR -C tst.r >/dev/null 2>&1; then
-    echo ok > status
-  else
-    echo bad > status
-  fi
-) &
-pid=$!
+timer -e 12 '$RATFOR -C tst.r >/dev/null 2>&1'
 
-i=0
-while test $i -lt 12; do # 12 seconds seems large enough
-    i=`expr $i + 1`
-    sleep 1
-    if kill -2 $pid; then
-        : # process still alive, wait more
-    else
-        break
-    fi
-done
-
-# Be sure not to leave a stray ratfor process in the user's system.
-kill -15 $pid || :
-sleep 1
-if kill -2 $pid; then
-    kill -9 $pid || testcase_HARDERROR 'cannot kill stray ratfor process!'
-fi
-kill -2 $pid && testcase_HARDERROR 'cannot kill stray ratfor process!'
-
-test -s status || testcase_FAIL "ratfor hanged!"
-test x"`cat status`" = x"ok" || testcase_FAIL "ratfor failed"
-
-testcase_PASS
+e=`cat timer-exitstatus`
+case $e in
+    TIMEOUT) testcase_FAIL "ratfor hanged!";;
+    0) testcase_PASS;;
+    *) testcase_FAIL "ratfor failed with status $e";;
+esac
 
 # vim: ft=sh ts=4 sw=4 et
