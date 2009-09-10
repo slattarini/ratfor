@@ -65,6 +65,10 @@ ALL_TESTS = \
   define-whitespaces.test \
   devnull-input.test \
   empty-input.test \
+  function-name-invalid.test \
+  function-name-missing.test \
+  function-return.test \
+  function-return_f77.test \
   include-abspath.test \
   include-basic.test \
   include-cornercase.test \
@@ -74,11 +78,13 @@ ALL_TESTS = \
   include-nested-deep.test \
   include-nested.test \
   include-recursive.test \
+  include-relpath.test \
   include-stress.test \
   integers-many-bases.test \
   integers-many-bases_f77.test \
   keepcomment.test \
   keepcomment_f77.test \
+  label-conflict.test \
   line-continuation-basic.test \
   line-continuation-multiple.test \
   line-continuation-stress1.test \

@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Check that ratfor diagnose possible conflicts between internally-used
+# labels and used-provided labels.
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+while(true) {
+    do_nothing()
+}
+100 continue
+EOF
+
+run_RATFOR -e 1 -- -l 100 tst.r || testcase_FAIL
+$FGREP ':4: possible label conflict' stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

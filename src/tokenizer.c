@@ -377,8 +377,10 @@ gettok(char token[], int toksiz)
                 skpblk(infile[level]);
                 t = deftok(fcname, MAXFUNCNAME, infile[level]);
                 pbstr(fcname);
-                if (t != ALPHA)
+                if (is_stmt_ending(t))
                     synerr("missing function name.");
+                else if (t != ALPHA)
+                    synerr("invalid function name `%s'", fcname);
                 putbak(BLANK);
                 return(tok);
             }
