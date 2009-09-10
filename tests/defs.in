@@ -345,6 +345,65 @@ run_F77() {
     run_CMD "$F77" ${1+"$@"}
 }
 
+# Usage: timer [-e] TIME COMMAND [ARGS]
+# Run the given COMMAND (in a subshell) until the given TIME (measured
+# in seconds) is expired, then terminate it.  If `-e' option is given,
+# eval COMMAND rather then simply executing it (in this case, no ARGS
+# is accepted).  The exit status of COMMAND is saved in the file
+# `timer-exitstatus' in the current directory; if the command has timed
+# out, that file will contain the string "TIMEOUT".
+timerExitStatusFile=timer-exitstatus
+timer() {
+    if test x"${1-}" = x"-e"; then
+        _timer_eval=yes
+        shift
+    else
+        _timer_eval=no
+    fi
+    case $# in
+        0) testcase_HARDERROR "timer(): missing TIME argument";;
+        1) testcase_HARDERROR "timer(): missing COMMAND argument";;
+    esac
+    _timer_time=$1
+    _timer_cmd=$2
+    [ 0 -lt "${_timer_time}" ] || \
+      testcase_HARDERROR "timer(): invalid TIME ${_timer_time}"
+    shift 2
+    if test x"${_timer_eval}" = x"yes" && test $# -gt 0; then
+        testcase_HARDERROR "timer(): ARGS not acceptable with \`-e' option"
+    fi
+    (
+      trap '' 3 # ignore SIGQUIT, it will be used to `ping' the process
+      echo TIMEOUT >$timerExitStatusFile
+      _timer_e=0
+      if test x"${_timer_eval}" = x"yes"; then
+        (eval "${_timer_cmd}") || _timer_e=$?
+      else
+        ("${_timer_cmd}" ${1+"$@"}) || _timer_e=$?
+      fi
+      echo ${_timer_e} >$timerExitStatusFile
+    ) & # background
+    _timer_pid=$!
+    _timer_i=0
+    while :; do
+        _timer_i=`expr ${_timer_i} + 1`
+        kill -3 ${_timer_pid} || break # process finished bu itslef
+        sleep 1
+        if test ${_timer_i} -lt ${_timer_time}; then
+            continue
+        else
+            kill -15 ${_timer_pid} || :
+            sleep 3 # give the process the time to die gracefully
+            if kill -3 ${_timer_pid}; then
+                # sigh, process still alive... and we don't want to leave
+                # stray processes lingering around.
+                kill -9 ${_timer_pid}
+            fi
+            break
+        fi
+    done
+}
+
 # Setup cleanup traps.
 trap 'cleanup_at_exit' 0
 trap 'rat4_exit_signal=SIGHUP;  Exit $E_HARD' 1
