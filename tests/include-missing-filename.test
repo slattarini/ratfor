@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Check that `include' complains correctly if te path of file to include
+# Check that `include' complains correctly if the path of file to include
 # is not specified.
 
 # WARNING: ratfor must not abort on failed include. Check for this, too.
