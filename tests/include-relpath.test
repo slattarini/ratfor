@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Check `include' on paths containing `.' or `..'
+
+. ./defs.sh || exit 99
+
+mkdir subdir
+echo 'include ./inc.r' > tstdot.r
+echo 'include ../inc.r' > subdir/tstdotdot.r
+echo 'foo' > inc.r
+
+run_RATFOR -e 0 tstdot.r || testcase_FAIL
+$FGREP 'include' stdout && testcase_FAIL
+$FGREP 'foo' stdout || testcase_FAIL
+
+cd subdir
+run_RATFOR -e 0 tstdotdot.r || testcase_FAIL
+$FGREP 'include' stdout && testcase_FAIL
+$FGREP 'foo' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
