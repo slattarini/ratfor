@@ -58,6 +58,11 @@
 #define TILDE       '~'
 #define UNDERLINE   '_'
 
+#define RADIX PERCENT /* `%' indicates alternate radix for numbers */
+
+#define MAXFUNCNAME 128     /* max funcname size */
+#define MAXTOK      1024    /* max chars in a token */
+
 #define STREQ(x, y) (strcmp((x),(y)) == 0)
 
 /* simulate booleans */
@@ -90,17 +95,6 @@ is_stmt_ending(int c)
 {
     return((is_newline(c) || c == SEMICOL) ? YES : NO);
 }
-
-#define MAXCHARS        10      /* characters for outnum */
-#define MAXDEF          2048    /* max chars in a defn */
-#define MAXSWITCH       300     /* max stack for switch statement */
-#define MAXFORSTK       200     /* max space for for reinit clauses */
-#define MAXNAME         64      /* filename and funcname size in gettok */
-#define MAXSTACK        100     /* max stack depth for parser */
-#define MAXTOK          1024    /* max chars in a token */
-#define NFILES          7       /* max depth of file inclusion */
-
-#define RADIX PERCENT /* `%' indicates alternate radix for numbers */
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

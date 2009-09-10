@@ -14,6 +14,9 @@
 
 #include "rat4-global.h"
 
+#define MAXSTRNAME MAXFUNCNAME /* max length for a string name */
+#define MAXSWITCH  300         /* max stack for switch statement */
+#define MAXFORSTK  200         /* max space for for reinit clauses */
 
 /*
  *  C O N S T A N T  S T R I N G S
@@ -515,10 +518,10 @@ retcode(void)
 void
 strdcl(void)
 {
-    char t, name[MAXNAME], init[MAXTOK];
+    char t, name[MAXSTRNAME], init[MAXTOK];
     int i, len;
 
-    t = gnbtok(name, MAXNAME);
+    t = gnbtok(name, MAXSTRNAME);
     if (t != ALPHA)
         synerr("missing string name.");
     if (gnbtok(init, MAXTOK) != LPAREN) {
