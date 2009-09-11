@@ -36,8 +36,6 @@ bar
 main2
 EOF
 
-set -x
-
 cat tst1.r
 cat included.r
 cat exp1
