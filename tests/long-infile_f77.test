@@ -4,21 +4,10 @@
 
 . ./defs.sh || exit 99
 
-require_fortran_compiler
+require_strong_fortran_compiler
 
 # a bigger number will slow down too much the fortran compiler
 startlab=6000
-
-# NOTE: *six* leading spaces here - they are necessary!
-$SED 's/^/      /' >sanity.f <<EOF
-program sanity
-  stop
-end
-EOF
-$F77 sanity.f -o sanity.exe 2>sanity.err
-$GREP "MAIN sanity:" sanity.err && \
-  testcase_SKIP "fort77 is too much limited to be used in this test case"
-rm -f sanity.*
 
 cat > tst.r <<EOF
 program longprog
