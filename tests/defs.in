@@ -233,7 +233,7 @@ testcase_HARDERROR() {
 }
 
 # Check that we have a valid fortran 77 compiler available, else 
-# cause the testcase to be SKIP'd
+# cause the testcase to be SKIP'd.
 require_fortran_compiler() {
     case "$F77" in
         "") testcase_SKIP "Fotran 77 compiler not available" \
@@ -241,6 +241,31 @@ require_fortran_compiler() {
       NONE) testcase_SKIP "Fotran 77 compiler should not be used" \
                           "(variable \`\$F77' is set to \`NONE')";;
     esac
+}
+
+# Check that we have available a valid fortran 77 compiler without silly
+# limits, else cause the testcase to be SKIP'd.
+require_strong_fortran_compiler() {
+    require_fortran_compiler
+    f77check_opwd=`pwd`
+    f77check_ok=no
+    mkdir f77check.d \
+      && cd f77check.d \
+      && $AWK 'BEGIN {
+            print "      program testf77"
+            for(i = 1; i <= 8192; i++)
+                printf("%-5d i%d = 1\n", i, i)
+            print "      stop"
+            print "      end"
+        }'> f77check.f </dev/null \
+      && "$F77" -o f77check.exe f77check.f \
+      && f77check_ok=yes
+    cd "$f77check_opwd"
+    rm_rf f77check.d
+    if test x"$f77check_ok" = x"no"; then
+        testcase_SKIP "Fotran 77 compiler \`$F77' is too limited" \
+                      "to run this test appropriately"
+    fi
 }
 
 # "Safer" version of `rm -rf', useful for directories which are either
