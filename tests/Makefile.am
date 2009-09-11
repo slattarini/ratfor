@@ -72,6 +72,8 @@ ALL_TESTS = \
   function-return.test \
   function-return_f77.test \
   goto_f77.test \
+  if_f77.test \
+  ifelse-ambiguity_f77.test \
   include-abspath.test \
   include-basic.test \
   include-cornercase.test \
