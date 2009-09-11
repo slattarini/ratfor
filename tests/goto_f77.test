@@ -1,0 +1,93 @@
+#!/bin/sh
+
+# Test the `goto' statement, and its compatibility with structured
+# statements (for, while, ...). Done by compiling and running the
+# generated fortran code
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+OK=100
+BAD=110
+DIG=120
+
+SEP=500
+cat > tst.r <<EOF
+program testfor
+    implicit none
+    integer x
+
+    write(*,$SEP)
+    
+    goto 11
+10  write(*,$BAD)10
+11  write(*,$OK) 11
+    
+    write(*,$SEP)
+    
+    if (1 == 1)
+        goto 21
+20  write(*,$BAD)20
+21  write(*,$OK)21
+    
+    write(*,$SEP)
+
+    for(x = 0; x < 9; x = x + 2) {
+30      goto 32
+31      continue
+        write(*,$DIG) x
+    }
+    goto 33
+32  continue
+    x = x + 1
+    goto 31
+33  continue
+
+    write(*,$SEP)
+    
+    goto 40
+    stop
+40  write(*,$OK) 40
+    
+    write(*,$SEP)
+    stop
+
+$OK  format('ok ',I2)
+$BAD format('bad ',I2)
+$DIG format('i',I1)
+$SEP format('~~~~~')
+end
+EOF
+
+cat > exp <<EOF
+~~~~~
+ok 11
+~~~~~
+ok 21
+~~~~~
+i1
+i4
+i7
+~~~~~
+ok 40
+~~~~~
+EOF
+
+cat tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+timer 10 run_CMD ./tst.exe -e 0 || testcase_FAIL
+mv stdout got
+
+cat got
+cat exp
+
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
