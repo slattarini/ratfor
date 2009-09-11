@@ -108,6 +108,7 @@ ALL_TESTS = \
   repeat-without-until_f77.test \
   startlabel-default.test \
   startlabel-user-choice.test \
+  stmt-stack-stress_f77.test \
   stress1_f77.test \
   stress2_f77.test \
   stress3_f77.test \
