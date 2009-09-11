@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Check that the `define' builtin is case-sensible w.r.t. filenames.
+
+. ./defs.sh || exit 99
+
+echo lower > case1
+echo 'include case1' >tst-1-1.r
+echo 'include CASE1' >tst-1-2.r
+
+echo upper > CASE2
+echo 'include case2' >tst-2-1.r
+echo 'include CASE2' >tst-2-2.r
+
+echo lower > case3
+echo upper > CASE3
+
+echo 'include case3; include CASE3' >tst-3.r
+
+cat > exp3 <<\EOF
+lower
+upper
+EOF
+
+my_run_rat4() {
+    n=$1
+    shift
+    cat tst-$n.r
+    run_RATFOR $* tst-$n.r || testcase_FAIL
+    mv stdout stdout.$n
+    mv stderr stderr.$n
+}
+
+my_run_rat4 1-1 -e 0 || testcase_FAIL
+$FGREP lower stdout.1-1 || testcase_FAIL
+my_run_rat4 1-2 -e 1 || testcase_FAIL
+$FGREP lower stdout.1-2 && testcase_FAIL
+
+my_run_rat4 2-1 -e 0 || testcase_FAIL
+$FGREP upper stdout.1-1 || testcase_FAIL
+my_run_rat4 2-2 -e 1 || testcase_FAIL
+$FGREP upper stdout.1-2 && testcase_FAIL
+
+my_run_rat4 3 -e 0 || testcase_FAIL
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout.3 >got3
+$DIFF_U exp3 got3 || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

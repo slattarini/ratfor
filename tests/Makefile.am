@@ -19,6 +19,9 @@ XFAIL_TESTS += no-double-quotes.test
 # Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
 XFAIL_TESTS += define-case-sensibility.test
 
+# Currently, ratfor builtin `include' is case-insensible w.r.t. filenames
+XFAIL_TESTS += include-case-sensible.test
+
 # Underscores are not yet recognized as alphanumeric characters by ratfor;
 # this should be fixed soon
 XFAIL_TESTS += define-underscores.test
@@ -76,6 +79,7 @@ ALL_TESTS = \
   ifelse-ambiguity_f77.test \
   include-abspath.test \
   include-basic.test \
+  include-case-sensible.test \
   include-cornercase.test \
   include-defined.test \
   include-fail.test \
