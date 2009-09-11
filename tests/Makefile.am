@@ -65,10 +65,13 @@ ALL_TESTS = \
   define-whitespaces.test \
   devnull-input.test \
   empty-input.test \
+  for_f77.test \
+  forever_f77.test \
   function-name-invalid.test \
   function-name-missing.test \
   function-return.test \
   function-return_f77.test \
+  goto_f77.test \
   include-abspath.test \
   include-basic.test \
   include-cornercase.test \
@@ -92,11 +95,15 @@ ALL_TESTS = \
   line-continuation_f77.test \
   long-infile.test \
   long-infile_f77.test \
+  nested-loops_f77.test \
   no-curly-brackets.test \
   no-double-quotes.test \
   no-semicolons.test \
   no-tabs.test \
   rel-transl.test \
+  repeat-until_f77.test \
+  repeat-without-until.test \
+  repeat-without-until_f77.test \
   startlabel-default.test \
   startlabel-user-choice.test \
   stress1_f77.test \
@@ -116,7 +123,8 @@ ALL_TESTS = \
   verbatim-stress.test \
   verbatim-stress_f77.test \
   verbatim.test \
-  verbatim_f77.test
+  verbatim_f77.test \
+  while_f77.test
 
 EXTRA_DIST = $(TESTS)
 

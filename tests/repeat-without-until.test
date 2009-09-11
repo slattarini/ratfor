@@ -1,0 +1,12 @@
+#!/bin/sh
+
+# Check that the `repeat' statement does not require a following until
+
+. ./defs.sh || exit 99
+
+echo 'repeat nothing' >tst.r
+run_RATFOR -e 0 tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
