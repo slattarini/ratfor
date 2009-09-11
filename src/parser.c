@@ -15,54 +15,6 @@
  * P A R S E R
  */
 
-static void
-unstak(int *sp, int lextyp[], int labval[], char token)
-{
-    int tp;
-
-    for (tp = *sp; tp > 0; tp--) {
-        switch(lextyp[tp])
-        {
-        case LBRACE:
-        case LEXSWITCH:
-            goto out;
-            break;
-        case LEXIF:
-            if (token == LEXELSE)
-                goto out;
-#ifdef F77
-            ifend();
-#else
-            outcon(labval[tp]);
-#endif /* F77 */
-            break;
-        case LEXELSE:
-            if (*sp > 1)
-                tp--;
-#ifdef F77
-            ifend();
-#else
-            outcon(labval[tp]+1);
-#endif /* F77 */
-            break;
-        case LEXDO:
-            dostat(labval[tp]);
-            break;
-        case LEXWHILE:
-            whiles(labval[tp]);
-            break;
-        case LEXFOR:
-            fors(labval[tp]);
-            break;
-        case LEXREPEAT:
-            untils(labval[tp], token);
-            break;
-        } /* switch */
-    } /* for */
-out:
-    *sp = tp;
-}
-
 void
 init(int xstartlab, int xkeepcomments, const char *xfilename)
 {
@@ -86,13 +38,59 @@ init(int xstartlab, int xkeepcomments, const char *xfilename)
     set_starting_label(xstartlab);
 }
 
+/* shared among unstak() and parser() */
+static int sp, labval[MAXSTACK], lextyp[MAXSTACK];
+
+static void
+unstak(char token)
+{
+    for (; sp > 0; sp--) {
+        switch(lextyp[sp])
+        {
+        case LBRACE:
+        case LEXSWITCH:
+            return;
+            break;
+        case LEXIF:
+            if (token == LEXELSE)
+                return;
+#ifdef F77
+            ifend();
+#else
+            outcon(labval[sp]);
+#endif /* F77 */
+            break;
+        case LEXELSE:
+            if (sp > 1)
+                sp--;
+#ifdef F77
+            ifend();
+#else
+            outcon(labval[sp]+1);
+#endif /* F77 */
+            break;
+        case LEXDO:
+            dostat(labval[sp]);
+            break;
+        case LEXWHILE:
+            whiles(labval[sp]);
+            break;
+        case LEXFOR:
+            fors(labval[sp]);
+            break;
+        case LEXREPEAT:
+            untils(labval[sp], token);
+            break;
+        } /* switch */
+    } /* for */
+}
+
 void
 parse(void)
 {
     char lexstr[MAXTOK];
-    int lab, labval[MAXSTACK], lextyp[MAXSTACK], sp, i, token;
+    int lab, i, token;
 
-    sp = 0;
     lextyp[0] = EOF;
     while ((token = lex(lexstr)) != EOF) {
         
@@ -190,7 +188,7 @@ parse(void)
             }
             token = lex(lexstr); /* peek at next token */
             pbstr(lexstr);
-            unstak(&sp, lextyp, labval, token);
+            unstak(token);
         }
     } /* while read next token */
     if (sp != 0)
