@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Check the `INCLUDE' is not an alias for `include'.
+
+. ./defs.sh || exit 99
+
+echo 'FAILURE' >notincluded.r
+echo 'INCLUDE notincluded.r' >tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+$FGREP INCLUDE stdout || testcase_FAIL
+$FGREP -i failure stdout && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

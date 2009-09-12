@@ -24,7 +24,7 @@ Body
 NestedIncludeEnd
 EOF
 
-tolower > exp <<\EOF
+cat > exp <<\EOF
 TopStart
 IncludeStart
 NestedIncludeStart

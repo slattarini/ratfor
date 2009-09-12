@@ -12,14 +12,18 @@ define L1 L3
 :L0:
 EOF
 
-tolower >exp1 <<EOF
+cat >exp1 <<EOF
 :L2:
 :L3:
 EOF
 
 run_RATFOR -e 0 tst1.r || testcase_FAIL
-$GREP -v '^[cC]' stdout | ws_normalize | tolower > got1
+$GREP -v '^[cC]' stdout | ws_normalize > got1
 rm -f stdout
+
+cat exp1
+cat got1
+
 $DIFF_U exp1 got1 || testcase_FAIL
 
 # the same test as above, with deeper nesting
@@ -43,7 +47,7 @@ define bar quux
 :L0:
 EOF
 
-tolower >exp2 <<EOF
+cat >exp2 <<EOF
 :L9:
 :foo:
 :bar:
@@ -51,8 +55,11 @@ tolower >exp2 <<EOF
 EOF
 
 run_RATFOR -e 0 tst2.r || testcase_FAIL
-$GREP -v '^[cC]' stdout | ws_normalize | tolower > got2
+$GREP -v '^[cC]' stdout | ws_normalize > got2
 rm -f stdout
+
+cat exp2
+cat got2
 
 $DIFF_U exp2 got2 || testcase_FAIL
 

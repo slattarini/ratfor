@@ -6,7 +6,7 @@
 
 cat >tst.r <<EOF
 define sym1 foo
-define sym2 bar
+define sym2 BAR
 define SYM2 quux
 sym1
 SYM1
@@ -16,8 +16,8 @@ EOF
 
 cat >exp <<EOF
 foo
-sym1
-bar
+SYM1
+BAR
 quux
 EOF
 

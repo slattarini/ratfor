@@ -11,10 +11,12 @@ x1 sym1
 x2 sym2
 EOF
 
+cat tst.r
+
 run_RATFOR -e 0 tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 
-$FGREP -i 'define' stdout || testcase_FAIL
+$FGREP 'DEFINE' stdout || testcase_FAIL
 $GREP 'x1 *sym1' stdout || testcase_FAIL
 $GREP 'x2 *sym2' stdout || testcase_FAIL
 $GREP 'x.*foo' stdout && testcase_FAIL
