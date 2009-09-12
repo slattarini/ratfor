@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Check that ratfor accept a non-regular file, namely `/dev/null', as its
+# outfile
+
+. ./defs.sh || exit 99
+
+echo 'junk' > tst.r
+
+run_RATFOR -e 0 -- -o /dev/null tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

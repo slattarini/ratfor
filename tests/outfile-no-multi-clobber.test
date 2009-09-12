@@ -1,0 +1,24 @@
+#!/bin/sh
+
+# Check that ratfor does not unnecessarily overwrite files when multiple
+# `-o' options are given
+
+. ./defs.sh || exit 99
+
+mkdir out.d
+
+echo 'clobbered' > tst.r
+echo 'safe' > safe
+cp safe o1
+cp safe o2
+cp safe o3
+
+run_RATFOR -e 0 -- -o o1 -o o2 -o o3 tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+$DIFF_U o1 safe || { (echo '~~~~~') 2>/dev/null; testcase_FAIL; }
+$DIFF_U o2 safe || { (echo '~~~~~') 2>/dev/null; testcase_FAIL; }
+$GREP clobbered o3 || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

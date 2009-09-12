@@ -1,5 +1,13 @@
 List of user-visible changes of Public Domain Ratfor.
 
+New in XXX
+-----------
+ 
+ * The handling of the `-o' has been improved, so that error messages are
+   more detailed, `-o -' sends output to standard output, and files are no
+   more unnecessarily overwritten if multiple `-o' options are specified
+   (only the last one is honoured).
+
 New in 1.0i
 -----------
  

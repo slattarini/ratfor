@@ -41,7 +41,7 @@ int
 main(int argc, char *argv[])
 {
     int c, errflg = NO;
-    const char *progname = argv[0], *infile = "-";
+    const char *progname = argv[0], *infile = "-", *outfile = "-";
 
     int startlab = 23000; /* default start label */
     int keep_comments = NO;
@@ -54,12 +54,11 @@ main(int argc, char *argv[])
                 startlab = atoi(optarg);
                 break;
             case 'o':
-                /* XXX make this "lazily" executed later */
-                if ((freopen(optarg, "w", stdout)) == NULL)
-                    fatal("%s: cannot open for writing", optarg); /*XXX: perror*/
+                outfile = optarg;
                 break;
             default:
                 errflg = YES;
+                break;
         }
     }
 
@@ -77,6 +76,13 @@ main(int argc, char *argv[])
 
     /* intialize preprocessor status */
     init(startlab, keep_comments, infile);
+
+    /* open output file for writing */
+    if (!STREQ(outfile, "-"))
+        if ((freopen(outfile, "w", stdout)) == NULL)
+            fatal("%s: cannot open for writing: %s\n", outfile,
+                  strerror(errno));
+
     /* leave our fingerprint in the generated output */
     printf("C Output from Public Domain Ratfor, version %s\n",
            PACKAGE_VERSION);

@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Check that ratfor overwrite its output file.
+
+. ./defs.sh || exit 99
+
+echo 'CLOBBER ME' >tst.out
+echo 'reborn' > tst.r
+run_RATFOR -e 0 -- -o tst.out tst.r || testcase_FAIL
+cat tst.out
+$FGREP 'CLOBBER ME' tst.out && testcase_FAIL
+$FGREP 'reborn' tst.out || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
