@@ -97,6 +97,15 @@ ALL_TESTS = \
   no-double-quotes.test \
   no-semicolons.test \
   no-tabs.test \
+  outfile-cantcreate-fail.test \
+  outfile-dash-is-stdout.test \
+  outfile-devnull.test \
+  outfile-directory-fail.test \
+  outfile-no-multi-clobber.test \
+  outfile-no-useless-overwrite.test \
+  outfile-overwrite.test \
+  outfile-unwritable-fail.test \
+  outfile.test \
   rel-transl.test \
   repeat-until_f77.test \
   repeat-without-until.test \

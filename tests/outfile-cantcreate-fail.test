@@ -1,0 +1,18 @@
+#!/bin/sh
+
+# Check that ratfor barfs when trying to create output file in an
+# unwritable directory.
+
+. ./defs.sh || exit 99
+
+mkdir tst.d
+chmod a-w tst.d
+
+echo 'junk' > tst.r
+
+run_RATFOR -e 1 -- -o tst.d/tst.out tst.r || testcase_FAIL
+$GREP 'tst\.d/tst\.out:.* [pP]ermission denied' stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

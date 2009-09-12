@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Check that `-o -' tells ratfor to write on standard output
+
+. ./defs.sh || exit 99
+
+echo 'junk123' > tst.r
+
+run_RATFOR -e 0 -- -o - tst.r || testcase_FAIL
+test -f ./-  && testcase_FAIL
+test -s stderr && testcase_FAIL
+$GREP 'junk123' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

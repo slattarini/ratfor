@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Check that ratfor barfs if given an unwritable file output file.
+
+. ./defs.sh || exit 99
+
+: > tst.out
+chmod a-w tst.out
+echo 'junk' > tst.r
+
+run_RATFOR -e 1 -- -o tst.out tst.r || testcase_FAIL
+$GREP 'tst\.out:.* [pP]ermission denied' stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

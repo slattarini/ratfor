@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Check that ratfor barfs if given a directory as output file.
+
+. ./defs.sh || exit 99
+
+mkdir tst.d
+echo 'junk' > tst.r
+
+run_RATFOR -e 1 -- -o tst.d tst.r || testcase_FAIL
+$GREP 'tst\.d:.* [iI]s a directory' stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
