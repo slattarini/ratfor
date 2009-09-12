@@ -3,9 +3,13 @@ List of user-visible changes of Public Domain Ratfor.
 New in XXX
 -----------
  
- * The uppercase `DEFINE' is no more recognized as an alias for the builtin
-   `define' (WARNING: presently, this is only half-true, do to a bug caused
-   by character folding to lowercase done at a wrong time).
+ * Ratfor is now fully case-sensible, both respect to its input and to its
+   output.  In particular, this means that output is no more converted to
+   lowercase (this conversion was tricky, since e.g. strings and comments
+   had to be left unchanged, and was cause of some bugs and dark corner
+   cases).  This new behaviour shouldn't cause problems, as modern fortran
+   compilers, although case-insensible, are smart enough not to barf on
+   mixed-case input.
  * The line numbers in error messages should now be always correct, even
    when inclusion of files or expansion of macros are involved. Alas, this
    was not the case before.

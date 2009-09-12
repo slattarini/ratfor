@@ -29,7 +29,7 @@ enter3
 exit3
 EOF
 
-tolower > exp <<\EOF
+cat > exp <<\EOF
 enter0
 enter1
 enter2
@@ -43,6 +43,9 @@ EOF
 run_RATFOR -e 0 top.r || testcase_FAIL
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
+cat got
 
 $DIFF_U exp got || testcase_FAIL
 

@@ -2,24 +2,6 @@ List of BUGS for the public domain ratfor preprocessor.
 
  ---
 
-The `include' statement coerce the name of the file to include to lowercase.
-This is crazy on case-sensible file-systems. Must be fixed ASAP.
-
- ---
-
-The builtin `define' is case-insensible w.r.t. symbol names, so that a
-statement like:
-  define SYM "value"
-defines both the symbols `SYM' and `sym' to "value"!
-
-  ---
-
-Lines starting with `%' should be copied verbatim to the output (apart
-from stripping the `%', of course). But currently they are still subjected
-to line wrapping.
-  
-  ---
-
 This is a limitation rather than a bug.
 
 Defining a symbol (with the `define' builtin) to an expression containing

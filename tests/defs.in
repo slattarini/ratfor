@@ -145,27 +145,6 @@ ws_strip() { $SED -e "s/^$ws0p//" -e "s/$ws0p$//"; }
 # and strip leading and trailing white spaces
 ws_normalize() { $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"; }
 
-# Simple subroutines for test manipulation, from bot strings and stdin.
-
-getstr() {
-    case $# in
-        0) cat;;
-        *) echo "$*";;
-    esac
-}
-
-# convert standard input (or given args, if any) to upper case
-toupper() {
-    getstr ${1+"$@"} | \
-      tr abcdefghijklmnopqrstuvwxyz ABCDEFGHIJKLMNOPQRSTUVWXYZ
-}
-
-# convert standard input (or given args, if any) to lower case
-tolower() {
-    getstr ${1+"$@"} | \
-      tr ABCDEFGHIJKLMNOPQRSTUVWXYZ abcdefghijklmnopqrstuvwxyz
-}
-
 # We use a trap for cleanup.  This requires us to go through hoops to
 # get the right exit status transported through signals.  Also, more
 # hoops are required since there are shells (even some modern version
@@ -263,8 +242,7 @@ require_strong_fortran_compiler() {
     cd "$f77check_opwd"
     rm_rf f77check.d
     if test x"$f77check_ok" = x"no"; then
-        testcase_SKIP "Fotran 77 compiler \`$F77' is too limited" \
-                      "to run this test appropriately"
+        testcase_SKIP "Fotran 77 compiler \`$F77' is too limited"
     fi
 }
 

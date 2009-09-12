@@ -75,18 +75,6 @@ itoc(int n, char str[], int size)
 }
 
 /*
- * fold - convert alphabetic token to single case
- *
- */
-void
-fold(char token[])
-{
-    int i;
-    for (i = 0; token[i] != EOS; i++)
-        token[i] = tolower(token[i]);
-}
-
-/*
  * scopy - copy string at from[i] to to[j]
  *
  */

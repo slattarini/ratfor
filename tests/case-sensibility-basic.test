@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Basic checks about case-sensibility of ratfor
+
+. ./defs.sh || exit 99
+
+
+echo fooBAR > tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+
+$FGREP 'FOO' stdout && testcase_FAIL
+$FGREP 'bar' stdout && testcase_FAIL
+$FGREP 'fooBAR' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

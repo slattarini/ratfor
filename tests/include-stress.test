@@ -26,7 +26,7 @@ ${TAB}  include inc4.r ${TAB}
 @MARK5@
 EOF
 
-tolower > exp <<\EOF
+cat > exp <<\EOF
 @MARK1@
 ONE
 @MARK2@

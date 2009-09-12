@@ -16,12 +16,6 @@ XFAIL_TESTS = # updated later
 # should be outputted.
 XFAIL_TESTS += no-double-quotes.test
 
-# Currently, ratfor builtin `define' is case-insensible w.r.t. symbol names
-XFAIL_TESTS += define-case-sensibility.test
-
-# Currently, ratfor builtin `include' is case-insensible w.r.t. filenames
-XFAIL_TESTS += include-case-sensible.test
-
 # Underscores are not yet recognized as alphanumeric characters by ratfor;
 # this should be fixed soon
 XFAIL_TESTS += define-underscores.test
@@ -33,17 +27,13 @@ XFAIL_TESTS += \
   verbatim-only-line-begin.test \
   verbatim-stress.test
 
-# This test still fails; this is due to the folding to lowercase of output
-# characters done at the wrong time -- a problem which is causing many
-# others failures and bugs, and that will be hopefully fixed soon.
-XFAIL_TESTS += define-no-uppercase-alias.test
- 
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
 # in `CheckTestList.am'.
 ALL_TESTS = \
   000sanity.test \
+  case-sensibility-basic.test \
   comments-no-hang.test \
   comments.test \
   define-balanced-paren.test \
@@ -86,6 +76,7 @@ ALL_TESTS = \
   include-missing-filename.test \
   include-nested-deep.test \
   include-nested.test \
+  include-no-uppercase-alias.test \
   include-recursive.test \
   include-relpath.test \
   include-stress.test \

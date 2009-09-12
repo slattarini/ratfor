@@ -213,8 +213,9 @@ gtok(char lexstr[], int toksiz, FILE *fp)
         tok = DIGIT;
     }
     else if (c == SQUOTE || c == DQUOTE) {
-        /* XXX: handle escaepd quotes inside a string */
+        /* XXX: handle escaped quotes inside a string */
         for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
+            /* XXX: but is not this already done by io.c:ngetch()? */
             if (lexstr[i] == UNDERLINE) {
                 c = ngetch(fp);
                 if (is_newline(c)) {
@@ -231,6 +232,7 @@ gtok(char lexstr[], int toksiz, FILE *fp)
                 break;
             }
         }
+        tok = STRING;
     }
     else if (c == PERCENT) {
         /* XXX: make this lazily done */
@@ -347,10 +349,6 @@ deftok(char token[], int toksiz, FILE *fp)
             }
         }
     }
-    /* XXX: better to move this in fortran-generating code, or something
-     * like that... */
-    if (t == ALPHA) /* convert to single case */
-        fold(token);
     return(t);
 }
 
@@ -361,7 +359,7 @@ deftok(char token[], int toksiz, FILE *fp)
 
 
 /*
- * gettok - get token; handles file inclusion and fix line numbers
+ * gettok - get token, handle file inclusion
  *
  */
 int

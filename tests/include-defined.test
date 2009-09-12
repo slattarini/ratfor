@@ -16,7 +16,7 @@ include BAR
 main2
 EOF
 
-tolower > exp <<\EOF
+cat > exp <<\EOF
 main1
 foo1
 foo2
