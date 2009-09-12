@@ -1,8 +1,8 @@
 /*< 
-  ratfor77
+  Public Domain Ratfor
  
 Usage
-  ratfor77 -o output.f input.r pars
+  ratfor [options] [-o output.f] [input.r]
  
 Input Parameters
   l - flag [-l n]  user sets strating label n
@@ -35,44 +35,68 @@ Copyright
 #include "parser.h"
 #include <unistd.h> /* for getopt */
 
+static const char *progname = NULL;
+
+static void
+usage_error(const char *msg)
+{
+    if (msg != NULL)
+        fprintf(stderr, "%s: %s\n", progname, msg);
+    fprintf(stderr, "Usage: %s [-C] [-l STARTLAB] [-o OUTFILE] [INFILE]\n",
+                    progname);
+    exit(E_USAGE);
+}
+
+/* useful to avoid code duplication in option parsing code */
+#define OPTERROR(msg) \
+    do { \
+        fprintf(stderr, "%s: `-%c': " msg "\n", progname, optopt); \
+        errflg = YES; \
+    } while(0);
+
 int
 main(int argc, char *argv[])
 {
     int c, errflg = NO;
-    const char *progname = argv[0], *infile = "-", *outfile = "-";
+    const char *infile = "-", *outfile = "-";
+    
+    progname = argv[0];
 
     int startlab = 23000; /* default start label */
     int keep_comments = NO;
-    while ((c = getopt(argc, argv, "Cl:o:")) != EOF) {
+    opterr = 0; /* we report option parsing errors by ourselves */
+    while ((c = getopt(argc, argv, ":Cl:o:")) != -1) {
         switch (c) {
-            case 'C':
-                keep_comments = YES; /* keep comments in src */
-                break;
-            case 'l': /* user sets label */
-                startlab = atoi(optarg);
-                break;
-            case 'o':
-                outfile = optarg;
-                break;
-            default:
-                errflg = YES;
-                break;
+        case 'C':
+            keep_comments = YES; /* keep comments in src */
+            break;
+        case 'l': /* user sets label */
+            startlab = atoi(optarg);
+            break;
+        case 'o':
+            outfile = optarg;
+            break;
+        case '?':
+            OPTERROR("invalid option");
+            break;
+        case ':':
+            OPTERROR("option requires an argument");
+            break;
+        default:
+            abort(); /* can't happen */
+            break;
         }
     }
 
-    if (errflg) {
-        fprintf(stderr,
-                "Usage: %s [-C] [-l STARTLAB] [-o OUTFILE] [INFILE]\n",
-                progname);
-        exit(E_USAGE);
-    }
+    if (errflg)
+        usage_error(NULL);
 
-    /* TODO error if two or more args given */
-
-    if (optind < argc)
+    if (argc == optind + 1)
         infile = argv[optind];
+    else if (argc > optind + 1)
+        usage_error("too many arguments.");
 
-    /* intialize preprocessor status */
+    /* intialize preprocessor status, open input file */
     init(startlab, keep_comments, infile);
 
     /* open output file for writing */
