@@ -1,8 +1,5 @@
 #include "rat4-common.h"
-
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include "rat4-global.h"
 
 #include "utils.h"
 #include "io.h"
@@ -11,8 +8,6 @@
 #include "lex-symbols.h"
 #include "labgen.h"
 #include "codegen.h"
-
-#include "rat4-global.h"
 
 #define MAXSTRNAME MAXFUNCNAME /* max length for a string name */
 #define MAXSWITCH  300         /* max stack for switch statement */

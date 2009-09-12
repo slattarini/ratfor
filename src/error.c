@@ -1,14 +1,13 @@
 #include "rat4-common.h"
+#include "rat4-global.h"
 
 #include <stdarg.h>
-#include <stdlib.h>
 
 #include "utils.h"
 #include "error.h"
-#include "rat4-global.h"
 
 /* Global program exit status, declared in error.h */
-int exit_status = 0;
+int exit_status = EXIT_SUCCESS;
 
 
 /*
@@ -32,7 +31,7 @@ int exit_status = 0;
 
 #define SYNERR_POSTAMBLE() \
     fputc('\n', stderr); \
-    exit_status = 1 /* do not add `;' */
+    exit_status = EXIT_FAILURE /* do not add `;' */
 
 #define SYNERR_PREAMBLE_VARIADIC(lineno_offset) \
     va_list ap; \
@@ -56,7 +55,7 @@ fatal(const char *msg, ...)
     fflush(stdout);
     vfprintf(stderr, msg, ap);
     va_end(ap);
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 
@@ -108,7 +107,7 @@ synerr_fatal(const char *msg, ...)
     SYNERR_PREAMBLE_VARIADIC(0);
     SYNERR_PRINTERR_VARIADIC();
     SYNERR_POSTAMBLE_VARIADIC();
-    exit(1);
+    exit(EXIT_FAILURE);
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */

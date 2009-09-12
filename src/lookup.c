@@ -4,8 +4,6 @@
  */
 #include "rat4-common.h"
 
-#include <stdlib.h>
-
 #include "utils.h"
 #include "lookup.h"
 

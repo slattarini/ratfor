@@ -31,11 +31,9 @@ Copyright
 
 #include "rat4-common.h"
 
-#include <stdlib.h>
-#include <unistd.h> /* for getopt */
-
 #include "error.h"
 #include "parser.h"
+#include <unistd.h> /* for getopt */
 
 int
 main(int argc, char *argv[])
@@ -64,9 +62,9 @@ main(int argc, char *argv[])
 
     if (errflg) {
         fprintf(stderr,
-                "Usage: %s [-C] [-l STARTLAB] [-o OUTFILE] [INFILE...]\n",
+                "Usage: %s [-C] [-l STARTLAB] [-o OUTFILE] [INFILE]\n",
                 progname);
-        exit(2);
+        exit(E_USAGE);
     }
 
     /* TODO error if two or more args given */

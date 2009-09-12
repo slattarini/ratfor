@@ -1,11 +1,9 @@
 #include "rat4-common.h"
 
-#include <stdlib.h>
-#include <string.h>
-#include <ctype.h>
-
 #include "utils.h"
 #include "lookup.h"
+
+#include <ctype.h>
 
 
 /*

@@ -2,7 +2,6 @@
 
 #include "rat4-common.h"
 
-#include <stdlib.h>
 #include <ctype.h>
 
 #include "utils.h"
