@@ -9,7 +9,8 @@ chmod a-w tst.out
 echo 'junk' > tst.r
 
 run_RATFOR -e 1 -- -o tst.out tst.r || testcase_FAIL
-$GREP 'tst\.out:.* [pP]ermission denied' stderr || testcase_FAIL
+rx='tst\.out: cannot open for writing: [pP]ermission denied'
+$GREP  "$rx" stderr || testcase_FAIL
 
 testcase_PASS
 

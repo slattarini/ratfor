@@ -8,7 +8,8 @@ mkdir tst.d
 echo 'junk' > tst.r
 
 run_RATFOR -e 1 -- -o tst.d tst.r || testcase_FAIL
-$GREP 'tst\.d:.* [iI]s a directory' stderr || testcase_FAIL
+rx='tst\.d: cannot open for writing: [iI]s a directory'
+$GREP "$rx" stderr || testcase_FAIL
 
 testcase_PASS
 
