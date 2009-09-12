@@ -1,6 +1,6 @@
 List of user-visible changes of Public Domain Ratfor.
 
-New in XXX
+New in 1.0i
 -----------
  
  * Ratfor is now fully case-sensible, both respect to its input and to its
@@ -36,6 +36,7 @@ New in XXX
  * If GNU make is called on the unconfigured ratfor tree, it automatically
    runs autoreconf and ./configure before trying to build the given
    targets.
+ * Testuite coverage increased, with many new test scripts added.
  * Added the customary installation instruction (in file `INSTALL').
 
 New in 1.0h
