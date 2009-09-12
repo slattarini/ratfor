@@ -4,7 +4,9 @@
 
 #include <config.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
+#define E_USAGE 2
 
 #define ACCENT      '`' /* backtick */
 #define AND         '&'
