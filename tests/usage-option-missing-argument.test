@@ -1,0 +1,13 @@
+#!/bin/sh
+
+# Check that ratfor barfs if the `-o' option is given without an argument
+
+. ./defs.sh || exit 99
+
+run_RATFOR -e 2 -i /dev/null -- -o || testcase_FAIL
+$GREP "^$ratfor_rx: \`-o': option requires an argument" stderr || testcase_FAIL
+$GREP "^Usage:" stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

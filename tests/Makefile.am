@@ -123,6 +123,9 @@ ALL_TESTS = \
   synerr-nonfatal.test \
   synerr-nonfatal_f77.test \
   synerr-stdin.test \
+  usage-option-missing-argument.test \
+  usage-option-unknown.test \
+  usage-too-many-args.test \
   verbatim-in-define.test \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
