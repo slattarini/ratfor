@@ -8,6 +8,11 @@ New in XXX
     - `-o -' sends output to standard output
     - files are no more unnecessarily overwritten if multiple `-o'
       options are specified (only the last one is honoured).
+ * The error messages have been generally improved and made more detailed.
+   A prominent example of this improvement is the increased level of
+   details in messages about I/O failures, with the explicit indication of
+   the failure's reasons, e.g. `No such file or directory' or `Permission
+   denied'.
  * Now ratfor complains if given more than one non-option arguments,
    instead of silently discarding all the extra arguments.
  * Messages about usage errors involving unknown option or options called
