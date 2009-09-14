@@ -72,7 +72,9 @@ ALL_TESTS = \
   include-case-sensible.test \
   include-cornercase.test \
   include-defined.test \
-  include-fail.test \
+  include-fail-directory.test \
+  include-fail-nonexistent.test \
+  include-fail-unreadable.test \
   include-missing-filename.test \
   include-nested-deep.test \
   include-nested.test \
@@ -80,6 +82,9 @@ ALL_TESTS = \
   include-recursive.test \
   include-relpath.test \
   include-stress.test \
+  infile-directory-fail.test \
+  infile-nonexistent-fail.test \
+  infile-unreadable-fail.test \
   integers-many-bases.test \
   integers-many-bases_f77.test \
   keepcomment.test \

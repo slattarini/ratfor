@@ -6,6 +6,7 @@
 
 #include "utils.h"
 #include "io.h"
+#include "xopen.h"
 #include "error.h"
 #include "lookup.h"
 #include "lex-symbols.h"
@@ -367,6 +368,8 @@ gettok(char token[], int toksiz)
     int t, i, j;
     int tok;
     char path[MAXPATH];
+    const char *fn;
+    FILE *fp;
 
     for ( ; level >= 0; level--) {
         while((tok = deftok(token, toksiz, infile[level])) != EOF) {
@@ -381,9 +384,8 @@ gettok(char token[], int toksiz)
                 putbak(BLANK);
                 return(tok);
             }
-            if (!STREQ(token, incl)) {
+            if (!STREQ(token, incl))
                 return(tok);
-            }
             /* deal with file inclusion */
             for (i = 0; ; i = strlen(path)) {
                 /* XXX possible segfault here */
@@ -402,22 +404,20 @@ gettok(char token[], int toksiz)
                 /* skip leading white space in path */
                 for (j = 0; is_blank(path[j]); j++)
                     /* empty body */;
-                filename[level+1] = strsave(&path[j]);
-                if (filename[level+1] == NULL) {
+                if ((fn = strsave(&path[j])) == NULL) {
                     synerr_include("memory error.");
                     goto include_done;
                 }
-                if (*filename[level+1] == EOS) {
+                if (*fn == EOS) {
                     synerr_include("missing filename.");
                     goto include_done;
                 }
-                infile[level+1] = fopen(filename[level+1], "r");
-                if (infile[level+1] == NULL) {
-                    synerr_include("I/O error.");
+                if ((fp = xopen(fn, IO_MODE_READ, synerr_include)) == NULL)
                     goto include_done;
-                }
-                lineno[level+1] = 1;
                 ++level;
+                lineno[level] = 1;
+                filename[level] = fn;
+                infile[level] = fp;
 include_done:
                 /* nothing else to do */;
             }

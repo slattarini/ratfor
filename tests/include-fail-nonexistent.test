@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Check that `include' fails on non-existent files.
+# WARNING: ratfor must not abort on failed include. Check for this, too.
+
+. ./defs.sh || exit 99
+
+ls -l none.r 2>&1 || :
+test ! -f none.r
+
+cat > tst.r <<EOF
+include none.r
+#2
+#3
+include none.r
+stillalive
+EOF
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+r='include: none\.r: cannot open for reading: [nN]o such file or directory'
+$GREP "^tst\\.r:1: $r" stderr || testcase_FAIL
+$GREP "^tst\\.r:4: $r" stderr || testcase_FAIL
+$GREP 'stillalive' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

@@ -20,6 +20,7 @@ ratfor_SOURCES = \
 	utils.c utils.h \
 	error.c error.h \
 	io.c io.h \
+	xopen.c xopen.h \
 	lookup.c lookup.h \
 	tokenizer.c tokenizer.h \
 	lexer.h \

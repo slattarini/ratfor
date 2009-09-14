@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Check that `include' fails on directories.
+# WARNING: ratfor must not abort on failed include. Check for this, too.
+
+. ./defs.sh || exit 99
+
+mkdir dir.d
+ls -ld dir.d 2>&1 || :
+test -d dir.d
+
+cat > tst.r <<EOF
+include dir.d
+#2
+include dir.d
+stillalive
+EOF
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+r='include: dir\.d: cannot open for reading: [iI]s a directory'
+$GREP "^tst\\.r:1: $r" stderr || testcase_FAIL
+$GREP "^tst\\.r:3: $r" stderr || testcase_FAIL
+$GREP 'stillalive' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,13 +1,15 @@
 #include "rat4-common.h"
 #include "rat4-global.h"
 
-#include "io.h"
-#include "error.h"
+#include "io.h"         /* for `pbstr()' */
+#include "error.h"      /* for `synerr*()' */
 #include "tokenizer.h"
 #include "lexer.h"
 #include "labgen.h"
-#include "codegen.h" /* we need to set the starting label */
+#include "codegen.h"    /* we need to set the starting label */
+#include "xopen.h"      /* for xopen_or_die() */
 #include "parser.h"
+
 
 #define MAXSTACK 1024  /* max stack depth for parser */
 
@@ -22,12 +24,9 @@ init(int xstartlab, int xkeepcomments, const char *xfilename)
 
     keep_comments = xkeepcomments;
 
-    if (STREQ(xfilename, "-")) {
-        xinfile = stdin;
-        xfilename = "(stdin)";
-    } else if ((xinfile = fopen(xfilename, "r")) == NULL) {
-        fatal("%s: cannot open for reading\n", xfilename); /*XXX: perror?*/
-    }
+    xinfile = xopen(xfilename, IO_MODE_READ, fatal);
+    if (STREQ(xfilename, "-"))
+        xfilename = "(stdin)"; /* this is clearer in error messages */
 
     level = 0;                  /* file control */
     lineno[0] = 1;              /* line count of first file */

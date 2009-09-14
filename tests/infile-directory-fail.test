@@ -1,0 +1,16 @@
+#!/bin/sh
+
+# Check that ratfor barfs if input file is a directory.
+
+. ./defs.sh || exit 99
+
+mkdir tst.d
+
+run_RATFOR -e 1 -- tst.d || testcase_FAIL
+rx='tst\.d: cannot open for reading: [iI]s a directory'
+$GREP "$rx" stderr || testcase_FAIL
+test -s stdout && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
