@@ -10,7 +10,6 @@
 #include "xopen.h"      /* for xopen_or_die() */
 #include "parser.h"
 
-
 #define MAXSTACK 1024  /* max stack depth for parser */
 
 /*
