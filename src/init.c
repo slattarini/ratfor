@@ -26,7 +26,7 @@ init(int x_startlab, int x_keep_comments, const char *x_filename)
     filename[0] = x_filename;   /* filename of first file */
     infile[0] = x_infile;       /* file handle of first file */
     keep_comments = x_keep_comments;
-    fcname[0] = EOS;            /* current function name */
+    current_function_name[0] = EOS;
     set_starting_label(x_startlab);
 }
 

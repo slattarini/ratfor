@@ -495,7 +495,7 @@ retcode(void)
     if (!is_stmt_ending(t) && t != RBRACE) {
         pbstr(token);
         outtab();
-        outstr(fcname);
+        outstr(current_function_name);
         outch(EQUALS);
         eatup();
         outdon();
