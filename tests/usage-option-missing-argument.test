@@ -4,9 +4,12 @@
 
 . ./defs.sh || exit 99
 
-run_RATFOR -e 2 -i /dev/null -- -o || testcase_FAIL
-$GREP "^$ratfor_rx: \`-o': option requires an argument" stderr || testcase_FAIL
-$GREP "^Usage:" stderr || testcase_FAIL
+for opt in o l; do
+    run_RATFOR -e 2 -i /dev/null -- "-$opt" || testcase_FAIL
+    $GREP "^$ratfor_rx: \`-$opt': option requires an argument" stderr || \
+      testcase_FAIL
+    $GREP "^Usage:" stderr || testcase_FAIL
+done
 
 testcase_PASS
 
