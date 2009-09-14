@@ -16,19 +16,22 @@ EXTRA_DIST = mklexer.sh
 MOSTLYCLEANFILES = lexer.c lexer.c-t
 
 ratfor_SOURCES = \
+    rat4-global.h \
+	rat4-common.h \
+	lex-symbols.h \
 	main.c \
 	utils.c utils.h \
 	error.c error.h \
 	io.c io.h \
 	xopen.c xopen.h \
 	lookup.c lookup.h \
+	init.c init.h \
 	tokenizer.c tokenizer.h \
-	lexer.h \
 	parser.c parser.h \
 	labgen.c labgen.h \
-	codegen.c codegen.h \
-    rat4-global.h rat4-common.h lex-symbols.h
+	codegen.c codegen.h
 
+ratfor_SOURCES += lexer.h 
 nodist_ratfor_SOURCES = lexer.c
 
 ## vim: ft=automake noet sw=4 ts=4

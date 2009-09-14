@@ -5,39 +5,19 @@
 #include "error.h"      /* for `synerr*()' */
 #include "tokenizer.h"
 #include "lexer.h"
-#include "labgen.h"
-#include "codegen.h"    /* we need to set the starting label */
-#include "xopen.h"      /* for xopen_or_die() */
+#include "codegen.h"
 #include "parser.h"
 
 #define MAXSTACK 1024  /* max stack depth for parser */
 
 /*
- * P A R S E R
+ *  P A R S E R
  */
 
-void
-init(int xstartlab, int xkeepcomments, const char *xfilename)
-{
-    FILE *xinfile;
-
-    keep_comments = xkeepcomments;
-
-    xinfile = xopen(xfilename, IO_MODE_READ, fatal);
-    if (STREQ(xfilename, "-"))
-        xfilename = "(stdin)"; /* this is clearer in error messages */
-
-    level = 0;                  /* file control */
-    lineno[0] = 1;              /* line count of first file */
-    filename[0] = xfilename;    /* filename of first file */
-    infile[0] = xinfile;        /* file handle of first file */
-
-    fcname[0] = EOS;  /* current function name */
-    set_starting_label(xstartlab);
-}
-
 /* shared among unstak() and parser() */
-static int sp, labval[MAXSTACK], lextyp[MAXSTACK];
+static int sp;
+static int labval[MAXSTACK];
+static int lextyp[MAXSTACK];
 
 static void
 unstak(char token)

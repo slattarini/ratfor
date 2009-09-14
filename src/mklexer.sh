@@ -42,7 +42,7 @@ cat <<\EOF
 
 
 /*
- *  L E X I C A L  A N A L Y S E R
+ *   L E X I C A L   A N A L Y S E R
  */
 
 
