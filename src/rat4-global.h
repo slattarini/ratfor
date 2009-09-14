@@ -3,10 +3,11 @@
 
 #include "rat4-common.h"
 
-char fcname[MAXFUNCNAME];       /*  text of current function name                */
-int keep_comments;              /*  YES if comments should be kept, NO otherwise */
+char current_function_name[MAXFUNCNAME];  /* text of current function name */
 
-#define NFILES 7                /* max depth of file inclusion                   */
+int keep_comments; /* YES if comments should be kept, NO otherwise */
+
+#define NFILES 7  /* max depth of file inclusion */
 
 int level;                      /*  level of file inclusion; init = 1            */
 int lineno[NFILES];             /*  line count on input file[level]; init = 1    */
