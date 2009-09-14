@@ -93,7 +93,7 @@ relate(char token[], FILE *fp)
     token[3] = PERIOD;
     token[4] = EOS;
     token[5] = EOS; /* for .not. and .and. */
-    
+
     switch(token[0]) {
         case GREATER:
             token[1] = 'g';
@@ -142,7 +142,7 @@ relate(char token[], FILE *fp)
 }
 
 /*
- * gtok - get token for Ratfor
+ * gtok - get raw token for Ratfor
  *
  */
 static int
@@ -247,7 +247,7 @@ gtok(char lexstr[], int toksiz, FILE *fp)
              || c == BANG || c == CARET || c == EQUALS
              || c == AND || c == OR)
         i = relate(lexstr, fp);
-    
+
     if (i >= toksiz - 1)
         synerr("token too long.");
     lexstr[i+1] = EOS;
@@ -352,6 +352,55 @@ deftok(char token[], int toksiz, FILE *fp)
     return(t);
 }
 
+/*
+ * Open path and push it on the input files stack. Deal with errors.
+ * XXX: re-add support for quoted filenames, sooner or later
+ */
+static void
+push_file_stack(const char *path)
+{
+    int i;
+    FILE *fp;
+
+    if (level >= NFILES - 1) {
+        synerr_include("includes nested too deeply.");
+        return;
+    }
+    /* skip leading white space in path */
+    for (i = 0; is_blank(path[i]); i++)
+        /* empty body */;
+    if ((path = strsave(&path[i])) == NULL) {
+        synerr_include("memory error.");
+        return;
+    }
+    if (*path == EOS) {
+        synerr_include("missing filename.");
+        return;
+    }
+    if ((fp = xopen(path, IO_MODE_READ, synerr_include)) == NULL)
+        return;
+    ++level;
+    lineno[level] = 1;
+    filename[level] = path;
+    infile[level] = fp;
+}
+
+/*
+ * Pop the input files stack.
+ */
+static void
+pop_file_stack(void)
+{
+    /* XXX: assert level >= 0? */
+    if (level > 0) {
+        fclose(infile[level]); /* XXX: check return status? */
+        infile[level] = NULL; /* just to be sure */
+        free((void *)filename[level]);
+        filename[level] = NULL; /* just to be sure */
+    }
+    level--;
+}
+
 
 /*
  *  P U B L I C  F U N C T I O N S
@@ -365,14 +414,12 @@ deftok(char token[], int toksiz, FILE *fp)
 int
 gettok(char token[], int toksiz)
 {
-    int t, i, j;
+    int t, i;
     int tok;
     char path[MAXPATH];
-    const char *fn;
-    FILE *fp;
 
-    for ( ; level >= 0; level--) {
-        while((tok = deftok(token, toksiz, infile[level])) != EOF) {
+    while (level >= 0) {
+        while ((tok = deftok(token, toksiz, infile[level])) != EOF) {
             if (STREQ(token, fncn)) {
                 skpblk(infile[level]);
                 t = deftok(fcname, MAXFUNCNAME, infile[level]);
@@ -394,42 +441,14 @@ gettok(char token[], int toksiz)
                     break;
             }
             path[i] = EOS;
-            if (level >= NFILES - 1)
-                synerr_include("includes nested too deeply.");
-            else {
-/*XXX re-add support for quoted filenames, sooner or later
-                path[i-1]=EOS;
-                infile[level+1] = fopen(&path[2], "r");
-*/
-                /* skip leading white space in path */
-                for (j = 0; is_blank(path[j]); j++)
-                    /* empty body */;
-                if ((fn = strsave(&path[j])) == NULL) {
-                    synerr_include("memory error.");
-                    goto include_done;
-                }
-                if (*fn == EOS) {
-                    synerr_include("missing filename.");
-                    goto include_done;
-                }
-                if ((fp = xopen(fn, IO_MODE_READ, synerr_include)) == NULL)
-                    goto include_done;
-                ++level;
-                lineno[level] = 1;
-                filename[level] = fn;
-                infile[level] = fp;
-include_done:
-                /* nothing else to do */;
-            }
+            push_file_stack(path);
         }
-        if (level > 0) { /* close include and pop file name stack */
-            fclose(infile[level]);
-            infile[level] = NULL; /* just to be sure */
-            free((void *)filename[level]);
-            filename[level] = NULL; /* just to be sure */
-        }
+        /* close include and pop file name stack */
+        pop_file_stack();
     }
-    token[0] = EOF;   /* in case called more than once */
+
+    /* in case called again after input ended */
+    token[0] = EOF;
     token[1] = EOS;
     tok = EOF;
     return(tok);
