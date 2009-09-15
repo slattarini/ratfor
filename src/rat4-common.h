@@ -71,15 +71,15 @@
 #ifdef HAVE_STDBOOL_H
 #  include <stdbool.h>
 #else /* !HAVE_STDBOOL_H */
-#  ifdef __cplusplus
-     /* do nothing: bool is a built-in type */
-#  else  /* !__cplusplus */
+#  ifndef __cplusplus
 #    ifdef HAVE__BOOL
-       typedef bool _Bool;
+       typedef _Bool bool;
+#      define false 0
+#      define true 1
 #    else /* !HAVE__BOOL */
        typedef enum boolvars { false = 0, true = 1 } bool;
 #    endif /* HAVE__BOOL */
-#  endif /* __cplusplus */
+#  endif /* !__cplusplus */
 #endif /* HAVE_STDBOOL_H */
 
 static inline bool
