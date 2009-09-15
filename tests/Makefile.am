@@ -100,6 +100,8 @@ ALL_TESTS = \
   nested-loops_f77.test \
   no-curly-brackets.test \
   no-double-quotes.test \
+  no-fortran66-if.test \
+  no-fortran66-while.test \
   no-semicolons.test \
   no-string-directive.test \
   no-tabs.test \

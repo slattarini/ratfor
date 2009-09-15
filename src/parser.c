@@ -32,20 +32,12 @@ unstak(char token)
         case LEXIF:
             if (token == LEXELSE)
                 return;
-#ifdef F77
             ifend();
-#else
-            outcon(labval[sp]);
-#endif /* F77 */
             break;
         case LEXELSE:
             if (sp > 1)
                 sp--;
-#ifdef F77
             ifend();
-#else
-            outcon(labval[sp]+1);
-#endif /* F77 */
             break;
         case LEXDO:
             dostat(labval[sp]);
