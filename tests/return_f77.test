@@ -1,0 +1,51 @@
+#!/bin/sh
+
+# Check that ratfor generate correct code for a `return' statement
+# (compile & run generated code)
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<EOF
+integer function foo(i)
+    integer i
+    return i+1
+end
+integer function bar(i)
+    integer i
+    return(i*2)
+end
+program testreturn
+    integer x, foo, bar
+    x = foo(1)
+    write(*,100) x
+    x = bar(3)
+    write(*,100) x
+100 format(i1)
+    stop
+end
+EOF
+
+cat tst.r
+
+cat > exp <<EOF
+2
+6
+EOF
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe -e 0 || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
