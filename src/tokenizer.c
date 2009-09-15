@@ -19,17 +19,17 @@
          here greater than BUFSIZE in io.c */
 
 /*
- *  P R I V A T E  V A R I A B L E S
+ * Private Variables.
  */
 
 
-static const char incl[] = "include";
-static const char fncn[] = "function";
-static const char defn[] = "define";
+static const char KEYWORD_INCLUDE[] = "include";
+static const char KEYWORD_FUNCTION[] = "function";
+static const char KEYWORD_DEFINE[] = "define";
 
 
 /*
- *  P R I V A T E  F U N C T I O N S
+ * Private Functions.
  */
 
 
@@ -330,7 +330,7 @@ deftok(char token[], int toksiz, FILE *fp)
     while ((t = gtok(token, toksiz, fp)) != EOF) {
         if (t != ALPHA) {
             break;  /* non-alpha */
-        } else if (STREQ(token, defn)) {
+        } else if (STREQ(token, KEYWORD_DEFINE)) {
             /* get definition for token, save it in tkdefn */
             getdef(token, toksiz, tkdefn, MAXDEFLEN, fp);
             install(token, tkdefn);
@@ -403,7 +403,7 @@ pop_file_stack(void)
 
 
 /*
- *  P U B L I C  F U N C T I O N S
+ * Public Functions.
  */
 
 
@@ -420,7 +420,7 @@ gettok(char token[], int toksiz)
 
     while (level >= 0) {
         while ((tok = deftok(token, toksiz, infile[level])) != EOF) {
-            if (STREQ(token, fncn)) {
+            if (STREQ(token, KEYWORD_FUNCTION)) {
                 skpblk(infile[level]);
                 t = deftok(current_function_name, MAXFUNCNAME,
                            infile[level]);
@@ -433,7 +433,7 @@ gettok(char token[], int toksiz)
                 putbak(BLANK);
                 return(tok);
             }
-            if (!STREQ(token, incl))
+            if (!STREQ(token, KEYWORD_INCLUDE))
                 return(tok);
             /* deal with file inclusion */
             for (i = 0; ; i = strlen(path)) {
