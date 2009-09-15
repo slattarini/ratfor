@@ -52,24 +52,26 @@ usage_error(const char *msg)
 #define OPTERROR(msg) \
     do { \
         fprintf(stderr, "%s: `-%c': " msg "\n", progname, optopt); \
-        errflg = YES; \
-    } while(0);
+        errflg = true; \
+    } while (false);
 
 int
 main(int argc, char *argv[])
 {
-    int c, errflg = NO;
+    int c, startlab;
+    bool errflg, keep_comments;
     const char *infile = "-", *outfile = "-";
     
     progname = argv[0];
 
-    int startlab = 23000; /* default start label */
-    int keep_comments = NO;
+    errflg = false;
+    keep_comments = false;
+    startlab = 23000; /* default start label */
     opterr = 0; /* we report option parsing errors by ourselves */
     while ((c = getopt(argc, argv, ":Cl:o:")) != -1) {
         switch (c) {
         case 'C':
-            keep_comments = YES; /* keep comments in src */
+            keep_comments = true; /* keep comments in src */
             break;
         case 'l': /* user sets label */
             startlab = atoi(optarg);

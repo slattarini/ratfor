@@ -67,35 +67,46 @@
 
 #define STREQ(x, y) (strcmp((x),(y)) == 0)
 
-/* simulate booleans */
-#define NO      0
-#define YES     1
+/* simulate booleans if not present */
+#ifdef HAVE_STDBOOL_H
+#  include <stdbool.h>
+#else /* !HAVE_STDBOOL_H */
+#  ifdef __cplusplus
+     /* do nothing: bool is a built-in type */
+#  else  /* !__cplusplus */
+#    ifdef HAVE__BOOL
+       typedef bool _Bool;
+#    else /* !HAVE__BOOL */
+       typedef enum boolvars { false = 0, true = 1 } bool;
+#    endif /* HAVE__BOOL */
+#  endif /* __cplusplus */
+#endif /* HAVE_STDBOOL_H */
 
-static inline int
+static inline bool
 is_blank(int c)
 {
-    return((c == BLANK || c == TAB) ? YES : NO);
+    return((c == BLANK || c == TAB) ? true : false);
 }
 
-static inline int
+static inline bool
 is_strict_newline(int c)
 {
-    return((c == NEWLINE) ? YES : NO);
+    return((c == NEWLINE) ? true : false);
 }
 
-static inline int
+static inline bool
 is_newline(int c)
 {
     /* hack needed to keep the count of line numbers correct even when
      * expansion of multiline macros (defined through the `define'
      * builtin) is involved */
-    return((c == NEWLINE || c == FKNEWLINE) ? YES : NO);
+    return((c == NEWLINE || c == FKNEWLINE) ? true : false);
 }
 
-static inline int
+static inline bool
 is_stmt_ending(int c)
 {
-    return((is_newline(c) || c == SEMICOL) ? YES : NO);
+    return((is_newline(c) || c == SEMICOL) ? true : false);
 }
 
 #endif

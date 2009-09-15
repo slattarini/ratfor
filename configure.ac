@@ -47,6 +47,8 @@ for header in errno unistd stdlib string; do
         [AC_MSG_ERROR([header `<$header.h>' not found or broken])])
 done
 
+AC_HEADER_STDBOOL
+
 #
 # Checks for typedefs, structures, and compiler characteristics.
 #

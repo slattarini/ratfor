@@ -42,7 +42,7 @@ xopen(const char *path, enum io_mode mode,
             error_handler("%s: cannot %s %s: %s", path, s_, open_how, \
                           strerror(errno)); \
             goto open_failed; \
-        } while(0);
+        } while (false);
 
     if (STREQ(path, "-")) {
         return default_file;

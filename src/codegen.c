@@ -37,8 +37,8 @@ static const char eoss[]        = "EOS/";
 static int swtop = 0;   /* switch stack index */
 static int swlast = 1;  /* switch stack index */
 static int fordep = 0;  /* for stack */
-static int xfer;  /*  YES if just made transfer, NO otherwise */
-                  /* XXX how to initialize it? */
+static bool xfer;  /*  true if just made transfer, false otherwise */
+                   /* XXX how to initialize it? */
 
 static int swstak[MAXSWITCH];   /* switch information stack */
 static char forstk[MAXFORSTK];  /* stack of reinit strings  */
@@ -134,20 +134,20 @@ eatup(void)
 
 
 /*
- *  alldig - return YES if str is all digits
+ *  alldig - return true if str is all digits
  *
  */
-static int
+static bool
 alldig(const char str[])
 {
     int i;
 
     if (str[0] == EOS)
-        return(NO);
+        return(false);
     for (i = 0; str[i] != EOS; i++)
         if (str[i] < DIG0 || str[i] > DIG9)
-            return(NO);
-    return(YES);
+            return(false);
+    return(true);
 }
 
 /*
@@ -157,7 +157,7 @@ alldig(const char str[])
 static void
 outgo(int n)
 {
-    if (xfer == YES)
+    if (xfer)
         return;
     outtab();
     outstr(sgoto);
@@ -177,27 +177,26 @@ brknxt(int sp, int lextyp[], int labval[], int token)
 
     n = 0;
     t = gnbtok(ptoken, MAXTOK);
-    if (alldig(ptoken) == YES) {     /* have break n or next n */
+    if (alldig(ptoken)) { /* have break n or next n */
         i = 0;
         n = ctoi(ptoken, &i) - 1;
-    }
-    else if (t != SEMICOL)      /* default case */
+    } else if (t != SEMICOL) /* default case */
         pbstr(ptoken);
     for (i = sp; i >= 0; i--)
         if (lextyp[i] == LEXWHILE || lextyp[i] == LEXDO
             || lextyp[i] == LEXFOR || lextyp[i] == LEXREPEAT) {
             if (n > 0) {
                 n--;
-                continue;             /* seek proper level */
+                continue; /* seek proper level */
             }
             else if (token == LEXBREAK)
                 outgo(labval[i]+1);
             else
                 outgo(labval[i]);
 /* original value
-            xfer = YES;
+            xfer = true;
 */
-            xfer = NO;
+            xfer = false;
             return;
         }
     if (token == LEXBREAK)
@@ -214,7 +213,7 @@ brknxt(int sp, int lextyp[], int labval[], int token)
 void
 docode(int *lab)
 {
-    xfer = NO;
+    xfer = false;
     outtab();
     outstr(sdo);
     *lab = labgen(2);
@@ -343,7 +342,7 @@ fors(int lab)
 {
     int i, j;
 
-    xfer = NO;
+    xfer = false;
     outnum(lab);
     j = 0;
     for (i = 1; i < fordep; i++)
@@ -381,7 +380,7 @@ void
 ifcode(int *lab)
 {
 
-    xfer = NO;
+    xfer = false;
     *lab = labgen(2);
 #ifdef F77
     ifthenc();
@@ -426,7 +425,7 @@ void
 labelc(char lexstr[])
 {
 
-    xfer = NO;   /* can't suppress goto's now */
+    xfer = false;  /* can't suppress goto's now */
     if (can_label_conflict(atoi(lexstr)))
         synerr("possible label conflict.");
     outstr(lexstr);
@@ -440,7 +439,7 @@ labelc(char lexstr[])
 void
 otherstmt(char lexstr[])
 {
-    xfer = NO;
+    xfer = false;
     outtab();
     outstr(lexstr);
     eatup();
@@ -454,7 +453,7 @@ otherstmt(char lexstr[])
 void
 outcon(int lab)
 {
-    xfer = NO;
+    xfer = false;
 #if 0
     if (n <= 0 && outp == 0)
         return; /* don't need unlabeled continues */
@@ -505,7 +504,7 @@ retcode(void)
     outtab();
     outstr(sreturn);
     outdon();
-    xfer = YES;
+    xfer = true;
 }
 
 
@@ -584,7 +583,7 @@ untils(int lab, int token)
 {
     char ptoken[MAXTOK];
 
-    xfer = NO;
+    xfer = false;
     outnum(lab);
     if (token == LEXUNTIL) {
         while (is_newline(gnbtok(ptoken, MAXTOK)))
@@ -682,7 +681,7 @@ cascode(int lab, int token)
         return;
     }
     outgo(lab + 1); /* # terminate previous case */
-    xfer = YES;
+    xfer = true;
     l = labgen(1);
     if (token == LEXCASE) { /* # case n[,n]... : ... */
         while (caslab (&lb, &t) != EOF) {
@@ -728,7 +727,7 @@ cascode(int lab, int token)
     else if (t != COLON)
         synerr_fatal ("missing colon in case or default label.");
 
-    xfer = NO;
+    xfer = false;
     outcon (l);
 }
 
@@ -759,14 +758,14 @@ swcode(int *lab)
     swstak[swlast + 2] = 0;
     swtop = swlast;
     swlast = swlast + 3;
-    xfer = NO;
+    xfer = false;
     outtab(); /* # Innn=(e) */
     swvar(*lab);
     outch(EQUALS);
     balpar();
     outdon();
     outgo(*lab); /* # goto L */
-    xfer = YES;
+    xfer = true;
     while (is_newline(gnbtok(scrtok, MAXTOK)))
         /* skip empty lines, get next token */;
     if (scrtok[0] != LBRACE) {
@@ -795,7 +794,7 @@ swend(int lab)
     outgo(lab + 1); /* # terminate last case */
     if (swstak[swtop + 2] == 0)
         swstak[swtop + 2] = lab + 1; /* # default default label */
-    xfer = NO;
+    xfer = false;
     outcon (lab); /*  L continue */
     /* output branch table */
     if (n > 0) { /* # output linear search form */
