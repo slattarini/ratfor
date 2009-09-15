@@ -8,7 +8,7 @@
 echo 'x = "123"' > tst.r
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
-$GREP '"' stdout && testcase_FAIL
+$FGREP '"' stdout && testcase_FAIL
 
 testcase_PASS
 
