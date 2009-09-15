@@ -3,9 +3,11 @@ List of user-visible changes of Public Domain Ratfor.
 New in XXX
 -----------
  
- * The handling of the `-o' has been improved:
-    - error messages are more detailed
-    - `-o -' sends output to standard output
+ * The `string' directive is no more recognized.  It should be superseded
+   by the improved string-handling capabilities of Fortran 77.
+ * The handling of the `-o' has been improved; in particular
+    - error messages are more detailed;
+    - `-o -' sends output to standard output;
     - files are no more unnecessarily overwritten if multiple `-o'
       options are specified (only the last one is honoured).
  * The error messages have been generally improved and made more detailed.

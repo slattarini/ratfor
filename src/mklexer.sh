@@ -20,7 +20,6 @@ RAT4_KEYWORDS='
     next
     repeat
     return
-    string
     switch
     until
     while

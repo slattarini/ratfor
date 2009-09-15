@@ -160,9 +160,6 @@ parse(void)
                 case LEXRETURN:
                     retcode();
                     break;
-                case LEXSTRING:
-                    strdcl();
-                    break;
             }
             token = lex(lexstr); /* peek at next token */
             pbstr(lexstr);

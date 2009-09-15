@@ -28,7 +28,6 @@ static const char sendif[]      = "endif";
 #endif /* F77 */
 static const char sgoto[]       = "goto ";
 static const char sreturn[]     = "return";
-static const char eoss[]        = "EOS/";
 
 /*
  *  G L O B A L  V A R I A B L E S
@@ -505,72 +504,6 @@ retcode(void)
     outstr(sreturn);
     outdon();
     xfer = true;
-}
-
-
-/* strdcl - generate code for string declaration */
-void
-strdcl(void)
-{
-    char t, name[MAXSTRNAME], init[MAXTOK];
-    int i, len;
-
-    t = gnbtok(name, MAXSTRNAME);
-    if (t != ALPHA)
-        synerr("missing string name.");
-    if (gnbtok(init, MAXTOK) != LPAREN) {
-        /* make size same as initial value */
-        len = strlen(init) + 1;
-        if (init[1] == SQUOTE || init[1] == DQUOTE)
-            len = len - 2;
-    }
-    else { /* form is string name(size) init */
-        t = gnbtok(init, MAXTOK);
-        i = 0;
-        len = ctoi(init, &i);
-        if (init[i] != EOS)
-            synerr("invalid string size.");
-        if (gnbtok(init, MAXTOK) != RPAREN)
-            synerr("missing right paren.");
-        else
-            t = gnbtok(init, MAXTOK);
-    }
-    outtab();
-    /*
-     *   outstr(int);
-     */
-    outstr(name);
-    outch(LPAREN);
-    outnum(len);
-    outch(RPAREN);
-    outdon();
-    outtab();
-    outstr(sdata);
-    outch(BLANK);
-    len = strlen(init) + 1;
-    if (init[0] == SQUOTE || init[0] == DQUOTE) {
-        init[len-1] = EOS;
-        scopy(init, 1, init, 0);
-        len = len - 2;
-    }
-    for (i = 1; i <= len; i++) {
-        /* put out variable names */
-        outstr(name);
-        outch(LPAREN);
-        outnum(i);
-        outch(RPAREN);
-        if (i < len)
-            outch(COMMA);
-        else
-            outch(SLASH);
-        ;
-    }
-    for (i = 0; init[i] != EOS; i++) {
-        /* put out init */
-        outnum(init[i]);
-        outch(COMMA);
-    }
-    pbstr(eoss); /* push back "EOS/" for subsequent substitution */
 }
 
 
