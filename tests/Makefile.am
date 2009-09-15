@@ -123,6 +123,7 @@ ALL_TESTS = \
   stress1_f77.test \
   stress2_f77.test \
   stress3_f77.test \
+  switch_f77.test \
   synerr-basic.test \
   synerr-define-lineno.test \
   synerr-include-lineno.test \
