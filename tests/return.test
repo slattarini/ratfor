@@ -1,0 +1,38 @@
+#!/bin/sh
+
+# Check that ratfor generate correct code for a `return' statement
+
+. ./defs.sh || exit 99
+
+
+cat > tst.r <<EOF
+function f1
+    return 1+1
+end
+
+function f2()
+    return 2-2
+end
+
+function f3(x)
+    return (3 +  3)
+end
+
+function f4; return(4  - 4); end
+EOF
+
+cat tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+$GREP "^ *return *$" stdout || testcase_FAIL
+test `$GREP "^ *return *$" stdout | wc -l` -eq 4 || testcase_FAIL
+$GREP "[^ ].*return" stdout && testcase_FAIL
+$GREP "return.*[^ ]" stdout && testcase_FAIL
+$GREP "^ *f1 *= *1+1 *$" stdout || testcase_FAIL
+$GREP "^ *f2 *= *2-2 *$" stdout || testcase_FAIL
+$GREP "^ *f3 *= *(3 + 3) *$" stdout || testcase_FAIL
+$GREP "^ *f4 *= *(4 - 4) *$" stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
