@@ -15,7 +15,8 @@ EOF
 cat tst.r
 
 run_RATFOR -e 0 tst.r || testcase_FAIL
-$GREP -v '^[cC]' <stdout >stdout-t && mv -f stdout-t stdout
+$GREP -v '^[cC]' <stdout >stdout-t
+mv -f stdout-t stdout
 $FGREP 'string' stdout || testcase_FAIL
 test `$FGREP 'string' stdout | wc -l` -eq 5 || testcase_FAIL
 $FGREP '12abcdef' stdout || testcase_FAIL
