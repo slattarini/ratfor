@@ -18,15 +18,13 @@
  */
 
 static const char scontinue[]   = "continue";
-static const char sdata[]       = "data";
 static const char sdo[]         = "do";
 static const char sif[]         = "if(";
 static const char sifnot[]      = "if(.not.";
-#ifdef F77
 static const char sthen[]       = "then";
+static const char selse[]       = "else";
 static const char sendif[]      = "endif";
-#endif /* F77 */
-static const char sgoto[]       = "goto ";
+static const char sgoto[]       = "goto";
 static const char sreturn[]     = "return";
 
 /*
@@ -239,15 +237,9 @@ dostat(int lab)
 void
 elseifc(int lab)
 {
-
-#ifdef F77
     outtab();
     outstr(selse);
     outdon();
-#else
-    outgo(lab+1);
-    outcon(lab);
-#endif /* F77 */
 }
 
 /*
@@ -343,9 +335,8 @@ fors(int lab)
 
     xfer = false;
     outnum(lab);
-    j = 0;
-    for (i = 1; i < fordep; i++)
-        j = j + strlen(&forstk[j]) + 1;
+    for (j = 0, i = 1; i < fordep; i++)
+        j += strlen(&forstk[j]) + 1;
     if (strlen(&forstk[j]) > 0) {
         outtab();
         outstr(&forstk[j]);
@@ -378,17 +369,11 @@ ifgo(int lab)
 void
 ifcode(int *lab)
 {
-
     xfer = false;
-    *lab = labgen(2);
-#ifdef F77
+    *lab = labgen(1);
     ifthenc();
-#else
-    ifgo(*lab);
-#endif /* F77 */
 }
 
-#ifdef F77
 /*
  * ifend - generate code for end of if
  *
@@ -408,13 +393,13 @@ ifend(void)
 void
 ifthenc(void)
 {
-    outtab();
-    outstr(sif);
-    balpar();
-    outstr(sthen);
+    outtab();       /* get to column 7 */
+    outstr(sif);    /* " if( " */
+    balpar();       /* collect and output condition */
+    outch(RPAREN);  /* " ) " */
+    outstr(sthen);  /* " then " */
     outdon();
 }
-#endif /* F77 */
 
 /*
  * labelc - output statement number
@@ -454,7 +439,7 @@ outcon(int lab)
 {
     xfer = false;
 #if 0
-    if (n <= 0 && outp == 0)
+    if (lab <= 0 && outp == 0)
         return; /* don't need unlabeled continues */
 #endif
     if (lab > 0)
@@ -470,7 +455,6 @@ outcon(int lab)
  */
 void repcode(int *lab)
 {
-
     int tlab;
 
     tlab = *lab;
@@ -535,18 +519,10 @@ untils(int lab, int token)
 void
 whilecode(int *lab)
 {
-    int tlab;
-
-    tlab = *lab;
     outcon(0); /* unlabeled continue, in case there was a label */
-    tlab = labgen(2);
-    outnum(tlab);
-#ifdef F77
+    *lab = labgen(2); /* see whiles() to know why we need 2 labels */
+    outnum(*lab);
     ifthenc();
-#else
-    ifgo(tlab+1);
-#endif /* F77 */
-    *lab = tlab;
 }
 
 /*
@@ -556,12 +532,9 @@ whilecode(int *lab)
 void
 whiles(int lab)
 {
-
     outgo(lab);
-#ifdef F77
     ifend();
-#endif /* F77 */
-    outcon(lab+1);
+    outcon(lab+1); /* needed by e.g. break */
 }
 
 /*
