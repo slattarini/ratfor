@@ -262,15 +262,16 @@ gtok(char lexstr[], int toksiz, FILE *fp)
 static void
 getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
 {
-    int i, nlpar, t, t2, defn_with_paren;
+    int i, nlpar, t, t2;
+    bool defn_with_paren;
     char c, ptoken[MAXTOK]; /* temporary buffer for token */
 
     skpblk(fp);
     if ((t = gtok(ptoken, MAXTOK, fp)) != LPAREN) {
-        defn_with_paren = NO; /* define name def */
+        defn_with_paren = false; /* define name def */
         pbstr(ptoken);
     } else {
-        defn_with_paren = YES; /* define(name,def) */
+        defn_with_paren = true; /* define(name,def) */
     }
     skpblk(fp);
     t2 = gtok(name, namesiz, fp); /* name */
@@ -334,7 +335,7 @@ deftok(char token[], int toksiz, FILE *fp)
             /* get definition for token, save it in tkdefn */
             getdef(token, toksiz, tkdefn, MAXDEFLEN, fp);
             install(token, tkdefn);
-        } else if (look(token, tkdefn) == NO) {
+        } else if (!look(token, tkdefn)) {
             break;  /* undefined */
         } else {
             /* Push replacement onto input, with newlines substituted

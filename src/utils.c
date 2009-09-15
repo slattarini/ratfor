@@ -61,9 +61,7 @@ itoc(int n, char str[], int size)
     if (sign < 0 && i < size-1)
         str[i++] = '-';
     str[i] = EOS;
-    /*
-     * reverse the string and plug it back in
-     */
+    /* reverse the string and plug it back in */
     for (j = 0, k = strlen(str) - 1; j < k; j++, k--) {
         c = str[j];
         str[j] = str[k];
@@ -93,14 +91,14 @@ scopy(const char from[], int i, char to[], int j)
  * look - look-up definition of `name', copy it in defn
  *
  */
-int
+bool
 look(const char name[], char defn[])
 {
     struct hashlist *p;
     if ((p = lookup(name)) == NULL)
-        return(NO);
+        return(false);
     strcpy(defn, p->def); /* XXX potential overflow here! */
-    return(YES);
+    return(true);
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */
