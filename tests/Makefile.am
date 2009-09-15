@@ -101,6 +101,7 @@ ALL_TESTS = \
   no-curly-brackets.test \
   no-double-quotes.test \
   no-semicolons.test \
+  no-string-directive.test \
   no-tabs.test \
   outfile-cantcreate-fail.test \
   outfile-dash-is-stdout.test \

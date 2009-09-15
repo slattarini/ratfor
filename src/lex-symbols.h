@@ -7,9 +7,8 @@
  */
 
 /* 
- * WARNING: the values of all these three macros must be smaller than
- * the numerical value of any ascii character that might be used in the
- * input.
+ * WARNING: the values of all these four macros must be smaller than the
+ * numerical value of any ascii character that might be used in the input.
  */
 #define LETTER          1
 #define DIGIT           2
@@ -30,10 +29,9 @@
 #define LEXRETURN       21
 #define LEXEND          22
 #define LEXSTOP         23
-#define LEXSTRING       24
-#define LEXSWITCH       25
-#define LEXCASE         26
-#define LEXDEFAULT      27
+#define LEXSWITCH       24
+#define LEXCASE         25
+#define LEXDEFAULT      26
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */
