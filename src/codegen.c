@@ -55,16 +55,16 @@ balpar(void)
     char token[MAXTOK];
     int t, nlpar;
 
-    if (gnbtok(token, MAXTOK) != LPAREN) {
+    if (get_nonblank_token(token, MAXTOK) != LPAREN) {
         synerr("missing left paren.");
         return;
     }
     outstr(token);
     nlpar = 1;
     do {
-        t = gettok(token, MAXTOK);
+        t = get_token(token, MAXTOK);
         if (t == SEMICOL || t == LBRACE || t == RBRACE || t == EOF) {
-            pbstr(token);
+            put_back_string(token);
             break;
         }
         if (is_newline(t)) /* delete newlines */
@@ -93,16 +93,16 @@ eatup(void)
 
     nlpar = 0;
     do {
-        t = gettok(token, MAXTOK);
+        t = get_token(token, MAXTOK);
         if (is_stmt_ending(t))
             break;
         if (t == RBRACE || t == LBRACE) {
-            pbstr(token);
+            put_back_string(token);
             break;
         }
         if (t == EOF) {
             synerr_eof();
-            pbstr(token);
+            put_back_string(token);
             break;
         }
         /* check for tokens that automatically enable a line
@@ -111,9 +111,9 @@ eatup(void)
             || t == LPAREN || t == AND || t == BAR || t == BANG
             || t == EQUALS || t == UNDERLINE)
         {
-            while (is_newline(gettok(ptoken, MAXTOK)))
+            while (is_newline(get_token(ptoken, MAXTOK)))
                 /* empty body */;
-            pbstr(ptoken);
+            put_back_string(ptoken);
             if (t == UNDERLINE) /* XXX: ??? */
                 token[0] = EOS;
         }
@@ -173,12 +173,12 @@ brknxt(int sp, int lextyp[], int labval[], int token)
     char t, ptoken[MAXTOK];
 
     n = 0;
-    t = gnbtok(ptoken, MAXTOK);
+    t = get_nonblank_token(ptoken, MAXTOK);
     if (alldig(ptoken)) { /* have break n or next n */
         i = 0;
         n = ctoi(ptoken, &i) - 1;
     } else if (t != SEMICOL) /* default case */
-        pbstr(ptoken);
+        put_back_string(ptoken);
     for (i = sp; i >= 0; i--)
         if (lextyp[i] == LEXWHILE || lextyp[i] == LEXDO
             || lextyp[i] == LEXFOR || lextyp[i] == LEXREPEAT) {
@@ -255,27 +255,27 @@ forcode(int *lab)
     tlab = *lab;
     tlab = labgen(3);
     outcon(0);
-    if (gnbtok(token, MAXTOK) != LPAREN) {
+    if (get_nonblank_token(token, MAXTOK) != LPAREN) {
         synerr("missing left paren.");
         return;
     }
-    if (gnbtok(token, MAXTOK) != SEMICOL) { /* real init clause */
-        pbstr(token);
+    if (get_nonblank_token(token, MAXTOK) != SEMICOL) { /* real init clause */
+        put_back_string(token);
         outtab();
         eatup();
         outdon();
     }
-    if (gnbtok(token, MAXTOK) == SEMICOL) /* empty condition */
+    if (get_nonblank_token(token, MAXTOK) == SEMICOL) /* empty condition */
         outcon(tlab);
     else { /* non-empty condition */
-        pbstr(token);
+        put_back_string(token);
         outnum(tlab);
         outtab();
         outstr(sifnot);
         outch(LPAREN);
         nlpar = 0;
         while (nlpar >= 0) {
-            t = gettok(token, MAXTOK);
+            t = get_token(token, MAXTOK);
             if (t == SEMICOL)
                 break;
             if (t == LPAREN)
@@ -283,7 +283,7 @@ forcode(int *lab)
             else if (t == RPAREN)
                 nlpar--;
             if (t == EOF) {
-                pbstr(token);
+                put_back_string(token);
                 return;
             }
             if (!is_newline(t) && t != UNDERLINE) /* XXX: underline? */
@@ -296,21 +296,20 @@ forcode(int *lab)
             synerr("invalid for clause.");
     }
     fordep++; /* stack reinit clause */
-    j = 0;
-    for (i = 1; i < fordep; i++) /* find end *** should i = 1 ??? *** */
+    for (j = 0, i = 1; i < fordep; i++) /* find end *** should i = 1 ??? *** */
         j += strlen(&forstk[j]) + 1;
     forstk[j] = EOS; /* null, in case no reinit */
     nlpar = 0;
-    t = gnbtok(token, MAXTOK);
-    pbstr(token);
+    t = get_nonblank_token(token, MAXTOK);
+    put_back_string(token);
     while (nlpar >= 0) {
-        t = gettok(token, MAXTOK);
+        t = get_token(token, MAXTOK);
         if (t == LPAREN)
             nlpar++;
         else if (t == RPAREN)
             nlpar--;
         if (t == EOF) {
-            pbstr(token);
+            put_back_string(token);
             break;
         }
         if (nlpar >= 0 && !is_newline(t) && t != UNDERLINE) { /* XXX: underline? */
@@ -473,9 +472,9 @@ retcode(void)
 {
     char token[MAXTOK], t;
 
-    t = gnbtok(token, MAXTOK);
+    t = get_nonblank_token(token, MAXTOK);
     if (!is_stmt_ending(t) && t != RBRACE) {
-        pbstr(token);
+        put_back_string(token);
         outtab();
         outstr(current_function_name);
         outch(EQUALS);
@@ -483,7 +482,7 @@ retcode(void)
         outdon();
     }
     else if (t == RBRACE)
-        pbstr(token);
+        put_back_string(token);
     outtab();
     outstr(sreturn);
     outdon();
@@ -503,7 +502,7 @@ untils(int lab, int token)
     xfer = false;
     outnum(lab);
     if (token == LEXUNTIL) {
-        while (is_newline(gnbtok(ptoken, MAXTOK)))
+        while (is_newline(get_nonblank_token(ptoken, MAXTOK)))
             /* skip empty lines, get next token */;
         ifgo(lab-1);
     }
@@ -547,9 +546,9 @@ caslab (int *n, int *t)
     char tok[MAXTOK];
     int i, s;
 
-    *t = gnbtok (tok, MAXTOK);
+    *t = get_nonblank_token (tok, MAXTOK);
     while (is_newline(*t))
-        *t = gnbtok (tok, MAXTOK);
+        *t = get_nonblank_token (tok, MAXTOK);
     if (*t == EOF)
         return(*t);
     if (*t == MINUS)
@@ -557,7 +556,7 @@ caslab (int *n, int *t)
     else
         s = 1;
     if (*t == MINUS || *t == PLUS)
-        *t = gnbtok (tok, MAXTOK);
+        *t = get_nonblank_token (tok, MAXTOK);
     if (*t != DIGIT) {
         synerr ("invalid case label.");
         *n = 0;
@@ -567,7 +566,7 @@ caslab (int *n, int *t)
         *n = s * ctoi (tok, &i);
     }
     do { /* ignore blank lines */; 
-        *t = gnbtok (tok, MAXTOK);
+        *t = get_nonblank_token (tok, MAXTOK);
     } while (is_newline(*t));
     return(0); /* expected to be ignored */
 }
@@ -621,7 +620,7 @@ cascode(int lab, int token)
         }
     }
     else { /* # default : ... */
-        t = gnbtok (scrtok, MAXTOK);
+        t = get_nonblank_token (scrtok, MAXTOK);
         if (swstak[swtop + 2] != 0)
             synerr_fatal ("multiple defaults in switch statement.");
         else
@@ -672,11 +671,11 @@ swcode(int *lab)
     outdon();
     outgo(*lab); /* # goto L */
     xfer = true;
-    while (is_newline(gnbtok(scrtok, MAXTOK)))
+    while (is_newline(get_nonblank_token(scrtok, MAXTOK)))
         /* skip empty lines, get next token */;
     if (scrtok[0] != LBRACE) {
         synerr ("missing left brace in switch statement.");
-        pbstr (scrtok);
+        put_back_string(scrtok);
     }
 }
 

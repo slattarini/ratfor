@@ -47,7 +47,7 @@ ngetch(FILE *fp)
     while ((c = NGETC_(fp)) == UNDERLINE) {
         c = NGETC_(fp);
         if (!is_strict_newline(c)) {
-            putbak(c);
+            put_back_char(c);
             c = UNDERLINE;
             break;
         } else {
@@ -63,24 +63,18 @@ ngetch(FILE *fp)
 
 #undef NGETC_
 
-/*
- * pbstr - push string back onto input
- *
- */
+/* put_back_string() - push string back onto input */
 void
-pbstr(const char in[])
+put_back_string(const char in[])
 {
     int i;
     for (i = strlen(in) - 1; i >= 0; i--)
-        putbak(in[i]);
+        put_back_char(in[i]);
 }
 
-/*
- * putbak - push char back onto input
- *
- */
+/* put_back_char() - push character back onto input */
 void
-putbak(char c)
+put_back_char(char c)
 {
     if (++bp >= BUFSIZE)
         synerr_fatal("too many characters pushed back.");

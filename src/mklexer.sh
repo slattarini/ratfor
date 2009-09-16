@@ -55,7 +55,7 @@ lex(char lexstr[])
     int tok;
 
     do { /* skip empty lines, get next token, copy it in lexstr */
-        tok = gnbtok(lexstr, MAXTOK);
+        tok = get_nonblank_token(lexstr, MAXTOK);
     } while (is_newline(tok));
 
     if (tok == EOF || is_stmt_ending(tok) || tok == LBRACE || tok == RBRACE)
