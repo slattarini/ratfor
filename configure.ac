@@ -46,6 +46,7 @@ for header in errno unistd stdlib string; do
         [:],
         [AC_MSG_ERROR([header `<$header.h>' not found or broken])])
 done
+AS_UNSET([header])
 
 AC_HEADER_STDBOOL
 
@@ -60,18 +61,27 @@ AC_C_INLINE
 # Checks for library functions.
 #
 
-for func in getopt strerror; do
+for func in getopt strerror vfprintf; do
     AC_CHECK_FUNC(
         [$func],
         [:],
         [AC_MSG_ERROR([No proper `$func' subroutine found])])
 done
+AS_UNSET([func])
 
-# Sigh! Checks for vfprintf don't work with GCC if `-Werror' is active.
-RAT4_CHECK_FUNC_NO_WERROR(
-    [vfprintf],
-    [:],
-    [AC_MSG_ERROR([No proper `vfprintf' subroutine found])])
+#
+#  Enable compiler warnings.
+#
+
+# Enable as many compiler warnings as possible (this is tailered to gcc,
+# but should not cause failures of problems for other compilers).
+# This code *must* be set after any check on cc, c headers, c functions
+# or c libraries, as stricter handling of warnings can interfere with
+# autoconf checks.
+for flag in -Wall -Wextra -Wshadow -Werror -pedantic; do
+    RAT4_CACHE_CHECK_CC_FLAG([$flag],[],[],[CFLAGS="$CFLAGS $flag"])
+done
+AS_UNSET([flag])
 
 #
 # Checks for things needed by the test suite.

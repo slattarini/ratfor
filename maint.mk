@@ -79,9 +79,7 @@ null_AM_MAKEFLAGS = \
 strict_distcheck_f77_compilers ?= fort77 gfortran
 
 # Command line arguments for configure as called by `strict-distcheck'.
-strict_distcheck_configure_flags = \
-	CFLAGS='$(CFLAGS) -Wall -Werror -Wshadow -pedantic' \
-	FFLAGS='$(FFLAGS) -Wall -Werror'
+strict_distcheck_configure_flags =
 
 .PHONY: vc-nodiff-check
 vc-nodiff-check: git-no-diff-check git-no-diff-cached-check
@@ -137,7 +135,7 @@ strict-distcheck: all check distcheck
 	   xrun $(xmake) distcheck \
 	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
 	     DISTCHECK_CONFIGURE_FLAGS="$$configure_flags"; \
-	   echo "  -*-*-*- "; \
+	   echo " -*-*-*- "; \
 	   xrun $(xmake) -j8 distcheck \
 	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
 	     DISTCHECK_CONFIGURE_FLAGS="$$configure_flags"; \
