@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Check that ratfor complains if a label is placed just after a left
+# parenthesis, rather than bogusly complaning about `missin parenthesis'
+
+. ./defs.sh || exit 99
+
+echo '(10) foo' >tst.r
+
+run_RATFOR -e 1 -- tst.r || testcase_FAIL
+$FGREP "label following left parenthesis" stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

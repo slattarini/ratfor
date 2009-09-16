@@ -1,0 +1,20 @@
+#!/bin/sh
+
+# Check that ratfor complains if a label is followed by EOF
+
+. ./defs.sh || exit 99
+
+cat >tst.r <<EOF
+foo
+bar
+100
+EOF
+
+cat tst.r
+
+run_RATFOR -e 1 -- tst.r || testcase_FAIL
+$FGREP ':3: unexpected EOF.' stderr || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

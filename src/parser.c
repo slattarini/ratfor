@@ -19,6 +19,30 @@ static int sp;
 static int labval[MAXSTACK];
 static int lextyp[MAXSTACK];
 
+static bool
+detected_unusual_error(int token, const char lexstr [])
+{
+    char tmptok[MAXTOK];
+
+    if (token == LEXOTHER && lexstr[0] == LPAREN) {
+        token = lex(tmptok); /* peek at next token */
+        pbstr(tmptok);
+        if (token == LEXDIGITS) {
+            synerr("label following left parenthesis.");
+            return(true);
+            }
+    } else if (token == LEXDIGITS) {
+        /* cannot use lex() here, since it skips statement endings */
+        token = gnbtok(tmptok, MAXTOK); /* peek at next token */
+        pbstr(tmptok);
+        if (token == SEMICOL) {
+            synerr("label followed by empty statement.");
+            return(true);
+        }
+    }
+    return(false);
+}
+
 static void
 unstak(char token)
 {
@@ -51,8 +75,8 @@ unstak(char token)
         case LEXREPEAT:
             untils(labval[sp], token);
             break;
-        } /* switch */
-    } /* for */
+        } /* end switch */
+    } /* end for */
 }
 
 void
@@ -64,6 +88,11 @@ parse(void)
     lextyp[0] = EOF;
     while ((token = lex(lexstr)) != EOF) {
         
+        /* some errors, if not treated specially, may give confusing
+         * diagnostic, so we try to detect them in an ad-hoc way */
+        if (detected_unusual_error(token, lexstr))
+            continue;
+
         /* do code generation */
         switch(token)
         {
