@@ -90,6 +90,11 @@ ALL_TESTS = \
   keepcomment.test \
   keepcomment_f77.test \
   label-conflict.test \
+  label-fail-empty-statement.test \
+  label-fail-misplaced-paren.test \
+  label-fail-unexpected-eof.test \
+  label-line-continuation.test \
+  label-line-continuation_f77.test \
   line-continuation-basic.test \
   line-continuation-multiple.test \
   line-continuation-stress1.test \

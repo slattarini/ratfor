@@ -1,0 +1,26 @@
+#!/bin/sh
+
+# Check that ratfor do automatic line continuation after lables, until a
+# statement is found.
+
+. ./defs.sh || exit 99
+
+cat > tst.r <<EOF
+100
+foo
+
+200
+
+
+bar
+EOF
+
+cat tst.r
+
+run_RATFOR -e 0 -- tst.r || testcase_FAIL
+$GREP '100.*foo' stdout || testcase_FAIL
+$GREP '200.*bar' stdout || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
