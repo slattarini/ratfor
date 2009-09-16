@@ -4,8 +4,8 @@
 #include <stdio.h> /* for `*FILE' and `EOF' (at least) */
 
 int ngetch(FILE *);
-void pbstr(const char []);
-void putbak(char c);
+void put_back_string(const char []);
+void put_back_char(char c);
 
 void outch(char c);
 void outstr(const char []);

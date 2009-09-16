@@ -15,7 +15,7 @@
 #define MAXPATH     1024    /* max length of the name of a file included */
 #define MAXDEFLEN   2048    /* max length of a ratfor macro's definition */
 
-/* NOTE: due to implemntation details, it is pointless to have MAXDEFLEN
+/* NOTE: due to implementation details, it is pointless to have MAXDEFLEN
          here greater than BUFSIZE in io.c */
 
 /*
@@ -44,26 +44,19 @@ dispatch_comment(FILE *fp)
             /* strip comments */;
 }
 
-/*
- * skpblk - skip blanks and tabs in file fp
- *
- */
 static void
-skpblk(FILE *fp)
+skip_blanks(FILE *fp)
 {
     char c;
-
     for (c = ngetch(fp); is_blank(c); c = ngetch(fp))
         /* skip blank characters */;
-    putbak(c);
+    put_back_char(c);
 }
 
-/*
- * type - return LETTER, DIGIT or char itslef if it's neither
- *
- */
+/* Return character type -- this "type" is the character itself unless
+ * it is a letter or a digit. */
 static int
-type(char c)
+char_type(char c)
 {
     int t;
 
@@ -76,18 +69,17 @@ type(char c)
     return(t);
 }
 
-/*
- * relate - convert relational shorthands into long form
- *
- */
+/* Convert relational shorthands (e.g. `&&' => `.and.', '<' => '.gt.'),
+ * write the resulting string in token[] itslef.  Return the lenght of
+ * the resulting string. */
 static int
-relate(char token[], FILE *fp)
+convert_relation_shortand(char token[], FILE *fp)
 {
 
     if ((token[1] = ngetch(fp)) == EQUALS) {
         token[2] = 'e';
     } else {
-        putbak(token[1]);
+        put_back_char(token[1]);
         token[2] = 't';
     }
     token[3] = PERIOD;
@@ -121,7 +113,7 @@ relate(char token[], FILE *fp)
             break;
         case AND:
             if ((token[1] = ngetch(fp)) != AND) /* look for && or & */ 
-                putbak(token[1]);
+                put_back_char(token[1]);
             token[1] = 'a';
             token[2] = 'n';
             token[3] = 'd';
@@ -129,7 +121,7 @@ relate(char token[], FILE *fp)
             break;
         case OR:
             if ((token[1] = ngetch(fp)) != OR) /* look for || or | */
-                putbak(token[1]);
+                put_back_char(token[1]);
             token[1] = 'o';
             token[2] = 'r';
             break;
@@ -141,12 +133,10 @@ relate(char token[], FILE *fp)
     return(strlen(token)-1);
 }
 
-/*
- * gtok - get raw token for Ratfor
- *
- */
+/* Get raw ratfor token. Also deal with comments (# COMMENT...) and
+ * verbatim lines (% VERBATIME LINE...) */
 static int
-gtok(char lexstr[], int toksiz, FILE *fp)
+get_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int i, b, n, tok;
     char c;
@@ -165,31 +155,31 @@ gtok(char lexstr[], int toksiz, FILE *fp)
             c = NEWLINE;
         }
         if (!is_newline(c))
-            putbak(c);
+            put_back_char(c);
         else
             lexstr[0] = c;
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
     i = 0;
-    tok = type(c);
+    tok = char_type(c);
     if (tok == LETTER) { /* alphanumeric token */
         for (i = 0; i < toksiz - 3; i++) {
             lexstr[i+1] = ngetch(fp);
-            tok = type(lexstr[i+1]);
+            tok = char_type(lexstr[i+1]);
             /* Test for DOLLAR added by BM, 7-15-80 */
             if (tok != LETTER && tok != DIGIT && tok != UNDERLINE
                 && tok != DOLLAR && tok != PERIOD)
                 break;
         }
-        putbak(lexstr[i+1]);
+        put_back_char(lexstr[i+1]);
         tok = ALPHA;
     }
     else if (tok == DIGIT) { /* number */
         b = c - DIG0; /* in case alternate base number */
         for (i = 0; i < toksiz - 3; i++) {
             lexstr[i+1] = ngetch(fp);
-            if (type(lexstr[i+1]) != DIGIT)
+            if (char_type(lexstr[i+1]) != DIGIT)
                 break;
             b = 10*b + lexstr[i+1] - DIG0;
         }
@@ -205,11 +195,11 @@ gtok(char lexstr[], int toksiz, FILE *fp)
                     break;
                 c = c - DIG0;
             }
-            putbak(lexstr[0]);
+            put_back_char(lexstr[0]);
             i = itoc(n, lexstr, toksiz);
         }
         else
-            putbak(lexstr[i+1]);
+            put_back_char(lexstr[i+1]);
         tok = DIGIT;
     }
     else if (c == SQUOTE || c == DQUOTE) {
@@ -222,12 +212,12 @@ gtok(char lexstr[], int toksiz, FILE *fp)
                     c = ngetch(fp);
                     lexstr[i] = c;
                 } else {
-                    putbak(c);
+                    put_back_char(c);
                 }
             }
             if (is_newline(lexstr[i]) || i >= toksiz-1) {
                 synerr("missing quote.");
-                putbak(lexstr[i]);
+                put_back_char(lexstr[i]);
                 lexstr[i] = lexstr[0];
                 break;
             }
@@ -246,7 +236,7 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     else if (c == GREATER || c == LESS || c == NOT
              || c == BANG || c == CARET || c == EQUALS
              || c == AND || c == OR)
-        i = relate(lexstr, fp);
+        i = convert_relation_shortand(lexstr, fp);
 
     if (i >= toksiz - 1)
         synerr("token too long.");
@@ -255,10 +245,9 @@ gtok(char lexstr[], int toksiz, FILE *fp)
     return(tok);
 }
 
-/*
- * getdef (for no arguments) - get name and definition
- *
- */
+/* Parse definition of ratfor macro. If an error is detected, stop ratfor
+ * with a suitable error message, alse save macro name (in `name[]') and
+ * macro definition (in `def[]'). */
 static void
 getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
 {
@@ -266,15 +255,15 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
     bool defn_with_paren;
     char c, ptoken[MAXTOK]; /* temporary buffer for token */
 
-    skpblk(fp);
-    if ((t = gtok(ptoken, MAXTOK, fp)) != LPAREN) {
+    skip_blanks(fp);
+    if ((t = get_raw_token(ptoken, MAXTOK, fp)) != LPAREN) {
         defn_with_paren = false; /* define name def */
-        pbstr(ptoken);
+        put_back_string(ptoken);
     } else {
         defn_with_paren = true; /* define(name,def) */
     }
-    skpblk(fp);
-    t2 = gtok(name, namesiz, fp); /* name */
+    skip_blanks(fp);
+    t2 = get_raw_token(name, namesiz, fp); /* name */
     if (!defn_with_paren && is_stmt_ending(t2)) {
         /* stray `define', as in `...; define; ...' */
         synerr_fatal("empty name.");
@@ -284,10 +273,10 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
     } else if (t2 != ALPHA) {
         synerr_fatal("non-alphanumeric name.");
     }
-    skpblk(fp);
-    c = gtok(ptoken, MAXTOK, fp);
+    skip_blanks(fp);
+    c = get_raw_token(ptoken, MAXTOK, fp);
     if (!defn_with_paren) { /* define name def */
-        pbstr(ptoken);
+        put_back_string(ptoken);
         i = 0;
         do {
             c = ngetch(fp);
@@ -296,7 +285,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
             def[i++] = c;
         } while (c != SHARP && !is_newline(c) && c != EOF && c != PERCENT);
         if (c == SHARP || c == PERCENT)
-            putbak(c);
+            put_back_char(c);
     }
     else { /* define (name, def) */
         if (c != COMMA)
@@ -318,17 +307,15 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
     def[i-1] = EOS;
 }
 
-/*
- * deftok - get token; process macro calls and invocations
- *
- */
+/* Get token, expanding macro calls and processing macro definitions. */
+/* XXX: clearer name? */
 static int
 deftok(char token[], int toksiz, FILE *fp)
 {
     char tkdefn[MAXDEFLEN];
     int i, t;
 
-    while ((t = gtok(token, toksiz, fp)) != EOF) {
+    while ((t = get_raw_token(token, toksiz, fp)) != EOF) {
         if (t != ALPHA) {
             break;  /* non-alpha */
         } else if (STREQ(token, KEYWORD_DEFINE)) {
@@ -344,19 +331,17 @@ deftok(char token[], int toksiz, FILE *fp)
              * of multiline macros is involved. */
             for (i = strlen(tkdefn) - 1; i >= 0; i--) {
                 if (is_newline(tkdefn[i]))
-                    putbak(FKNEWLINE);
+                    put_back_char(FKNEWLINE);
                 else
-                    putbak(tkdefn[i]);
+                    put_back_char(tkdefn[i]);
             }
         }
     }
     return(t);
 }
 
-/*
- * Open path and push it on the input files stack. Deal with errors.
- * XXX: re-add support for quoted filenames, sooner or later
- */
+/* Open path and push it on the input files stack. Deal with errors. */
+/* XXX: re-add support for quoted filenames, sooner or later */
 static void
 push_file_stack(const char *path)
 {
@@ -386,9 +371,7 @@ push_file_stack(const char *path)
     infile[level] = fp;
 }
 
-/*
- * Pop the input files stack.
- */
+/* Pop the input files stack. */
 static void
 pop_file_stack(void)
 {
@@ -408,12 +391,10 @@ pop_file_stack(void)
  */
 
 
-/*
- * gettok - get token, handle file inclusion
- *
- */
+/* Get token (handling macro expansions, macro definitons and file
+ * inclusion). */
 int
-gettok(char token[], int toksiz)
+get_token(char token[], int toksiz)
 {
     int t, i;
     int tok;
@@ -422,16 +403,16 @@ gettok(char token[], int toksiz)
     while (level >= 0) {
         while ((tok = deftok(token, toksiz, infile[level])) != EOF) {
             if (STREQ(token, KEYWORD_FUNCTION)) {
-                skpblk(infile[level]);
+                skip_blanks(infile[level]);
                 t = deftok(current_function_name, MAXFUNCNAME,
                            infile[level]);
-                pbstr(current_function_name);
+                put_back_string(current_function_name);
                 if (is_stmt_ending(t))
                     synerr("missing function name.");
                 else if (t != ALPHA)
                     synerr("invalid function name `%s'",
                            current_function_name);
-                putbak(BLANK);
+                put_back_char(BLANK);
                 return(tok);
             }
             if (!STREQ(token, KEYWORD_INCLUDE))
@@ -457,16 +438,13 @@ gettok(char token[], int toksiz)
     return(tok);
 }
 
-/*
- * gnbtok - get nonblank token
- *
- */
+/* Like `get_token()', but skip any leading blanks. */
 int
-gnbtok(char token[], int toksiz)
+get_nonblank_token(char token[], int toksiz)
 {
     int tok;
-    skpblk(infile[level]);
-    tok = gettok(token, toksiz);
+    skip_blanks(infile[level]);
+    tok = get_token(token, toksiz);
     return(tok);
 }
 

@@ -1,7 +1,7 @@
 #include "rat4-common.h"
 #include "rat4-global.h"
 
-#include "io.h"         /* for `pbstr()' */
+#include "io.h"         /* for `put_back_string()' */
 #include "error.h"      /* for `synerr*()' */
 #include "tokenizer.h"
 #include "lexer.h"
@@ -26,15 +26,15 @@ detected_unusual_error(int token, const char lexstr [])
 
     if (token == LEXOTHER && lexstr[0] == LPAREN) {
         token = lex(tmptok); /* peek at next token */
-        pbstr(tmptok);
+        put_back_string(tmptok);
         if (token == LEXDIGITS) {
             synerr("label following left parenthesis.");
             return(true);
             }
     } else if (token == LEXDIGITS) {
         /* cannot use lex() here, since it skips statement endings */
-        token = gnbtok(tmptok, MAXTOK); /* peek at next token */
-        pbstr(tmptok);
+        token = get_nonblank_token(tmptok, MAXTOK); /* peek at next token */
+        put_back_string(tmptok);
         if (token == SEMICOL) {
             synerr("label followed by empty statement.");
             return(true);
@@ -183,7 +183,7 @@ parse(void)
                     break;
             }
             token = lex(lexstr); /* peek at next token */
-            pbstr(lexstr);
+            put_back_string(lexstr);
             unstak(token);
         }
     } /* while read next token */
