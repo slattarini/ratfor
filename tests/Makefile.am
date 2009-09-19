@@ -27,12 +27,18 @@ XFAIL_TESTS += \
   verbatim-only-line-begin.test \
   verbatim-stress.test
 
+# Errors about switch/case are correctly recognized, but can sometimes still
+# produce bogus diagnostic messages.
+XFAIL_TESTS += switch-fail.test
+
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
 # in `CheckTestList.am'.
 ALL_TESTS = \
   000sanity.test \
+  break-fail.test \
+  break_f77.test \
   case-sensibility-basic.test \
   comments-no-hang.test \
   comments.test \
@@ -103,6 +109,8 @@ ALL_TESTS = \
   long-infile.test \
   long-infile_f77.test \
   nested-loops_f77.test \
+  next-fail.test \
+  next_f77.test \
   no-curly-brackets.test \
   no-double-quotes.test \
   no-fortran66-if.test \
@@ -131,6 +139,8 @@ ALL_TESTS = \
   stress1_f77.test \
   stress2_f77.test \
   stress3_f77.test \
+  switch-fail-no-braces.test \
+  switch-fail.test \
   switch_f77.test \
   synerr-basic.test \
   synerr-define-lineno.test \
@@ -164,6 +174,10 @@ TESTS = $(ALL_TESTS)
 EXTRA_DIST += integers-many-bases.data
 integers-many-bases.log: integers-many-bases.data
 integers-many-bases_f77.log: integers-many-bases.data
+
+EXTRA_DIST += break-next-fail.data
+break-fail.test: break-next-fail.data
+next-fail.test: break-next-fail.data
 
 # --------------------------------- #
 #  TESTSUITE ENVIRONMENT AND SETUP  #
