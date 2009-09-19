@@ -1,0 +1,27 @@
+#!/bin/sh
+
+# Check that incorrect usages of the `switch/case' statement are caught.
+
+. ./defs.sh || exit 99
+
+$SED 's/ *#.*$//' > tst.r <<EOF
+switch(1)       # 01
+    foo         # 02
+bar1;           # 03
+bar2;           # 04
+switch(1)       # 05
+    case 1:     # 06
+        foo     # 07
+EOF
+
+cat tst.r
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+e=0
+$GREP '^tst.r:2: missing left brace in switch statement.$' stderr || e=$?
+$GREP '^tst.r:6: missing left brace in switch statement.$' stderr || e=$?
+test $e -eq 0 || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

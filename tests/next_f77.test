@@ -1,0 +1,162 @@
+#!/bin/sh
+
+# Test the `next' statement (by compiling and running the generated
+# fortran code)
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<EOF
+program testnext
+    implicit none
+    integer i
+
+100 format(A20, ' / ', I20)
+150 format(A20, ' / ', A20)
+200 format('')
+    
+    ###  WHILE  ###
+    write(*,200)
+    i = 1
+    while(i < 4) {
+        write(*, 100) 'while1', i
+        i = i + 1
+        next
+        i = i + 1
+    }
+    
+    ###  WHILE  ###
+    write(*,200)
+    i = 1
+    while(i <= 6) {
+        write(*, 100) 'while2', i
+        i = i + 1
+        if (i <= 3)
+            next
+        i = i + 1
+    }
+    
+    ###  FOR  ###
+    write(*,200)
+    for(i = 1; i < 4; i = i + 1) {
+        write(*, 100) 'for1', i
+        next
+        i = i + 1
+    }
+
+    ###  FOR  ###
+    write(*,200)
+    for(i = 1; i <= 6; i = i + 1) {
+        write(*, 100) 'for2', i
+        if (i + 1 <= 3)
+            next
+        i = i + 1
+    }
+    
+    ###  REPEAT  ###
+    write(*,200)
+    i = 1
+    repeat {
+        write(*, 100) 'repeat1', i
+        i = i + 1
+        next
+        i = i + 1
+    } until(i >= 4)
+    
+    ###  REPEAT  ###
+    write(*,200)
+    i = 1
+    repeat {
+        write(*, 100) 'repeat2', i
+        i = i + 1
+        if (i <= 3)
+            next
+        i = i + 1
+    } until(i >= 6)
+    
+    #
+    # WARNING: modifying the value of the looping variable in the body
+    #          of a do-loop is a Fortran big no-no.
+    #
+
+    ###  DO  ###
+    write(*,200)
+    do i = 1, 3 {
+        write(*, 100) 'do1', i
+        next
+        write(*, 150) 'do1', 'No-No'
+    }
+
+    ###  DO  ###
+    write(*,200)
+    do i = 1, 6 {
+        write(*, 100) 'do2', i
+        if (i > 3)
+            next
+        write(*, 100) 'do2', i*10
+    }
+    
+    ###  STOP  ###
+    write(*,200)
+    stop
+end
+
+EOF
+
+: > exp
+
+xline='~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+
+echo "$xline" >>exp
+
+for kw in 'while' 'for' 'repeat'; do
+    $SED "s/^$ws0p//" <<EOF
+        
+        ${kw}1 / 1
+        ${kw}1 / 2
+        ${kw}1 / 3
+
+        ${kw}2 / 1
+        ${kw}2 / 2
+        ${kw}2 / 3
+        ${kw}2 / 5
+EOF
+done >>exp
+
+cat >>exp <<EOF
+
+do1 / 1
+do1 / 2
+do1 / 3
+
+do2 / 1
+do2 / 10
+do2 / 2
+do2 / 20
+do2 / 3
+do2 / 30
+do2 / 4
+do2 / 5
+do2 / 6
+EOF
+
+(echo && echo "$xline") >>exp
+
+cat tst.r
+
+run_RATFOR -e 0 tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
+timer 15 run_CMD ./tst.exe -e 0 || testcase_FAIL
+(echo "$xline" && ws_normalize <stdout && echo "$xline") >got
+
+cat got
+cat exp
+
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
