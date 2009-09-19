@@ -10,18 +10,18 @@ echo 'junk3' > tst3.r
 echo 'junk4' > tst4.r
 echo 'junk5' > tst5.r
 
-run_RATFOR -e 2 -- tst1.r tst2.r || testcase_FAIL
+run_CMD -e 2 "$RATFOR" tst1.r tst2.r || testcase_FAIL
 $GREP "^$ratfor_rx: too many arguments" stderr || testcase_FAIL
 $GREP "^Usage:" stderr || testcase_FAIL
 
 test ! -f none
 
-run_RATFOR -e 2 -- -o none tst1.r tst2.r || testcase_FAIL
+run_CMD -e 2 "$RATFOR" -o none tst1.r tst2.r || testcase_FAIL
 $GREP "^$ratfor_rx: too many arguments" stderr || testcase_FAIL
 $GREP "^Usage:" stderr || testcase_FAIL
 test ! -f none || testcase_FAIL
 
-run_RATFOR -e 2 -- tst1.r tst2.r tst3.r tst4.r tst5.r || testcase_FAIL
+run_CMD -e 2 "$RATFOR" tst1.r tst2.r tst3.r tst4.r tst5.r || testcase_FAIL
 $GREP "^$ratfor_rx: too many arguments" stderr || testcase_FAIL
 $GREP "^Usage:" stderr || testcase_FAIL
 

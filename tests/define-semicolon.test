@@ -12,7 +12,7 @@ sym2
 alive
 EOF
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 ws_normalize <stdout >xstdout
 
 $FGREP sym xstdout && testcase_FAIL

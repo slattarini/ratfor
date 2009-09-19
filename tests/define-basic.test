@@ -20,7 +20,7 @@ sym 4
 sym5
 EOF
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 
 $FGREP -i 'define' stdout && testcase_FAIL

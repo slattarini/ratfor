@@ -10,10 +10,11 @@ function foo
 end
 EOF
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout | ws_normalize >stdout-t
 mv stdout-t stdout
 $GREP '^foo *= *1$' stdout || testcase_FAIL
+$GREP '^return$' stdout || testcase_FAIL
 
 testcase_PASS
 

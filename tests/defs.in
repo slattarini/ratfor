@@ -273,7 +273,7 @@ rm_rf() {
     rm -rf "$1"
 }
 
-# run_CMD COMMAND [-e STATUS] [-i FILE] [-m] [--] [ARGUMENTS..]
+# run_CMD [-e STATUS] [-i FILE] [-m] [--] COMMAND [ARGUMENTS..]
 # -------------------------------------------------------------
 # Run the given COMMAND (can be an external commnds, a shell function or
 # shell builtin) with ARGUMENTS (and with standard input taken from FILE,
@@ -294,10 +294,6 @@ run_CMD ()
     # in user code.
     : 'entering run_CMD(): become quiet'
     set +x # xtrace verbosity stops here
-    case $# in
-        0) testcase_HARDERROR "run_CMD(): missing COMMAND argument";;
-        *) _run_cmd=$1; shift;;
-    esac
     _run_stdin=-
     _run_expected_exitcode=0
     _run_mix_stdout_and_stderr=no
@@ -307,11 +303,15 @@ run_CMD ()
             -i) _run_stdin=$2; shift;;
             -m) _run_mix_stdout_and_stderr=yes;;
             --) shift; break;;
-            -?) testcase_HARDERROR "run_CMD(): invalid switch '$1'";;
+            -?) testcase_HARDERROR "run_CMD(): invalid option '$1'";;
              *) break;;
         esac
         shift
     done
+    case $# in
+        0) testcase_HARDERROR "run_CMD(): missing COMMAND argument";;
+        *) _run_cmd=$1; shift;;
+    esac
     _run_exitcode=0
     if test x"${_run_mix_stdout_and_stderr}" = x"yes"; then
         _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdall 2>&1'
@@ -349,18 +349,6 @@ run_CMD ()
     : "exit status ${_run_exitcode} (expecting ${_run_expected_exitcode})"
     : "leaving run_CMD()"
     return ${_run_rc}
-}
-
-# Usage: run_RATFOR [-e STATUS] [-i INFILE] [-m] [ARGUMENTS..]
-# See documentation of `run_CMD()' for more info.
-run_RATFOR() {
-    run_CMD "$RATFOR" ${1+"$@"}
-}
-
-# Usage: run_F77 [-e STATUS] [-i INFILE] [-m] [ARGUMENTS..]
-# See documentation of `run_CMD()' for more info.
-run_F77() {
-    run_CMD "$F77" ${1+"$@"}
 }
 
 # Usage: timer [-e] TIME COMMAND [ARGS]

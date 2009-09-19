@@ -12,7 +12,7 @@ cat > bar.r <<EOF
 include foo.r
 EOF
 
-timer 15 run_RATFOR -e 1 foo.r || :
+timer 15 run_CMD -e 1 "$RATFOR" foo.r || :
 
 case `cat 'timer-exitstatus'` in
   0) if test -s stderr; then

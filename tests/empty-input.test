@@ -5,7 +5,7 @@
 . ./defs.sh || exit 99
 
 : > empty
-run_RATFOR -e 0 empty || testcase_FAIL
+run_CMD "$RATFOR" empty || testcase_FAIL
 
 : ratfor must produce only comments on empty input
 $GREP -v '^[Cc]' stdout && testcase_FAIL

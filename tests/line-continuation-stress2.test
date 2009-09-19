@@ -45,9 +45,9 @@ inject_line_continuations <tst.r >tst_.r
 cat tst.r
 cat tst_.r
 
-run_RATFOR -e 0 tst.r || testcase_HARDERROR
+run_CMD "$RATFOR" tst.r || testcase_HARDERROR
 mv stdout exp
-run_RATFOR -e 0 tst_.r || testcase_FAIL
+run_CMD "$RATFOR" tst_.r || testcase_FAIL
 mv stdout got
 
 cat exp

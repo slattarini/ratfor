@@ -5,7 +5,7 @@
 . ./defs.sh || exit 99
 
 echo '}' > tst1.r
-run_RATFOR -e 1 tst1.r || testcase_FAIL
+run_CMD -e 1 $RATFOR tst1.r || testcase_FAIL
 mv stderr stderr1
 test 1 -le "`wc -l <stderr1`"
 
@@ -14,7 +14,7 @@ cat > tst2.r <<EOF
 break # illegal break (not in do/while/for/repeat-until construct)
 next # illegal next (not in do/while/for/repeat-until construct)
 EOF
-run_RATFOR -e 1 tst2.r || testcase_FAIL
+run_CMD -e 1 $RATFOR tst2.r || testcase_FAIL
 mv stderr stderr2
 test 3 -le "`wc -l <stderr2`"
 

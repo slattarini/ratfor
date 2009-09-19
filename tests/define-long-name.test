@@ -24,12 +24,12 @@ y2
 EOF
 
 cat tst.r
-cat exp
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
-
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
 cat got
 
 $DIFF_U exp got || testcase_FAIL

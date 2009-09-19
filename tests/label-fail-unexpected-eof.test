@@ -12,7 +12,7 @@ EOF
 
 cat tst.r
 
-run_RATFOR -e 1 -- tst.r || testcase_FAIL
+run_CMD -e 1 "$RATFOR" tst.r || testcase_FAIL
 $FGREP ':3: unexpected EOF.' stderr || testcase_FAIL
 
 testcase_PASS

@@ -9,7 +9,7 @@ baddef() {
     tcnt=`expr $tcnt + 1` || testcase_HARDERROR
     echo "$1" > tst$tcnt.r
     cat tst$tcnt.r
-    run_RATFOR -e 1 tst$tcnt.r || testcase_FAIL
+    run_CMD -e 1 "$RATFOR" tst$tcnt.r || testcase_FAIL
     mv stdout stdout$tcnt
     mv stderr stderr$tcnt
     $FGREP "$2" stderr$tcnt || testcase_FAIL

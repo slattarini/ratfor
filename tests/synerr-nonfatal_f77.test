@@ -18,15 +18,19 @@ EOF
 
 echo 'ALIVE' > exp
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
+run_CMD -e 1 "$RATFOR" tst.r || testcase_FAIL
 $FGREP 'illegal right brace' stderr || testcase_FAIL
 $FGREP 'illegal next' stderr || testcase_FAIL
 mv stdout tst.f
 
-run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
-run_CMD ./tst.exe -e 0 || testcase_FAIL
+run_CMD $F77 -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe || testcase_FAIL
 mv stdout got
 test -s stderr && testcase_FAIL
+
+cat exp
+cat got
+
 $DIFF_U exp got || testcase_FAIL
 
 testcase_PASS
