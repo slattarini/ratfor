@@ -48,7 +48,7 @@ exec 5<&-
 : TEST DATA READ
 
 cat tst.r
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 $GREP -v '^[cC]' <stdout >got
 makeup got exp

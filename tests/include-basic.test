@@ -41,7 +41,7 @@ cat included.r
 cat tst2.r
 cat included
 
-run_RATFOR -e 0 tst1.r || testcase_FAIL
+run_CMD "$RATFOR" tst1.r || testcase_FAIL
 mv stdout stdout1
 mv stderr stderr1
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout1 >got1
@@ -49,7 +49,7 @@ cat exp1
 cat got1
 $DIFF_U exp1 got1 || testcase_FAIL
 
-run_RATFOR -e 0 tst2.r || testcase_FAIL
+run_CMD "$RATFOR" tst2.r || testcase_FAIL
 mv stdout stdout2
 mv stderr stderr2
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout2 >got2

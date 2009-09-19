@@ -6,7 +6,7 @@
 . ./defs.sh || exit 99
 
 echo '}' > tst.r
-run_RATFOR -e 1 -i tst.r || testcase_FAIL
+run_CMD -e 1 -i tst.r -- "$RATFOR" || testcase_FAIL
 $GREP '^-' stderr && testcase_FAIL
 $GREP '^(stdin):' stderr || testcase_FAIL
 

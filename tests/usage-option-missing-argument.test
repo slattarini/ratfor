@@ -5,7 +5,7 @@
 . ./defs.sh || exit 99
 
 for opt in o l; do
-    run_RATFOR -e 2 -i /dev/null -- "-$opt" || testcase_FAIL
+    run_CMD -e 2 -i /dev/null -- "$RATFOR" "-$opt" || testcase_FAIL
     $GREP "^$ratfor_rx: \`-$opt': option requires an argument" stderr || \
       testcase_FAIL
     $GREP "^Usage:" stderr || testcase_FAIL

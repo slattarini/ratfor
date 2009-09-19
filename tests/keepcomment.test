@@ -9,7 +9,7 @@ cat >tst.r <<EOF
 blah blah blah
 EOF
 
-run_RATFOR -e 0 -- -C tst.r || testcase_FAIL
+run_CMD "$RATFOR" -C tst.r || testcase_FAIL
 $GREP "^[cC].*\"%c@mm3nt%'!" stdout || testcase_FAIL
 testcase_PASS
 

@@ -25,14 +25,14 @@ EOF
 
 $SED 's/$/$/' tst.r
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 mv stdout tst.f
-run_F77 -e 0 -- -o tst.exe tst.f || testcase_FAIL
-run_CMD ./tst.exe -e 0 || testcase_FAIL
+run_CMD $F77 -o tst.exe tst.f || testcase_FAIL
+run_CMD ./tst.exe || testcase_FAIL
 mv stdout got
 
-cat got
 cat exp
+cat got
 
 test -s stderr && testcase_FAIL
 

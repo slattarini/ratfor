@@ -23,7 +23,7 @@ EOF
 
 cat tst.r
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 $GREP "^ *return *$" stdout || testcase_FAIL
 test `$GREP "^ *return *$" stdout | wc -l` -eq 4 || testcase_FAIL
 $GREP "[^ ].*return" stdout && testcase_FAIL

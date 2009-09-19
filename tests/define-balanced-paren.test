@@ -11,7 +11,7 @@ sym1
 sym2
 EOF
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 
 $FGREP 'define' stdout  && testcase_FAIL
 $GREP 'sym[12]' stdout  && testcase_FAIL

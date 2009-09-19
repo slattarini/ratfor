@@ -28,7 +28,7 @@ EOF
 cat tst.r
 cat inc.r
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 for x in a b c; do
   for i in 1 2; do

@@ -6,13 +6,13 @@
 
 echo 'junk' > tst.r
 
-run_RATFOR -e 2 -- -x tst.r || testcase_FAIL
+run_CMD -e 2 -- "$RATFOR" -x tst.r || testcase_FAIL
 $GREP "^$ratfor_rx: \`-x': invalid option" stderr || testcase_FAIL
 $GREP "^Usage:" stderr || testcase_FAIL
 
 test ! -f none
 
-run_RATFOR -e 2 -- -C -x -@ -o none tst.r -3 || testcase_FAIL
+run_CMD -e 2 -- "$RATFOR" -C -x -@ -o none tst.r -3 || testcase_FAIL
 test ! -f none || testcase_FAIL
 $GREP "^$ratfor_rx: \`-x': invalid option" stderr || testcase_FAIL
 $GREP "^$ratfor_rx: \`-3': invalid option" stderr || testcase_FAIL

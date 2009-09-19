@@ -21,7 +21,7 @@ bar
 quux
 EOF
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout | ws_normalize > got
 
 cat exp

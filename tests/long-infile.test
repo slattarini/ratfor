@@ -17,7 +17,7 @@ $AWK </dev/null >tst.r "BEGIN {
 
 $GREP -v '^#' <tst.r | ws_normalize >exp
 
-run_RATFOR -e 0 -- -l $startlab tst.r || testcase_FAIL
+run_CMD "$RATFOR" -l $startlab tst.r || testcase_FAIL
 grep -v '^[cC]' <stdout | ws_normalize >got
 
 $DIFF_U exp got || testcase_FAIL

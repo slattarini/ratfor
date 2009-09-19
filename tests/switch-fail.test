@@ -49,10 +49,12 @@ $AWK -F '|' '($2 != "") { print "tst.r:" NR ": " $2 }' <tst.dat \
 
 cat tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
+run_CMD -e 1 "$RATFOR" tst.r || testcase_FAIL
 mv stderr got
-cat got
+
 cat exp
+cat got
+
 $DIFF_U exp got || testcase_FAIL
 
 testcase_PASS

@@ -11,7 +11,7 @@ cp safe risky
 
 test ! -f none.r
 
-run_RATFOR -e 1 -- -o risky none.r || testcase_FAIL
+run_CMD -e 1 "$RATFOR" -o risky none.r || testcase_FAIL
 cat risky
 $DIFF_U safe risky || { (echo '~~~~~') 2>/dev/null; testcase_FAIL; }
 

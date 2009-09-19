@@ -14,7 +14,7 @@ EOF
 
 cat tst.r
 
-run_RATFOR -e 0 tst.r || testcase_FAIL
+run_CMD "$RATFOR" tst.r || testcase_FAIL
 $GREP -v '^[cC]' <stdout >stdout-t
 mv -f stdout-t stdout
 $FGREP 'string' stdout || testcase_FAIL

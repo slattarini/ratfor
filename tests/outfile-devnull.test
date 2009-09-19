@@ -7,7 +7,7 @@
 
 echo 'junk' > tst.r
 
-run_RATFOR -e 0 -- -o /dev/null tst.r || testcase_FAIL
+run_CMD "$RATFOR" -o /dev/null tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 
 testcase_PASS

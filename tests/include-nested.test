@@ -34,7 +34,7 @@ IncludeEnd
 TopEnd
 EOF
 
-run_RATFOR -e 0 top.r || testcase_FAIL
+run_CMD "$RATFOR" top.r || testcase_FAIL
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
 

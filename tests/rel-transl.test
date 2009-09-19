@@ -23,10 +23,12 @@ cat >map <<EOF
 EOF
 
 $SED 's/^ *\([^ ]*\)  *\([^ ]*\) *$/  .\2. \2/' <map >exp
-cat exp
 
-run_RATFOR -e 0 map || testcase_FAIL
+run_CMD "$RATFOR" map || testcase_FAIL
 $GREP -v '^[cC]' stdout | ws_normalize | $SED 's/^/  /' > got
+
+cat exp
+cat got
 
 $DIFF_U exp got || testcase_FAIL
 
