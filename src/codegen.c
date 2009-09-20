@@ -235,7 +235,7 @@ dostat(int lab)
  *
  */
 void
-elseifc(int lab)
+elseifc(void)
 {
     outtab();
     outstr(selse);

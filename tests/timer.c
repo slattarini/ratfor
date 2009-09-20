@@ -90,12 +90,12 @@ handle_child()
 static int
 xkill(int pid, int signum)
 {
-    if (kill(cpid, signum) == 0)
+    if (kill(pid, signum) == 0)
         return 0;
     
     switch(errno) {
     case EPERM:
-        fatal(E_UNEXPECT, "cannot send signals to child process %d", cpid);
+        fatal(E_UNEXPECT, "cannot send signals to child process %d", pid);
         break;
     case ESRCH:
         /* child already terminated, nothing to do */
@@ -107,19 +107,21 @@ xkill(int pid, int signum)
                           "child process %d", errno, cpid);
         break;
     }
+    /* NOTREACHED */
+    abort();
 }
 
 #define is_pid_alive(pid) (!xkill(pid, 0))
 
 static void
-timeout(int signum)
+handle_timeout(int signum)
 {
     if (signum != SIGALRM)
         /* CANTHAPPEN */
-        fatal(E_UNEXPECT, "unexpected signal passed to timeout():"
+        fatal(E_UNEXPECT, "unexpected signal passed to handle_timeout():"
                           "signal %d", signum);
     /* try to make sure that alarm(2) and sleep(3) do not interfere */
-    if (signal(SIGALRM, SIG_DFL) < 0)
+    if (signal(SIGALRM, SIG_DFL) == SIG_ERR)
         fatal(E_UNEXPECT, "couldn't shutdown timer: signal() failed");
     /* kill child if it's still alive */
     xkill(cpid, SIGTERM);
@@ -138,7 +140,7 @@ static void
 setup_timer(unsigned int time)
 {
     struct sigaction sa;
-    sa.sa_handler = timeout;
+    sa.sa_handler = handle_timeout;
     sa.sa_flags = SA_RESTART;
     if (sigaction(SIGALRM, &sa, NULL) < 0)
         fatal(E_UNEXPECT, "couldn't setup timer: sigaction() failed");
@@ -169,7 +171,7 @@ main(int argc, char **argv)
             errflag++;
             break;
         default:
-            /* CANTHAPPEN */
+            /* NOTREACHED */
             abort();
             break;
         }

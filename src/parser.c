@@ -129,7 +129,7 @@ parse(void)
             break;
         case LEXELSE:
             if (lextyp[sp] == LEXIF)
-                elseifc(labval[sp]);
+                elseifc();
             else
                 synerr("illegal else.");
             break;
