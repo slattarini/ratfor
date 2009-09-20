@@ -83,7 +83,6 @@ AS_UNSET([func])
 # This code *must* be set after any check on cc, c headers, c functions
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
-# XXX XXX  this doens't work as expected! why?  XXX XXX
 for flag in -Wall -Wextra -Wshadow -Werror -pedantic; do
     RAT4_CACHE_CHECK_CC_FLAG([$flag],[],[],[CFLAGS="$CFLAGS $flag"])
 done

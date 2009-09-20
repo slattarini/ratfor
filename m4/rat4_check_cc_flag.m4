@@ -13,8 +13,9 @@ AC_DEFUN([_RAT4_CHECK_CC_FLAG],
     AS_UNSET([rat4_save_CFLAGS])
     AC_LANG_POP()])
 
-# RAT4_CACHE_CHECK_CC_FLAG(FLAG-TO-CHECK,[PROLOGUE],[BODY])
-# ---------------------------------------------------------
+# RAT4_CACHE_CHECK_CC_FLAG(FLAG-TO-CHECK, [PROLOGUE], [BODY], 
+#                          [ACTION-IF-SUCCESS], [ACTION-IF-FAILURE])
+# ------------------------------------------------------------------
 #  This macro check if the C compiler supports the flag FLAG-TO-CHECK.
 #  Execute ACTION-IF-SUCCESS if succesfull, ACTION-IF-FAILURE otherwise.
 #  PROLOGUE and BODY are optional, and should be used as in they are
@@ -34,7 +35,7 @@ AC_DEFUN([RAT4_CACHE_CHECK_CC_FLAG],
             [eval "rat4_cv_check_cc_flag_$rat4_cc_flag_norm=no"])])
     
     AS_IF(
-        [eval test \"\$rat4_cv_cc_check_flag_$rat4_cc_flag_norm\" = yes],
+        [eval test \"\$rat4_cv_check_cc_flag_$rat4_cc_flag_norm\" = yes],
         [$4],
         [$5])
     AS_UNSET([rat4_cc_flag_norm])])

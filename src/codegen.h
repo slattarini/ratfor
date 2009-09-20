@@ -16,7 +16,7 @@ void fors(int);
 void ifcode(int *);
 void ifthenc(void);
 void ifend(void);
-void elseifc(int);
+void elseifc(void);
 
 void repcode(int *);
 void untils(int, int);
