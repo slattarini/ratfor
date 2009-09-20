@@ -2,3 +2,9 @@ ratfor
 defs.sh
 *.log
 *.dir
+/.deps/
+*.o
+*.obj
+ratfor
+timer
+.deps

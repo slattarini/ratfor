@@ -13,8 +13,6 @@ git.log[0-9]
 /autom4te.cache/
 /aclocal.m4
 
-/src/lexer.c
-
 Makefile
 Makefile.in
 
