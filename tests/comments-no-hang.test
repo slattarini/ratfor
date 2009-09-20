@@ -8,7 +8,7 @@
 echo 'abc # comment after another token, as the last line of file' > tst.r
 
 e=0
-timer -e 12 '"$RATFOR" -C tst.r >/dev/null 2>&1' || e=$?
+run_CMD timer -t 5 "$RATFOR" -C tst.r || e=$?
 case $e in
     255) testcase_FAIL "ratfor hanged!";;
     0) testcase_PASS;;

@@ -206,12 +206,21 @@ AM_TEST_LOG_FLAGS += srcdir='$(abs_srcdir)'
 # might be updated later (esp. in included files)
 MOSTLYCLEANFILES = 
 
+check_SCRIPTS  = # will be updted later
+check_PROGRAMS = # will be updted later
+
 # Each test case depends on defs.sh and ratfor.
-check_SCRIPTS = ratfor$(EXEEXT) defs.sh
+check_SCRIPTS += defs.sh
+
+# Some test cases depends on ./ratfor.
+check_SCRIPTS += ratfor$(EXEEXT)
+
+# Some test cases depends on ./timer.
+check_PROGRAMS += timer$(EXEEXT)
 
 # Let a call to `make all' rebuild all the scripts/programs needed by the
 # testsuite.
-all-local: $(check_SCRIPTS)
+all-local: $(check_SCRIPTS) $(check_PROGRAMS)
 
 # Real ratfor binary.
 top_ratfor = $(top_builddir)/src/ratfor$(EXEEXT)
@@ -227,6 +236,9 @@ $(top_ratfor): _force
 	cd $(abs_top_builddir)/src && $(MAKE) $(AM_MAKEFLAGS) ratfor$(EXEEXT)
 _force:
 .PHONY: _force
+
+# Auxiliary program used by the testsuite.
+timer_SOURCES = timer.c
 
 # Be sure to use the absolute path of the test ratfor executable, since
 # in our testsuite we merryli change the curent directory a lot.
