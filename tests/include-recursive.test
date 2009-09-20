@@ -12,25 +12,10 @@ cat > bar.r <<EOF
 include foo.r
 EOF
 
-timer 15 run_CMD -e 1 "$RATFOR" foo.r || :
+run_CMD -e 1 timer -t 10 "$RATFOR" foo.r || testcase_FAIL
+test -s stderr || testcase_FAIL "ratfor did not print error any message" \
+                                "on recursive include"
 
-case `cat 'timer-exitstatus'` in
-  0) if test -s stderr; then
-        testcase_PASS
-    else
-        testcase_FAIL "ratfor did not print error any message on" \
-                      "recursive include"
-    fi
-    ;;
-  1)
-    testcase_FAIL "ratfor succceded on recursive include"
-    ;;
-  TIMEOUT)
-    testcase_FAIL "ratfor hanged on recursive include"
-    ;;
-  *)
-    testcase_HARDERROR "unexpected exit status value from run_RATFOR()"
-    ;;
-esac
+testcase_PASS
 
 # vim: ft=sh ts=4 sw=4 et

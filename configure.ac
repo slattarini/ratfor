@@ -33,20 +33,27 @@ AM_PROG_CC_C_O
 # Checks for programs.
 #
 
-AC_PROG_INSTALL
-AC_PROG_MKDIR_P
+: # None needed presently
 
 #
 # Checks for headers.
 #
 
-for header in errno unistd stdlib string; do
-    AC_CHECK_HEADER(
-        [$header.h],
-        [:],
+AC_HEADER_STDC
+if test x"$ac_cv_header_stdc" != x"yes"; then
+    AC_MSG_ERROR([some system standard C headers seem broken])
+fi
+
+for header in errno unistd signal fcntl; do
+    AC_CHECK_HEADER([$header.h], [:],
         [AC_MSG_ERROR([header `<$header.h>' not found or broken])])
 done
 AS_UNSET([header])
+
+AC_HEADER_SYS_WAIT
+if test x"$ac_cv_header_sys_wait_h" != x"yes"; then
+    AC_MSG_ERROR([header `<sys/wait.h>' not found or broken])
+fi
 
 AC_HEADER_STDBOOL
 
@@ -61,10 +68,8 @@ AC_C_INLINE
 # Checks for library functions.
 #
 
-for func in getopt strerror vfprintf; do
-    AC_CHECK_FUNC(
-        [$func],
-        [:],
+for func in getopt strerror alarm signal sigaction vfprintf; do
+    AC_CHECK_FUNC([$func], [:],
         [AC_MSG_ERROR([No proper `$func' subroutine found])])
 done
 AS_UNSET([func])
@@ -78,6 +83,7 @@ AS_UNSET([func])
 # This code *must* be set after any check on cc, c headers, c functions
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
+# XXX XXX  this doens't work as expected! why?  XXX XXX
 for flag in -Wall -Wextra -Wshadow -Werror -pedantic; do
     RAT4_CACHE_CHECK_CC_FLAG([$flag],[],[],[CFLAGS="$CFLAGS $flag"])
 done
