@@ -114,15 +114,15 @@ case "$srcdir" in
      *) srcdir=`cd "$srcdir" && pwd`;;
 esac
 
-# Testsuite utilities have always precedence over system ones.
-PATH=$srcdir${PATH+":$PATH"}
-export PATH
-
 # Absolute path of the directory where the test is run.
 testrootdir=`pwd`
 
+# Testsuite utilities have always precedence over system ones.
+PATH=$testrootdir${PATH+":$PATH"}
+export PATH
+
 # Program to be tested.
-RATFOR=${RAT4_TESTUITE_RATFOR_EXECUTABLE-"$srcdir/ratfor${EXEEXT}"}
+RATFOR=${RAT4_TESTUITE_RATFOR_EXECUTABLE-"$testrootdir/ratfor${EXEEXT}"}
 if do_sanity_checks; then
     test -f "$RATFOR" || {
         echo "Expected ratfor program to test not found: $RATFOR" >&2
@@ -370,10 +370,10 @@ cd ./$me.dir
 testSubDir=`pwd` # absolute path
 
 echo "=== Running test $0"
+echo "# PWD: `pwd`"
+echo "# PATH: $PATH"
 
 # Turn on shell traces.
 set -x
-
-pwd
 
 # vim: ft=sh ts=4 sw=4 et

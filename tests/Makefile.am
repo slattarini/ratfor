@@ -242,7 +242,8 @@ timer_SOURCES = timer.c
 
 # Be sure to use the absolute path of the test ratfor executable, since
 # in our testsuite we merryli change the curent directory a lot.
-AM_TEST_LOG_FLAGS += TESTED_RATFOR='$(abs_builddir)/ratfor$(EXEEXT)'
+AM_TEST_LOG_FLAGS += \
+  RAT4_TESTUITE_RATFOR_EXECUTABLE='$(abs_builddir)/ratfor$(EXEEXT)'
 
 # To improve the overall speed of our slow testsuite, let it know that
 # it is already being run with the proper $SHELL (as found by configure),
