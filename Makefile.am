@@ -6,7 +6,7 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-EXTRA_DIST = GNUmakefile maint.mk
+EXTRA_DIST = GNUmakefile maint.mk maint/HACKING
 
 SUBDIRS = src doc tests 
 
