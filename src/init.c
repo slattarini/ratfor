@@ -10,9 +10,31 @@
  *   I N I T I A L I Z E   P R E P R O C E S S O R   S T A T E
  */
 
+#ifdef __cplusplus
+
+/* DEFINE HERE global variables DECLARED IN "rat4-global.h".
+   This is REQUIRED by C++ compilers. */
+
+/* text of current function name */
+char current_function_name[MAXFUNCNAME];
+
+/* true if comments should be kept, false otherwise */
+bool keep_comments;
+
+/*  level of file inclusion; init = 1 */
+int level;
+
+/* stack of inluded files: line nuber, file name, file pointer */
+int lineno[NFILES];
+FILE *infile[NFILES];
+const char *filename[NFILES];
+
+#endif /* C++ */
+
+
 /* use `x_foo' names to avoid colliding with similarly named global
  * variables */
-void
+C_DECL void
 init(int x_startlab, int x_keep_comments, const char *x_filename)
 {
     FILE *x_infile;

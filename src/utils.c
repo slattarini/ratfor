@@ -10,22 +10,20 @@
  * U T I L I T Y  R O U T I N E S
  */
 
+BEGIN_C_DECLS
 
-/*
- * strsave - save string s somewhere, by malloc'ing memory
- */
+/* strsave - save string s somewhere, by malloc'ing memory */
 char
 *strsave(const char *s)
 {
     char *p;
-    if ((p = malloc(strlen(s)+1)) != NULL)
+    /* cast needed to avoid errors with c++ compilers */
+    if ((p = (char *) malloc(strlen(s)+1)) != NULL)
         strcpy(p, s); /* XXX strncpy? */
     return(p);
 }
 
-/*
- * ctoi - convert string at in[*i] to int, increment i
- */
+/* ctoi - convert string at in[*i] to int, increment i */
 int
 ctoi(const char in[], int *i)
 {
@@ -43,9 +41,7 @@ ctoi(const char in[], int *i)
     return(k);
 }
 
-/*
- * itoc - special version of itoa
- */
+/* itoc - special version of itoa */
 int
 itoc(int n, char str[], int size)
 {
@@ -70,10 +66,7 @@ itoc(int n, char str[], int size)
     return(i-1);
 }
 
-/*
- * scopy - copy string at from[i] to to[j]
- *
- */
+/* scopy - copy string at from[i] to to[j] */
 void
 scopy(const char from[], int i, char to[], int j)
 {
@@ -87,10 +80,7 @@ scopy(const char from[], int i, char to[], int j)
     to[k2] = EOS;
 }
 
-/*
- * look - look-up definition of `name', copy it in defn
- *
- */
+/* look - look-up definition of `name', copy it in defn */
 bool
 look(const char name[], char defn[])
 {
@@ -100,5 +90,7 @@ look(const char name[], char defn[])
     strcpy(defn, p->def); /* XXX potential overflow here! */
     return(true);
 }
+
+END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

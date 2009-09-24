@@ -1,6 +1,10 @@
 #ifndef RAT4_LOOKUP_H
 #  define RAT4_LOOKUP_H 1
 
+#define HASHMAX 100 /* size of hashtable */
+
+BEGIN_C_DECLS
+
 /*
  * from K&R "The C Programming language"
  * Table lookup routines structure and definitions
@@ -14,10 +18,10 @@ struct hashlist {
     struct hashlist *next; /* next in chain */
 };
 
-#define HASHMAX 100 /* size of hashtable */
-
 struct hashlist *install(const char *, const char *);
 struct hashlist *lookup(const char *);
+
+END_C_DECLS
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

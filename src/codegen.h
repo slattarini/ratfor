@@ -1,5 +1,7 @@
 #ifndef RAT4_CODEGEN_H
 #  define RAT4_CODEGEN_H 1
+BEGIN_C_DECLS
+
 /* subroutines for code generation */
 
 void brknxt(int, int [], int [], int);
@@ -30,5 +32,6 @@ void swend(int);
 void strdcl(void);
 void swcode(int *);
 
+END_C_DECLS
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

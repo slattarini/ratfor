@@ -6,9 +6,10 @@
 #include "utils.h"
 #include "error.h"
 
+BEGIN_C_DECLS
+
 /* Global program exit status, declared in error.h */
 int exit_status = EXIT_SUCCESS;
-
 
 /*
  *  E R R O R  M E S S A G E S
@@ -109,5 +110,7 @@ synerr_fatal(const char *msg, ...)
     SYNERR_POSTAMBLE_VARIADIC();
     exit(EXIT_FAILURE);
 }
+
+END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */
