@@ -7,8 +7,8 @@
 git.log
 git.log[0-9]
 
-/local-cfg.mk
-/gcc-2.95-wrapper.bash
+/config.site
+/maint/local-cfg.mk
 
 /_build/
 

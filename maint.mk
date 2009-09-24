@@ -4,9 +4,36 @@
 
 ME := maint.mk
 
+# Directory containing most maintainer-specific stuff
+maintdir = $(srcdir)/maint
+abs_maintdir = $(abs_srcdir)/maint
+
 # Prevent programs like 'sort' from considering distinct strings to be equal.
 # Doing it here saves us from having to set LC_ALL elsewhere in this file.
 export LC_ALL = C
+
+# Do not save the original name or timestamp in the .tar.gz file.
+# Use --rsyncable if available.
+gzip_rsyncable := \
+  $(shell gzip --help 2>/dev/null | grep rsyncable >/dev/null && \
+      echo x--rsyncable | sed 's/^x//')
+GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
+
+# quoted-version: $(VERSION) with some metacharacters quoted, to be used
+# e.g. in grep or sed commands
+quoted-version = $(subst .,\.,$(VERSION))
+
+# do not assume $(MAKE) to be GNU make, since it is sometimes useful to
+# ovverride it from the command line for testing purposes.
+is_gnu_make := $(shell \
+  $(MAKE) -f /dev/null --version nil 2>/dev/null | grep GNU \
+    && echo yes || echo no)
+
+ifeq ($(is_gnu_make),yes)
+xmake = $(MAKE) --no-print-directory
+else
+xmake = $(MAKE)
+endif
 
 # When running autoreconf, honor the `AUTORECONF' environment variable,
 # regardless of the fact that make was called with or without the `-e'
@@ -40,31 +67,8 @@ _reconfigure_and_redo: reconfigure
 endif
 endif
 
-# Do not save the original name or timestamp in the .tar.gz file.
-# Use --rsyncable if available.
-gzip_rsyncable := \
-  $(shell gzip --help 2>/dev/null | grep rsyncable >/dev/null && \
-  	    echo x--rsyncable | sed 's/^x//')
-GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
-
-# quoted-version: $(VERSION) with some metacharacters quoted, to be used
-# e.g. in grep or sed commands
-quoted-version = $(subst .,\.,$(VERSION))
-
-# do not assume $(MAKE) to be GNU make, since it is sometimes useful to
-# ovverride it from the command line for testing purposes.
-is_gnu_make := $(shell \
-  $(MAKE) -f /dev/null --version nil 2>/dev/null | grep GNU \
-    && echo yes || echo no)
-
-ifeq ($(is_gnu_make),yes)
-xmake = $(MAKE) --no-print-directory
-else
-xmake = $(MAKE)
-endif
-
 # Read local definition and overrides, if any.
--include $(srcdir)/local-cfg.mk
+-include $(maintdir)/local-cfg.mk
 
 GIT ?= git
 
@@ -202,7 +206,7 @@ CLEAN_FILES += git-no-diff-check.tmp
 git-no-diff-cached-check:
 	@(unset CDPATH; cd $(srcdir) && $(GIT) diff --cached) >$@.tmp
 	@test ! -s $@.tmp || { \
-	  cat $@.tmp;	\
+	  cat $@.tmp; \
 	  echo "$(ME): there are uncommitted modifications to Git index" >&2; \
 	  exit 1; \
 	};
