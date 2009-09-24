@@ -5,11 +5,12 @@
 # shared repository
 
 ##-------------------------------------------------------------------------
-## local-cfg.mk for stefano on bigio
+## local-cfg.mk for STEFANO ON BIGIO
 
 # C/C++ compilers to be used to by the ratfor testsuite, when doing a
 # strict-distcheck.
 strict_distcheck_c_compilers = \
+  $(abs_srcdir)/gcc-2.95-wrapper.bash \
   /usr/local/bin/pcc \
   /usr/bin/tcc \
   /usr/bin/gcc-3.3 \
@@ -18,7 +19,6 @@ strict_distcheck_c_compilers = \
   /usr/bin/g++-3.3 \
   /usr/bin/g++-4.1 \
   /usr/bin/g++
-# /usr/bin/gcc-2.95 #XXX: does not work with `-Wall' on our sources
 
 # Fortran compilers to be used by the reatfor testsuite, when doing a
 # strict-distcheck.
