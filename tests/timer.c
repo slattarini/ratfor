@@ -31,6 +31,9 @@
 #define E_TIMEOUT   254
 #define E_UNEXPECT  255
 
+/* XXX remove this when we'll use assertions */
+#define assert(cond) ((void) 0)
+
 struct exitinfo {
     unsigned short status;
     unsigned short signal;
@@ -72,18 +75,19 @@ handle_child()
 {
     int wstatus;
     struct exitinfo exit_info;
+    
     waitpid(cpid, &wstatus, 0);
     alarm(0); /* once the child has completed, cancel any pending alarm */
-    if (WIFEXITED(wstatus)) {
+    
+    exit_info.status = E_UNEXPECT;
+    exit_info.signal = 0;
+    if (WIFEXITED(wstatus))
         exit_info.status = WEXITSTATUS(wstatus);
-        exit_info.signal = 0;
-    } else if (WIFSIGNALED(wstatus)) {
-        exit_info.status = -1;
+    else if (WIFSIGNALED(wstatus))
         exit_info.signal = WTERMSIG(wstatus);
-    } else {
-        /* CANTHAPPEN */
+    else /* CANTHAPPEN */
         fatal(E_UNEXPECT, "bogus exit status from child");
-    }
+    
     return exit_info;
 }
 
@@ -189,6 +193,10 @@ main(int argc, char **argv)
     
     setup_timer(timeout);
     
+    /* dummy initilizalion, just to avoid compiler warnings like
+       "... may be used uninitialized in this function" */
+    exit_info.status = exit_info.signal = -1;
+ 
     cpid = fork();
     if (cpid < 0)
         /* fork failed */
@@ -200,10 +208,17 @@ main(int argc, char **argv)
         /* parent process */
         exit_info = handle_child();
     
+    /* internal checks */
+    assert(exit_info.status >= 0);
+    assert(exit_info.signal >= 0);
+
     if (exit_info.signal)
         exit(E_SIGNAL(exit_info.signal));
     else
         exit(exit_info.status);
+    
+    /* NOTREACHED */
+    abort();
 }
 
 /* vim: set ft=c ts=4 sw=4 et: */
