@@ -1,0 +1,44 @@
+# -*- Makefile -*-
+# Contains "local" overriding for different maintainers. This file is not
+# meant to be used directly: it should rather be used to write a proper
+# `local-cfg.mk' file, which for obvious reasons cannot be placed in the
+# shared repository
+
+##-------------------------------------------------------------------------
+## local-cfg.mk for stefano on bigio
+
+# C/C++ compilers to be used to by the ratfor testsuite, when doing a
+# strict-distcheck.
+strict_distcheck_c_compilers = \
+  /usr/bin/tcc \
+  /usr/bin/gcc-3.3 \
+  /usr/bin/gcc-4.1 \
+  /usr/bin/gcc \
+  /usr/bin/g++-3.3 \
+  /usr/bin/g++-4.1 \
+  /usr/bin/g++
+# /usr/bin/gcc-2.95 #XXX: does not work with `-Wall' on our sources
+
+# Fortran compilers to be used by the reatfor testsuite, when doing a
+# strict-distcheck.
+strict_distcheck_f77_compilers = \
+  /usr/bin/fort77 \
+  /usr/bin/gfortran
+
+# Shells to be used to run the configure script and the tests scripts,
+# when doing a strict-distcheck.
+strict_distcheck_shells = \
+  /bin/dash \
+  /opt/bin/heirloom-sh \
+  '/usr/bin/zsh3 -o no_function_argzero' \
+  '/bin/zsh -o no_function_argzero' \
+  /opt/vintage/bin/bash-3.2 \
+  /opt/vintage/bin/bash-3.0 \
+  /opt/vintage/bin/bash-2.05 \
+  /bin/ksh \
+  /bin/pdksh \
+# /bin/mksh #XXX: break some tests
+
+##-------------------------------------------------------------------------
+
+# vim: ft=make ts=4 sw=4 noet
