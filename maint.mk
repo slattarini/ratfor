@@ -51,8 +51,6 @@ GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
 # e.g. in grep or sed commands
 quoted-version = $(subst .,\.,$(VERSION))
 
-GIT = git
-
 # do not assume $(MAKE) to be GNU make, since it is sometimes useful to
 # ovverride it from the command line for testing purposes.
 is_gnu_make := $(shell \
@@ -65,9 +63,14 @@ else
 xmake = $(MAKE)
 endif
 
+# Read local definition and overrides, if any.
+-include $(srcdir)/local-cfg.mk
+
+GIT ?= git
+
 # Use this to make sure we don't run these programs when building
 # from a virgin tgz file, below.
-null_AM_MAKEFLAGS = \
+null_AM_MAKEFLAGS ?= \
   ACLOCAL=false \
   AUTOCONF=false \
   AUTOMAKE=false \
@@ -83,7 +86,7 @@ strict_distcheck_configure_flags =
 StrictDistcheckLoopBegin =
 StrictDistcheckLoopEnd =
 
-# C/C++ compilers to be used to by the reatfor testsuite, when doing a
+# C/C++ compilers to be used to by the ratfor testsuite, when doing a
 # strict-distcheck.
 strict_distcheck_c_compilers ?= cc c++
 StrictDistcheckLoopBegin += \
@@ -91,7 +94,7 @@ StrictDistcheckLoopBegin += \
 StrictDistcheckLoopEnd += done;
 strict_distcheck_configure_flags += CC='$$cc'
 
-# Fortran compilers to be used by the reatfor testsuite, when doing a
+# Fortran compilers to be used by the ratfor testsuite, when doing a
 # strict-distcheck.
 strict_distcheck_f77_compilers ?= fort77 gfortran
 StrictDistcheckLoopBegin += \
@@ -107,12 +110,20 @@ strict_distcheck_shells ?= ksh bash
 StrictDistcheckLoopBegin += \
   for sh_t in /bin/sh $(strict_distcheck_shells); do \
     case "$$sh_t" in \
-      /*) sh=$$sh_t;; \
-      */*) sh=`pwd`/$$sh_t1;; \
-      *) sh=`which "$$sh_t" 2>/dev/null`;; \
+      *'[ 	]'*) \
+        sh=`(set $$sh_t && shift && echo $$1)`; \
+        sh_args=`(set $$sh_t && shift && shift && echo $$*)`;; \
+      *) \
+        sh=$$sh_t; sh_args='';; \
+    esac; \
+    case "$$sh" in \
+      /*) ;; \
+      */*) sh=`pwd`/$$sh;; \
+      *) sh=`which "$$sh" 2>/dev/null`;; \
     esac; \
     case "$$sh" in /*);; *) continue;; esac; \
     test -f "$$sh" && test -x "$$sh" || continue; \
+    sh="$$sh $$sh_args"; \
     _RAT4_STRICT_DISTCHECK_CONFIG_SHELL="$$sh"; \
     export _RAT4_STRICT_DISTCHECK_CONFIG_SHELL; \
     :
