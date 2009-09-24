@@ -74,6 +74,24 @@ C Coding Style
     #endif /* RAT4_FOO_H */
 
 
+C++ Compatibility
+-----------------
+
+ Ratfor must compile even under a C++ compiler.  In particular, this means
+ that:
+   - C++ reserved keywords, like `and', `or', `private' or `public' cannot
+     be used.
+   - Global variables and non-static functions must be explicitly marked
+     as `extern "C"' when compiling with a C++ compiler; this can be
+     accomplished using the macros `BEGIN_C_DECLS', `END_C_DECLS' and
+     `C_DECL', defined in <config.h>.
+   - Since the C++ compilers are stricter in type checking, the return
+     value of malloc must always cast explicitly; e.g. this does not work:
+       char *p = malloc(STRING_SIZE); /* WRONG */
+     and this must be used instead:
+       char *p = (char *) malloc(STRING_SIZE); /* GOOD */
+
+
 Testsuite
 ---------
 
@@ -97,7 +115,7 @@ Make a release
 
 Miscellaneous
 -------------
-  
+
   * Do not checkin generated files like configure or the various
     Makefile.in
   * Do not use $Id$ lines, which create more problems than they solve.

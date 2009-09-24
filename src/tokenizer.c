@@ -22,7 +22,6 @@
  * Private Variables.
  */
 
-
 static const char KEYWORD_INCLUDE[] = "include";
 static const char KEYWORD_FUNCTION[] = "function";
 static const char KEYWORD_DEFINE[] = "define";
@@ -390,6 +389,7 @@ pop_file_stack(void)
  * Public Functions.
  */
 
+BEGIN_C_DECLS
 
 /* Get token (handling macro expansions, macro definitons and file
  * inclusion). */
@@ -447,5 +447,7 @@ get_nonblank_token(char token[], int toksiz)
     tok = get_token(token, toksiz);
     return(tok);
 }
+
+END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

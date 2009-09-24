@@ -15,17 +15,18 @@ New in XXX
  * The error messages have been generally improved and made more detailed.
    A prominent example of this improvement is the increased level of
    details in messages about I/O failures, with the explicit indication of
-   the failure's reasons, e.g. `No such file or directory' or `Permission
+   the failure's reason, e.g. `No such file or directory' or `Permission
    denied'.
  * Now ratfor complains if given more than one non-option arguments,
    instead of silently discarding all the extra arguments.
  * Messages about usage errors involving unknown option or options called
    in the wrong way have now the format:
     <PROGNAME>: `-<OPTION>': <ERROR-MESSAGE>
+ * It should now be possible to compile Ratfor also with a C++ compiler.
 
 New in 1.0i
 -----------
- 
+
  * Ratfor is now fully case-sensible, both respect to its input and to its
    output.  In particular, this means that output is no more converted to
    lowercase (this conversion was tricky, since e.g. strings and comments

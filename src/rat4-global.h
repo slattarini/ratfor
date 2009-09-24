@@ -3,16 +3,19 @@
 
 #include "rat4-common.h"
 
-char current_function_name[MAXFUNCNAME];  /* text of current function name */
+/* text of current function name */
+C_DECL char current_function_name[MAXFUNCNAME];
 
-int keep_comments; /* YES if comments should be kept, NO otherwise */
+/* true if comments should be kept, false otherwise */
+C_DECL bool keep_comments;
 
-#define NFILES 7  /* max depth of file inclusion */
+/*  level of file inclusion; init = 1 */
+C_DECL int level;
 
-int level;                      /*  level of file inclusion; init = 1            */
-int lineno[NFILES];             /*  line count on input file[level]; init = 1    */
-FILE *infile[NFILES];           /*  file number[level]; init infile[1] = STDIN   */
-const char *filename[NFILES];   /*  filename of input file[level]                */
+/* stack of inluded files: line nuber, file name, file pointer */
+C_DECL int lineno[NFILES];
+C_DECL FILE *infile[NFILES];
+C_DECL const char *filename[NFILES];
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

@@ -23,7 +23,7 @@ AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
 AM_SILENT_RULES([yes]) # make `--enable-silent-rules' the default
 
 #
-# Checks for C support.
+# Checks for C compiler and support.
 #
 
 AC_PROG_CC_STDC
@@ -87,6 +87,21 @@ for flag in -Wall -Wextra -Wshadow -Werror -pedantic; do
     RAT4_CACHE_CHECK_CC_FLAG([$flag],[],[],[CFLAGS="$CFLAGS $flag"])
 done
 AS_UNSET([flag])
+
+#
+# Hack to support C++ compilers.
+#
+
+AH_TOP([/* Support for C++ compilers */
+#ifdef __cplusplus
+#  define C_DECL extern "C"
+#  define BEGIN_C_DECLS extern "C" {
+#  define END_C_DECLS }
+# else
+#  define C_DECL
+#  define BEGIN_C_DECLS
+#  define END_C_DECLS
+#endif])
 
 #
 # Checks for things needed by the test suite.

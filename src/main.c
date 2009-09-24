@@ -55,7 +55,7 @@ usage_error(const char *msg)
         errflg = true; \
     } while (false);
 
-int
+C_DECL int
 main(int argc, char *argv[])
 {
     int c, startlab;

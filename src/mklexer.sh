@@ -49,7 +49,7 @@ cat <<\EOF
  * lex - return lexical type of token, while writing it in lexstr[]
  *
  */
-int
+C_DECL int
 lex(char lexstr[])
 {
     int tok;

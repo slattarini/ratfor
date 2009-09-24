@@ -27,7 +27,7 @@ hash(const char *s)
  * lookup - lookup for a string s in the hash table
  *
  */
-struct hashlist *
+C_DECL struct hashlist *
 lookup(const char *s)
 {
     struct hashlist *np;
@@ -42,14 +42,15 @@ lookup(const char *s)
  * install - install a string name in hashtable and its value def
  *
  */
-struct hashlist*
+C_DECL struct hashlist*
 install(const char *name, const char *def)
 {
     int hashval;
     struct hashlist *np;
 
     if ((np = lookup(name)) == NULL) { /* not found.. */
-        np = malloc(sizeof(*np));
+        /* cast needed to avoid errors with c++ compilers */
+        np = (struct hashlist *) malloc(sizeof(*np));
         if (np == NULL)
             return(NULL);
         if ((np->name = strsave(name)) == NULL)

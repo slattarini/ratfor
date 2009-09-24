@@ -14,7 +14,12 @@
 #define MAXFORSTK  200         /* max space for for reinit clauses */
 
 /*
- *  C O N S T A N T  S T R I N G S
+ *  C O D E  G E N E R A T I O N
+ */
+
+
+/*
+ * Private Constant Strings.
  */
 
 static const char scontinue[]   = "continue";
@@ -27,8 +32,9 @@ static const char sendif[]      = "endif";
 static const char sgoto[]       = "goto";
 static const char sreturn[]     = "return";
 
+
 /*
- *  G L O B A L  V A R I A B L E S
+ * Private Global Variables
  */
 
 static int swtop = 0;   /* switch stack index */
@@ -40,15 +46,12 @@ static bool xfer;  /*  true if just made transfer, false otherwise */
 static int swstak[MAXSWITCH];   /* switch information stack */
 static char forstk[MAXFORSTK];  /* stack of reinit strings  */
 
-/*
- *  C O D E  G E N E R A T I O N
- */
-
 
 /*
- * balpar - copy balanced paren string
- *
+ * Private Functions.
  */
+
+/* balpar - copy balanced paren string */
 static void
 balpar(void)
 {
@@ -80,10 +83,8 @@ balpar(void)
         synerr("missing parenthesis in condition.");
 }
 
-/*
- * eatup - process rest of statement; interpret continuations
- *
- */
+/* eatup - process rest of statement; interpret continuations 
+XXX: but is not interpretation of continuation already done in io.c ??? */
 static void
 eatup(void)
 {
@@ -130,12 +131,9 @@ eatup(void)
 }
 
 
-/*
- *  alldig - return true if str is all digits
- *
- */
+/* is_all_digits - return true if str is all digits */
 static bool
-alldig(const char str[])
+is_all_digits(const char str[])
 {
     int i;
 
@@ -147,10 +145,7 @@ alldig(const char str[])
     return(true);
 }
 
-/*
- * outgo - output "goto  n"
- *
- */
+/* outgo - output "goto  n" */
 static void
 outgo(int n)
 {
@@ -163,9 +158,14 @@ outgo(int n)
     outdon();
 }
 
+
 /*
- * brknxt - generate code for break n and next n; n = 1 is default
+ * Public Functions.
  */
+
+BEGIN_C_DECLS
+
+/* brknxt - generate code for break n and next n; n = 1 is default */
 void
 brknxt(int sp, int lextyp[], int labval[], int token)
 {
@@ -174,7 +174,7 @@ brknxt(int sp, int lextyp[], int labval[], int token)
 
     n = 0;
     t = get_nonblank_token(ptoken, MAXTOK);
-    if (alldig(ptoken)) { /* have break n or next n */
+    if (is_all_digits(ptoken)) { /* have break n or next n */
         i = 0;
         n = ctoi(ptoken, &i) - 1;
     } else if (t != SEMICOL) /* default case */
@@ -203,10 +203,7 @@ brknxt(int sp, int lextyp[], int labval[], int token)
     return;
 }
 
-/*
- * docode - generate code for beginning of do
- *
- */
+/* docode - generate code for beginning of do */
 void
 docode(int *lab)
 {
@@ -219,10 +216,7 @@ docode(int *lab)
     outdon();
 }
 
-/*
- * dostat - generate code for end of do statement
- *
- */
+/* dostat - generate code for end of do statement */
 void
 dostat(int lab)
 {
@@ -230,10 +224,7 @@ dostat(int lab)
     outcon(lab+1);
 }
 
-/*
- * elseifc - generate code for end of if before else
- *
- */
+/* elseifc - generate code for end of if before else */
 void
 elseifc(void)
 {
@@ -242,10 +233,7 @@ elseifc(void)
     outdon();
 }
 
-/*
- * forcode - beginning of for statement
- *
- */
+/* forcode - beginning of for statement */
 void
 forcode(int *lab)
 {
@@ -323,10 +311,7 @@ forcode(int *lab)
     *lab = tlab;
 }
 
-/*
- * fors - process end of for statement
- *
- */
+/* fors - process end of for statement */
 void
 fors(int lab)
 {
@@ -346,10 +331,7 @@ fors(int lab)
     fordep--;
 }
 
-/*
- * ifgo - generate "if(.not.(...))goto lab"
- *
- */
+/* ifgo - generate "if(.not.(...))goto lab" */
 static void
 ifgo(int lab)
 {
@@ -361,10 +343,7 @@ ifgo(int lab)
     outgo(lab);     /* " goto lab " */
 }
 
-/*
- * ifcode - generate initial code for if
- *
- */
+/* ifcode - generate initial code for if */
 void
 ifcode(int *lab)
 {
@@ -373,10 +352,7 @@ ifcode(int *lab)
     ifthenc();
 }
 
-/*
- * ifend - generate code for end of if
- *
- */
+/* ifend - generate code for end of if */
 void
 ifend(void)
 {
@@ -385,10 +361,7 @@ ifend(void)
     outdon();
 }
 
-/*
- * ifthenc - generate "if((...))then"
- *
- */
+/* ifthenc - generate "if((...))then" */
 void
 ifthenc(void)
 {
@@ -400,10 +373,7 @@ ifthenc(void)
     outdon();
 }
 
-/*
- * labelc - output statement number
- *
- */
+/* labelc - output statement number */
 void
 labelc(char lexstr[])
 {
@@ -415,10 +385,7 @@ labelc(char lexstr[])
     outtab();
 }
 
-/*
- * otherstmt - output ordinary Fortran statement
- *
- */
+/* otherstmt - output ordinary Fortran statement */
 void
 otherstmt(char lexstr[])
 {
@@ -429,10 +396,7 @@ otherstmt(char lexstr[])
     outdon();
 }
 
-/*
- * outcon - output "lab   continue"
- *
- */
+/* outcon - output "lab   continue" */
 void
 outcon(int lab)
 {
@@ -448,10 +412,7 @@ outcon(int lab)
     outdon();
 }
 
-/*
- * repcod - generate code for beginning of repeat
- *
- */
+/* repcod - generate code for beginning of repeat */
 void repcode(int *lab)
 {
     int tlab;
@@ -463,10 +424,7 @@ void repcode(int *lab)
     *lab = ++tlab; /* label to go on next's */
 }
 
-/*
- * retcode - generate code for return
- *
- */
+/* retcode - generate code for return */
 void
 retcode(void)
 {
@@ -490,10 +448,7 @@ retcode(void)
 }
 
 
-/*
- * untils - generate code for until or end of repeat
- *
- */
+/* untils - generate code for until or end of repeat */
 void
 untils(int lab, int token)
 {
@@ -511,10 +466,7 @@ untils(int lab, int token)
     outcon(lab+1);
 }
 
-/*
- * whilecode - generate code for beginning of while
- *
- */
+/* whilecode - generate code for beginning of while */
 void
 whilecode(int *lab)
 {
@@ -524,10 +476,7 @@ whilecode(int *lab)
     ifthenc();
 }
 
-/*
- * whiles - generate code for end of while
- *
- */
+/* whiles - generate code for end of while */
 void
 whiles(int lab)
 {
@@ -536,10 +485,7 @@ whiles(int lab)
     outcon(lab+1); /* needed by e.g. break */
 }
 
-/*
- * caslab - get one case label
- *
- */
+/* caslab - get one case label */
 static int
 caslab (int *n, int *t)
 {
@@ -571,10 +517,7 @@ caslab (int *n, int *t)
     return(0); /* expected to be ignored */
 }
 
-/*
- * cascode - generate code for case or default label
- *
- */
+/* cascode - generate code for case or default label */
 void
 cascode(int lab, int token)
 {
@@ -636,9 +579,7 @@ cascode(int lab, int token)
     outcon (l);
 }
 
-/*
- * swvar  - output switch variable Innn, where nnn = lab
- */
+/* swvar  - output switch variable Innn, where nnn = lab */
 static void
 swvar(int lab)
 {
@@ -646,10 +587,7 @@ swvar(int lab)
     outnum(lab);
 }
 
-/*
- * swcode - generate code for switch stmt.
- *
- */
+/* swcode - generate code for switch stmt. */
 void
 swcode(int *lab)
 {
@@ -679,19 +617,11 @@ swcode(int *lab)
     }
 }
 
-/*
- * swend  - finish off switch statement; generate dispatch code
- *
- */
+/* swend  - finish off switch statement; generate dispatch code */
 void
 swend(int lab)
 {
     int lb, ub, n, i;
-
-    static const char eq[]  = ".eq.";
-    static const char ge[]  = ".ge.";
-    static const char le[]  = ".le.";
-    static const char and[] = ".and.";
 
     lb = swstak[swtop + 3];
     ub = swstak[swlast - 2];
@@ -708,15 +638,15 @@ swend(int lab)
             outstr (sif);
             swvar  (lab);
             if (swstak[i] == swstak[i+1]) {
-                outstr (eq); /* #   .eq....*/
+                outstr (".eq."); /* #   .eq....*/
                 outnum (swstak[i]);
             }
             else {
-                outstr (ge); /* #   .ge.lb.and.Innn.le.ub */
+                outstr (".ge."); /* #   .ge.lb.and.Innn.le.ub */
                 outnum (swstak[i]);
-                outstr (and);
+                outstr (".and.");
                 swvar  (lab);
-                outstr (le);
+                outstr (".le.");
                 outnum (swstak[i + 1]);
             }
             outch (RPAREN); /* #    ) goto ... */
@@ -729,5 +659,7 @@ swend(int lab)
     swlast = swtop;   /* # pop switch stack */
     swtop = swstak[swtop];
 }
+
+END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

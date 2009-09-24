@@ -34,6 +34,8 @@ void puts_(const char *s)
 /* get next char (either pushed back or new from the stream) */
 #define NGETC_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
     
+BEGIN_C_DECLS
+
 /*
  * ngetch - get a (possibly pushed back) character, dealing with line
  *          continuation and keeping the count of line number.
@@ -83,12 +85,16 @@ put_back_char(char c)
     buf[bp] = c;
 }
 
+END_C_DECLS
+
 /*
  *  O U T P U T  F O R T R A N - C O M P A T I B L E  T E X T
  */
 
 static char outbuf[82]; /*  output lines collected here    */
 static int outp = 0;    /*  last position filled in outbuf */
+
+BEGIN_C_DECLS
 
 /*
  * outch - put one char into output buffer
@@ -141,7 +147,7 @@ outdon(void)
 {
     outbuf[outp] = NEWLINE;
     outbuf[outp+1] = EOS;
-    puts_( outbuf);
+    puts_(outbuf);
     outp = 0;
 }
 
@@ -213,5 +219,7 @@ outcmnt(FILE * fp)
     comout[comoutp+1] = EOS;
     puts_(comout);
 }
+
+END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

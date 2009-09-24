@@ -64,6 +64,7 @@
 
 #define MAXFUNCNAME 128     /* max funcname size */
 #define MAXTOK      1024    /* max chars in a token */
+#define NFILES      30      /* max depth of file inclusion */
 
 #define STREQ(x, y) (strcmp((x),(y)) == 0)
 

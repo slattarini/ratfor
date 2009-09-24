@@ -79,7 +79,7 @@ unstak(char token)
     } /* end for */
 }
 
-void
+C_DECL void
 parse(void)
 {
     char lexstr[MAXTOK];
