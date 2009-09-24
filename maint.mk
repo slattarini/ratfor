@@ -93,6 +93,7 @@ StrictDistcheckLoopBegin += \
   for cc in $(strict_distcheck_c_compilers); do
 StrictDistcheckLoopEnd += done;
 strict_distcheck_configure_flags += CC='$$cc'
+strict_distcheck_configure_flags += --enable-werror-cflag
 
 # Fortran compilers to be used by the ratfor testsuite, when doing a
 # strict-distcheck.
