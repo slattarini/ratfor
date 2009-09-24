@@ -16,7 +16,6 @@ strict_distcheck_c_compilers = \
   /usr/bin/gcc-3.3 \
   /usr/bin/gcc-4.1 \
   /usr/bin/gcc \
-  /usr/bin/g++-3.3 \
   /usr/bin/g++-4.1 \
   /usr/bin/g++
 
