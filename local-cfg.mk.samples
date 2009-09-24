@@ -10,6 +10,7 @@
 # C/C++ compilers to be used to by the ratfor testsuite, when doing a
 # strict-distcheck.
 strict_distcheck_c_compilers = \
+  /usr/bin/pcc \
   /usr/bin/tcc \
   /usr/bin/gcc-3.3 \
   /usr/bin/gcc-4.1 \
