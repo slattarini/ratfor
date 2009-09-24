@@ -78,12 +78,22 @@ AS_UNSET([func])
 #  Enable compiler warnings.
 #
 
+# Whether or not the `-Werror' flag should be added (when supported) to
+# $CFLAGS.
+AC_ARG_ENABLE(
+    [werror-cflag],
+    [AC_HELP_STRING(
+        [--enable-werror-cflag],
+        [enable the `-Werror' C compiler flag, if supported])],
+    [maybe_werror=-Werror],
+    [maybe_werror=''])
+
 # Enable as many compiler warnings as possible (this is tailered to gcc,
 # but should not cause failures of problems for other compilers).
 # This code *must* be set after any check on cc, c headers, c functions
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
-for flag in -Wall -Wextra -Wshadow -Werror -pedantic; do
+for flag in -Wall -Wextra -Wshadow -pedantic $maybe_werror; do
     RAT4_CACHE_CHECK_CC_FLAG([$flag],[],[],[CFLAGS="$CFLAGS $flag"])
 done
 AS_UNSET([flag])
