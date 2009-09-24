@@ -78,14 +78,22 @@ AS_UNSET([func])
 #  Enable compiler warnings.
 #
 
-# Whether or not the `-Werror' flag should be added (when supported) to
-# $CFLAGS.
+# Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
+# should be added (when supported) to $CFLAGS.
 AC_ARG_ENABLE(
     [werror-cflag],
     [AC_HELP_STRING(
         [--enable-werror-cflag],
         [enable the `-Werror' C compiler flag, if supported])],
-    [maybe_werror=-Werror],
+    [AS_CASE(
+        ["$enable_werror_cflag"],
+        [[[yY]|[yY]es|YES|1|[tT]rue]],
+            [maybe_werror=-Werror],
+        [[[nN]|[nN]o|NO|0|[fF]alse]],
+            [maybe_werror=''],
+        failmsg="Invalid value \`$enable_werror_cflag' specified"
+        failmsg="$failmsg for option \`--enable-werror-cflag'"
+        [AC_MSG_ERROR([$failmsg])])],
     [maybe_werror=''])
 
 # Enable as many compiler warnings as possible (this is tailered to gcc,
