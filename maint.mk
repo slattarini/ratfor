@@ -18,12 +18,12 @@ _autoreconf := $(shell echo "$${AUTORECONF:-autoreconf}")
 autoreconf:
 	cd $(srcdir) && rm -rf autom4te.cache && $(_autoreconf) -vi
 
-# Regenrate the source tree, and reconfigure the build tree.
+# Regenerate the source tree, and reconfigure the build tree.
 .PHONY: reconfigure
 reconfigure: autoreconf
 	$(SHELL) $(srcdir)/configure
 
-# By default, call autoreconf in an uncofigured tree before trying to
+# By default, call autoreconf in an unconfigured tree before trying to
 # make the requsted targets.
 ifeq ($(.DEFAULT_GOAL),abort-due-to-no-makefile)
 ifeq ($(MAKECMDGOALS),)
@@ -74,12 +74,103 @@ null_AM_MAKEFLAGS = \
   AUTOHEADER=false \
   MAKEINFO=false
 
-# Compilers to be used by the reatfor testsuite, when doing a
+# Command line arguments for configure as called by `strict-distcheck'.
+# Will be updated later.
+strict_distcheck_configure_flags =
+
+# Auxilary variables, needed to keep the code in target `strict-distcheck'
+# understandable. Will be suitably updated later, in various places.
+StrictDistcheckLoopBegin =
+StrictDistcheckLoopEnd =
+
+# C/C++ compilers to be used to by the reatfor testsuite, when doing a
+# strict-distcheck.
+strict_distcheck_c_compilers ?= cc c++
+StrictDistcheckLoopBegin += \
+  for cc in $(strict_distcheck_c_compilers); do
+StrictDistcheckLoopEnd += done;
+strict_distcheck_configure_flags += CC='$$cc'
+
+# Fortran compilers to be used by the reatfor testsuite, when doing a
 # strict-distcheck.
 strict_distcheck_f77_compilers ?= fort77 gfortran
+StrictDistcheckLoopBegin += \
+  for f77 in NONE $(strict_distcheck_f77_compilers); do
+StrictDistcheckLoopEnd += done;
+strict_distcheck_configure_flags += F77='$$f77'
 
-# Command line arguments for configure as called by `strict-distcheck'.
-strict_distcheck_configure_flags =
+# Shells to be used to run the configure script and the tests scripts,
+# when doing a strict-distcheck.  Since the rules in `make distcheck'
+# run `configure' directly, we need to go through some hoops to force
+# it to run with the shell we want.
+strict_distcheck_shells ?= ksh bash
+StrictDistcheckLoopBegin += \
+  for sh_t in /bin/sh $(strict_distcheck_shells); do \
+    case "$$sh_t" in \
+      /*) sh=$$sh_t;; \
+      */*) sh=`pwd`/$$sh_t1;; \
+      *) sh=`which "$$sh_t" 2>/dev/null`;; \
+    esac; \
+    case "$$sh" in /*);; *) continue;; esac; \
+    test -f "$$sh" && test -x "$$sh" || continue; \
+    _RAT4_STRICT_DISTCHECK_CONFIG_SHELL="$$sh"; \
+    export _RAT4_STRICT_DISTCHECK_CONFIG_SHELL; \
+    :
+StrictDistcheckLoopEnd += \
+    _RAT4_STRICT_DISTCHECK_CONFIG_SHELL=''; \
+    unset _RAT4_STRICT_DISTCHECK_CONFIG_SHELL || :; \
+  done;
+strict_distcheck_configure_flags += CONFIG_SHELL='$$sh'
+# Since the rules in `make distcheck' run `configure' directly, we need
+# to go through some hoops to force it to run with the shell we want.
+.PHONY: config-shell-strict-distcheck-hook
+distcheck-hook: config-shell-strict-distcheck-hook
+config-shell-strict-distcheck-hook:
+	@test -z "$${_RAT4_STRICT_DISTCHECK_CONFIG_SHELL-}" || { \
+	  echo "$(ME): Correcting configure script for strict-distcheck" \
+	  && tmp=configure.tmp \
+	  && sh=$${_RAT4_STRICT_DISTCHECK_CONFIG_SHELL} \
+	  && rm -f $$tmp \
+	  && echo "#! $$sh" >>$$tmp \
+	  && echo "# Correction code added by $(ME)" >>$$tmp \
+	  && echo "CONFIG_SHELL='$$sh'" >>$$tmp \
+	  && echo "export CONFIG_SHELL" >>$$tmp \
+	  && sed '1s/^#!.*$$//' $(distdir)/configure >>$$tmp \
+	  && chmod u+w $(distdir)/configure \
+	  && cat $$tmp >$(distdir)/configure \
+	  && chmod a-w $(distdir)/configure \
+	  && echo '|----------------' \
+	  && sed -e 's/^/| /' -e 40q $(distdir)/configure \
+	  && echo '|----------------' \
+	  && rm -f $$tmp; \
+	}
+
+.PHONY: strict-distcheck
+strict-distcheck: all check distcheck
+	set -e; \
+	 xrun() { \
+	   echo "+ $$*"; \
+	   "$$@" || { \
+	     echo "========================================================"; \
+	     echo "$(ME): COMMAND FAILED: $$*"; \
+	     echo "========================================================"; \
+	     exit 1; \
+	   }; \
+	 }; \
+	 echo " -*-*-*-"; \
+	 echo "$(ME): running $@"; \
+	 $(StrictDistcheckLoopBegin) \
+	   echo " -*-*-*-"; \
+	   xrun $(xmake) distcheck \
+	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
+	     DISTCHECK_CONFIGURE_FLAGS="$(strict_distcheck_configure_flags)"; \
+	   echo " -*-*-*- "; \
+	   xrun $(xmake) -j8 distcheck \
+	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
+	     DISTCHECK_CONFIGURE_FLAGS="$(strict_distcheck_configure_flags)"; \
+	 $(StrictDistcheckLoopEnd) \
+	 echo " -*-*-*-"; \
+	 exit $$e;
 
 .PHONY: vc-nodiff-check
 vc-nodiff-check: git-no-diff-check git-no-diff-cached-check
@@ -119,29 +210,6 @@ vc-diff-check:
 	   echo "$(ME): version \`$(VERSION)' not mentioned in NEWS" >&2; \
 	   exit 1; \
 	}
-
-.PHONY: strict-distcheck
-strict-distcheck: all check distcheck
-	@set -e; \
-	 xrun() { \
-	   echo "+ $$*"; \
-	   "$$@" || { echo "$(ME): COMMAND FAILED: $$*"; exit 1; }; \
-	 }; \
-	 echo " -*-*-*-"; \
-	 echo "$(ME): running strict-distcheck"; \
-	 for f77 in NONE $(strict_distcheck_f77_compilers); do \
-	   configure_flags="$(strict_distcheck_configure_flags) F77='$$f77'"; \
-	   echo " -*-*-*-"; \
-	   xrun $(xmake) distcheck \
-	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
-	     DISTCHECK_CONFIGURE_FLAGS="$$configure_flags"; \
-	   echo " -*-*-*- "; \
-	   xrun $(xmake) -j8 distcheck \
-	     AM_MAKEFLAGS='$(null_AM_MAKEFLAGS)' \
-	     DISTCHECK_CONFIGURE_FLAGS="$$configure_flags"; \
-	 done; \
-	 echo " -*-*-*-"; \
-	 exit $$e;
 
 .PHONY: alpha beta major
 ALL_RECURSIVE_TARGETS += alpha beta major
