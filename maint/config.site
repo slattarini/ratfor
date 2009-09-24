@@ -1,0 +1,11 @@
+#!/bin/sh
+# This file is read by our Autoconf-generated "configure" script.
+# This file is meant to be used by *maintainers only*.
+
+# Always enable `-Werror' flag for C compiler, if supported.
+enable_werror_cflag=yes
+
+# Always import maintainer rules in GNUmakefile.
+enable_maintainer_make_rules=yes
+
+# vim: ft=sh ts=4 sw=4 et
