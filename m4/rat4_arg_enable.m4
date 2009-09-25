@@ -20,6 +20,6 @@ AC_DEFUN([RAT4_ARG_ENABLE],
             [rat4_failmsg="Invalid value \`$enableval' specified"
              rat4_failmsg="$failmsg for option \`--enable-$1'"
             AC_MSG_ERROR([$rat4_failmsg])])],
-        [m4_default([$5], [$3])])])
+        [m4_default([$5], [$4])])])
 
 # vim: ft=m4 ts=4 sw=4 et
