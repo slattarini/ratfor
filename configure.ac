@@ -78,45 +78,23 @@ AS_UNSET([func])
 #  Enable compiler warnings.
 #
 
-## XXX: refactor and remove code duplication
-
 # Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
 # should be added (when supported) to $CFLAGS.
-AC_ARG_ENABLE(
+RAT4_ARG_ENABLE(
     [werror-cflag],
-    [AC_HELP_STRING(
-        [--enable-werror-cflag],
-        [enable the `-Werror' C compiler flag, if supported])],
-    [AS_CASE(
-        ["$enable_werror_cflag"],
-        [[[yY]|[yY]es|YES|1|[tT]rue]],
-            [maybe_werror=-Werror],
-        [[[nN]|[nN]o|NO|0|[fF]alse]],
-            [maybe_werror=''],
-        failmsg="Invalid value \`$enable_werror_cflag' specified"
-        failmsg="$failmsg for option \`--enable-werror-cflag'"
-        [AC_MSG_ERROR([$failmsg])])],
-    [maybe_werror=''])
+    [enable the `-Werror' C compiler flag, if supported],dnl '`# font-lock
+    [rat4_maybe_werror=-Werror],
+    [rat4_maybe_werror=''])
 
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
 # rules should be improted in the GNUmakefile.
-AC_ARG_ENABLE(
+RAT4_ARG_ENABLE(
     [maintainer-make-rules],
-    [AC_HELP_STRING(
-        [--enable-maintainer-make-rules],
-        [Import maintaner-specific rules in the GNUmakefile.
-         Use it only if you have GNU make, and you know what you are doing.
-         Also, note that this option has *NOTHING* to do with the
-         infamous automake's "maintainer-mode".])],
-    [AS_CASE(
-        ["$enable_maintainer_make_rules"],
-        [[[yY]|[yY]es|YES|1|[tT]rue]],
-            [rat4_enable_maintainer_make_rules=yes],
-        [[[nN]|[nN]o|NO|0|[fF]alse]],
-            [rat4_enable_maintainer_make_rules=no],
-        failmsg="Invalid value \`$enable_maintainer_make_rules' specified"
-        failmsg="$failmsg for option \`--enable-maintainer-make-rules'"
-        [AC_MSG_ERROR([$failmsg])])],
+    [Import maintaner-specific rules in the GNUmakefile. Use it only if
+      you have GNU make, and you know what you are doing. Also, note that
+      this option has *NOTHING* to do with the infamous automake's
+      "maintainer-mode".],dnl '# font-lock
+    [rat4_enable_maintainer_make_rules=yes],
     [rat4_enable_maintainer_make_rules=no])
 
 m4_pattern_allow([RAT4_ENABLE_MAINTAINER_MAKE_RULES])
@@ -128,7 +106,7 @@ AM_CONDITIONAL([RAT4_ENABLE_MAINTAINER_MAKE_RULES],
 # This code *must* be set after any check on cc, c headers, c functions
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
-for flag in -Wall -Wextra -Wshadow -pedantic $maybe_werror; do
+for flag in -Wall -Wextra -Wshadow -pedantic $rat4_maybe_werror; do
     RAT4_CACHE_CHECK_CC_FLAG([$flag],[],[],[CFLAGS="$CFLAGS $flag"])
 done
 AS_UNSET([flag])
