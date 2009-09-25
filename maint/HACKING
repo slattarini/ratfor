@@ -11,6 +11,27 @@ Bootstrap
   installed the latest version of autoconf (2.64) and automake (1.11).
 
 
+Configuring and building
+------------------------
+
+  Run configure with the option `--enable-maintainer-make-rules', to
+  enable the importing of the maintainer-specific rules (saved in files
+  `maint/*.mk') in GNUmakefile.
+
+  Run configure with the option `--enable-werror-cflag', to enable the
+  `-Werror' flag in the C compiler (if supported).  This helps catching
+  errors at compile-time.
+
+  Use GNU make to enable the automatic depedencies tracking (done by
+  automake) and to render the maintainer-specific make rules usable.
+
+  Also, note that, on a cloned git repository, the configure script read in
+  by default the file `maint/config.site', which contains code to make the
+  `-Werror' C compiler flag and the maintainer-specific make rules enabled
+  by default.  So you shouldn't need to explicitly pass to configure the
+  `--enable-*' option described above.
+
+
 Recording changes
 -----------------
 

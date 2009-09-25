@@ -7,7 +7,7 @@ m4_pattern_forbid([^_?RAT4_])
 m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 
 #
-# Autoconf's and Automake's initializations.
+# Autoconf's initializations.
 #
 
 AC_PREREQ([2.64])
@@ -17,6 +17,23 @@ AC_CONFIG_SRCDIR([src/rat4-common.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
+
+#
+# Maintainer-specific initializations and defaults.
+#
+
+maint_config_site=$srcdir/maint/config.site
+if test -f "$maint_config_site"; then
+    AC_MSG_NOTICE([loading mainainer script `$maint_config_site'])
+    . "$maint_config_site"
+    if test $? -ne 0; then
+        AC_MSG_ERROR([failed to source script `$maint_config_site'])
+    fi
+fi
+
+#
+# Automake's initializations.
+#
 
 AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
                        no-installinfo no-texinfo.tex])
