@@ -22,11 +22,21 @@ New in XXX
  * Messages about usage errors involving unknown option or options called
    in the wrong way have now the format:
     <PROGNAME>: `-<OPTION>': <ERROR-MESSAGE>
+ * Now the `configure' scripts tries by defaults to enable as many warnings
+   as possible in the C compiler.  Currently, there is no way to disable
+   this behaviour.
+ * There is a new configure option, `--enable-werror-flags', which tries
+   to enable the `-Werror' compiler flag (if the compiler supports itd), to
+   turn compile-time warnings into errors.  This option is expected to be
+   used mostly by maintainers.
  * Previously, if the user used GNU make, maintainer-specific make rules
    were uncoditionally imported by the GNUmakefile.  Now the user must pass
    the option `--enable-maintainer-make-rules' to configure to enable the
    importing of such rules.  This option is expected to be used only by
    maintainers.
+ * Now, even if using GNU make, a `make' command issued in an unconfigured
+   tree does not anymore trigger autotools boostrapping (i.e. basically the
+   call of `autoreconf', `./configure' and `make all').
  * It should now be possible to compile Ratfor also with a C++ compiler.
 
 New in 1.0i
