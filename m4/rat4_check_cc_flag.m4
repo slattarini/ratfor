@@ -1,4 +1,4 @@
-# serial 1 rat4_check_flag.m4
+# serial 2 rat4_check_cc_flag.m4
 
 # _RAT4_CHECK_CC_FLAG(FLAG-TO-CHECK,[PROLOGUE],[BODY],
 #                     [ACTION-IF-SUCCESS], [ACTION-IF-FAILURE])
