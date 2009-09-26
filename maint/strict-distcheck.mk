@@ -109,11 +109,7 @@ strict-distcheck: all check distcheck
 	 echo "$(ME): running $@"; \
 	 $(StrictDistcheckLoopBegin) \
 	   echo " -*-*-*-"; \
-	   xrun $(xmake) distcheck \
-	     AM_MAKEFLAGS='$(strict_distcheck_null_am_makeflags)' \
-	     DISTCHECK_CONFIGURE_FLAGS="$(strict_distcheck_configure_flags)"; \
-	   echo " -*-*-*- "; \
-	   xrun $(xmake) -j8 distcheck \
+	   xrun $(xmake) -j2 distcheck \
 	     AM_MAKEFLAGS='$(strict_distcheck_null_am_makeflags)' \
 	     DISTCHECK_CONFIGURE_FLAGS="$(strict_distcheck_configure_flags)"; \
 	 $(StrictDistcheckLoopEnd) \
