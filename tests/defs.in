@@ -372,6 +372,7 @@ testSubDir=`pwd` # absolute path
 echo "=== Running test $0"
 echo "# PWD: `pwd`"
 echo "# PATH: $PATH"
+echo "# RATFOR: $RATFOR"
 
 # Turn on shell traces.
 set -x
