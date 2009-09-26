@@ -11,6 +11,7 @@ strict_distcheck_null_am_makeflags ?= \
   AUTOCONF=false \
   AUTOMAKE=false \
   AUTOHEADER=false \
+  PERL=false \
   MAKEINFO=false
 
 # Command line arguments for configure as called by `strict-distcheck'.
