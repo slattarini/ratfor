@@ -1,6 +1,6 @@
 List of user-visible changes of Public Domain Ratfor.
 
-New in XXX
+New in 1.0j
 -----------
  * Since Fortran 77 is ubiquitous today, and Fortran 66 almost forgotten,
    Ratfor now output Fortran 77 code, without bothering anymore about
