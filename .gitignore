@@ -7,7 +7,7 @@
 git.log
 git.log[0-9]
 
-/config.site
+/maint/config.site
 /maint/local-cfg.mk
 
 /_build/
@@ -27,5 +27,5 @@ Makefile.in
 
 /stamp-h1
 
-/ratfor-*.tar.gz
-/ratfor-*/
+/ratfor-[0-9]*.tar.gz
+/ratfor-[0-9]*/
