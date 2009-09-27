@@ -1,0 +1,1 @@
+../../m4/rat4_check_cc_flag.m4

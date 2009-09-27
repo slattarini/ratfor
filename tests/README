@@ -1,5 +1,7 @@
                         The Public Domain Ratfor test suite
 
+TODO: brief description
+
 
 User interface
 ==============
@@ -50,6 +52,8 @@ Fortran 77 Compiler
   A special value of `NONE' for `RAT4_TESTSUITE_F77' will explicitly tell
   configure that you don't have any avaiable Fortran 77 compiler.  All the
   tests requiring such a compiler will be skipped.
+  
+  TODO: speak about RATFOR configure var
 
 
 Getting details from failures

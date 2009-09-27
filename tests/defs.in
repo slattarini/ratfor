@@ -1,6 +1,8 @@
 #!/bin/sh
+# @configure_input@
+#
 # Common definitions and environments setting read (with the `source'
-# shell builtin) by all tests of ratfor.
+# shell builtin) by all test scripts of the Ratfor Testsuite.
 #
 
 # Shell initialization code, stolen from autoconf
@@ -37,9 +39,10 @@ SED=${RAT4_TESTSUITE_SED-'@SED@'}
 AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
 SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
 DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
-F77=${RAT4_TESTSUITE_F77-'@RAT4_TESTSUITE_F77@'}
 CC=${RAT4_TESTSUITE_CC-'@CC@'}
 CFLAGS=${RAT4_TESTSUITE_CFLAGS-'@CFLAGS@'}
+F77=${RAT4_TESTSUITE_F77-'@F77@'}
+RATFOR=${RAT4_TESTSUITE_RATFOR-'@RATFOR@'}
 
 # Symbolic names for exit statuses
 SUCCESS=0
@@ -121,28 +124,6 @@ testrootdir=`pwd`
 PATH=$testrootdir${PATH+":$PATH"}
 export PATH
 
-# Program to be tested.
-RATFOR=${RAT4_TESTUITE_RATFOR_EXECUTABLE-"$testrootdir/ratfor${EXEEXT}"}
-if do_sanity_checks; then
-    case "$RATFOR" in
-      /*)
-        # OK, given as an absolute path
-        ;;
-      *) 
-        echo "Expected ratfor program to test not given as an absolute" \
-             "path: $RATFOR" >&2
-        exit $E_HARD
-        ;;
-    esac
-    test -f "$RATFOR" || {
-        echo "Expected ratfor program to test not found: $RATFOR" >&2
-        exit $E_HARD
-    }
-    test -x "$RATFOR" || {
-        echo "Expected ratfor program to test not executable: $RATFOR" >&2
-        exit $E_HARD
-    }
-fi
 # Symbolic names for whitespace characters.
 SPACE=' '
 TAB='	'
@@ -382,6 +363,7 @@ testSubDir=`pwd` # absolute path
 echo "=== Running test $0"
 echo "# PWD: `pwd`"
 echo "# PATH: $PATH"
+echo "# F77: $F77"
 echo "# RATFOR: $RATFOR"
 
 # Turn on shell traces.
