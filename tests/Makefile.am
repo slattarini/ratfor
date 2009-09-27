@@ -1,13 +1,29 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# Makefile for the test/ratfor subdirectory.
+# Makefile for the Ratfor Testsuite subpackage.
 
-TEST_EXTENSIONS = .test
+ACLOCAL_AMFLAGS = -I m4 --install
+
+# We don't support install targets
+RAT4_INSTALL_TARGETS = \
+  install install-data install-exec \
+  install-dvi install-html install-info install-ps install-pdf \
+  uninstall
+$(RAT4_INSTALL_TARGETS):
+	@(echo ==========================================================; \
+	  echo '$(PACKAGE_NAME) dot not support "install-like" targets.';  \
+	  echo "The target \`$@' is therefore a no-op.";                   \
+	  echo ==========================================================) \
+	 | sed 's/^/WARNING: /' >&2
+
+DISTCHECK_CONFIGURE_FLAGS = 'RATFOR=$(RATFOR)'
 
 # --------------- #
 #  LIST OF TESTS  #
 # --------------- #
+
+TEST_EXTENSIONS = .test
 
 XFAIL_TESTS = # updated later
 
@@ -203,47 +219,22 @@ AM_TEST_LOG_FLAGS = # will be updated later
 #        slowing the execution of the testsuite.
 AM_TEST_LOG_FLAGS += srcdir='$(abs_srcdir)'
 
-# might be updated later (esp. in included files)
+# Might be updated later (also in included files).  Do not remove this
+# definition.
 MOSTLYCLEANFILES = 
 
-check_SCRIPTS  = # will be updted later
-check_PROGRAMS = # will be updted later
+# Each test case depends on to-be-included scripts `defs.sh'.
+check_SCRIPTS = defs.sh
 
-# Each test case depends on defs.sh and ratfor.
-check_SCRIPTS += defs.sh
-
-# Some test cases depends on ./ratfor.
-check_SCRIPTS += ratfor$(EXEEXT)
-
-# Some test cases depends on ./timer.
-check_PROGRAMS += timer$(EXEEXT)
+# Some test cases depends on our custom `timer' binary.
+check_PROGRAMS = timer$(EXEEXT)
 
 # Let a call to `make all' rebuild all the scripts/programs needed by the
 # testsuite.
 all-local: $(check_SCRIPTS) $(check_PROGRAMS)
 
-# Real ratfor binary.
-top_ratfor = $(top_builddir)/src/ratfor$(EXEEXT)
-
-# Ratfor binary to be used in testing. It depends on the real ratfor
-# binary (at the moment, it's just a link to it).
-ratfor$(EXEEXT): $(top_ratfor)
-	rm -f $@ && $(LN_S) $(top_ratfor) $@
-
-# Tell how to rebuild the real ratfor binary -- aha, the woes of recursive
-# make...
-$(top_ratfor): _force
-	cd $(abs_top_builddir)/src && $(MAKE) $(AM_MAKEFLAGS) ratfor$(EXEEXT)
-_force:
-.PHONY: _force
-
 # Auxiliary program used by the testsuite.
 timer_SOURCES = timer.c
-
-# Be sure to use the absolute path of the test ratfor executable, since
-# in our testsuite we merryli change the curent directory a lot.
-AM_TEST_LOG_FLAGS += \
-  RAT4_TESTUITE_RATFOR_EXECUTABLE='$(abs_builddir)/ratfor$(EXEEXT)'
 
 # To improve the overall speed of our slow testsuite, let it know that
 # it is already being run with the proper $SHELL (as found by configure),
@@ -264,12 +255,6 @@ AM_TEST_LOG_FLAGS += $(TEST_SHELL)
 # ------------------- #
 #  TESTSUITE CLEANUP  #
 # ------------------- #
-
-# Remove the ratfor binary used in testing
-clean-local-ratfor:
-	rm -f ratfor$(EXEEXT)
-.PHONY: clean-local-ratfor
-clean-local: clean-local-ratfor
 
 # Remove any directory left behind the the test scripts (this is needed
 # especially if the shell used in test des not properly support the `-e'

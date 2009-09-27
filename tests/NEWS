@@ -1,0 +1,8 @@
+List of user-visible changes of Ratfor Testsuite.
+
+New in XXX 
+-----------
+ * The Ratfor Testsuite tree has been separated from the Public Domain
+   Ratfor tree, and turned into a subpackage, beginning a life of its own.
+   But note that it still works *only* as a subpackage of Public Domain
+   Ratfor.
