@@ -25,10 +25,6 @@
 
 /defs.sh
 
-/*.log
-/*.log-t
-/*.dir
-
 /.deps/
 /*.o
 /*.obj

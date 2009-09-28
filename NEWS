@@ -3,7 +3,7 @@ List of user-visible changes of Public Domain Ratfor.
 New in XXX
 -----------
  * The ratfor testsuite in `tests/' is now a subpackage, with its own
-   configure, Makefile.am, auto* auxiliary files etc.
+   configure script, makefiles, auto* auxiliary files etc.
 
 New in 1.0j
 -----------
