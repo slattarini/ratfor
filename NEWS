@@ -1,5 +1,9 @@
 List of user-visible changes of Ratfor Testsuite.
 
+New in XXX
+-----------
+ * Added BUGS and HACKING files. Consequent adaptation of the README file.
+
 New in 0.9a
 -----------
  * The Ratfor Testsuite tree has been separated from the Public Domain

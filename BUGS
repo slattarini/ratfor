@@ -1,0 +1,10 @@
+List of BUGS for the Ratfor Testsuite.
+
+ ---
+
+This is a limitation rather than a bug.
+The test scripts are already tailored to and designed for the Public Domain
+Ratfor.  This will hopefully change when another ratfor version will be
+available for testing.
+
+ ---

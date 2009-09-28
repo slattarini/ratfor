@@ -1,8 +1,0 @@
-The "Ratfot Testsuite" is not meant to be installed.
-
-It can simply be used directly from its own tree to check an installed
-version of the ratfor properocessor.
-
-Alternatively, it can be embedded in the distribution of a third-party
-ratfor processor to work as its testsuite, or at least as a part of its
-testsuite.

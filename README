@@ -2,54 +2,44 @@
 
 
 Brief Description
-=================
-
-This package contains a set of blackbox testcases for the ratfor
-preprocessor.  It is an independent package, not tailored to a particular
-ratfor implementation.
-
-It can be used to check that ratfor implmentations has "standardized"
-behaviour (where the "standardized" is to be interpreted as "passes all
-the tests defined in the Ratfor Testsuite").
-
-This package is used in particular as the testsuite of the Public Domain
-Ratfor (a ratfor proprocessor written in C and released in the public
-domain).
-
-
-
-User interface
-==============
-
-
-Running all tests
 -----------------
 
-  The command:
+  This package contains a set of blackbox testcases for the ratfor
+  preprocessor.  It is an independent package, not tailored to a particular
+  ratfor implementation.
 
-    make check
+  It can be used to check that ratfor implementations has "standardized"
+  behaviour (where the "standardized" is to be interpreted as "passes all
+  the tests defined in the Ratfor Testsuite").
 
-  should run all the ratfor testcases.  They will be run in series.
-
-  You can use the `-j N' make option for faster completion (roughly, this
-  runs up to N tests simultaneously, in parallel).  An example:
-    
-    make -j 5 check
+  This package is used in particular as the testsuite of the Public Domain
+  Ratfor (a ratfor proprocessor written in C and released in the public
+  domain).
 
 
-Interpretation
---------------
+Configuration process
+---------------------
 
-  Successes:
-    PASS  - success
-    XFAIL - expected failure
+  The Ratfor Testuite ships with a customary autoconf-generated `configure'
+  script, which scans the system looking for prerequisites needed to run
+  the testsuite.  Especially important are its searches for a ratfor
+  preprocessor and a fortran compiler, and the wasy in which the user can
+  override or preset the results of this search.  These and other aspects
+  are described in more details in the rest of the file.
 
-  Failures:
-    FAIL  - failure
-    XPASS - unexpected success
 
-  Other:
-    SKIP  - skipped tests (third party tools not available)
+(No) Installation
+-----------------
+
+  The "Ratfot Testsuite" is not meant to be installed.
+
+  It can be used directly from its own tree to check an installed version
+  of the ratfor properocessor.
+
+  Alternatively, it can be embedded in the distribution of a third-party
+  ratfor processor to work as its testsuite, or at least as a part of its
+  testsuite (see the following section "Ratfor preprocessor" for more
+  details about this possibility).
 
 
 Ratfor preprocessor
@@ -127,6 +117,36 @@ Fortran 77 Compiler
   such a compiler will be skipped.
 
 
+Running all tests
+-----------------
+
+  The command:
+
+    make check
+
+  should run all the ratfor testcases.  They will be run in series.
+
+  You can use the `-j N' make option for faster completion (roughly, this
+  runs up to N tests simultaneously, in parallel).  An example:
+    
+    make -j 5 check
+
+
+Interpretation
+--------------
+
+  Successes:
+    PASS  - success
+    XFAIL - expected failure
+
+  Failures:
+    FAIL  - failure
+    XPASS - unexpected success
+
+  Other:
+    SKIP  - skipped tests (third party tools not available)
+
+
 Getting details from failures
 -----------------------------
 
@@ -151,7 +171,7 @@ Getting details from failures
 
     env VERBOSE=yes TESTS='first.test second.test ...' make -e check
 
-  But remember that `make -e' can be evil, since it could pull to much
+  But remember that `make -e' can be evil, since it could pull too many
   things in the makefile's namespace.  You've been warned.
 
 
@@ -192,124 +212,4 @@ Reporting failures
   numbers (which ratfor, which C compiler, which fortran compiler, which
   operating system, which make utility and version, which shell, etc.).
   Also report any other information which you think might be useful.
-
-
-
-Writing test cases
-==================
-
-
-Do
---
-
-  Make sure the new test is executable.  Add it to TESTS in Makefile.am,
-  add it to XFAIL_TESTS in addition if needed.  If it depends on a data
-  file (say `foo.data'), add the proper dependency in Makefile.am, e.g.
-  `foo.log: foo.data', and add `foo.data' to EXTRA_DIST.
-
-  Explain what each test does, at least briefly.
-
-  Include `./defs.sh', aborting the test (with exit status `99') if the
-  inclusion fails.  You'd better read and understand that file well before
-  trying to write a test case.
-
-  Use `set -e' to catch failures you might not have thought of.
-
-  Use either `testcase_PASS', `testcase_FAIL', `testcase_SKIP' or
-  `testcase_HARDERROR' to terminate a test.  If for some reason you need
-  to return with a custom exit status, use `Exit' rather than `exit'.
-  *Every* test must use a call to either `testcase_PASS', `testcase_FAIL',
-  `testcase_SKIP', `testcase_HARDERROR' or `Exit' to do normal termination.
-  If a test exits for another reason (e.g. a call to plain `exit', a failed
-  command when the `set -e' switch is active, a terminating signal, a
-  syntax error in shell code, ...) the test will end in an "hard error",
-  and will be considered FAIL'd.
-
-  Do *not* use the `testcase_*' or `Exit' subroutines in a subshell.
-
-  Use $GREP, $FGREP, $EFREP, $SED, $AWK, $SHELL instead of the
-  corresponding commands.  Also prefer $DIFF_U on plain `diff'.
-  This list of tools might be incomplete: look at defs.in for a
-  complete list.
-
-  When calculating diffs on expected output and obtained output, put
-  file containing expected output first, as in `$DIFF_U exp.txt got.txt'.
-  This will make the output of diff more intuitive and easier to grasp.
-
-  Use `cat' or `grep' to display (part of) files that may be
-  interesting for debugging, so that when a user send a verbose
-  output we don't have to ask him for more details.  Display stderr
-  output on the stderr file descriptor.  If some redirected command
-  is likely to fail, and `set -e' is in effect, display its output
-  even in the failure case, before exiting.
-
-  It's more important to make sure that a feature works, than
-  make sure that ratfor's output looks correct.  It might look
-  correct and still fail to work.  In other words, prefer compiling and
-  running the fotran code generated by ratfor over grepping it (or do
-  both).
-
-  If you plan to test a ratfor feature (let's call it "foo") by both
-  grepping its output and testing the generated fortran code, divide the
-  test into two scripts, say `scripts/foo.test' and `scripts/foo_f77.test',
-  and place any shared bata between them in `data/foo.data' (if you need
-  more data files, use `data/foo.data1', `data/foo.data2' etc. instead).
-  This is done so that, even when a Fortran 77 compiler is not available,
-  the tests about the feature "foo" will not be completely skipped (only
-  "half-skipped").  Finally, in `scripts/foo_f77.test', place a call to
-  `require_fortran_compiler' just after the inclusion of `./defs.sh', so
-  that the test will be skipped if no Fortran 77 compiler is available.
-
-  Keep the shell code as portable as possible.  This can be trickier that
-  you think; for more information, you can refer to the Autoconf manual,
-  especially the section `Portable shell programming' -- which should be
-  reachable at the following URL:
-  http://www.gnu.org/software/autoconf/manual/html_node/Portable-Shell.html
-  See also about a particularly nasty bug of zsh, in the section `Do Not'
-  below.
-
-
-Do not
-------
-
-  Do not make different test cases dependent one from another.  Ever.
-  And above all, do not rely on a particular order in tests' execution;
-  even if they are usually run in alphabetic order, this might likely no
-  more hold when running them in parallel.
-
-  Do not try to be too smart when writing a testcase: better keep it
-  simple and robust.  But do not dumb down a test to the point of making
-  it incomplete or sloppy.
-
-  Do not test a ratfor error with `$RATFOR && testcase_FAIL', since the
-  ratfor program might fail for a reason different from the one you thought
-  of.
-  Better use something like:
-     run_RATFOR -e 1 || testcase_FAIL
-     $GREP 'expected diagnostic' stderr || testcase_FAIL
-  (Note that this doesn't prevent the test from failing for another reason,
-  but at least it makes sure the original error is still there.)
-
-  If you must run a program to later analize its stderr, do *not* run it
-  by doing e.g.:
-    [WRONG]  PROG 2>foo.txt
-  Instead, use the run_CMD() subroutine (defined in tests/defs.sh), as in:
-    [GOOD]   run_CMD PROG; mv stderr foo.txt
-  You can't use the apparently simpler form `PROG 2>stderr.txt' because of
-  a nasty bug of the zsh shell (at least of some 4.x versions).
-  In details: if you run command when `set -x' is active, and redirect its
-  standard error to a file, then zsh writes also the *trace* for the
-  command into that file, instead that into the original standard error.
-  For example:
-    $ zsh -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"
-    SHOULD BE EMPTY: +zsh:1> true
-  while the correct behaviour is e.g.
-    $ ksh -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"
-    + true
-    + 2> file
-    SHOULD BE EMPTY:
-  or:
-    $ bash -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"
-    + true
-    SHOULD BE EMPTY:
 

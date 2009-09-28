@@ -1,0 +1,246 @@
+HACKING file for The Ratfor Testsuite.
+
+This file attempts to describe the rules to use when hacking/extending it.
+
+
+
+Introduction and general infomration
+====================================
+
+ Bootstrap
+ ---------
+
+  To bootstrap checked-out sources, just run
+    $ autoreconf -vi
+  from the top directory. Note that to do this you'll need to have
+  installed the latest version of autoconf (2.64) and automake (1.11).
+
+
+ Configuring and building
+ ------------------------
+
+  TODO
+
+
+ Recording changes
+ -----------------
+
+  * Add an adequate and clear comment for every check-in.
+  * Changes other than minor bug fixes must be mentioned in NEWS.
+  * Important bug fixings must be mentioned in NEWS, too.
+  * If you do a change that add some obscure code for a good reason,
+    please comment the code carefully and explicitly describe the resason
+    that led you to write it.
+  * We do not use a ChangeLog file.
+
+
+
+Writing auxiliary C programs
+============================
+
+
+ When and how
+ ------------
+
+  It is ok to write small C programs to be used by the testsuite, if they
+  are useful enought or help working around portability problems of shell
+  utilties.
+
+  Keep them simple and portable, and let them degrade gracefully when
+  building requirments are not met (the `timer.c' program is a good
+  example of this).
+
+  Remember to add proper configure checks if needed.
+
+
+ C Coding Style
+ --------------
+
+  Mostly K&R style.
+
+  For variables: do not use CamelCase or mixedCase, but use only
+  names_with_undercores.
+
+  Constants defined with `enum' or with `#define' must be written in
+  UPPERCASE.  Macros defined with `#define' should be written in UPPERCASE,
+  *unless* keeping them lowercase can make the code clearer.
+
+  Always include the configure-generated <config.h> header.
+
+  Do not use typedefs : it's better know the real type of what is being
+  declared and used, even if that means a bit more typing.
+
+  Do not use `bool' type: stick to `int' even for boolena variables.
+
+  Do not write function definitions like this:
+    ...
+    int foo(void) {
+       ... /* function body here */
+    }
+    ...
+    char* bar(char c, char s[], int n)
+    {
+       ... /* function body here */
+    }
+    ...
+  Intead use:
+    ...
+    int
+    foo(void)
+    {
+       ... /* function body here */
+    }
+    ...
+    char *
+    bar(char c, char s[], int n)
+    {
+       ... /* function body here */
+    }
+    ...
+  This greatly increases greppability of C source files.
+
+  For header files: protect from multiple inclusions with the idiom
+  (assuming a `foo.h' header file):
+    #ifndef AUX_FOO_H
+    #  define AUX_FOO_H 1
+    ... /* content of header file here */
+    #endif /* AUX_FOO_H */
+
+
+ C++ Compatibility
+ -----------------
+
+  Ratfor must compile even under a C++ compiler.  In particular, this means
+  that:
+   - C++ reserved keywords, like `and', `or', `private' or `public' cannot
+     be used.
+   - Global variables and non-static functions must be explicitly marked
+     as `extern "C"' when compiling with a C++ compiler; this can be
+     accomplished using the macros `BEGIN_C_DECLS', `END_C_DECLS' and
+     `C_DECL', defined in <config.h>.
+   - Since the C++ compilers are stricter in type checking, the return
+     value of malloc must always cast explicitly; e.g. this does not work:
+       char *p = malloc(STRING_SIZE); /* WRONG */
+     and this must be used instead:
+       char *p = (char *) malloc(STRING_SIZE); /* GOOD */
+
+
+
+Writing test cases
+==================
+
+
+ Do
+ --
+
+  Make sure the new test is executable.  Add it to TESTS in Makefile.am,
+  add it to XFAIL_TESTS in addition if needed.  If it depends on a data
+  file (say `foo.data'), add the proper dependency in Makefile.am, e.g.
+  `foo.log: foo.data', and add `foo.data' to EXTRA_DIST.
+
+  Explain what each test does, at least briefly.
+
+  Include `./defs.sh', aborting the test (with exit status `99') if the
+  inclusion fails.  You'd better read and understand that file well before
+  trying to write a test case.
+
+  Use `set -e' to catch failures you might not have thought of.
+
+  Use either `testcase_PASS', `testcase_FAIL', `testcase_SKIP' or
+  `testcase_HARDERROR' to terminate a test.  If for some reason you need
+  to return with a custom exit status, use `Exit' rather than `exit'.
+  *Every* test must use a call to either `testcase_PASS', `testcase_FAIL',
+  `testcase_SKIP', `testcase_HARDERROR' or `Exit' to do normal termination.
+  If a test exits for another reason (e.g. a call to plain `exit', a failed
+  command when the `set -e' switch is active, a terminating signal, a
+  syntax error in shell code, ...) the test will end in an "hard error",
+  and will be considered FAIL'd.
+
+  Do *not* use the `testcase_*' or `Exit' subroutines in a subshell.
+
+  Use $GREP, $FGREP, $EFREP, $SED, $AWK, $SHELL instead of the
+  corresponding commands.  Also prefer $DIFF_U on plain `diff'.
+  This list of tools might be incomplete: look at defs.in for a
+  complete list.
+
+  When calculating diffs on expected output and obtained output, put
+  file containing expected output first, as in `$DIFF_U exp.txt got.txt'.
+  This will make the output of diff more intuitive and easier to grasp.
+
+  Use `cat' or `grep' to display (part of) files that may be
+  interesting for debugging, so that when a user send a verbose
+  output we don't have to ask him for more details.  Display stderr
+  output on the stderr file descriptor.  If some redirected command
+  is likely to fail, and `set -e' is in effect, display its output
+  even in the failure case, before exiting.
+
+  It's more important to make sure that a feature works, than
+  make sure that ratfor's output looks correct.  It might look
+  correct and still fail to work.  In other words, prefer compiling and
+  running the fotran code generated by ratfor over grepping it (or do
+  both).
+
+  If you plan to test a ratfor feature (let's call it "foo") by both
+  grepping its output and testing the generated fortran code, divide the
+  test into two scripts, say `scripts/foo.test' and `scripts/foo_f77.test',
+  and place any shared bata between them in `data/foo.data' (if you need
+  more data files, use `data/foo.data1', `data/foo.data2' etc. instead).
+  This is done so that, even when a Fortran 77 compiler is not available,
+  the tests about the feature "foo" will not be completely skipped (only
+  "half-skipped").  Finally, in `scripts/foo_f77.test', place a call to
+  `require_fortran_compiler' just after the inclusion of `./defs.sh', so
+  that the test will be skipped if no Fortran 77 compiler is available.
+
+  Keep the shell code as portable as possible.  This can be trickier that
+  you think; for more information, you can refer to the Autoconf manual,
+  especially the section `Portable shell programming' -- which should be
+  reachable at the following URL:
+  http://www.gnu.org/software/autoconf/manual/html_node/Portable-Shell.html
+  See also about a particularly nasty bug of zsh, in the section `Do Not'
+  below.
+
+
+ Do not
+ ------
+
+  Do not make different test cases dependent one from another.  Ever.
+  And above all, do not rely on a particular order in tests' execution;
+  even if they are usually run in alphabetic order, this might likely no
+  more hold when running them in parallel.
+
+  Do not try to be too smart when writing a testcase: better keep it
+  simple and robust.  But do not dumb down a test to the point of making
+  it incomplete or sloppy.
+
+  Do not test a ratfor error with `$RATFOR && testcase_FAIL', since the
+  ratfor program might fail for a reason different from the one you thought
+  of.
+  Better use something like:
+     run_RATFOR -e 1 || testcase_FAIL
+     $GREP 'expected diagnostic' stderr || testcase_FAIL
+  (Note that this doesn't prevent the test from failing for another reason,
+  but at least it makes sure the original error is still there.)
+
+  If you must run a program to later analize its stderr, do *not* run it
+  by doing e.g.:
+    [WRONG]  PROG 2>foo.txt
+  Instead, use the run_CMD() subroutine (defined in tests/defs.sh), as in:
+    [GOOD]   run_CMD PROG; mv stderr foo.txt
+  You can't use the apparently simpler form `PROG 2>stderr.txt' because of
+  a nasty bug of the zsh shell (at least of some 4.x versions).
+  In details: if you run command when `set -x' is active, and redirect its
+  standard error to a file, then zsh writes also the *trace* for the
+  command into that file, instead that into the original standard error.
+  For example:
+    $ zsh -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"
+    SHOULD BE EMPTY: +zsh:1> true
+  while the correct behaviour is e.g.
+    $ ksh -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"
+    + true
+    + 2> file
+    SHOULD BE EMPTY:
+  or:
+    $ bash -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"
+    + true
+    SHOULD BE EMPTY:
+
