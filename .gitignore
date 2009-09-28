@@ -4,13 +4,11 @@
 *[$~]
 #*#
 
-git.log
-git.log[0-9]
+/git.log
+/git.log[0-9]
 
 /maint/config.site
 /maint/local-cfg.mk
-
-/_build/
 
 /build-aux/
 /autom4te.cache/
@@ -27,5 +25,9 @@ Makefile.in
 
 /stamp-h1
 
-/public-domain-ratfor-[0-9]*.tar.gz
-/public-domain-ratfor-[0-9]*/
+/.deps
+/timer
+/timer.o
+
+/ratfor-testsuite-[0-9]*.tar.gz
+/ratfor-testsuite-[0-9]*/

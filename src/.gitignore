@@ -1,5 +1,0 @@
-/.deps/
-*.o
-*.obj
-ratfor
-lexer.c

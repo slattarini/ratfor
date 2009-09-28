@@ -1,27 +1,31 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# Public Domain Ratfor preprocessor, written in C.
-# Makefile for the top-level directory of ratfor.
+# Top-level Makefile for the Ratfor Testsuite subpackage.
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-EXTRA_DIST = GNUmakefile maint.mk HACKING
-EXTRA_DIST += maint/strict-distcheck.mk maint/release.mk maint/remake.mk
+SUBDIRS = tests
 
-if RAT4_ENABLE_MAINTAINER_MAKE_RULES
-  # used by maint.mk
-  RAT4_ENABLE_MAINTAINER_MAKE_RULES = yes
-else
-  # used by maint.mk
-  RAT4_ENABLE_MAINTAINER_MAKE_RULES = no
-endif
+DISTCHECK_CONFIGURE_FLAGS = 'RATFOR=$(RATFOR)'
 
-SUBDIRS = src doc blackbox-tests
+# We don't support install targets.
+RAT4_INSTALL_TARGETS = \
+  install install-data install-exec \
+  install-dvi install-html install-info install-ps install-pdf \
+  uninstall
+$(RAT4_INSTALL_TARGETS):
+	@(echo ==========================================================; \
+	  echo '$(PACKAGE_NAME) dot not support "install-like" targets.';  \
+	  echo "The target \`$@' is therefore a no-op.";                   \
+	  echo ==========================================================) \
+	 | sed 's/^/WARNING: /' >&2
 
-dist_doc_DATA = README BUGS NEWS
-
-# This is defined here so that it can be extended in maint.mk, if needed.
-distcheck-hook:
+# Some test cases depends on our custom `timer' binary.
+check_PROGRAMS = timer$(EXEEXT)
+timer_SOURCES = timer.c
+# Let a call to `make all' rebuild all the scripts/programs needed by the
+# testsuite.
+all-local: $(check_SCRIPTS)
 
 ## vim: ft=automake noet sw=4 ts=4
