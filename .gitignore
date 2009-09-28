@@ -27,5 +27,5 @@ Makefile.in
 
 /stamp-h1
 
-/ratfor-[0-9]*.tar.gz
-/ratfor-[0-9]*/
+/public-domain-ratfor-[0-9]*.tar.gz
+/public-domain-ratfor-[0-9]*/
