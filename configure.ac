@@ -18,7 +18,7 @@ AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
 # the testsuite is kept in a separate subpackage.
-AC_CONFIG_SUBDIRS([tests])
+AC_CONFIG_SUBDIRS([blackbox-tests])
 
 # Since $RATFOR is declared in tests/configure.ac as a precious variable,
 # this will pass the proper value of $RATFOR to tests/configure.

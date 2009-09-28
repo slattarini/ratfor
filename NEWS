@@ -2,8 +2,10 @@ List of user-visible changes of Public Domain Ratfor.
 
 New in XXX
 -----------
- * The ratfor testsuite in `tests/' is now a subpackage, with its own
-   configure script, makefiles, auto* auxiliary files etc.
+ * The ratfor testsuite, which is composed only of blackbox-style test
+   scripts, is now a subpackage, with its own configure script, makefiles,
+   auto* auxiliary files etcetera.  It has been moved from the `tests/'
+   subdirectory into the `blackbox-tests/' subdirectory.
 
 New in 1.0j
 -----------

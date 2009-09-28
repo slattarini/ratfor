@@ -116,8 +116,9 @@ C++ Compatibility
 Testsuite
 ---------
 
+  Currently, the testsuite comprises only blackbox test scripts.
   Can be run with `make check'.  For more details, refer to file
-  `tests/README'.
+  `blackbox-tests/README'.
 
 
 Fixing bugs

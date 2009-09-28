@@ -17,7 +17,7 @@ else
   RAT4_ENABLE_MAINTAINER_MAKE_RULES = no
 endif
 
-SUBDIRS = src doc tests 
+SUBDIRS = src doc blackbox-tests
 
 dist_doc_DATA = README BUGS NEWS
 
