@@ -1,7 +1,7 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# ratfor: public domain ratfor preprocessor, written in C.
+# Public Domain Ratfor preprocessor, written in C.
 # Makefile for the top-level directory of ratfor.
 
 ACLOCAL_AMFLAGS = -I m4 --install
