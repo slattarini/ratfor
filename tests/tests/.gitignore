@@ -1,0 +1,10 @@
+/*.log
+/*.log-t
+/*.dir
+
+/defs.sh
+
+/timer
+
+/Makefile
+/Makefile.in
