@@ -13,9 +13,9 @@ C_DECL bool keep_comments;
 C_DECL int level;
 
 /* stack of inluded files: line nuber, file name, file pointer */
-C_DECL int lineno[NFILES];
-C_DECL FILE *infile[NFILES];
-C_DECL const char *filename[NFILES];
+C_DECL int lineno[MAX_INCLUDE_DEPTH];
+C_DECL FILE *infile[MAX_INCLUDE_DEPTH];
+C_DECL const char *filename[MAX_INCLUDE_DEPTH];
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

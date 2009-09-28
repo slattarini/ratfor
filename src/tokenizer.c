@@ -347,7 +347,7 @@ push_file_stack(const char *path)
     int i;
     FILE *fp;
 
-    if (level >= NFILES - 1) {
+    if (level >= MAX_INCLUDE_DEPTH - 1) {
         synerr_include("includes nested too deeply.");
         return;
     }

@@ -62,9 +62,9 @@
 
 #define RADIX PERCENT /* `%' indicates alternate radix for numbers */
 
-#define MAXFUNCNAME 128     /* max funcname size */
-#define MAXTOK      1024    /* max chars in a token */
-#define NFILES      30      /* max depth of file inclusion */
+#define MAXFUNCNAME         128     /* max funcname size */
+#define MAXTOK              1024    /* max chars in a token */
+#define MAX_INCLUDE_DEPTH   30      /* max depth of file inclusion */
 
 #define STREQ(x, y) (strcmp((x),(y)) == 0)
 
