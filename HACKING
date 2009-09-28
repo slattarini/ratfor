@@ -132,7 +132,25 @@ Fixing bugs
 Make a release
 --------------
 
-  TODO
+  Be sure you have enabled the importing of maintainer make rules.  Commit
+  any pending change to Git.  Then, properly bump the package version in
+  the AC_INIT call in `configure.ac' and in the `NEWS' file; regenerate
+  autotools' files, rebuild the package and re-run the testsuite.  Commit
+  again to Git, with a proper message (like "bumped version 1.0 => 1.1").
+  Then simply issue a `make alpha' (if releasing an alpha version),
+  `make beta' (if releasing a beta version), or `make major' (if releasing
+  a stable version).  This will *automatically* do what follows (stopping
+  at the first error encountered):
+    1. check that there aren't uncommited changes;
+    2. run (minor) sanity checks on the contents of the `NEWS' file and
+       on the package version string;
+    3. re-run the testsuite;
+    4. run the `strict-distcheck' target (a stricter, fancier and more
+       thorough version of `distcheck', defined in the maintainer's file
+       `maint/strict-distcheck.mk');
+    5. create a distribution tarball;
+    6. add a Git tag with a suitable name (e.g. if current version is
+       `1.0', the tag will be named `v1.0').
 
 
 Miscellaneous
