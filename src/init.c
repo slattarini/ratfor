@@ -25,9 +25,9 @@ bool keep_comments;
 int level;
 
 /* stack of inluded files: line nuber, file name, file pointer */
-int lineno[NFILES];
-FILE *infile[NFILES];
-const char *filename[NFILES];
+int lineno[MAX_INCLUDE_DEPTH];
+FILE *infile[MAX_INCLUDE_DEPTH];
+const char *filename[MAX_INCLUDE_DEPTH];
 
 #endif /* C++ */
 
