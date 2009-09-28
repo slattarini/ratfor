@@ -1,6 +1,6 @@
 List of user-visible changes of Public Domain Ratfor.
 
-New in XXX
+New in 1.0k
 -----------
  * The ratfor testsuite, which is composed only of blackbox-style test
    scripts, is now a subpackage, with its own configure script, makefiles,
