@@ -20,10 +20,11 @@ AC_CONFIG_AUX_DIR([build-aux])
 # the testsuite is kept in a separate subpackage.
 AC_CONFIG_SUBDIRS([blackbox-tests])
 
-# Since $RATFOR is declared in tests/configure.ac as a precious variable,
-# this will pass the proper value of $RATFOR to tests/configure.
-# NOTE: in configure, the current working directory (returned by `pwd')
-# is the build directory.
+# Since `RATFOR' is declared in `blackbox-tests/configure.ac' as a
+# precious variable, this will pass the proper value of $RATFOR to
+# the recusrively invoked script `blackbox-tests/configure'.
+# NOTE: when the configure script is running, the current working
+# directory (returned by `pwd') is the build directory.
 RATFOR=`pwd`/src/ratfor; export RATFOR
 AC_MSG_NOTICE([exported RATFOR='$RATFOR'])
 
