@@ -193,18 +193,6 @@ next-fail.test: break-next-fail.data
 # Each test case depends on to-be-included scripts `defs.sh'.
 check_SCRIPTS = defs.sh
 
-# Some test cases depends on our custom `timer' binary.
-top_timer = $(top_builddir)/bin-aux/timer$(EXEEXT)
-timer: $(top_timer)
-	rm -f $@ && $(LN_S) $(top_timer) $@
-# aha, the woes of recursive make...
-$(top_timer): _force
-	cd $(abs_top_builddir)/bin-aux && $(MAKE) $(AM_MAKEFLAGS) timer$(EXEEXT)
-.PHONY: _force
-_force:
-check_SCRIPTS += timer
-
-
 # --------------------------------- #
 #  TESTSUITE ENVIRONMENT AND SETUP  #
 # --------------------------------- #
@@ -230,12 +218,6 @@ AM_TEST_LOG_FLAGS += $(TEST_SHELL)
 # ------------------- #
 #  TESTSUITE CLEANUP  #
 # ------------------- #
-
-# Remove the symlink to timer binary.
-.PHONY: clean-local-timer
-clean-local-timer:
-	rm -f timer$(EXEEXT)
-clean-local: clean-local-timer
 
 # Remove any directory left behind the the test scripts (this is needed
 # especially if the shell used in test des not properly support the `-e'
