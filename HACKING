@@ -47,8 +47,8 @@ Writing auxiliary C programs
   utilties.
 
   Keep them simple and portable, and let them degrade gracefully when
-  building requirments are not met (the `timer.c' program is a good
-  example of this).
+  building requirments are not met (the `bin-aux/timer.c' program is a
+  good example of this).
 
   Remember to add proper configure checks if needed.
 
