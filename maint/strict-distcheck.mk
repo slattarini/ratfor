@@ -89,7 +89,7 @@ config-shell-strict-distcheck-hook:
 	  && cat $$tmp >$(distdir)/configure \
 	  && chmod a-w $(distdir)/configure \
 	  && echo '|----------------' \
-	  && sed -e 's/^/| /' -e 40q $(distdir)/configure \
+	  && sed -e 's/^/| /' -e 11q $(distdir)/configure \
 	  && echo '|----------------' \
 	  && rm -f $$tmp; \
 	}
