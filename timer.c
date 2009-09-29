@@ -152,7 +152,7 @@ setup_timer(unsigned int time)
         fatal(E_UNEXPECT, "couldn't setup timer: previous alarm found");
 }
 
-int
+C_DECL int
 main(int argc, char **argv)
 {
     unsigned int timeout = 10;

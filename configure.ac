@@ -113,6 +113,21 @@ done
 AS_UNSET([flag])
 
 #
+# Hack to support C++ compilers.
+#
+
+AH_TOP([/* Support for C++ compilers */
+#ifdef __cplusplus
+#  define C_DECL extern "C"
+#  define BEGIN_C_DECLS extern "C" {
+#  define END_C_DECLS }
+# else
+#  define C_DECL
+#  define BEGIN_C_DECLS
+#  define END_C_DECLS
+#endif])
+
+#
 # Checks for things needed by the test suite.
 #
 
