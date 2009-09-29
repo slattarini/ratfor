@@ -25,9 +25,5 @@ Makefile.in
 
 /stamp-h1
 
-/.deps
-/timer
-/timer.o
-
 /ratfor-testsuite-[0-9]*.tar.gz
 /ratfor-testsuite-[0-9]*/

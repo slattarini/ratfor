@@ -1,11 +1,11 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# Top-level Makefile for the Ratfor Testsuite subpackage.
+# Top-level Makefile for the Ratfor Testsuite.
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-SUBDIRS = tests
+SUBDIRS = src-aux tests
 
 DISTCHECK_CONFIGURE_FLAGS = 'RATFOR=$(RATFOR)'
 
@@ -20,12 +20,5 @@ $(RAT4_INSTALL_TARGETS):
 	  echo "The target \`$@' is therefore a no-op.";                   \
 	  echo ==========================================================) \
 	 | sed 's/^/WARNING: /' >&2
-
-# Some test cases depends on our custom `timer' binary.
-check_PROGRAMS = timer$(EXEEXT)
-timer_SOURCES = timer.c
-# Let a call to `make all' rebuild all the scripts/programs needed by the
-# testsuite.
-all-local: $(check_SCRIPTS)
 
 ## vim: ft=automake noet sw=4 ts=4

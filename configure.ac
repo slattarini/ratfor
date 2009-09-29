@@ -152,7 +152,7 @@ RAT4_PROG_DIFF_U
 ## Make GNUmakefile available also in VPATH builds.
 #AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
-AC_CONFIG_FILES([Makefile tests/Makefile])
+AC_CONFIG_FILES([Makefile src-aux/Makefile tests/Makefile])
 # Be sure to make the generated file `defs.sh' readonly, to avoid that
 # absent-minded developers modify it instead of `defs.in'.
 # It already happened too many times.

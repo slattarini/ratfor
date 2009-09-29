@@ -1,7 +1,7 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# Makefile for the Ratfor Testsuite subpackage.
+# Makefile for the tests in the Ratfor Testsuite.
 
 
 # -------------- #
@@ -193,23 +193,21 @@ next-fail.test: break-next-fail.data
 # Each test case depends on to-be-included scripts `defs.sh'.
 check_SCRIPTS = defs.sh
 
+#XXX: to be removed
 # Let a call to `make all' rebuild all the scripts/programs needed by the
 # testsuite.
 all-local: $(check_SCRIPTS) $(check_PROGRAMS)
 
 # Some test cases depends on our custom `timer' binary.
-check_SCRIPTS += timer
-
-top_timer = $(top_builddir)/timer$(EXEEXT)
-
+top_timer = $(top_builddir)/src-aux/timer$(EXEEXT)
 timer: $(top_timer)
 	rm -f $@ && $(LN_S) $(top_timer) $@
-
 # aha, the woes of recursive make...
 $(top_timer): _force
-	cd $(abs_top_builddir) && $(MAKE) $(AM_MAKEFLAGS) timer$(EXEEXT)
+	cd $(abs_top_builddir)/src-aux && $(MAKE) $(AM_MAKEFLAGS) timer$(EXEEXT)
 .PHONY: _force
 _force:
+check_SCRIPTS += timer
 
 
 # --------------------------------- #
