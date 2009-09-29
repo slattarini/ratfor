@@ -193,11 +193,6 @@ next-fail.test: break-next-fail.data
 # Each test case depends on to-be-included scripts `defs.sh'.
 check_SCRIPTS = defs.sh
 
-#XXX: to be removed
-# Let a call to `make all' rebuild all the scripts/programs needed by the
-# testsuite.
-all-local: $(check_SCRIPTS) $(check_PROGRAMS)
-
 # Some test cases depends on our custom `timer' binary.
 top_timer = $(top_builddir)/bin-aux/timer$(EXEEXT)
 timer: $(top_timer)
