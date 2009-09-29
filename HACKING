@@ -11,6 +11,15 @@ Bootstrap
   installed the latest version of autoconf (2.64) and automake (1.11).
 
 
+Git Submodules
+--------------
+  
+  Public Domain Ratfor uses the "Ratfor Testsuite" package as a git
+  submodule, to do black-box testing.
+  
+  TODO: explain how to import the submodule
+
+
 Configuring and building
 ------------------------
 
