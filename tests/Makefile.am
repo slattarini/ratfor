@@ -199,12 +199,12 @@ check_SCRIPTS = defs.sh
 all-local: $(check_SCRIPTS) $(check_PROGRAMS)
 
 # Some test cases depends on our custom `timer' binary.
-top_timer = $(top_builddir)/src-aux/timer$(EXEEXT)
+top_timer = $(top_builddir)/bin-aux/timer$(EXEEXT)
 timer: $(top_timer)
 	rm -f $@ && $(LN_S) $(top_timer) $@
 # aha, the woes of recursive make...
 $(top_timer): _force
-	cd $(abs_top_builddir)/src-aux && $(MAKE) $(AM_MAKEFLAGS) timer$(EXEEXT)
+	cd $(abs_top_builddir)/bin-aux && $(MAKE) $(AM_MAKEFLAGS) timer$(EXEEXT)
 .PHONY: _force
 _force:
 check_SCRIPTS += timer
@@ -221,29 +221,10 @@ check_SCRIPTS += timer
 TEST_LOG_COMPILER = env # because we need to pass env vars to test scripts
 AM_TEST_LOG_FLAGS = # will be updated later
 
-# Explicitly set the $srcdir variable for the test cases.
-#  (Q.1) Why do we need this definition?
-#  (A.1) So that the code in defs.sh won't be forced to calculate it
-#        again and again.
-#  (Q.2) Why we can't rely on automake feature of exporting
-#        `srcdir=$(srcdir)' in the environment of every test case?
-#  (A.2) We prefer to export `srcdir=$(abs_srcdir)' instead, since
-#        otherwise, whenever $(srcdir) is not an absolute path (which
-#        is the usual case), defs.sh will be forced to make it an
-#        absolute path (with e.g. srcdir=`pwd`/$srcdir), thereby
-#        slowing the execution of the testsuite.
-AM_TEST_LOG_FLAGS += srcdir='$(abs_srcdir)'
-
 # To improve the overall speed of our slow testsuite, let it know that
 # it is already being run with the proper $SHELL (as found by configure),
 # so that the test scripts won't re-execute themselves with $SHELL
 AM_TEST_LOG_FLAGS += RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL='yes'
-
-# To slighty improve the overall speed of our slow testsuite, force
-# consistency checks in defs.sh to be skipped by default for test cases
-# run from the Makefile (in which case the tests are mostly superfluous
-# anyway).
-AM_TEST_LOG_FLAGS += RAT4_TESTSUITE_BYPASS_SANITY_CHECKS='yes'
 
 # To run the test scripts with the "better" shell available, while leaving
 # the possibility to the user to override the choice.

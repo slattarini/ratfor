@@ -5,7 +5,7 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-SUBDIRS = src-aux tests
+SUBDIRS = bin-aux tests
 
 DISTCHECK_CONFIGURE_FLAGS = 'RATFOR=$(RATFOR)'
 

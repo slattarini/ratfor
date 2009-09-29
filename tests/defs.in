@@ -32,6 +32,10 @@ LANG=C; export LANG
 PACKAGE_VERSION='@PACKAGE_VERSION@'
 PACKAGE_NAME='@PACKAGE_NAME@'
 EXEEXT='@EXEEXT@'
+srcdir='@abs_srcdir@'
+builddir='@abs_builddir@'
+top_srcdir='@abs_top_srcdir@'
+top_builddir='@abs_top_builddir@'
 GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
 EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
 FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
@@ -75,54 +79,13 @@ case "${RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL-}" in
         ;;
 esac
 
-case "${RAT4_TESTSUITE_BYPASS_SANITY_CHECKS-}" in
-    y|Y|yes|Yes|YES|1) do_sanity_checks() { return 1; };;
-                    *) do_sanity_checks() { return 0; };;
-esac
-
 # In a test script, it is an error if any command which must read from
 # standard input does so without first redirecting it; so close stdin
-# to make such an error stick out clearly.
+# to make such an error sticking out clearly.
 exec <&-
-
-if do_sanity_checks; then
-    # Ensure we are running from the right directory.
-    test -f ./defs.sh || {
-        echo "defs.sh: not found in current directory" >&2
-        exit $E_HARD
-    }
-fi
-
-test -n "${srcdir-}" || {
-   # compute $srcdir
-   srcdir=`echo x"$0" | $SED -e 's/^x//' -e 's|/[^/]*$||'`
-   test x"$srcdir" != x"$0" || srcdir=.
-}
-
-if do_sanity_checks; then
-    # ensure $srcdir is set correctly
-    test -f "$srcdir/defs.in" || {
-        echo "$srcdir/defs.in: not found." >&2
-        echo "Please check \$srcdir." >&2
-        exit $E_HARD
-    }
-fi
 
 # Name of the running test script.
 me=`echo x/"$0" | $SED -e 's|.*/||' -e 's/\.test$//'`
-
-# Always use an absolute srcdir.
-case "$srcdir" in
-    /*) ;; # OK
-     *) srcdir=`cd "$srcdir" && pwd`;;
-esac
-
-# Absolute path of the directory where the test is run.
-testrootdir=`pwd`
-
-# Testsuite utilities have always precedence over system ones.
-PATH=$testrootdir${PATH+":$PATH"}
-export PATH
 
 # Symbolic names for whitespace characters.
 SPACE=' '
@@ -220,6 +183,12 @@ testcase_SKIP() {
 testcase_HARDERROR() {
     test $# -eq 0 || echo "$me: HARD ERROR: $*" >&2
     Exit $E_HARD
+}
+
+# Usage: must_be_directory DIRECTORY [DESC]
+# Check that the given DIRECTORY exists, else die with an "hard error".
+must_be_directory() {
+    test -d "$1" || testcase_HARDERROR "${2-directory}" "\`$1' not found"
 }
 
 # Check that we have a valid fortran 77 compiler available, else 
@@ -346,6 +315,15 @@ run_CMD ()
     : "leaving run_CMD()"
     return ${_run_rc}
 }
+
+# Testsuite utilities have always precedence over system ones.
+must_be_directory "$top_srcdir/bin-aux"
+PATH=$top_srcdir/bin-aux${PATH+":$PATH"}
+if test x"$top_srcdir" != x"$top_builddir"; then
+    must_be_directory "$top_builddir/bin-aux"
+    PATH=$top_builddir/bin-aux:$PATH
+fi
+export PATH
 
 # Setup cleanup traps.
 trap 'cleanup_at_exit' 0
