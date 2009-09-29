@@ -6,8 +6,9 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-EXTRA_DIST = GNUmakefile maint.mk HACKING
-EXTRA_DIST += maint/strict-distcheck.mk maint/release.mk maint/remake.mk
+EXTRA_DIST = \
+  GNUmakefile maint.mk maint/strict-distcheck.mk maint/release.mk \
+  HACKING
 
 if RAT4_ENABLE_MAINTAINER_MAKE_RULES
   # used by maint.mk

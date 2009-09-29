@@ -5,6 +5,12 @@
 maintdir = $(srcdir)/maint
 abs_maintdir = $(abs_srcdir)/maint
 
+# When running autoreconf, honor the `AUTORECONF' environment variable,
+# regardless of the fact that make was called with or without the `-e'
+# switch. We use `$(_autoreconf)' since this is the same variable used
+# in top-level GNUmakefile.
+_autoreconf := $(shell echo "$${AUTORECONF:-autoreconf}")
+
 #
 # The rest of this makefile is to be considered only if the user requested
 # the import of maintainer-specific make rules.
@@ -51,8 +57,6 @@ ME := maint.mk
 include $(maintdir)/strict-distcheck.mk
 ME := maint.mk
 include $(maintdir)/release.mk
-ME := maint.mk
-include $(maintdir)/remake.mk
 
 #--------------------------------------------------------------------------
 
