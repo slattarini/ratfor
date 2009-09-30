@@ -2,7 +2,7 @@ List of BUGS for the Ratfor Testsuite.
 
  ---
 
-Some test scripts causes the MirBSD Korn Shell on GNU/Linux to crash.
+Some test scripts cause the MirBSD Korn Shell on GNU/Linux to crash.
 It is not yet clear which versions of the shell or the OS are involved.
 
  ---
