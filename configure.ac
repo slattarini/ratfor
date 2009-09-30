@@ -155,7 +155,7 @@ RAT4_PROG_DIFF_U
 AC_CONFIG_FILES([Makefile bin-aux/Makefile tests/Makefile])
 # Be sure to make the generated file `defs.sh' readonly, to avoid that
 # absent-minded developers modify it instead of `defs.in'.
-# It already happened too many times.
+# It has already happened too many times.
 AC_CONFIG_FILES([tests/defs.sh:tests/defs.in], [chmod a-w tests/defs.sh])
 
 AC_OUTPUT
