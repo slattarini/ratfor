@@ -8,7 +8,7 @@ It is not yet clear which versions of the shell or the OS are involved.
  ---
 
 This is a limitation rather than a bug.
-The test scripts are already tailored to and designed for the Public Domain
+The test scripts are mostly tailored to and designed for the Public Domain
 Ratfor.  This will hopefully change when another ratfor version will be
 available for testing.
 
