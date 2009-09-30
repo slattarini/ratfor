@@ -57,7 +57,7 @@ ifeq ($(RAT4_HUGE_DISTCHECK),yes)
     /opt/vintage/bin/bash-2.05 \
     /bin/ksh \
     /bin/pdksh \
-    #/bin/mksh #XXX: break some tests
+    #/bin/mksh #XXX: this breaks some tests
 endif
 ##
 ##-------------------------------------------------------------------------

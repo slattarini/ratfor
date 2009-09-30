@@ -4,6 +4,8 @@
 
 ME := strict-distcheck.mk
 
+sharp := \#
+
 # Use this to make sure we don't run these programs when building from a
 # virgin tgz file in `strict-distcheck'.
 strict_distcheck_null_am_makeflags ?= \
@@ -68,7 +70,7 @@ StrictDistcheckLoopBegin += \
 StrictDistcheckLoopEnd += \
     _RAT4_STRICT_DISTCHECK_CONFIG_SHELL=''; \
     unset _RAT4_STRICT_DISTCHECK_CONFIG_SHELL || :; \
-  done;
+  done; :
 strict_distcheck_configure_flags += CONFIG_SHELL='$$sh'
 # Since the rules in `make distcheck' run `configure' directly, we need
 # to go through some hoops to force it to run with the shell we want.
@@ -94,27 +96,54 @@ config-shell-strict-distcheck-hook:
 	  && rm -f $$tmp; \
 	}
 
+# internal macro
+define _SD_DisplayFlags
+  eval ' \
+    for x in : '"$(call $(1))"'; do \
+      test x"$$x" = x":" && continue; \
+      echo "$(2)    $$x"; \
+    done'
+endef
+
+# internal macro
+define _SD_StrictDistcheckDisplay
+ { \
+  echo "$(1)==========================================================="; \
+  echo "$(1)"; \
+  echo "$(1)  "$(2); \
+  echo "$(1)"; \
+  echo "$(1)  AM_MAKEFLAGS:"; \
+  $(call _SD_DisplayFlags,strict_distcheck_null_am_makeflags,$(1)); \
+  echo "$(1)"; \
+  echo "$(1)  DISTCHECK_CONFIGURE_FLAGS:"; \
+  $(call _SD_DisplayFlags,strict_distcheck_configure_flags,$(1)); \
+  echo "$(1)"; \
+  echo "$(1)==========================================================="; \
+ }
+endef
+
 .PHONY: strict-distcheck
 strict-distcheck: all check distcheck
 	set -e; \
-	 xrun() { \
-	   echo "+ $$*"; \
-	   "$$@" || { \
-	     echo "========================================================"; \
-	     echo "$(ME): COMMAND FAILED: $$*"; \
-	     echo "========================================================"; \
-	     exit 1; \
-	   }; \
-	 }; \
-	 echo " -*-*-*-"; \
-	 echo "$(ME): running $@"; \
-	 $(StrictDistcheckLoopBegin) \
-	   echo " -*-*-*-"; \
-	   xrun $(xmake) -j2 distcheck \
-	     AM_MAKEFLAGS='$(strict_distcheck_null_am_makeflags)' \
-	     DISTCHECK_CONFIGURE_FLAGS="$(strict_distcheck_configure_flags)"; \
-	 $(StrictDistcheckLoopEnd) \
-	 echo " -*-*-*-"; \
-	 exit $$e;
+	$(StrictDistcheckLoopBegin); \
+	  echo; \
+	  echo ' -*-*-*-'; \
+	  echo; \
+	  $(call _SD_StrictDistcheckDisplay,@@,'$(ME): running $@'); \
+	  e=0; \
+	  $(xmake) -j2 distcheck \
+	      AM_MAKEFLAGS='$(strict_distcheck_null_am_makeflags)' \
+	      DISTCHECK_CONFIGURE_FLAGS="$(strict_distcheck_configure_flags)" \
+	    || e=1; \
+	  if test $$e -eq 0; then \
+	    $(call _SD_StrictDistcheckDisplay,###,'$(ME): $@ OK'); \
+	  else \
+	    $(call _SD_StrictDistcheckDisplay,!!!,'$(ME): $@ FAILED'); \
+	    exit 1; \
+	  fi; \
+	$(StrictDistcheckLoopEnd); \
+	echo; \
+	echo ' -*-*-*-'; \
+	echo;
 
 # vim: ft=make ts=4 sw=4 noet
