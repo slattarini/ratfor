@@ -23,9 +23,9 @@ Configuration process
   The Ratfor Testuite ships with a customary autoconf-generated `configure'
   script, which scans the system looking for prerequisites needed to run
   the testsuite.  Especially important are its searches for a ratfor
-  preprocessor and a fortran compiler, and the wasy in which the user can
-  override or preset the results of this search.  These and other aspects
-  are described in more details in the rest of the file.
+  preprocessor and a fortran compiler, and the way in which the user can
+  override or preset the results of these searches.  These and other
+  aspects are described in more details in the rest of the file.
 
 
 (No) Installation
@@ -124,10 +124,12 @@ Running all tests
 
     make check
 
-  should run all the ratfor testcases.  They will be run in series.
-
-  You can use the `-j N' make option for faster completion (roughly, this
-  runs up to N tests simultaneously, in parallel).  An example:
+  should run all the ratfor testcases, also building in advance any
+  auxiliary script or binary required by the test scripts.
+  
+  The test cases are run in series by default.  You can use the `-j N'
+  option of make for faster completion (roughly, this runs up to N test
+  cases simultaneously, in parallel).  An example:
     
     make -j 5 check
 
