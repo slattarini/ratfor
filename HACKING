@@ -89,7 +89,7 @@ C Coding Style
        ... /* function body here */
     }
     ...
-  Intead use:
+  Instead use:
     ...
     int
     foo(void)

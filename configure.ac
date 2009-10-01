@@ -1,7 +1,11 @@
 # configure.ac file for Public Domain Ratfor
 # Process this file with autoconf to produce a configure script.
 
-m4_pattern_forbid([^_?RAT4_])
+m4_pattern_forbid([^_RAT4_])
+m4_pattern_forbid([^RAT4_])
+m4_pattern_forbid([^_AX_])
+m4_pattern_forbid([^AX_])
+
 # This apparently weird quote is needed to avoid that vim picks up
 # and intepretes the following line as a vim modeline for this file.
 m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
@@ -32,7 +36,7 @@ AC_MSG_NOTICE([exported RATFOR='$RATFOR'])
 # Maintainer-specific initializations and defaults.
 #
 
-RAT4_INCLUDE_MAINT_CONFIG_SITE
+AX_INCLUDE_MAINT_CONFIG_SITE
 
 #
 # Automake's initializations.
@@ -98,7 +102,7 @@ AS_UNSET([func])
 
 # Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
 # should be added (when supported) to $CFLAGS.
-RAT4_ARG_ENABLE(
+AX_ARG_ENABLE(
     [werror-cflag],
     [enable the `-Werror' C compiler flag, if supported],dnl '`# font-lock
     [rat4_maybe_werror=-Werror],
@@ -106,7 +110,7 @@ RAT4_ARG_ENABLE(
 
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
 # rules should be imported in the GNUmakefile.
-RAT4_ARG_ENABLE(
+AX_ARG_ENABLE(
     [maintainer-make-rules],
     [Import maintaner-specific rules in the GNUmakefile. Use it only if
       you have GNU make, and you know what you are doing. Also, note that
@@ -125,7 +129,7 @@ AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
 for flag in -Wall -Wextra -Wshadow -pedantic $rat4_maybe_werror; do
-    RAT4_CACHE_CHECK_CC_FLAG([$flag],[],[],[CFLAGS="$CFLAGS $flag"])
+    AX_CACHE_CHECK_CC_FLAG([$flag], [], [], [CFLAGS="$CFLAGS $flag"])
 done
 AS_UNSET([flag])
 
@@ -158,6 +162,7 @@ AC_OUTPUT
 # Done.
 #
 
+AX_REPORT_IF_BETA
 AS_EXIT(0)
 
 __vim_modeline__
