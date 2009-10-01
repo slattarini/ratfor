@@ -1,10 +1,14 @@
 # -*- Makefile -*-
+# Copied from SteLib at 2009-10-01 02:58:57 +0200.  DO NOT EDIT!
 # Contains maintainer-specific rules to run target `strict-distcheck',
-# and "on-steroids" version of distcheck. Included by top-level mait.mk.
+# and "on-steroids" version of distcheck. Included by top-level maint.mk.
 
-ME := strict-distcheck.mk
+# Public variables/macros follow the naming scheme `$(strict_distcheck_*)'
+# or $(StrictDistcheck*).
+# Internal macros, shell variables and make targets follow the naming
+# scheme `_SD_*'.
 
-sharp := \#
+_SD_me := strict-distcheck.mk
 
 # Use this to make sure we don't run these programs when building from a
 # virgin tgz file in `strict-distcheck'.
@@ -21,80 +25,70 @@ strict_distcheck_null_am_makeflags ?= \
 strict_distcheck_configure_flags =
 
 # Auxilary variables, needed to keep the code in target `strict-distcheck'
-# understandable. Will be suitably updated later, in various places.
+# They will be suitably extended in the rest of this file.
+# Note thatt projects using strict-distcheck can extend or override these,
+# if they need to.
 StrictDistcheckLoopBegin =
 StrictDistcheckLoopEnd =
-
-# C/C++ compilers to be used to by the ratfor testsuite, when doing a
-# strict-distcheck.
-strict_distcheck_c_compilers ?= cc c++
-StrictDistcheckLoopBegin += \
-  for cc in $(strict_distcheck_c_compilers); do
-StrictDistcheckLoopEnd += done;
-strict_distcheck_configure_flags += CC='$$cc'
-strict_distcheck_configure_flags += --enable-werror-cflag
-
-# Fortran compilers to be used by the ratfor testsuite, when doing a
-# strict-distcheck.
-strict_distcheck_f77_compilers ?= f77 gfortran
-StrictDistcheckLoopBegin += \
-  for f77 in NONE $(strict_distcheck_f77_compilers); do
-StrictDistcheckLoopEnd += done;
-strict_distcheck_configure_flags += F77='$$f77'
 
 # Shells to be used to run the configure script and the tests scripts,
 # when doing a strict-distcheck.  Since the rules in `make distcheck'
 # run `configure' directly, we need to go through some hoops to force
 # it to run with the shell we want.
-strict_distcheck_shells ?= ksh bash
+strict_distcheck_shells ?= /bin/sh ksh
 StrictDistcheckLoopBegin += \
-  for sh_t in /bin/sh $(strict_distcheck_shells); do \
-    case "$$sh_t" in \
-      *'[ 	]'*) \
-        sh=`(set $$sh_t && shift && echo $$1)`; \
-        sh_args=`(set $$sh_t && shift && shift && echo $$*)`;; \
-      *) \
-        sh=$$sh_t; sh_args='';; \
+  for _SD_sh in $(strict_distcheck_shells); do \
+    case "$${_SD_sh}" in \
+      /*) sh=$${_SD_sh};; \
+      */*) sh=`pwd`/$${_SD_sh};; \
+      *) sh=`which "$${_SD_sh}"` || \
+	       fatal "shell \`$${_SD_sh}' not found in PATH";; \
     esac; \
     case "$$sh" in \
-      /*) ;; \
-      */*) sh=`pwd`/$$sh;; \
-      *) sh=`which "$$sh" 2>/dev/null`;; \
-    esac; \
-    case "$$sh" in /*);; *) continue;; esac; \
-    test -f "$$sh" && test -x "$$sh" || continue; \
-    sh="$$sh $$sh_args"; \
-    _RAT4_STRICT_DISTCHECK_CONFIG_SHELL="$$sh"; \
-    export _RAT4_STRICT_DISTCHECK_CONFIG_SHELL; \
-    :
+	  /*);; \
+	  *) fatal "shell \`$$sh': not an absolute path";; \
+	esac; \
+    test -f "$$sh" || fatal "shell \`$$sh': doesn't exist"; \
+    test -x "$$sh" || fatal "shell \`$$sh': not executable"; \
+    _SD_STRICT_DISTCHECK_CONFIG_SHELL="$$sh"; \
+    export _SD_STRICT_DISTCHECK_CONFIG_SHELL; \
+    set +x;
 StrictDistcheckLoopEnd += \
-    _RAT4_STRICT_DISTCHECK_CONFIG_SHELL=''; \
-    unset _RAT4_STRICT_DISTCHECK_CONFIG_SHELL || :; \
-  done; :
+    _SD_STRICT_DISTCHECK_CONFIG_SHELL=''; \
+    unset _SD_STRICT_DISTCHECK_CONFIG_SHELL || :; \
+  done;
 strict_distcheck_configure_flags += CONFIG_SHELL='$$sh'
 # Since the rules in `make distcheck' run `configure' directly, we need
 # to go through some hoops to force it to run with the shell we want.
-.PHONY: config-shell-strict-distcheck-hook
-distcheck-hook: config-shell-strict-distcheck-hook
-config-shell-strict-distcheck-hook:
-	@test -z "$${_RAT4_STRICT_DISTCHECK_CONFIG_SHELL-}" || { \
-	  echo "$(ME): Correcting configure script for strict-distcheck" \
-	  && tmp=configure.tmp \
-	  && sh=$${_RAT4_STRICT_DISTCHECK_CONFIG_SHELL} \
-	  && rm -f $$tmp \
-	  && echo "#! $$sh" >>$$tmp \
-	  && echo "# Correction code added by $(ME)" >>$$tmp \
-	  && echo "CONFIG_SHELL='$$sh'" >>$$tmp \
-	  && echo "export CONFIG_SHELL" >>$$tmp \
-	  && sed '1s/^#!.*$$//' $(distdir)/configure >>$$tmp \
-	  && chmod u+w $(distdir)/configure \
-	  && cat $$tmp >$(distdir)/configure \
-	  && chmod a-w $(distdir)/configure \
-	  && echo '|----------------' \
-	  && sed -e 's/^/| /' -e 11q $(distdir)/configure \
-	  && echo '|----------------' \
-	  && rm -f $$tmp; \
+.PHONY: _SD_distcheck-config-shell-distcheck-hook
+distcheck-hook: _SD_config-shell-strict-distcheck-hook
+_SD_config-shell-strict-distcheck-hook:
+	@test -z "$${_SD_STRICT_DISTCHECK_CONFIG_SHELL-}" || { \
+	  echo "$(_SD_me): Correcting configure script for strict-distcheck" \
+	    && tmp=configure.tmp \
+	    && sh=$${_SD_STRICT_DISTCHECK_CONFIG_SHELL} \
+	    && rm -f $$tmp \
+	    && echo "#! $$sh" >>$$tmp \
+	    && echo "# Correction code added by $(_SD_me)" >>$$tmp \
+	    && echo "CONFIG_SHELL='$$sh'" >>$$tmp \
+	    && echo "export CONFIG_SHELL" >>$$tmp \
+	    && sed '1s/^#!.*$$//' $(distdir)/configure >>$$tmp \
+	    && chmod u+w $(distdir)/configure \
+	    && cat $$tmp >$(distdir)/configure \
+	    && chmod a-w $(distdir)/configure \
+	    && echo '|----------------' \
+	    && sed -e 's/^/| /' -e 11q $(distdir)/configure \
+	    && echo '|----------------' \
+	    && rm -f $$tmp; \
 	}
+
+# Loop on supported C/C++ compilers.
+strict_distcheck_c_compilers ?= cc c++
+StrictDistcheckLoopBegin += \
+  for cc in $(strict_distcheck_c_compilers); do
+StrictDistcheckLoopEnd += done;
+strict_distcheck_configure_flags += CC='$$cc'
+
 
 # internal macro
 define _SD_DisplayFlags
@@ -125,23 +119,25 @@ endef
 .PHONY: strict-distcheck
 strict-distcheck: all check distcheck
 	set -e; \
-	$(StrictDistcheckLoopBegin); \
-	  echo; \
-	  echo ' -*-*-*-'; \
-	  echo; \
-	  $(call _SD_StrictDistcheckDisplay,@@,'$(ME): running $@'); \
+	fatal() { \
+	  echo "$(_SD_me): $$*" >&2; \
+	  exit 1; \
+	}; \
+	$(StrictDistcheckLoopBegin) \
+	  echo; echo ' -*-*-*-'; echo; \
+	  $(call _SD_StrictDistcheckDisplay,@@,'$(_SD_me): running $@'); \
 	  e=0; \
-	  $(xmake) -j2 distcheck \
+	  $(MAKE) -j2 distcheck \
 	      AM_MAKEFLAGS='$(strict_distcheck_null_am_makeflags)' \
 	      DISTCHECK_CONFIGURE_FLAGS="$(strict_distcheck_configure_flags)" \
 	    || e=1; \
 	  if test $$e -eq 0; then \
-	    $(call _SD_StrictDistcheckDisplay,###,'$(ME): $@ OK'); \
+	    $(call _SD_StrictDistcheckDisplay,..,'$(_SD_me): $@ OK'); \
 	  else \
-	    $(call _SD_StrictDistcheckDisplay,!!!,'$(ME): $@ FAILED'); \
+	    $(call _SD_StrictDistcheckDisplay,!!,'$(_SD_me): $@ FAILED'); \
 	    exit 1; \
 	  fi; \
-	$(StrictDistcheckLoopEnd); \
+	$(StrictDistcheckLoopEnd) \
 	echo; \
 	echo ' -*-*-*-'; \
 	echo;

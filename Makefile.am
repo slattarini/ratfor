@@ -2,7 +2,7 @@
 ## Process this file with automake to produce Makefile.in
 ##
 # Public Domain Ratfor preprocessor, written in C.
-# Makefile for the top-level directory of ratfor.
+# Makefile for the top-level directory.
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
@@ -10,12 +10,12 @@ EXTRA_DIST = \
   GNUmakefile maint.mk maint/strict-distcheck.mk maint/release.mk \
   HACKING
 
-if RAT4_ENABLE_MAINTAINER_MAKE_RULES
-  # used by maint.mk
-  RAT4_ENABLE_MAINTAINER_MAKE_RULES = yes
+if ENABLE_MAINTAINER_MAKE_RULES
+  # variable used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = yes
 else
-  # used by maint.mk
-  RAT4_ENABLE_MAINTAINER_MAKE_RULES = no
+  # variable used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = no
 endif
 
 SUBDIRS = src doc blackbox-tests

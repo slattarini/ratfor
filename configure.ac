@@ -115,8 +115,8 @@ RAT4_ARG_ENABLE(
     [rat4_enable_maintainer_make_rules=yes],
     [rat4_enable_maintainer_make_rules=no])
 
-m4_pattern_allow([RAT4_ENABLE_MAINTAINER_MAKE_RULES])
-AM_CONDITIONAL([RAT4_ENABLE_MAINTAINER_MAKE_RULES],
+m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
+AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
                [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
 
 # Enable as many compiler warnings as possible (this is tailered to gcc,

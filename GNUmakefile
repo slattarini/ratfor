@@ -1,4 +1,5 @@
 # -*-Makefile-*-
+## Copied from SteLib at 2009-09-30 22:14:26 +0200.  DO NOT EDIT!
 ## Copied verbatim from gnulib `gnumakefile' module.
 
 # Having a separate GNUmakefile lets me `include' the dynamically
