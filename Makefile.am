@@ -5,6 +5,14 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
+if ENABLE_MAINTAINER_MAKE_RULES
+  # variable used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = yes
+else
+  # variable used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = no
+endif
+
 SUBDIRS = bin-aux tests
 
 DISTCHECK_CONFIGURE_FLAGS = 'RATFOR=$(RATFOR)'

@@ -2,6 +2,12 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
+ * Added possbility to import mainter-specific rules when using GNU Make,
+   if the (new) option `--enable-maintainer' is passed to the configure
+   script.
+ * The Ratfor Testsuite uses files imported from SteLib (e.g. `maint.mk',
+   `GNUmakefile', and `ax_check_cc_flag.m4').  Some related reorganization
+   and modifications have been required.
  * Added BUGS and HACKING files. Consequent adaptation of the README file.
 
 New in 0.9a
