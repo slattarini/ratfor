@@ -30,7 +30,7 @@ strict_distcheck_c_compilers = \
   /usr/bin/gcc
 ifeq ($(RAT4_HUGE_DISTCHECK),yes)
   strict_distcheck_c_compilers += \
-    $(abs_maintdir)/gcc-2.95-wrapper.bash \
+    gcc-2.95-wrapper \
     /usr/bin/tcc \
     /usr/bin/gcc-3.3 \
     /usr/bin/gcc-4.1 \
