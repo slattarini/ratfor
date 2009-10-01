@@ -48,7 +48,7 @@ Ratfor preprocessor
   By default, configure scans your system to found an available ratfor
   preprocessor, but this can be overridden by passing it a proper value
   for the variable `RATFOR', as in:
-    
+
     ./configure RATFOR=/opt/bin/ratfor
 
   Note that, obviously, a ratfor proprocessor is a necessary preprequisite
@@ -58,7 +58,7 @@ Ratfor preprocessor
   More importatnly, `RATFOR' is a "configure precious variable", so that
   it can be passed to configure as an environment variable without creating
   subtle problems:
-    
+
     export RATFOR=$HOME/bin/my-ratfot; ./configure
 
   This might not be particularly useful to individual usesr, but is *very*
@@ -67,7 +67,7 @@ Ratfor preprocessor
   black-box testsuite.
 
   For example, the configure script of such a package can:
-   
+
    1. set the $RATFOR shell variable to the absolute path of the ratfor
       preprocessor it provides;
    2. export this varible in the environment;
@@ -109,7 +109,7 @@ Fortran 77 Compiler
   By default, configure scans your system to found an available compiler,
   but this can be overridden by passing it a proper value for the variable
   `F77', as in:
-    
+
     ./configure F77=/usr/local/gnu/bin/g77
 
   A special value of `NONE' for `F77' will explicitly tell configure that
@@ -126,11 +126,11 @@ Running all tests
 
   should run all the ratfor testcases, also building in advance any
   auxiliary script or binary required by the test scripts.
-  
+
   The test cases are run in series by default.  You can use the `-j N'
   option of make for faster completion (roughly, this runs up to N test
   cases simultaneously, in parallel).  An example:
-    
+
     make -j 5 check
 
 
