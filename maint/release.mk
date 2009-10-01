@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2009-09-30 22:25:33 +0200.  DO NOT EDIT!
+# Copied from SteLib at 2009-10-01 13:29:32 +0200.  DO NOT EDIT!
 # Contains maintainer-specific rules to create a beta or stable release.
 # Included by top-level maint.mk.
 
@@ -8,12 +8,12 @@
 _rls_ME := release.mk
 _rls_make := $(MAKE) --no-print-directory
 
+# _rls_version: $(VERSION) with some metacharacters quoted, to be used
+# e.g. in grep or sed commands.
+_rls_version := $(subst .,\.,$(VERSION))
+
 # Path or name of git(1).
 GIT ?= git
-
-# _rls_version: $(VERSION) with some metacharacters quoted, to be used
-# e.g. in grep or sed commands
-_rls_version := $(subst .,\.,$(VERSION))
 
 .PHONY: vc-nodiff-check
 vc-nodiff-check: git-no-diff-check git-no-diff-cached-check
@@ -42,10 +42,10 @@ git-no-diff-cached-check:
 	@rm -f $@.tmp;
 CLEAN_FILES += git-no-diff-cached-check.tmp
 
-.PHONY: version-for-major-check
-version-ok-for-major-check:
+.PHONY: version-for-stable-check
+version-ok-for-stable-check:
 	  @echo x'$(VERSION)' | egrep '^x[0-9]+(\.[0-9]+)+$$' >/dev/null || { \
-	    echo "$(_rls_ME): invalid version string for major release:" \
+	    echo "$(_rls_ME): invalid version string for stable release:" \
 		     			 "$(VERSION)" >&2; \
 	    exit 1; \
 	  }
@@ -64,18 +64,18 @@ version-git-tag-is-new-check:
 	  exit 1; \
 	fi
 
-.PHONY: alpha beta major
-ALL_RECURSIVE_TARGETS += alpha beta major
-alpha beta major:
+.PHONY: alpha beta stable
+ALL_RECURSIVE_TARGETS += alpha beta stable
+alpha beta stable:
 	$(_rls_make) GIT='$(GIT)' vc-nodiff-check
 	@[ x'$(VERSION)' != x ] || { \
 	  echo "$(_rls_ME): $@: no version given!" >&2; \
 	  exit 1; \
 	}
 	$(_rls_make) version-git-tag-is-new-check
-	@if test x"$@" = x"major"; then \
-	  echo "$(_rls_make) version-ok-for-major-check"; \
-	  $(_rls_make) version-ok-for-major-check || exit 1; \
+	@if test x"$@" = x"stable"; then \
+	  echo "$(_rls_make) version-ok-for-stable-check"; \
+	  $(_rls_make) version-ok-for-stable-check || exit 1; \
 	fi
 	$(_rls_make) news-up-to-date-check
 	$(_rls_make) strict-distcheck

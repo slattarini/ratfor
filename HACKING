@@ -156,7 +156,7 @@ Make a release
   autotools' files, rebuild the package and re-run the testsuite.  Commit
   again to Git, with a proper message (like "bumped version 1.0 => 1.1").
   Then simply issue a `make alpha' (if releasing an alpha version),
-  `make beta' (if releasing a beta version), or `make major' (if releasing
+  `make beta' (if releasing a beta version), or `make stable' (if releasing
   a stable version).  This will *automatically* do what follows (stopping
   at the first error encountered):
     1. check that there aren't uncommited changes;
