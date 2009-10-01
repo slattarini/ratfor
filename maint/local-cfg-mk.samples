@@ -32,9 +32,7 @@ ifeq ($(RAT4_HUGE_DISTCHECK),yes)
   strict_distcheck_c_compilers += \
     gcc-2.95-wrapper \
     /usr/bin/tcc \
-    /usr/bin/gcc-3.3 \
-    /usr/bin/gcc-4.1 \
-    /usr/bin/g++-4.1
+    /usr/bin/gcc-3.3
 endif
 
 # Fortran compilers to be used by the reatfor testsuite, when doing a
