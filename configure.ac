@@ -1,6 +1,8 @@
 # configure.ac file for Ratfor Testsuite.
 # Process this file with autoconf to produce a configure script.
 
+m4_pattern_forbid([^_AX_])
+m4_pattern_forbid([^AX_])
 m4_pattern_forbid([^_RAT4_])
 m4_pattern_forbid([^RAT4_])
 
@@ -24,7 +26,7 @@ AC_CONFIG_AUX_DIR([build-aux])
 # Maintainer-specific initializations and defaults.
 #
 
-RAT4_INCLUDE_MAINT_CONFIG_SITE
+AX_INCLUDE_MAINT_CONFIG_SITE
 
 #
 # Automake's initializations.
@@ -98,7 +100,7 @@ AS_UNSET([func])
 
 # Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
 # should be added (when supported) to $CFLAGS.
-RAT4_ARG_ENABLE(
+AX_ARG_ENABLE(
     [werror-cflag],
     [enable the `-Werror' C compiler flag, if supported],dnl '`# font-lock
     [rat4_maybe_werror=-Werror],
@@ -106,7 +108,7 @@ RAT4_ARG_ENABLE(
 
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
 # rules should be imported in the GNUmakefile.
-RAT4_ARG_ENABLE(
+AX_ARG_ENABLE(
     [maintainer-make-rules],
     [Import maintaner-specific rules in the GNUmakefile. Use it only if
       you have GNU make, and you know what you are doing. Also, note that
@@ -125,7 +127,7 @@ AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
 for flag in -Wall -Wextra -Wshadow -pedantic $rat4_maybe_werror; do
-    RAT4_CACHE_CHECK_CC_FLAG([$flag], [], [], [CFLAGS="$CFLAGS $flag"])
+    AX_CACHE_CHECK_CC_FLAG([$flag], [], [], [CFLAGS="$CFLAGS $flag"])
 done
 AS_UNSET([flag])
 
@@ -160,7 +162,7 @@ AC_PROG_LN_S
 RAT4_PROG_F77
 
 # Look for a diff command that can produce better human-readable output.
-RAT4_PROG_DIFF_U
+AX_PROG_DIFF_U
 
 #
 # Do output.
@@ -181,6 +183,7 @@ AC_OUTPUT
 # Done.
 #
 
+AX_REPORT_IF_BETA
 AS_EXIT(0)
 
 __vim_modeline__
