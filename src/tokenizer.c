@@ -347,7 +347,7 @@ push_file_stack(const char *path)
     int i;
     FILE *fp;
 
-    if (level >= MAX_INCLUDE_DEPTH - 1) {
+    if (inclevel >= MAX_INCLUDE_DEPTH - 1) {
         synerr_include("includes nested too deeply.");
         return;
     }
@@ -364,24 +364,24 @@ push_file_stack(const char *path)
     }
     if ((fp = xopen(path, IO_MODE_READ, synerr_include)) == NULL)
         return;
-    ++level;
-    lineno[level] = 1;
-    filename[level] = path;
-    infile[level] = fp;
+    ++inclevel;
+    lineno[inclevel] = 1;
+    filename[inclevel] = path;
+    infile[inclevel] = fp;
 }
 
 /* Pop the input files stack. */
 static void
 pop_file_stack(void)
 {
-    /* XXX: assert level >= 0? */
-    if (level > 0) {
-        fclose(infile[level]); /* XXX: check return status? */
-        infile[level] = NULL; /* just to be sure */
-        free((void *)filename[level]);
-        filename[level] = NULL; /* just to be sure */
+    /* XXX: assert inclevel >= 0? */
+    if (inclevel > 0) {
+        fclose(infile[inclevel]); /* XXX: check return status? */
+        infile[inclevel] = NULL; /* just to be sure */
+        free((void *)filename[inclevel]);
+        filename[inclevel] = NULL; /* just to be sure */
     }
-    level--;
+    inclevel--;
 }
 
 
@@ -400,12 +400,12 @@ get_token(char token[], int toksiz)
     int tok;
     char path[MAXPATH];
 
-    while (level >= 0) {
-        while ((tok = deftok(token, toksiz, infile[level])) != EOF) {
+    while (inclevel >= 0) {
+        while ((tok = deftok(token, toksiz, infile[inclevel])) != EOF) {
             if (STREQ(token, KEYWORD_FUNCTION)) {
-                skip_blanks(infile[level]);
+                skip_blanks(infile[inclevel]);
                 t = deftok(current_function_name, MAXFUNCNAME,
-                           infile[level]);
+                           infile[inclevel]);
                 put_back_string(current_function_name);
                 if (is_stmt_ending(t))
                     synerr("missing function name.");
@@ -420,7 +420,7 @@ get_token(char token[], int toksiz)
             /* deal with file inclusion */
             for (i = 0; ; i = strlen(path)) {
                 /* XXX possible segfault here */
-                t = deftok(&path[i], MAXPATH, infile[level]);
+                t = deftok(&path[i], MAXPATH, infile[inclevel]);
                 if (is_stmt_ending(t))
                     break;
             }
@@ -443,7 +443,7 @@ int
 get_nonblank_token(char token[], int toksiz)
 {
     int tok;
-    skip_blanks(infile[level]);
+    skip_blanks(infile[inclevel]);
     tok = get_token(token, toksiz);
     return(tok);
 }

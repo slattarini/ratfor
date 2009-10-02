@@ -21,8 +21,8 @@ char current_function_name[MAXFUNCNAME];
 /* true if comments should be kept, false otherwise */
 bool keep_comments;
 
-/*  level of file inclusion; init = 1 */
-int level;
+/* level of file inclusion; init = 1 */
+int inclevel;
 
 /* stack of inluded files: line nuber, file name, file pointer */
 int lineno[MAX_INCLUDE_DEPTH];
@@ -43,7 +43,7 @@ init(int x_startlab, int x_keep_comments, const char *x_filename)
     if (STREQ(x_filename, "-"))
         x_filename = "(stdin)"; /* this is clearer in error messages */
 
-    level = 0;                  /* file control */
+    inclevel = 0;               /* count of inclusion levels */
     lineno[0] = 1;              /* line count of first file */
     filename[0] = x_filename;   /* filename of first file */
     infile[0] = x_infile;       /* file handle of first file */

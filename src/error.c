@@ -23,12 +23,12 @@ int exit_status = EXIT_SUCCESS;
  */
 
 #define SYNERR_PREAMBLE(lineno_offset) \
-    int xlevel = 0; \
-    /* account for EOF errors, where level < 0 */ \
-    xlevel = (level >= 0) ? level : 0; \
+    int level = 0; \
+    /* account for EOF errors, where inclevel < 0 */ \
+    level = (inclevel >= 0) ? inclevel : 0; \
     fflush(stdout); \
-    fprintf(stderr, "%s:%d: ", filename[xlevel], \
-                    lineno[xlevel] + lineno_offset) /* do not add `;' */
+    fprintf(stderr, "%s:%d: ", filename[level], \
+                    lineno[level] + lineno_offset) /* do not add `;' */
 
 #define SYNERR_POSTAMBLE() \
     fputc('\n', stderr); \

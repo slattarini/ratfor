@@ -9,8 +9,8 @@ C_DECL char current_function_name[MAXFUNCNAME];
 /* true if comments should be kept, false otherwise */
 C_DECL bool keep_comments;
 
-/*  level of file inclusion; init = 1 */
-C_DECL int level;
+/* level of file inclusion; init = 1 */
+C_DECL int inclevel;
 
 /* stack of inluded files: line nuber, file name, file pointer */
 C_DECL int lineno[MAX_INCLUDE_DEPTH];
