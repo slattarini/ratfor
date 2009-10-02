@@ -4,6 +4,11 @@
 
 . ./defs.sh || exit 99
 
+
+#
+# Check the `run_CMD' function.
+#
+
 test_func() {
     cat <<EOF
 OUT${1-}
@@ -28,32 +33,49 @@ test -f stderr || testcase_FAIL
 test x"`cat stdout`" = x"OUT3" || testcase_FAIL
 test x"`cat stderr`" = x"ERR3" || testcase_FAIL
 
+
+#
+# Check the `timer' auxiliary program.
+#
+
 for i in 0 1 42; do
-    echo "int main(void) { return $i; }" > "exit$i.c"
-    $CC $CFLAGS -o "exit$i" "exit$i.c"
+    (echo "#!/bin/sh"; echo "exit $i") > "exit$i"
+    chmod a+x "exit$i"
     run_CMD -e $i -- timer -t 10 "./exit$i" || testcase_FAIL
     test ! -s stdout || testcase_FAIL
     test ! -s stderr || testcase_FAIL
 done
 
+# Check that timer ignore shell builtins.
+mkdir tmp-bin
+(echo "#!/bin/sh"; echo "echo YES >&2"; echo "exit 133") >tmp-bin/'echo'
+chmod a+x tmp-bin/'echo'
+oPATH=$PATH
+PATH=`pwd`/tmp-bin:$oPATH; export PATH
+run_CMD -e 133 -- timer -t 10 'echo' NO || testcase_FAIL
+test -s stdout && testcase_FAIL
+$FGREP YES stderr || testcase_FAIL
+PATH=$oPATH; export PATH
+unset oPATH
+
 run_CMD -e 99 timer || testcase_FAIL
-$FGREP 'missing argument' stderr
+$FGREP 'missing argument' stderr || testcase_FAIL
 run_CMD -e 99 timer -x || testcase_FAIL
-$FGREP 'invalid option' stderr
+$FGREP 'invalid option' stderr || testcase_FAIL
 run_CMD -e 99 timer -t || testcase_FAIL
-$FGREP 'option requires an argument' stderr
+$FGREP 'option requires an argument' stderr || testcase_FAIL
 
 ls -l none || :
 test ! -f none
 run_CMD -e 127 timer ./none || testcase_FAIL
-$FGREP './none: cannot exec: command not found' stderr
+$GREP './none: [nN]o such file or directory' stderr || testcase_FAIL
 
 : > noexec
 chmod a-x noexec
 ls -l noexec || :
 test ! -x noexec
 run_CMD -e 126 timer ./noexec || testcase_FAIL
-$FGREP './noexec: cannot exec: permission denied' stderr
+$GREP './noexec: [pP]ermission denied' stderr || testcase_FAIL
 
 cat >xsleep.c <<\EOF
 #include <stdio.h>
@@ -66,12 +88,18 @@ int main(void)
     return 0;
 }
 EOF
-$CC $CFLAGS -o xsleep xsleep.c
-run_CMD -e 254 timer -t 4 ./xsleep || testcase_FAIL
-$GREP 'timer: command timed out' stderr || testcase_FAIL
-test `wc -l <stdout` -eq 1 || testcase_FAIL
-pid=`cat stdout`
-kill -9 $pid && testcase_FAIL
+if cc -o xsleep xsleep.c; then
+    run_CMD -e 254 timer -t 4 ./xsleep || testcase_FAIL
+    $GREP 'timer: command.*xsleep.*timed out' stderr || testcase_FAIL
+    test `wc -l <stdout` -eq 1 || testcase_FAIL
+    pid=`cat stdout`
+    kill -9 $pid && testcase_FAIL
+fi
+
+
+#
+# Done.
+#
 
 testcase_PASS
 

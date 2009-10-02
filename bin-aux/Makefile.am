@@ -3,7 +3,6 @@
 ##
 # Makefile for auxiliary programs of the Ratfor Testsuite.
 
-check_PROGRAMS = timer$(EXEEXT)
-timer_SOURCES = timer.c
+check_SCRIPTS = timer # created by config.status
 
 ## vim: ft=automake noet sw=4 ts=4

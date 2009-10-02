@@ -45,67 +45,6 @@ if test x"$RATFOR" = x":"; then
 fi
 AC_ARG_VAR([RATFOR], [Ratfor preprocessor to be used by the testsuite])
 
-#
-# Checks for C compiler and support.
-#
-
-AC_PROG_CC_STDC
-AM_PROG_CC_C_O
-
-#
-# Checks for programs.
-#
-
-: # None needed presently
-
-#
-# Checks for headers.
-#
-
-AC_HEADER_STDC
-if test x"$ac_cv_header_stdc" != x"yes"; then
-    AC_MSG_ERROR([some system standard C headers seem broken])
-fi
-
-for header in errno unistd signal fcntl; do
-    AC_CHECK_HEADERS([$header.h], [:],
-        [AC_MSG_ERROR([header `<$header.h>' not found or broken])])
-done
-AS_UNSET([header])
-
-AC_HEADER_SYS_WAIT
-if test x"$ac_cv_header_sys_wait_h" != x"yes"; then
-    AC_MSG_ERROR([header `<sys/wait.h>' not found or broken])
-fi
-
-#
-# Checks for typedefs, structures, and compiler characteristics.
-#
-
-AC_C_CONST
-
-#
-# Checks for library functions.
-#
-
-for func in getopt alarm signal sigaction vfprintf; do
-    AC_CHECK_FUNC([$func], [:],
-        [AC_MSG_ERROR([No proper `$func' subroutine found])])
-done
-AS_UNSET([func])
-
-#
-#  Enable compiler warnings.
-#
-
-# Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
-# should be added (when supported) to $CFLAGS.
-AX_ARG_ENABLE(
-    [werror-cflag],
-    [enable the `-Werror' C compiler flag, if supported],dnl '`# font-lock
-    [rat4_maybe_werror=-Werror],
-    [rat4_maybe_werror=''])
-
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
 # rules should be imported in the GNUmakefile.
 AX_ARG_ENABLE(
@@ -120,31 +59,6 @@ AX_ARG_ENABLE(
 m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
 AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
                [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
-
-# Enable as many compiler warnings as possible (this is tailered to gcc,
-# but should not cause failures of problems for other compilers).
-# This code *must* be set after any check on cc, c headers, c functions
-# or c libraries, as stricter handling of warnings can interfere with
-# autoconf checks.
-for flag in -Wall -Wextra -Wshadow -pedantic $rat4_maybe_werror; do
-    AX_CACHE_CHECK_CC_FLAG([$flag], [], [], [CFLAGS="$CFLAGS $flag"])
-done
-AS_UNSET([flag])
-
-#
-# Hack to support C++ compilers.
-#
-
-AH_TOP([/* Support for C++ compilers */
-#ifdef __cplusplus
-#  define C_DECL extern "C"
-#  define BEGIN_C_DECLS extern "C" {
-#  define END_C_DECLS }
-# else
-#  define C_DECL
-#  define BEGIN_C_DECLS
-#  define END_C_DECLS
-#endif])
 
 #
 # Checks for things needed by the test suite.
@@ -172,10 +86,14 @@ AX_PROG_DIFF_U
 #AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
 AC_CONFIG_FILES([Makefile bin-aux/Makefile tests/Makefile])
-# Be sure to make the generated file `defs.sh' readonly, to avoid that
-# absent-minded developers modify it instead of `defs.in'.
+
+# Be sure to make the generated files readonly, to avoid that absent-minded
+# developers modify them instead of the files they are generated from.
 # It has already happened too many times.
-AC_CONFIG_FILES([tests/defs.sh:tests/defs.in], [chmod a-w tests/defs.sh])
+AC_CONFIG_FILES([tests/defs.sh:tests/defs.in],
+                [chmod a-w tests/defs.sh])
+AC_CONFIG_FILES([bin-aux/timer:bin-aux/timer.sh],
+                [chmod a-w,a+x bin-aux/timer])
 
 AC_OUTPUT
 

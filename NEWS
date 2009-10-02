@@ -2,6 +2,9 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
+ * Auxiliary program `timer' (used by the testsuite) has been rewritten
+   as a shell script, so that no C compiler is required anymore to run
+   the Ratfor Testsuite.
  * Added possbility to import mainter-specific rules when using GNU Make,
    if the (new) option `--enable-maintainer' is passed to the configure
    script.
