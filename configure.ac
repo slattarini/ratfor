@@ -82,8 +82,8 @@ AX_PROG_DIFF_U
 # Do output.
 #
 
-## Make GNUmakefile available also in VPATH builds.
-#AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
+# Make GNUmakefile available also in VPATH builds.
+AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
 AC_CONFIG_FILES([Makefile bin-aux/Makefile tests/Makefile])
 

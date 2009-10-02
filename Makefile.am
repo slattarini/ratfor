@@ -5,6 +5,11 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
+EXTRA_DIST = \
+  GNUmakefile \
+  maint.mk maint/strict-distcheck.mk maint/release.mk \
+  HACKING
+
 if ENABLE_MAINTAINER_MAKE_RULES
   # variable used by maint.mk
   ENABLE_MAINTAINER_MAKE_RULES = yes
