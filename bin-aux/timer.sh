@@ -167,9 +167,18 @@ start_timer() {
     t=$1
     trap 'timeout' 14
     background "$SHELL" -c "
-        trap 'kill \$sleep_pid; exit' 15    # so that we can stop timer
-        sleep $t & sleep_pid=\$!; wait      # wait for timeout
-        kill -14 $$                         # signal timeout to parent
+        set -u
+        ## so that we can stop timer
+        trap '
+            if test -n \"\${sleep_pid-}\"; then
+                kill \$sleep_pid;
+            fi;
+            exit
+        ' 15
+        ## wait for timeout
+        sleep $t & sleep_pid=\$!; wait
+        ## signal timeout to parent
+        kill -14 $$
     " "$SHELL"
     timer_pid=$!
 }
