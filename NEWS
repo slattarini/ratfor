@@ -2,6 +2,13 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
+ * Now the `configure' scripts checks that the detected Fortran 77
+   compiler can create executables (this was not done before).  The check
+   is performed even if the compiler is specified by the user himself
+   (through the `F77' variable).  The only exception is when F77 is
+   defined as "NONE", meaning that no Fortran compiler is to be used by
+   the testsuite (this special behaviour was present also in the previous
+   versions).
  * Auxiliary program `timer' (used by the testsuite) has been rewritten
    as a shell script, so that no C compiler is required anymore to run
    the Ratfor Testsuite.

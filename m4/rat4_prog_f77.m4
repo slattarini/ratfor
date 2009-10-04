@@ -11,12 +11,14 @@ AC_DEFUN([RAT4_PROG_F77],
      scan the system looking for a working Fortran 77 compiler. If set to
      the special value `NONE', no Fortran 77 compiler will be used in the
      tests (the tests requiring such a compiler will be skipped).])
-  AC_PROG_F77
-  if test -n "$F77"; then
-    AC_MSG_NOTICE([Fortran 77 compiler to be used in testing: $F77])
-  else
-    AC_MSG_WARN([No Fortran 77 compiler found to be used in testing])
-    AC_MSG_WARN([Some parts of the testsuite will be skipped])
-  fi])
+   AS_IF([test x"$F77" = x"NONE"],
+    [AC_MSG_NOTICE([Fortran 77 compiler must not be used in testing])],
+    [AC_PROG_F77()
+     if test -n "$F77"; then
+       AC_MSG_NOTICE([Fortran 77 compiler to be used in testing: $F77])
+     else
+       AC_MSG_WARN([No Fortran 77 compiler found to be used in testing])
+       AC_MSG_WARN([Some parts of the testsuite will be skipped])
+     fi])])
 
 # vim: ft=m4 ts=4 sw=4 et

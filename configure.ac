@@ -37,16 +37,10 @@ AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror -Wno-override color-tests
 AM_SILENT_RULES([yes]) # make `--enable-silent-rules' the default
 
 #
-# Check for a ratfor program to be used by the test scripts.
-#
-AC_PATH_PROGS([RATFOR], [ratfor ratfor77], [:])
-if test x"$RATFOR" = x":"; then
-    AC_MSG_ERROR([No ratfor program found])
-fi
-AC_ARG_VAR([RATFOR], [Ratfor preprocessor to be used by the testsuite])
-
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
 # rules should be imported in the GNUmakefile.
+#
+
 AX_ARG_ENABLE(
     [maintainer-make-rules],
     [Import maintaner-specific rules in the GNUmakefile. Use it only if
@@ -59,6 +53,16 @@ AX_ARG_ENABLE(
 m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
 AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
                [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
+
+#
+# Check for a ratfor program to be used by the test scripts.
+#
+
+AC_PATH_PROGS([RATFOR], [ratfor ratfor77], [:])
+if test x"$RATFOR" = x":"; then
+    AC_MSG_ERROR([No ratfor program found])
+fi
+AC_ARG_VAR([RATFOR], [Ratfor preprocessor to be used by the testsuite])
 
 #
 # Checks for things needed by the test suite.
