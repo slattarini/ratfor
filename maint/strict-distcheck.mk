@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2009-10-01 17:06:19 +0200.  DO NOT EDIT!
+# Copied from SteLib at 2009-10-04 21:06:21 +0200.  DO NOT EDIT!
 # Contains maintainer-specific rules to run target `strict-distcheck',
 # and "on-steroids" version of distcheck. Included by top-level maint.mk.
 
@@ -81,14 +81,6 @@ _SD_config-shell-strict-distcheck-hook:
 	    && echo '|----------------' \
 	    && rm -f $$tmp; \
 	}
-
-# Loop on supported C/C++ compilers.
-strict_distcheck_c_compilers ?= cc c++
-StrictDistcheckLoopBegin += \
-  for cc in $(strict_distcheck_c_compilers); do
-StrictDistcheckLoopEnd += done;
-strict_distcheck_configure_flags += CC='$$cc'
-
 
 # internal macro
 define _SD_DisplayFlags

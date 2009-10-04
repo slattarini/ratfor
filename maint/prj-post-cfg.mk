@@ -3,12 +3,6 @@
 # maintainer-specific targets
 
 #
-# Make compile-time warnings fatal also when checkin dist tarball
-# with `strict-distcheck'
-#
-strict_distcheck_configure_flags += --enable-werror-cflag
-
-#
 # Fortran compilers to be used by the ratfor testsuite, when doing a
 # strict-distcheck.
 #
