@@ -54,19 +54,20 @@ m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
 AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
                [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
 
+
 #
-# Check for a ratfor program to be used by the test scripts.
+# Checks on programs.
 #
 
+# Check for a Ratfor preprocessor, to be used by the test scripts.
 AC_PATH_PROGS([RATFOR], [ratfor ratfor77], [:])
 if test x"$RATFOR" = x":"; then
     AC_MSG_ERROR([No ratfor program found])
 fi
 AC_ARG_VAR([RATFOR], [Ratfor preprocessor to be used by the testsuite])
 
-#
-# Checks for things needed by the test suite.
-#
+# Get an available fortran compiler, to be used in testing.
+RAT4_PROG_F77
 
 # Common utilities.
 AC_PROG_GREP
@@ -75,9 +76,6 @@ AC_PROG_FGREP
 AC_PROG_SED
 AC_PROG_AWK
 AC_PROG_LN_S
-
-# Get an available fortran compiler, to be used in testing.
-RAT4_PROG_F77
 
 # Look for a diff command that can produce better human-readable output.
 AX_PROG_DIFF_U
