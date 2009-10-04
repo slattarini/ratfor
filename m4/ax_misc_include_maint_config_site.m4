@@ -1,5 +1,5 @@
 # -*- Autoconf -*-
-# Copied from SteLib at 2009-10-01 16:42:14 +0200.  DO NOT EDIT!
+# Copied from SteLib at 2009-10-04 20:49:22 +0200.  DO NOT EDIT!
 # serial 1 ax_misc_include_maint_config_site.m4
 
 # AX_INCLUDE_MAINT_CONFIG_SITE([MAINT-DIR])

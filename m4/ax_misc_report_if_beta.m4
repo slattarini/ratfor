@@ -1,5 +1,5 @@
 #-*- Autoconf -*-
-# Copied from SteLib at 2009-10-01 16:42:13 +0200.  DO NOT EDIT!
+# Copied from SteLib at 2009-10-04 20:49:22 +0200.  DO NOT EDIT!
 # serial 4 ax_misc_report_if_beta.m4
 
 #
