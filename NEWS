@@ -1,6 +1,6 @@
 List of user-visible changes of Ratfor Testsuite.
 
-New in XXX
+New in 0.9b
 -----------
  * Now the `configure' scripts checks that the detected Fortran 77
    compiler can create executables (this was not done before).  The check

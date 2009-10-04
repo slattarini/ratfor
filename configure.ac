@@ -15,7 +15,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 #
 
 AC_PREREQ([2.64])
-AC_INIT([Ratfor Testsuite], [0.9a], [stefano.lattarini@gmail.com])
+AC_INIT([Ratfor Testsuite], [0.9b], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([tests/ifelse-ambiguity_f77.test])
 AC_CONFIG_HEADERS([config.h])
