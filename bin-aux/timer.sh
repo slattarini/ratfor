@@ -166,6 +166,12 @@ timeout() {
 start_timer() {
     t=$1
     trap 'timeout' 14
+    # NOTE.  We use SIGQUIT (3), not SIGTERM (15), to stop the background
+    # shell working as our timer.  This  is done because some Korn shells
+    # display (on standard error) a message like:
+    #  "timer: line 242:  5986 Terminated ..."
+    # when we terminate that background shell with SIGTERM, even if the
+    # shell has in fact trapped the SIGTERM signal.  Weird bug.
     background "$SHELL" -c "
         set -u
         ## so that we can stop timer
@@ -174,7 +180,7 @@ start_timer() {
                 kill \$sleep_pid;
             fi;
             exit
-        ' 15
+        ' 3
         ## wait for timeout
         sleep $t & sleep_pid=\$!; wait
         ## signal timeout to parent
@@ -186,7 +192,9 @@ start_timer() {
 # Usage: stop_timer
 stop_timer() {
     trap "" 14
-    xkill 15 $timer_pid
+    # See comments in `start_timer()' to understand why we need to use
+    # SIGQUIT (3) here, instead of the more natural SIGTERM (15).
+    xkill 3 $timer_pid
 }
 
 ##

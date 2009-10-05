@@ -1,5 +1,10 @@
 List of user-visible changes of Ratfor Testsuite.
 
+New in XXX
+-----------
+ * Fixed a bug in the auxiliary script `timer', which could causes spurious
+   intermittent failures with some Korn shells.
+
 New in 0.9b
 -----------
  * Now the `configure' scripts checks that the detected Fortran 77
