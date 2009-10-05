@@ -1,6 +1,6 @@
 List of user-visible changes of Public Domain Ratfor.
 
-New in XXX
+New in 1.0l
 -----------
  * Public Domain Ratfor uses files imported from SteLib (e.g. `maint.mk',
    `GNUmakefile' and `ax_check_cc_flag.m4'). Some related reorganization
