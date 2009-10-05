@@ -17,13 +17,9 @@
 Makefile
 Makefile.in
 
-/config.h
-/config.h.in
 /config.log
 /config.status
 /configure
-
-/stamp-h1
 
 /ratfor-testsuite-[0-9]*.tar.gz
 /ratfor-testsuite-[0-9]*/
