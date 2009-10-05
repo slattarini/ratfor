@@ -41,7 +41,7 @@ test x"`cat stderr`" = x"ERR3" || testcase_FAIL
 for i in 0 1 42; do
     (echo "#!/bin/sh"; echo "exit $i") > "exit$i"
     chmod a+x "exit$i"
-    run_CMD -e $i -- timer -t 10 "./exit$i" || testcase_FAIL
+    run_CMD -e $i -- timer -t 20 "./exit$i" || testcase_FAIL
     test ! -s stdout || testcase_FAIL
     test ! -s stderr || testcase_FAIL
 done
@@ -52,7 +52,7 @@ mkdir tmp-bin
 chmod a+x tmp-bin/'echo'
 oPATH=$PATH
 PATH=`pwd`/tmp-bin:$oPATH; export PATH
-run_CMD -e 133 -- timer -t 10 'echo' NO || testcase_FAIL
+run_CMD -e 133 -- timer -t 20 'echo' NO || testcase_FAIL
 test -s stdout && testcase_FAIL
 $FGREP YES stderr || testcase_FAIL
 PATH=$oPATH; export PATH
@@ -76,26 +76,6 @@ ls -l noexec || :
 test ! -x noexec
 run_CMD -e 126 timer ./noexec || testcase_FAIL
 $GREP './noexec: [pP]ermission denied' stderr || testcase_FAIL
-
-cat >xsleep.c <<\EOF
-#include <stdio.h>
-#include <unistd.h>
-int main(void)
-{
-    printf("%d\n", (int) getpid());
-    fflush(stdout); /* we expect to be terminated */
-    sleep(15);
-    return 0;
-}
-EOF
-if cc -o xsleep xsleep.c; then
-    run_CMD -e 254 timer -t 4 ./xsleep || testcase_FAIL
-    $GREP 'timer: command.*xsleep.*timed out' stderr || testcase_FAIL
-    test `wc -l <stdout` -eq 1 || testcase_FAIL
-    pid=`cat stdout`
-    kill -9 $pid && testcase_FAIL
-fi
-
 
 #
 # Done.

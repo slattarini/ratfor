@@ -46,7 +46,8 @@ XFAIL_TESTS += switch-fail.test
 # with consistency checks done by  the `check-list-of-tests' target defined
 # in `CheckTestList.am'.
 ALL_TESTS = \
-  000sanity.test \
+  001sanity.test \
+  002sanity.test \
   break-fail.test \
   break_f77.test \
   case-sensibility-basic.test \
