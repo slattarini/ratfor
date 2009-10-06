@@ -53,6 +53,31 @@ m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
 AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
                [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
 
+#
+# Determine the list of tests to be skipped.
+#
+
+m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
+AC_ARG_VAR([RAT4_TESTSUITE_XFAIL_TESTS],
+           [List of testcases expected to fail with your version of
+            Ratfor (list is empty by default)])
+
+for tst in $RAT4_TESTSUITE_XFAIL_TESTS; do
+  AS_CASE([$tst], [*.test], [], [tst="$tst.test"])
+  test -f "$srcdir/tests/$tst" || bad_tests=${bad_tests+"$bad_tests "}$tst
+done
+AS_UNSET([tst])
+
+if test -n "$bad_tests"; then
+    AC_MSG_ERROR([invalid xfail-tests specified:$bad_tests])
+fi
+AS_UNSET([badtests])
+
+for tst in $RAT4_TESTSUITE_XFAIL_TESTS; do
+  AS_CASE([$tst], [*.test], [], [tst="$tst.test"])
+  AC_MSG_NOTICE([the testcase `$tst' will be skipped])
+done
+AS_UNSET([tst])
 
 #
 # Checks on programs.
@@ -61,7 +86,7 @@ AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
 # Check for a Ratfor preprocessor, to be used by the test scripts.
 AC_PATH_PROGS([RATFOR], [ratfor ratfor77], [:])
 if test x"$RATFOR" = x":"; then
-    AC_MSG_ERROR([No ratfor program found])
+  AC_MSG_ERROR([No ratfor program found])
 fi
 AC_ARG_VAR([RATFOR], [Ratfor preprocessor to be used by the testsuite])
 

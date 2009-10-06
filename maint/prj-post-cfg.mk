@@ -3,6 +3,14 @@
 # maintainer-specific targets
 
 #
+# Testcases to be skipped, even when doing a strict-distcheck (presently
+# these are exactly the same the use passed to the configure script).
+#
+
+strict_distcheck_configure_flags += \
+  RAT4_TESTSUITE_XFAIL_TESTS='$(RAT4_TESTSUITE_XFAIL_TESTS)'
+
+#
 # Fortran compilers to be used by the ratfor testsuite, when doing a
 # strict-distcheck.
 #

@@ -1,5 +1,10 @@
 List of user-visible changes of Ratfor Testsuite.
 
+New in XXX
+-----------
+ * Now the user can define, at configure time, a list of test cases
+   expected to fail (see variable `RAT4_TESTUITE_XFAIL_TESTS').
+
 New in 0.9c
 -----------
  * Fixed a bug in the auxiliary script `timer', which could causes spurious

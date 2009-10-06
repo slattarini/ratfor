@@ -117,6 +117,35 @@ Fortran 77 Compiler
   such a compiler will be skipped.
 
 
+Expected failures
+-----------------
+
+  It can sometimes happen that a particular implementation of ratfor has
+  known unfixed bugs or limitations, which can cause some test cases of
+  the Ratfor Testsuite to fail.  These failures are expected, and should
+  not be flagged as real failures by the testsuite driver: the associated
+  tests are said to be "xfailing" (XFAIL: eXpected FAILure).
+
+  Thus, if you know that your ratfor program has known issues causing some
+  tests, say `foo.test' and `bar.test', to fail, you can avoid spurious
+  failures' reports by explicitly flaggin these tests as "xfailing" at
+  configure time, using the configure variable `RAT4_TESTUITE_XFAIL_TESTS':
+
+    ./configure RAT4_TESTUITE_XFAIL_TESTS='foo bar'
+
+  It's important to note that `RAT4_TESTUITE_XFAIL_TESTS' is a "configure
+  precious variable", and as such it can be passed to configure as an
+  environment variable without creating subtle problems:
+
+    export RAT4_TESTUITE_XFAIL_TESTS='foo bar'; ./configure
+
+  This might not be particularly useful to individual usesr, but is *very*
+  useful for a package providing a ratfor implementation and using the
+  present "Ratfor Testsuite" package as a subpackage implementing a
+  black-box testsuite.  Considerations similar to those given in the
+  section "Ratfor preprocessor" above apply here.
+
+
 Running all tests
 -----------------
 

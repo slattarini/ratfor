@@ -19,27 +19,7 @@ MOSTLYCLEANFILES =
 
 TEST_EXTENSIONS = .test
 
-XFAIL_TESTS = # updated later
-
-# Currently, ratfor output strings with the same quoting they are input
-# with; this should be changed, and only single-quoted strings (e.g. 'foo')
-# should be outputted.
-XFAIL_TESTS += no-double-quotes.test
-
-# Underscores are not yet recognized as alphanumeric characters by ratfor;
-# this should be fixed soon
-XFAIL_TESTS += define-underscores.test
-
-# Currently, `%'-escaping is recognized also after blank spaces, and this
-# behaviour (which should be fixed in a later release) break these tests.
-XFAIL_TESTS += \
-  verbatim-in-define.test \
-  verbatim-only-line-begin.test \
-  verbatim-stress.test
-
-# Errors about switch/case are correctly recognized, but can sometimes still
-# produce bogus diagnostic messages.
-XFAIL_TESTS += switch-fail.test
+XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
