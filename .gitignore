@@ -1,12 +1,3 @@
-*.tmp
-*.tmpdir
-.*.sw[op]
-*[$~]
-#*#
-
-/git.log
-/git.log[0-9]
-
 /maint/config.site
 /maint/local-cfg.mk
 
@@ -19,6 +10,7 @@ Makefile.in
 
 /config.h
 /config.h.in
+/config.h.in~
 /config.log
 /config.status
 /configure
