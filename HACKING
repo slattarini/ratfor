@@ -78,6 +78,12 @@ C Coding Style
   booleans): it's better know the real type of what is being declared
   and used, even if that means a bit more typing.
 
+  Do not use tab characters in C headers and source files, *ever*.
+  
+  Preprocessor statements (#if and such) *must* start at column one. To
+  indent preprocessor directives you should put the # at the beginning
+  of a line, followed by any number of whitespaces.
+
   Do not write function definitions like this:
     ...
     int foo(void) {
