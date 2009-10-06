@@ -1,12 +1,3 @@
-*.tmp
-*.tmpdir
-.*.sw[op]
-*[$~]
-#*#
-
-/git.log
-/git.log[0-9]
-
 /maint/config.site
 /maint/local-cfg.mk
 
