@@ -55,11 +55,11 @@ Ratfor preprocessor
   to run the ratfor testsuite, and thus configure aborts if it fails to
   find one.
 
-  More importatnly, `RATFOR' is a "configure precious variable", so that
+  More importantly, `RATFOR' is a "configure precious variable", so that
   it can be passed to configure as an environment variable without creating
   subtle problems:
 
-    export RATFOR=$HOME/bin/my-ratfot; ./configure
+    export RATFOR=$HOME/bin/my-ratfor; ./configure
 
   This might not be particularly useful to individual usesr, but is *very*
   useful for a package providing a ratfor implementation and using the
