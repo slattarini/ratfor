@@ -4,6 +4,10 @@ New in XXX
 -----------
  * Now the user can define, at configure time, a list of test cases
    expected to fail (see variable `RAT4_TESTUITE_XFAIL_TESTS').
+ * The Ratfor Testsuite have been fixed to work also with gfortran
+   version 4.0.  Previously it didn't work because of a misbehaviour in
+   gfortran-4.0 which caused the `STOP' builtin in the compiled programs
+   to be too much verbose even when used without arguments.
 
 New in 0.9c
 -----------

@@ -74,6 +74,16 @@ Writing test cases
   Use the subroutine `run_CMD' if you need to run a program to later
   analyze its standard output and/or standard error.
 
+  When running the Fortran 77 compiler, use the subroutine `run_F77'
+  instead of directly calling $F77.  For example, use:
+    run_F77 -- -Wall -o tst.exe tst.f
+  instead of:
+    $F77 -Wall -o tst.exe tst.f
+  or:
+    run_CMD $F77 -Wall -o tst.exe tst.f
+  This can facilitate working around possible bugs in supported Fortran 77
+  compilers.
+
   Use either `testcase_PASS', `testcase_FAIL', `testcase_SKIP' or
   `testcase_HARDERROR' to terminate a test.  If for some reason you need
   to return with a custom exit status, use `Exit' rather than `exit'.

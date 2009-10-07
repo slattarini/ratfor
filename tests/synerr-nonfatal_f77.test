@@ -23,7 +23,7 @@ $FGREP 'illegal right brace' stderr || testcase_FAIL
 $FGREP 'illegal next' stderr || testcase_FAIL
 mv stdout tst.f
 
-run_CMD $F77 -o tst.exe tst.f || testcase_FAIL
+run_F77 -- -o tst.exe tst.f || testcase_FAIL
 run_CMD ./tst.exe || testcase_FAIL
 mv stdout got
 test -s stderr && testcase_FAIL
