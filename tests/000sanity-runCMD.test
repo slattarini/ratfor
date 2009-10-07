@@ -1,0 +1,71 @@
+#!/bin/sh
+
+# Testsuite sanity check: check the `run_CMD' subroutine.
+
+. ./defs.sh || exit 99
+
+NL='
+'
+
+test_func() {
+    cat <<EOF
+OUT${1-}
+EOF
+    echo "ERR${1-}" >&2
+    return ${2-0}
+}
+
+rm -f stdout stderr stdall
+run_CMD test_func 1 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT1" || testcase_FAIL
+test x"`cat stderr`" = x"ERR1" || testcase_FAIL
+
+rm -f stdout stderr stdall
+run_CMD -e 0 test_func 2 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT2" || testcase_FAIL
+test x"`cat stderr`" = x"ERR2" || testcase_FAIL
+
+rm -f stdout stderr stdall
+run_CMD -m -e 0 test_func 3 || testcase_FAIL
+test -f stdout && testcase_FAIL
+test -f stderr && testcase_FAIL
+test -f stdall || testcase_FAIL
+test x"`tr '\012' '@' <stdall`" = x"OUT3@ERR3@" || testcase_FAIL
+
+rm -f stdout stderr stdall
+run_CMD -e 0 eval 'echo OUT4 && echo ERR4 >&2 && :' || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT4" || testcase_FAIL
+test x"`cat stderr`" = x"ERR4" || testcase_FAIL
+
+rm -f stdout stderr stdall
+run_CMD -e 15 test_func 5 15 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT5" || testcase_FAIL
+test x"`cat stderr`" = x"ERR5" || testcase_FAIL
+
+rm -f stdout stderr stdall
+run_CMD -e FAIL test_func 6 3 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT6" || testcase_FAIL
+test x"`cat stderr`" = x"ERR6" || testcase_FAIL
+
+# TODO: option `-i'? option `-c'? `-e IGNORE'?
+
+rm -f stdout stderr stdall
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

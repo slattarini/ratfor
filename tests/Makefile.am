@@ -26,8 +26,10 @@ XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 # with consistency checks done by  the `check-list-of-tests' target defined
 # in `CheckTestList.am'.
 ALL_TESTS = \
-  001sanity.test \
-  002sanity.test \
+  000sanity-runCMD.test \
+  000sanity-runF77.test \
+  000sanity-timer-cc.test \
+  000sanity-timer.test \
   break-fail.test \
   break_f77.test \
   case-sensibility-basic.test \

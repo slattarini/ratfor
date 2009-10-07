@@ -1,42 +1,8 @@
 #!/bin/sh
 
-# Check that there are no obvious errors in the testing framework.
+# Testsuite sanity check: checks on the `timer' auxiliary program.
 
 . ./defs.sh || exit 99
-
-
-#
-# Check the `run_CMD' function.
-#
-
-test_func() {
-    cat <<EOF
-OUT${1-}
-EOF
-    echo "ERR${1-}" >&2
-}
-run_CMD test_func 1 || testcase_FAIL
-test -f stdout || testcase_FAIL
-test -f stderr || testcase_FAIL
-test x"`cat stdout`" = x"OUT1" || testcase_FAIL
-test x"`cat stderr`" = x"ERR1" || testcase_FAIL
-
-run_CMD -e 0 test_func 2 || testcase_FAIL
-test -f stdout || testcase_FAIL
-test -f stderr || testcase_FAIL
-test x"`cat stdout`" = x"OUT2" || testcase_FAIL
-test x"`cat stderr`" = x"ERR2" || testcase_FAIL
-
-run_CMD -e 0 eval 'echo OUT3 && echo ERR3 >&2 && :' || testcase_FAIL
-test -f stdout || testcase_FAIL
-test -f stderr || testcase_FAIL
-test x"`cat stdout`" = x"OUT3" || testcase_FAIL
-test x"`cat stderr`" = x"ERR3" || testcase_FAIL
-
-
-#
-# Check the `timer' auxiliary program.
-#
 
 for i in 0 1 42; do
     (echo "#!/bin/sh"; echo "exit $i") > "exit$i"
@@ -76,10 +42,6 @@ ls -l noexec || :
 test ! -x noexec
 run_CMD -e 126 timer ./noexec || testcase_FAIL
 $GREP './noexec: [pP]ermission denied' stderr || testcase_FAIL
-
-#
-# Done.
-#
 
 testcase_PASS
 

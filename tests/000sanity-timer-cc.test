@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# Check that there are no obvious errors in the testing framework.
+# Testsuite sanity check: additional checks on the `timer' auxiliary
+# program.
+
 # The tests here require that we can compile simple C programs; but
 # a C compiler is not required by the Ratfor Testsuite, so we must
 # SKIP this test if compilations fail.

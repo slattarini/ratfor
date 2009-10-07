@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Check run_F77 subroutine.
+# Testsuite sanity check: check the `run_F77' subroutine.
 
 . ./defs.sh || exit 99
 
