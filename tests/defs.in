@@ -193,9 +193,7 @@ must_be_directory() {
 # cause the testcase to be SKIP'd.
 require_fortran_compiler() {
     case "$F77" in
-        #XXX: is this first case really needed?
-        "") testcase_SKIP "Fotran 77 compiler not available" \
-                          "(variable \`\$F77' is empty)";;
+        "") testcase_HARDERROR "variable \`\$F77' is empty";;
       NONE) testcase_SKIP "Fotran 77 compiler should not be used" \
                           "(variable \`\$F77' is set to \`NONE')";;
     esac
