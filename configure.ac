@@ -24,13 +24,30 @@ AC_CONFIG_AUX_DIR([build-aux])
 # the testsuite is kept in a separate subpackage.
 AC_CONFIG_SUBDIRS([blackbox-tests])
 
-# Since `RATFOR' is declared in `blackbox-tests/configure.ac' as a
-# precious variable, this will pass the proper value of $RATFOR to
-# the recusrively invoked script `blackbox-tests/configure'.
+#
+# Define and pass proper values of precious variables to the recursively
+# invoked script `blackbox-tests/configure'.
+#
+
+# Ratfor program to be used in the testsuite. *Must* be an absolute path.
 # NOTE: when the configure script is running, the current working
 # directory (returned by `pwd') is the build directory.
-RATFOR=`pwd`/src/ratfor; export RATFOR
+RATFOR=`pwd`/src/ratfor
+export RATFOR
 AC_MSG_NOTICE([exported RATFOR='$RATFOR'])
+
+test -f "$srcdir/xfail-tests.txt"  && test -r "$srcdir/xfail-tests.txt" \
+ || AC_MSG_ERROR([file `xfail-tests.txt' not found in srcdir `$srcdir'])
+
+m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
+
+AC_MSG_NOTICE([reading list of test cases expected to fail])
+RAT4_TESTSUITE_XFAIL_TESTS=`
+  while read line; do
+    AS_CASE(["$line"], ['@%:@'*|''], [], [AS_ECHO_N(" $line")])
+  done <"$srcdir/xfail-tests.txt"` \
+ || AC_MSG_ERROR([unexpected error reading file `$srcdir/xfail-tests.txt'])
+export RAT4_TESTSUITE_XFAIL_TESTS
 
 #
 # Maintainer-specific initializations and defaults.

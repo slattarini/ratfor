@@ -1,0 +1,24 @@
+# List of blackbox tests from the Ratfor Testsuite subpackage which are
+# expected to fail with Public Domain Ratfor.
+# Blank lines and lines starting with `#' are ignored.
+
+# Currently, ratfor output strings with the same quoting they are input
+# with; this should be changed, and only single-quoted strings (e.g. 'foo')
+# should be outputted.
+no-double-quotes.test
+
+# Underscores are not yet recognized as alphanumeric characters by ratfor;
+# this should be fixed soon.
+define-underscores.test
+
+# Currently, `%'-escaping is recognized also after blank spaces, and this
+# behaviour (which should be fixed in a later release) break these tests.
+verbatim-in-define.test
+verbatim-only-line-begin.test
+verbatim-stress.test
+
+# Errors about switch/case are correctly recognized, but can sometimes still
+# produce bogus diagnostic messages.
+switch-fail.test
+
+# vim: ft=conf ts=4 sw=4 et
