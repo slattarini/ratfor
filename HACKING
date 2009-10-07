@@ -71,6 +71,9 @@ Writing test cases
 
   Use `set -e' to catch failures you might not have thought of.
 
+  Use the subroutine `run_CMD' if you need to run a program to later
+  analyze its standard output and/or standard error.
+
   Use either `testcase_PASS', `testcase_FAIL', `testcase_SKIP' or
   `testcase_HARDERROR' to terminate a test.  If for some reason you need
   to return with a custom exit status, use `Exit' rather than `exit'.
