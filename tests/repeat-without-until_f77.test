@@ -26,7 +26,7 @@ cat tst.r
 
 run_CMD "$RATFOR" tst.r || testcase_FAIL
 mv stdout tst.f
-run_F77 -- -o tst.exe tst.f || testcase_FAIL
+run_F77 tst.f || testcase_FAIL
 run_CMD timer -t 10 ./tst.exe || testcase_FAIL
 
 test -s stderr && testcase_FAIL

@@ -1,0 +1,71 @@
+#!/bin/sh
+
+# Check run_F77 subroutine.
+
+. ./defs.sh || exit 99
+
+require_fortran_compiler
+
+# -*-*-
+
+cat >true.f <<\EOF
+      program true
+        stop
+      end
+EOF
+
+cat true.f
+
+run_F77 true.f || testcase_FAIL
+test -f true.exe && test -x true.exe || {
+    ls -l true.exe || :
+    testcase_FAIL
+}
+
+run_CMD ./true.exe
+test -s stdout && testcase_FAIL
+test -s stderr && testcase_FAIL
+
+# -*-*-
+
+cat >main.f <<\EOF
+      program hw
+        call hello('World')
+        stop
+      end
+EOF
+
+cat >hello.f <<\EOF
+      subroutine hello(s)
+        character s*(*)
+        write(*,100) s
+100     format('Hello, ', A, '!') 
+        return
+      end
+EOF
+
+cat main.f
+cat hello.f
+
+run_F77 -o hw.exe hello.f main.f || testcase_FAIL
+test -f hw.exe && test -x hw.exe || {
+    ls -l hw.exe || :
+    testcase_FAIL
+}
+
+run_CMD ./hw.exe
+test -s stderr && testcase_FAIL
+mv stdout got
+
+echo 'Hello, World!' >exp
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+# -*-*-
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

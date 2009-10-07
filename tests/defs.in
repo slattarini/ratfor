@@ -336,7 +336,32 @@ run_CMD ()
 # Wrapper around `run_CMD $F77', to facilitate any present or future
 # workaround for bugs/limitations in Fortran compilers.
 run_F77() {
-    run_CMD -c "$F77" ${1+"$@"}
+    # NOTE: all internal variables used here starts with the `_run77'
+    # prefix, to minimize possibility of name clashes with global
+    # variables defined in user code.
+    : 'entering run_F77(): become quiet'
+    set +x # xtrace verbosity stops here
+    _run77_opts='' # options to be passed to run_CMD
+    while test $# -gt 0; do
+        case "$1" in
+            -e|-i) _run77_opts="${_run77_opts} $1 $2"; shift;;
+            -m) _run77_opts="${_run77_opts} $1";;
+            --) shift; break;;
+            # Be more liberal about unrecognized options: stop parsing
+            # and pass the rest of arguments and options verbatim to
+            # COMMAND.  This makes the use of run_F77 more convenient.
+            -*) break;;
+             *) break;;
+        esac
+        shift
+    done
+    if test $# -eq 1; then
+        _run77_aout=`echo "$1" | $SED -e 's/\.f\(77\)\?$//'`.exe
+        set x "$1" -o "${_run77_aout}"; shift;
+    fi
+    set -x # xtrace verbosity restart here
+    : "jumping from run_F77() to run_CMD"
+    run_CMD -c "$F77" ${_run77_opts} -- ${1+"$@"}
 }
 
 # Testsuite utilities have always precedence over system ones.

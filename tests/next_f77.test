@@ -147,7 +147,7 @@ cat tst.r
 
 run_CMD "$RATFOR" tst.r || testcase_FAIL
 mv stdout tst.f
-run_F77 -- -o tst.exe tst.f || testcase_FAIL
+run_F77 tst.f || testcase_FAIL
 run_CMD timer -t 15 ./tst.exe || testcase_FAIL
 (echo "$xline" && ws_normalize <stdout && echo "$xline") >got
 
