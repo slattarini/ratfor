@@ -47,11 +47,11 @@ program testfor
     write(*,$SEP)
     
     goto 40
-    stop
+    call halt
 40  write(*,$OK) 40
     
     write(*,$SEP)
-    stop
+    call halt
 
 $OK  format('ok ',I2)
 $BAD format('bad ',I2)

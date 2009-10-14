@@ -30,7 +30,7 @@ cat >tst.r <<\EOF
         xmain
         j = 2; i = 1;
         xmain
-        stop
+        call halt
     end # testprogram
 EOF
 

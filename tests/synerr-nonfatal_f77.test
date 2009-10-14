@@ -12,7 +12,7 @@ program testprogram
     } # syntax error here
 100 format(A5)
     next # syntax error here
-    stop
+    call halt
 end # testprogram
 EOF
 

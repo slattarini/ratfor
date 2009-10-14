@@ -20,7 +20,7 @@ cat >tst.r <<EOF
     write(*,100) d
     write(*,100) e
 100 format(I1)
-    stop
+    call halt
   end # testprogram
 EOF
 

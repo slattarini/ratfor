@@ -20,7 +20,7 @@ program testfuncret
     i = 3
     write(*,100) foo(), bar(i);
 100 format(I1,";",I1);
-    stop
+    call halt
 end
 EOF
 

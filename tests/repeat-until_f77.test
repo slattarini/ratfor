@@ -42,7 +42,7 @@ program testrepeat
     
     write(*,200)
     
-    stop
+    call halt
 100 format(I1)
 200 format('~~~')
 end

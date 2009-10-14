@@ -48,7 +48,7 @@ define p2 2 }
   ELSE
     write(STAR,200) x
   ENDIF
-  stop
+  call halt
 
   100 format('OK:', I1)
   200 format('BAD:', I1)

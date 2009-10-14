@@ -16,7 +16,7 @@ tr '_' "$TAB" >tst.r <<\EOF
         write(*,100) "TWO", TWO
         write(*,100) "THREE", THREE
 100     format(A10,":",I1)
-        stop
+        call halt
     end # testprogram
 EOF
 

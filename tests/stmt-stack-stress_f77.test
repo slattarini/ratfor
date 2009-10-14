@@ -52,7 +52,7 @@ BEGIN {
     print ""
     print "write(*,600)"
     print ""
-    print "stop"
+    print "call halt"
     print "end"
 }' 
 

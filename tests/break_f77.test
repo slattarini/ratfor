@@ -85,7 +85,7 @@ program testbreak
     
     ###  STOP  ###
     write(*,200)
-    stop
+    call halt
 
 end
 EOF

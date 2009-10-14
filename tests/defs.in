@@ -203,6 +203,7 @@ require_fortran_compiler() {
 # limits, else cause the testcase to be SKIP'd.
 require_strong_fortran_compiler() {
     require_fortran_compiler
+    #XXX: move this checks at configure times?
     f77check_opwd=`pwd`
     f77check_ok=no
     mkdir f77check.d \
@@ -353,13 +354,19 @@ run_F77() {
         esac
         shift
     done
+    # file providing the custom `halt' procedure
+    _run77_haltf=$builddir/halt.f 
+    if test ! -f "${_run77_haltf}"; then
+        testcase_HARDERROR "auxiliary source file \`${_run77_haltf}'" \
+                           "not found"
+    fi
     if test $# -eq 1; then
         _run77_aout=`echo "$1" | $SED -e 's/\.f\(77\)\?$//'`.exe
         set x "$1" -o "${_run77_aout}"; shift;
     fi
     set -x # xtrace verbosity restart here
     : "jumping from run_F77() to run_CMD"
-    run_CMD -c "$F77" ${_run77_opts} -- ${1+"$@"}
+    run_CMD -c "$F77" ${_run77_opts} -- "${_run77_haltf}" ${1+"$@"}
 }
 
 # Testsuite utilities have always precedence over system ones.

@@ -45,7 +45,7 @@ program testfor
 
 100 format(I2)
 200 format('---')
-    stop
+    call halt
 end
 EOF
 

@@ -76,7 +76,7 @@ program testprog
         write(*,900)x
 
     TSTLBL '@stop'
-    stop # program ends here
+    call halt # program ends here
     write(*,800) "NOTREACHED"
 
 800 format(Afmt)
@@ -137,6 +137,7 @@ mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
 
 run_CMD ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 ws_normalize <stdout | $SED 's/ *: */:/g' >got
 
 cat exp

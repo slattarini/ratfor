@@ -43,7 +43,7 @@ or(i = 0; i < 4; i = (i + 2)_
 -1){ write(*,100) i }
 
 100 format(I1)
-stop
+call halt
 end
 EOF
 

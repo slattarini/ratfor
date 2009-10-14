@@ -99,7 +99,7 @@ program testnext
     
     ###  STOP  ###
     write(*,200)
-    stop
+    call halt
 end
 
 EOF

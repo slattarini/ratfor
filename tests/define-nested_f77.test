@@ -38,7 +38,7 @@ cat >tst.r <<\EOF
         
 100     format(I1)
         
-        stop
+        call halt
     
     end # testprogram
 EOF

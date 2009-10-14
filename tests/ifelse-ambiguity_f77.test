@@ -33,7 +33,7 @@ program testifelseamb
     else
         $OK 7
 
-    stop
+    call halt
 
 100 format('ok ',I1)
 200 format('bad ', I1)

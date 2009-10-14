@@ -51,7 +51,7 @@ goto 2000
 600 format('Wrong, ', I1, '!=', I1)
 601 format('Also wrong, ', I1, '<', I1)
 602 format('Ok!')
-continue; define HALT stop;
+continue; define HALT { call halt; }
 continue; continue; continue; continue; continue; HALT
 write(*,666); 666 format('NOTREACHED')
                                                                     end
@@ -72,6 +72,7 @@ mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
 
 run_CMD ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 mv stdout got
 
 cat exp

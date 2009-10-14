@@ -10,7 +10,7 @@ require_fortran_compiler
 
 cat >true.f <<\EOF
       program true
-        stop
+        call halt
       end
 EOF
 
@@ -31,7 +31,7 @@ test -s stderr && testcase_FAIL
 cat >main.f <<\EOF
       program hw
         call hello('World')
-        stop
+        call halt
       end
 EOF
 

@@ -16,7 +16,7 @@ program testrepeat
         x = x + 1;
         if(x == 9) {
             write(*,100) x; 100 format(I1)
-            stop
+            call halt
         }
     }
 end

@@ -21,7 +21,7 @@ program testprog
     x = 4
     write(*,100) x; # write(*,100) 5
 #write(*,100) 7
-    stop
+    call halt
 end
 EOF
 

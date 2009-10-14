@@ -32,7 +32,7 @@ program testnestloop
     write(*,100) x, y
     
     write(*,200)
-    stop
+    call halt
 100 format(I10,' ',I10)
 200 format('~~~~~~~~')
 end

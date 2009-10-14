@@ -14,7 +14,9 @@ program stess3;implicit@none;integer@@@x,@y,%@%@%  %%  @@  @ z,t
 x=100;y=10   @@ %%%%%%%%%%%%%%%%%%%%%%% z@@=%%%%1
 if(%%%%%%%%%%%%%%x%%%%%%+1%%%%%%==101){call@@@@@@@@@@@@ok(1)} @ @ @ @ @ @ @
 if@(y@@@*10==%%%%%%%%%%%x){{{{;;;;call ok( 2 ); ;}}@@@}%%%%%%%%%%%%%%%%%%%}
-for (t=1;t<=%@z;%@t@%@=@%@t@%@+@%@1@)%%%call ok(t+@@2); stop; end #stress3
+for (t=1;t<=%@z;%@t@%@=@%@t@%@+@%@1@)%%%%%%%%%%%%%call ok(t+@@2); c_
+a_
+ll halt; end #stress3
 EOF
 
 cat >exp <<EOF
@@ -29,6 +31,7 @@ run_CMD "$RATFOR" tst.r || testcase_FAIL
 mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
 run_CMD ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 mv stdout got
 
 cat exp

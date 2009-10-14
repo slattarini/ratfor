@@ -20,7 +20,7 @@ program testforever
         y = y + 1
     }
 100 format(I2,' ',I2)
-    stop
+    call halt
 end
 EOF
 

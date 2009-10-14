@@ -20,7 +20,7 @@ define(cmd,
         write(*,100) x
         write(*,100) y
         write(*,100) z
-        stop
+        call halt
     end # testprogram
 EOF
 

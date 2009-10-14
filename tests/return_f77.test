@@ -23,7 +23,7 @@ program testreturn
     x = bar(3)
     write(*,100) x
 100 format(i1)
-    stop
+    call halt
 end
 EOF
 

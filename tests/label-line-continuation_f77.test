@@ -15,7 +15,7 @@ program testlabel
 goto 10
 20
 write(*,200)
-stop
+call halt
 10
 
 

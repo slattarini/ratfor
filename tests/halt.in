@@ -1,0 +1,10 @@
+C -*- Fortran -*-
+C! Custom function `halt', used to work around to bugs in 
+C! ther `stop' Fortran builtin as provided by some compilers
+C! (e.g. gfortran 4.0, whose `stop' always produce a message
+C! on stderr, even if used without arguments).
+      subroutine halt
+C       set at configure time
+        @RAT4_FORTRAN_STOP@
+      end
+C vim: ft=fortran ts=4 sw=4 et

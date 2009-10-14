@@ -86,6 +86,12 @@ Writing test cases
   The use of run_F77 is meant to facilitate working around possible bugs
   in supported Fortran 77 compilers.
 
+  Do not use the Fortran builtin `stop', since some compilers has bugs
+  which can lead to an incorrect behaviour of that builtin (e.g. binaries
+  produced by gfortran-4.0, print "STOP 0" on stderr even if `stop' is
+  called without arguments).  Use the `halt' subroutine insted (custom
+  subroutine defined in auxiliary file `tests/halt.f').
+
   Use either `testcase_PASS', `testcase_FAIL', `testcase_SKIP' or
   `testcase_HARDERROR' to terminate a test.  If for some reason you need
   to return with a custom exit status, use `Exit' rather than `exit'.

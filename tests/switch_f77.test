@@ -23,7 +23,7 @@ program testswtich
             write(*,100) 'MANY';
         }
     }
-    stop
+    call halt
 end
 EOF
 

@@ -29,7 +29,7 @@ program testprog
 %      write(*,100) y
   write(*,100) c
   100 format(i1)
-  stop
+  call halt
 end
 EOF
 
