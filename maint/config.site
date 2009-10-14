@@ -12,4 +12,7 @@ enable_werror_cflag=yes
 # Always import maintainer rules in GNUmakefile.
 enable_maintainer_make_rules=yes
 
+# Enable silent-rules by default.
+enable_silent_rules=yes
+
 # vim: ft=sh ts=4 sw=4 et

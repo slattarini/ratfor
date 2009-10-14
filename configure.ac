@@ -60,7 +60,7 @@ AX_INCLUDE_MAINT_CONFIG_SITE
 #
 
 AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror no-installinfo no-texinfo.tex])
-AM_SILENT_RULES([yes]) # make `--enable-silent-rules' the default
+AM_SILENT_RULES([no]) dnl. make `silent-rules' disabled by default
 
 #
 # Checks for C compiler and support.
