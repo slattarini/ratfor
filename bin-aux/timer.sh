@@ -41,10 +41,10 @@ NEWLINE='
 '
 IFS=" ${TAB}${NEWLINE}" # space tab newline
 
-set -u  # make expanding uninitialized variable a fatal error
+set -u  # make expansion of uninitialized variables a fatal error
 set -f  # disable file globbing
 
-# output redirection don't clobber existing files (not portable)
+# output redirection shouldn't clobber existing files (not portable)
 (set -C) >/dev/null 2>&1 && set -C
 
 ##
@@ -174,17 +174,27 @@ start_timer() {
     # shell has in fact trapped the SIGTERM signal.  Weird bug.
     background "$SHELL" -c "
         set -u
+        xkill() {
+            sig=\$1
+            pid=\$2
+            s=\`kill -\$sig \$pid 2>&1\`
+            case \$?,\$s in
+                0,*) rc=0;; # signal delivered correctly
+                *,*[nN]o*[pP]rocess*) rc=0;; # process already terminated
+                *) echo \"\$s\" >&2; rc=1;; # weird: kill failed
+            esac
+            return \$rc
+        }
         ## so that we can stop timer
         trap '
-            if test -n \"\${sleep_pid-}\"; then
-                kill \$sleep_pid;
-            fi;
+            test -z \"\${sleep_pid-}\" || xkill 15 \$sleep_pid
             exit
         ' 3
         ## wait for timeout
         sleep $t & sleep_pid=\$!; wait
         ## signal timeout to parent
-        kill -14 $$
+        xkill 14 $$
+        (exit \$?); exit
     " "$SHELL"
     timer_pid=$!
 }
