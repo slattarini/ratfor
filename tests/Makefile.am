@@ -220,6 +220,7 @@ clean-local: clean-local-testdirs
 # ----------------------------------------- #
 
 include CheckTestsList.am
+check-local: check-list-of-tests
 
 
 ## vim: ft=automake noet sw=4 ts=4

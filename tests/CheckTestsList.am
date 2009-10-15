@@ -1,13 +1,14 @@
 ## -*- Makefile.am -*-
-## Included by tests/Makefile.am
+## Copied from SteLib at 2009-10-15 19:45:09 +0200.  DO NOT EDIT! 
+## Usually included by tests/Makefile.am
 
 # temporary files used in the `check-list-of-tests' target
 tmk = tests-in-makefile-list.tmp
 tfs = tests-on-filesystem-list.tmp
 tdiffs = diff-in-tests-lists.tmp 
 
-# Check that the list of tests as given by $(TESTS) is equal to the
-# list of all *.test scripts
+# Check that the list of tests as given by $(ALL_TESTS) is equal to the
+# list of all *.test scripts in the current directory.
 check-list-of-tests:
 	@set -e; \
 	 LANG=C; export LANG; \
@@ -38,7 +39,5 @@ check-list-of-tests:
 MOSTLYCLEANFILES += $(tmk) $(tfs) $(tdiffs)
 
 .PHONY: check-list-of-tests
-
-check-local: check-list-of-tests
 
 ## vim: ft=automake noet sw=4 ts=4
