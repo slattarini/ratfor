@@ -1,5 +1,12 @@
 List of user-visible changes of Public Domain Ratfor.
 
+New in XXX
+-----------
+ * The testsuite have been fixed to work also with gfortran version 4.0.
+   Previously it didn't work because of a misbehaviour in gfortran-4.0,
+   which caused the `STOP' builtin in the compiled programs to be too much
+   verbose even when used without arguments.
+
 New in 1.0l
 -----------
  * Public Domain Ratfor uses files imported from SteLib (e.g. `maint.mk',
