@@ -10,17 +10,17 @@ Bootstrap
   from the top directory. This will automatically fetch/update any Git
   submodule and run `autoreconf -vi' (honoring the `GIT' and `AUTORECONF'
   environment variables).
-  
+
   Note that to correctly generate the autotools' files you'll need to have
   installed the latest version of autoconf (2.64) and automake (1.11).
 
 
 Git Submodules
 --------------
-  
+
   Public Domain Ratfor uses the "Ratfor Testsuite" package as a git
   submodule, to do black-box testing.
-  
+
   This submodule is automatically fetched by the `mainr/bootstrap.sh'
   script.  If you want to fetch/update it indipendently, just run:
     $ git submodule init && git submodule update
