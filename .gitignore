@@ -1,9 +1,11 @@
 /maint/config.site
 /maint/local-cfg.mk
 
-/build-aux/
 /autom4te.cache/
 /aclocal.m4
+/build-aux/missing
+/build-aux/install-sh
+/tests/TestsList.am
 
 Makefile
 Makefile.in

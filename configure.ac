@@ -20,6 +20,10 @@ AC_INIT([Ratfor Testsuite], [0.9c], [stefano.lattarini@gmail.com])
 AC_CONFIG_SRCDIR([tests/ifelse-ambiguity_f77.test])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
+build_aux='${top_srcdir}/build-aux'
+abs_build_aux='${abs_top_srcdir}/build-aux'
+AC_SUBST([build_aux])
+AC_SUBST([abs_build_aux])
 
 #
 # Maintainer-specific initializations and defaults.

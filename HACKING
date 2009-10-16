@@ -12,8 +12,12 @@ Introduction and general infomration
  ---------
 
   To bootstrap checked-out sources, just run
-    $ autoreconf -vi
-  from the top directory. Note that to do this you'll need to have
+    $ ./maint/bootstrap.sh
+  from the top directory.  This will automatically build some automake
+  input files which must be dinamically generated, and then run
+  `autoreconf -vi' (honoring the `AUTORECONF' environment variable).
+
+  Note that to correctly generate the autotools' files you'll need to have
   installed the latest version of autoconf (2.64) and automake (1.11).
 
 
