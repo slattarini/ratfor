@@ -6,10 +6,11 @@ Bootstrap
 ---------
 
   To bootstrap checked-out sources, just run
-    $ ./maint/bootstrap.sh
+    $ ./bootstrap.sh
   from the top directory. This will automatically fetch/update any Git
-  submodule and run `autoreconf -vi' (honoring the `GIT' and `AUTORECONF'
-  environment variables).
+  submodule (honoring the `GIT' environment variable), bootstrap them,
+  and then run `autoreconf -vi' (honoring the `AUTORECONF' environment
+  variable).
 
   Note that to correctly generate the autotools' files you'll need to have
   installed the latest version of autoconf (2.64) and automake (1.11).
