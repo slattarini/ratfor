@@ -15,7 +15,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 #
 
 AC_PREREQ([2.64])
-AC_INIT([Public Domain Ratfor], [1.0l], [stefano.lattarini@gmail.com])
+AC_INIT([Public Domain Ratfor], [1.0m], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([src/rat4-common.h])
 AC_CONFIG_HEADERS([config.h])

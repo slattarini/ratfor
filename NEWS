@@ -1,6 +1,6 @@
 List of user-visible changes of Public Domain Ratfor.
 
-New in XXX
+New in 1.0m
 -----------
  * The testsuite have been fixed to work also with gfortran version 4.0.
    Previously it didn't work because of a misbehaviour in gfortran-4.0,
