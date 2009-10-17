@@ -24,7 +24,7 @@ SUBDIRS = src doc blackbox-tests
 
 dist_doc_DATA = README BUGS NEWS
 
-# This is defined here so that it can be extended in maint.mk, if needed.
+# This is defined here so that it can be extended in maint/*.mk, if needed.
 distcheck-hook:
 
 ## vim: ft=automake noet sw=4 ts=4
