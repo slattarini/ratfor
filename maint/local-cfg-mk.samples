@@ -50,13 +50,13 @@ strict_distcheck_shells = \
 ifeq ($(RAT4_HUGE_DISTCHECK),yes)
   strict_distcheck_shells += \
     $(abs_maintdir)/zsh3/sh \
+    /bin/mksh \
     /bin/pdksh \
     /bin/dash \
     /opt/vintage/bin/bash-3.2 \
     /opt/vintage/bin/bash-3.0 \
     /opt/vintage/bin/bash-2.05 \
-    /bin/bash \
-    #/bin/mksh #XXX: break some tests
+    /bin/bash
 endif
 
 ##

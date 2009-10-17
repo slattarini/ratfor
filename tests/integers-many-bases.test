@@ -16,34 +16,51 @@ makeup() {
 
 : NOW WILL READ TEST DATA
 
-# since a redirected while loop might take place in a subshell in some
-# shells, we need thew following hack
-exec 5<&1
-exec <"$srcdir"/integers-many-bases.data
 : >exp
 : >tst.r
-: "** reading data from $srcdir/integers-many-bases.data"
-while read LINE; do
+
+input=$srcdir/integers-many-bases.data
+: "** reading data from $input"
+
+# sanity checks
+test -f "$input"
+test -r "$input"
+
+# The `cat' bolow seems useless, but indeed it prevent a bug in the combo
+# "MirBSD Korn Shell" + "glibc", which is triggered by the construct:
+#   while read; do ...; done <FILE
+# but not by the construct:
+#   cat FILE | while read; do ...; done
+cat "$input" | (
+  rc=0
+  while read LINE; do
     case "$LINE" in
       \#*|"")
-          # comments or empty lines: skip
-          continue
-          ;;
+        # comments or empty lines: skip
+        continue
+        ;;
       *)
-          # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE-FLAG]"
-          set X $LINE; shift; in=$1 out=$2 compile=${3-}; set X; shift
-          case $compile in
-            ""|compile-also|no-compile);;
-            compile-only) continue;;
-            *) testcase_HARDERROR "invalid 'compile' field: \`$compile'";;
-          esac
-          ;;
+        # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE-FLAG]"
+        set X $LINE; shift; in=$1 out=$2 compile=${3-}; set X; shift
+        case $compile in
+          ""|compile-also|no-compile)
+            ;;
+          compile-only)
+            continue
+            ;;
+          *)
+            echo "$me: invalid 'compile' field: \`$compile'" >&2
+            rc=1
+            continue
+            ;;
+        esac
+        ;;
     esac
     echo "'$in' $in" >> tst.r
     echo "'$in' $out" >> exp
-done
-set -x
-exec 5<&-
+  done
+  exit $rc
+) || testcase_HARDERROR "some invalid 'compile' field was found"
 
 : TEST DATA READ
 
