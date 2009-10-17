@@ -36,4 +36,8 @@ $(RAT4_INSTALL_TARGETS):
 	  echo ==========================================================) \
 	 | sed 's/^/WARNING: /' >&2
 
+
+# This is defined here so that it can be extended in maint/*.mk, if needed.
+distcheck-hook:
+
 ## vim: ft=automake noet sw=4 ts=4
