@@ -5,10 +5,34 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-EXTRA_DIST = \
-  GNUmakefile \
-  maint/maint.mk maint/strict-distcheck.mk maint/release.mk \
-  HACKING
+# List of files which must not be put in the distributed tarball.
+no_dist_files =
+# List of extra files to be put in the distributed tarball.
+EXTRA_DIST =
+
+EXTRA_DIST += HACKING
+EXTRA_DIST += GNUmakefile
+EXTRA_DIST += maint/maint.mk maint/strict-distcheck.mk maint/release.mk
+EXTRA_DIST += maint/prj-post-cfg.mk maint/local-cfg-mk.samples
+no_dist_files += maint/config.site maint/local-cfg.mk
+
+# Check that we do not erronously include in the tarball any file which is
+# not meant for distribution.
+dist-hook:
+	@list='$(no_dist_files)'; for f in $$list; do \
+	  if test -r $(distdir)/$$f; then \
+	    bad_dist_files="$$bad_dist_files $$f"; \
+	  fi; \
+	done; \
+	if test -n "$$bad_dist_files"; then \
+	  echo "$@: ERROR: the following files have erroneously been put" \
+	       "in the distributed tarball:" >&2; \
+	  for f in $$bad_dist_files; do \
+	    echo "  - $$f" >&2; \
+	  done; \
+	  exit 1; \
+	fi; \
+	exit 0
 
 if ENABLE_MAINTAINER_MAKE_RULES
   # variable used by maint.mk
