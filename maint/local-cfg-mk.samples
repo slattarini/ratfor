@@ -2,7 +2,7 @@
 # Contains "local" overriding for different maintainers. This file is not
 # meant to be used directly: it should rather be used to write a proper
 # `local-cfg.mk' file, which for obvious reasons cannot be placed in the
-# shared repository
+# shared repository.
 
 ##-------------------------------------------------------------------------
 ## shared utility code
@@ -10,7 +10,7 @@
 define normalize-rat4-huge-distcheck-sh-code
   case '$(RAT4_HUGE_DISTCHECK)' in
     [yY]|[yY]es|YES|[tT]rue|1) echo yes;;
-	*) echo no;;
+    *) echo no;;
   esac
 endef
 
@@ -45,12 +45,12 @@ endif
 # startup).
 strict_distcheck_shells = \
   $(abs_maintdir)/zsh4/sh \
+  /bin/mksh \
   /bin/ksh \
   /opt/bin/heirloom-sh
 ifeq ($(RAT4_HUGE_DISTCHECK),yes)
   strict_distcheck_shells += \
     $(abs_maintdir)/zsh3/sh \
-    /bin/mksh \
     /bin/pdksh \
     /bin/dash \
     /opt/vintage/bin/bash-3.2 \

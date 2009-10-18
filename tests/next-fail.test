@@ -7,10 +7,14 @@
 
 data="$srcdir/break-next-fail.data"
 
+# sanity checks
 test -f "$data" || testcase_HARDERROR "data file \`$data' not found"
+test -r "$data" || testcase_HARDERROR "data file \`$data' not readable"
 
-$SED -e 's/ *#.*$//' -e 's/KWORD/next/g' <"$data" >tst.r
-$AWK '/# *ERR/{ print "tst.r:" NR ": illegal next." }' <"$data" >exp
+# Do NOT use `<"$data"' in the two commands below, or a bug in the combo
+# "MirBSD Korn Shell" + "GNU C Library" will be triggered.
+$SED -e 's/ *#.*$//' -e 's/KWORD/next/g' "$data" >tst.r
+$AWK '/# *ERR/{ print "tst.r:" NR ": illegal next." }' "$data" >exp
 
 cat tst.r
 

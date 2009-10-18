@@ -23,14 +23,11 @@ input=$srcdir/integers-many-bases.data
 : "** reading data from $input"
 
 # sanity checks
-test -f "$input"
-test -r "$input"
+test -f "$input" || testcase_HARDERROR "data file \`$input' not found"
+test -r "$input" || testcase_HARDERROR "data file \`$input' not readable"
 
-# The `cat' bolow seems useless, but indeed it prevent a bug in the combo
-# "MirBSD Korn Shell" + "glibc", which is triggered by the construct:
-#   while read; do ...; done <FILE
-# but not by the construct:
-#   cat FILE | while read; do ...; done
+# The useless `cat' below is required to work around a bug in the combo
+# "MirBSD Korn Shell" + "GNU C Library"
 cat "$input" | (
   rc=0
   while read LINE; do
