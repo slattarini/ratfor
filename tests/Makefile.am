@@ -9,7 +9,7 @@
 # -------------- #
 
 # Might be updated later (also in included files).  Do not remove these
-# definitiond.
+# definitions.
 MOSTLYCLEANFILES = 
 EXTRA_DIST =
 
