@@ -73,7 +73,7 @@ AM_PROG_CC_C_O
 # Checks for programs.
 #
 
-: # None needed presently
+AC_PROG_FGREP
 
 #
 # Checks for headers.
