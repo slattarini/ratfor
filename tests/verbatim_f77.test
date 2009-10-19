@@ -3,7 +3,7 @@
 # Check the use of `%' to output lines verbatim enough to keep the
 # fortran compiler happy.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 require_fortran_compiler
 

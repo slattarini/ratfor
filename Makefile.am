@@ -5,6 +5,8 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
+SUBDIRS = tests
+
 # List of files which must not be put in the distributed tarball.
 no_dist_files =
 # List of extra files to be put in the distributed tarball.
@@ -41,8 +43,6 @@ else
   # variable used by maint.mk
   ENABLE_MAINTAINER_MAKE_RULES = no
 endif
-
-SUBDIRS = bin-aux tests
 
 DISTCHECK_CONFIGURE_FLAGS = \
 	'RATFOR=$(RATFOR)' \

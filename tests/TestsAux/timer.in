@@ -1,4 +1,5 @@
 #!/bin/sh
+# @configure_input@
 #
 # timer -- Run a command in the given time, abort it if times out.
 #          Part of The Ratfor Testsuite

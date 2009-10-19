@@ -2,7 +2,7 @@
 
 # Testsuite sanity check: check the `run_CMD' subroutine.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 NL='
 '

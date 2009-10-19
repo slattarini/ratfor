@@ -19,7 +19,11 @@ AC_INIT([Ratfor Testsuite], [0.9d], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([tests/ifelse-ambiguity_f77.test])
 AC_CONFIG_MACRO_DIR([m4])
+
+# Directory of auxiliary files used by the build system.
 AC_CONFIG_AUX_DIR([build-aux])
+# NOTE: these two should be used only in makefiles, so it's OK to
+# single-quote them here.
 build_aux='${top_srcdir}/build-aux'
 abs_build_aux='${abs_top_srcdir}/build-aux'
 AC_SUBST([build_aux])
@@ -135,17 +139,17 @@ AX_PROG_DIFF_U
 # Make GNUmakefile available also in VPATH builds.
 AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
-AC_CONFIG_FILES([Makefile bin-aux/Makefile tests/Makefile])
+AC_CONFIG_FILES([Makefile tests/Makefile tests/TestsAux/Makefile])
 
 # Be sure to make the generated files readonly, to avoid that absent-minded
 # developers modify them instead of the files they are generated from.
 # It has already happened too many times.
-AC_CONFIG_FILES([tests/defs.sh:tests/defs.in],
-                [chmod a-w tests/defs.sh])
-AC_CONFIG_FILES([tests/halt.f:tests/halt.in],
-                [chmod a-w tests/halt.f])
-AC_CONFIG_FILES([bin-aux/timer:bin-aux/timer.sh],
-                [chmod a-w,a+x bin-aux/timer])
+AC_CONFIG_FILES([tests/TestsAux/defs.sh:tests/TestsAux/defs.in],
+                [chmod a-w tests/TestsAux/defs.sh])
+AC_CONFIG_FILES([tests/TestsAux/halt.f:tests/TestsAux/halt.in],
+                [chmod a-w tests/TestsAux/halt.f])
+AC_CONFIG_FILES([tests/TestsAux/timer:tests/TestsAux/timer.in],
+                [chmod a-w,a+x tests/TestsAux/timer])
 
 AC_OUTPUT
 
@@ -154,6 +158,7 @@ AC_OUTPUT
 #
 
 AX_REPORT_IF_BETA
+
 AS_EXIT(0)
 
 __vim_modeline__

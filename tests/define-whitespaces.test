@@ -2,7 +2,7 @@
 
 # Check that 'define(SYMBOL,...)' preserve leading/trailing spaces
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 cat >tst.r <<EOF
 define(sym1, text1)

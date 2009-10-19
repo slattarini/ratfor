@@ -2,7 +2,7 @@
 
 # Test "deeply" nested `include'.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 (set -C) >/dev/null 2>&1 && set -C
 

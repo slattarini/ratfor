@@ -32,10 +32,6 @@ LANG=C; export LANG
 PACKAGE_VERSION='@PACKAGE_VERSION@'
 PACKAGE_NAME='@PACKAGE_NAME@'
 EXEEXT='@EXEEXT@'
-srcdir='@abs_srcdir@'
-builddir='@abs_builddir@'
-top_srcdir='@abs_top_srcdir@'
-top_builddir='@abs_top_builddir@'
 GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
 EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
 FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
@@ -45,6 +41,12 @@ SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
 DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
 F77=${RAT4_TESTSUITE_F77-'@F77@'}
 RATFOR=${RAT4_TESTSUITE_RATFOR-'@RATFOR@'}
+top_srcdir='@abs_top_srcdir@'
+top_builddir='@abs_top_builddir@'
+srcdir=$top_srcdir/tests
+builddir=$top_builddir/tests
+testaux_srcdir=$srcdir/TestsAux
+testaux_builddir=$builddir/TestsAux
 
 # Symbolic names for exit statuses
 SUCCESS=0
@@ -226,6 +228,7 @@ require_strong_fortran_compiler() {
 
 # "Safer" version of `rm -rf', useful for directories which are either
 # unwritable or have unwritable subdirectories.
+# TODO: support more than one argument
 rm_rf() {
     test $# -gt 0 || return 0  # do nothing if no argument is given
     # the only interesting exit status is that of rm(1): ignore errors
@@ -355,7 +358,7 @@ run_F77() {
         shift
     done
     # file providing the custom `halt' procedure
-    _run77_haltf=$builddir/halt.f 
+    _run77_haltf=$testaux_builddir/halt.f
     if test ! -f "${_run77_haltf}"; then
         testcase_HARDERROR "auxiliary source file \`${_run77_haltf}'" \
                            "not found"
@@ -370,11 +373,11 @@ run_F77() {
 }
 
 # Testsuite utilities have always precedence over system ones.
-must_be_directory "$top_srcdir/bin-aux"
-PATH=$top_srcdir/bin-aux${PATH+":$PATH"}
-if test x"$top_srcdir" != x"$top_builddir"; then
-    must_be_directory "$top_builddir/bin-aux"
-    PATH=$top_builddir/bin-aux:$PATH
+must_be_directory "$testaux_srcdir"
+PATH=${testaux_srcdir}${PATH+":$PATH"}
+if test x"$testaux_srcdir" != x"$testaux_builddir"; then
+    must_be_directory "$testaux_builddir"
+    PATH=${testaux_builddir}${PATH+":$PATH"}
 fi
 export PATH
 

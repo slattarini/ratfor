@@ -5,7 +5,7 @@
 
 # WARNING: ratfor must not abort on failed include. Check for this, too.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 cat > tst1.r <<EOF
 include

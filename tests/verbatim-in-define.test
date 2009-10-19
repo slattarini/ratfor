@@ -3,7 +3,7 @@
 # Test that `%'-escaping plays well with define builtin
 # at the beginning of a line
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 cat >tst.r <<EOF
 define(x,%||)

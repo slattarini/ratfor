@@ -2,7 +2,7 @@
 
 # Check that ratfor works on empty input
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 : > empty
 run_CMD "$RATFOR" empty || testcase_FAIL

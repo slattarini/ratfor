@@ -2,7 +2,7 @@
 
 # Check that ratfor continue its execution on non-fatal syntax errors.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 cat > tst.r <<EOF
 foo

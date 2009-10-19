@@ -2,7 +2,7 @@
 
 # Basic checks on the `-o' option of ratfor.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 echo 'junk123' > tst.r
 

@@ -3,7 +3,7 @@
 # Check that curly brackets (aka `{' and `}') are not improperly passed
 # down in ratfor output.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 echo '{}' > tst.t
 

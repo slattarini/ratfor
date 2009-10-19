@@ -3,7 +3,7 @@
 # Check that ratfor do automatic line continuation after lables, until a
 # statement is found.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 require_fortran_compiler
 

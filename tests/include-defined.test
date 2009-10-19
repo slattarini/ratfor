@@ -2,7 +2,7 @@
 
 # Check that `include' works when passed as argument a `define'd token.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 cat > foo.r <<EOF
 foo1

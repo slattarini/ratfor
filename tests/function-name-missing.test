@@ -3,7 +3,7 @@
 # Check that ratfor complains if te keyword `fuction' is not followed by
 # a fuction name.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 echo function > tst1.r
 run_CMD -e 1 "$RATFOR" tst1.r || testcase_FAIL

@@ -3,7 +3,7 @@
 # Check that ratfor does not unnecessarily overwrite files when multiple
 # `-o' options are given
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 mkdir out.d
 

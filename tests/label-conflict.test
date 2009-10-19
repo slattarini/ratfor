@@ -3,7 +3,7 @@
 # Check that ratfor diagnose possible conflicts between internally-used
 # labels and used-provided labels.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 cat >tst.r <<EOF
 while(true) {

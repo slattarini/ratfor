@@ -3,7 +3,7 @@
 # Check that line numbers in error messages are ok, even when expansion
 # of multiline macros is involved.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 $SED 's/#.*$//' > tst.r <<EOF
 l1; l1; l1; #1

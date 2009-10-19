@@ -2,7 +2,7 @@
 
 # Check that the `define' builtin is case-sensible w.r.t. filenames.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 echo lower > case1
 echo 'include case1' >tst-1-1.r

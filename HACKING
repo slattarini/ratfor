@@ -69,9 +69,9 @@ Writing test cases
 
   Explain what each test does, at least briefly.
 
-  Include `./defs.sh', aborting the test (with exit status `99') if the
-  inclusion fails.  You'd better read and understand that file well before
-  trying to write a test case.
+  Include `./TestsAux/defs.sh', aborting the test (with exit status `99')
+  if the inclusion fails.  You'd better read and understand that file well
+  before trying to write a test case.
 
   Use `set -e' to catch failures you might not have thought of.
 
@@ -108,10 +108,10 @@ Writing test cases
 
   Do *not* use the `testcase_*' or `Exit' subroutines in a subshell.
 
-  Use $GREP, $FGREP, $EFREP, $SED, $AWK, $SHELL instead of the
-  corresponding commands.  Also prefer $DIFF_U on plain `diff'.
-  This list of tools might be incomplete: look at defs.in for a
-  complete list.
+  Use $GREP, $FGREP, $EGREP, $SED, $AWK, instead of the corresponding
+  commands.  Also prefer $DIFF_U on plain `diff'.  This list of tools might
+  be incomplete: look in the file `tests/TestsAux/defs.in' for a complete
+  list.
 
   When calculating diffs on expected output and obtained output, put
   file containing expected output first, as in `$DIFF_U exp.txt got.txt'.
@@ -137,7 +137,7 @@ Writing test cases
   This is done so that, even when a Fortran 77 compiler is not available,
   the tests about the feature "foo" will not be completely skipped (only
   "half-skipped").  Finally, in `scripts/foo_f77.test', place a call to
-  `require_fortran_compiler' just after the inclusion of `./defs.sh', so
+  `require_fortran_compiler' just after the inclusion of `defs.sh', so
   that the test will be skipped if no Fortran 77 compiler is available.
 
   Keep the shell code as portable as possible.  This can be trickier that
@@ -173,7 +173,8 @@ Writing test cases
   If you must run a program to later analize its stderr, do *not* run it
   by doing e.g.:
     [WRONG]  PROG 2>foo.txt
-  Instead, use the run_CMD() subroutine (defined in tests/defs.sh), as in:
+  Instead, use the run_CMD subroutine (defined in tests/TestsAux/defs.in),
+  as in:
     [GOOD]   run_CMD PROG; mv stderr foo.txt
   You can't use the apparently simpler form `PROG 2>stderr.txt' because of
   a nasty bug of the zsh shell (at least of some 4.x versions).

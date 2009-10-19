@@ -3,7 +3,7 @@
 # Test the `for' statement (by compiling and running the generated
 # fortran code)
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 require_fortran_compiler
 

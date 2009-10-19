@@ -2,7 +2,7 @@
 
 # Test `for(;;)' idiom
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 require_fortran_compiler
 

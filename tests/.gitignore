@@ -2,9 +2,9 @@
 /*.log-t
 /*.dir
 
-/defs.sh
-
-/halt.f
+/TestsAux/defs.sh
+/TestsAux/halt.f
+/TestsAux/timer
 
 /Makefile
 /Makefile.in

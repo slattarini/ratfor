@@ -3,7 +3,7 @@
 # Check that ratfor generate correct code for a `return' statement
 # (compile & run generated code)
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 require_fortran_compiler
 

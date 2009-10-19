@@ -2,7 +2,7 @@
 
 # Check tha no extra newline is printed before an `%'-escaped line.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 
 echo '%123' >tst.r

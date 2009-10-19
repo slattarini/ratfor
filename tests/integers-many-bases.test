@@ -3,7 +3,7 @@
 # Check the ratfor support for integers in bases != 10 (format: b%ddd...)
 # The checks are done by "grepping" the ratfor output.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 # make output of our tests more pleasant for humans
 makeup() {

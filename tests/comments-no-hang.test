@@ -3,7 +3,7 @@
 # Check that comments with the `-C' switch do not make ratfor hang.
 # This bug already showed up in practice.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 echo 'abc # comment after another token, as the last line of file' > tst.r
 

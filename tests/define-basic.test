@@ -2,7 +2,7 @@
 
 # Check simple usages of `define'.
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 tr '_' "$TAB" >tst.r <<EOF
 define sym1 text1

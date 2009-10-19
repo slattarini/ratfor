@@ -2,7 +2,7 @@
 
 # Stress test for the `define' builting (done with the aid of f77)
 
-. ./defs.sh || exit 99
+. ./TestsAux/defs.sh || exit 99
 
 require_fortran_compiler
 

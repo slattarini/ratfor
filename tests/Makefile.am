@@ -4,9 +4,11 @@
 # Makefile for the tests in the Ratfor Testsuite.
 
 
-# -------------- #
-#  MISCELLANOUS  #
-# -------------- #
+# --------------- #
+#  MISCELLANEOUS  #
+# --------------- #
+
+SUBDIRS = TestsAux
 
 # Might be updated later (also in included files).  Do not remove these
 # definitions.
@@ -28,16 +30,17 @@ $(srcdir)/TestsList.am: $(build_aux)/gen-tests-list.sh Makefile.am
 MAINTAINERCLEANFILES = $(srcdir)/TestsList.am $(srcdir)/TestsList.am-t
 EXTRA_DIST += $(build_aux)/gen-tests-list.sh
 
-# Include the list of tests (definition of TESTS_ALL).
+# Include the definition of $(ALL_TESTS): list of all test scripts.
 include $(srcdir)/TestsList.am
 
 EXTRA_DIST += $(ALL_TESTS)
 
 TEST_EXTENSIONS = .test
 
+# Defined at configure time.
 XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 
-# run all tests by default
+# Rrun all tests by default.
 TESTS = $(ALL_TESTS)
 
 
@@ -52,9 +55,6 @@ integers-many-bases_f77.log: integers-many-bases.data
 EXTRA_DIST += break-next-fail.data
 break-fail.test: break-next-fail.data
 next-fail.test: break-next-fail.data
-
-# Each test case depends on to-be-included scripts `defs.sh'.
-check_SCRIPTS = defs.sh
 
 # --------------------------------- #
 #  TESTSUITE ENVIRONMENT AND SETUP  #
