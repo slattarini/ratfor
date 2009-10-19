@@ -1,15 +1,16 @@
 # -*-Makefile-*-
-## Copied from SteLib at 2009-09-30 22:14:26 +0200.  DO NOT EDIT!
-## Copied verbatim from gnulib `gnumakefile' module.
+## Copied from SteLib at 2009-10-19 12:21:25 +0200.  DO NOT EDIT!
+## Slighty modified version of the GNUmakefile from gnulib `gnumakefile'
+## module.
 
 # Having a separate GNUmakefile lets me `include' the dynamically
-# generated rules created via cfg.mk (package-local configuration)
-# as well as maint.mk (generic maintainer rules).
+# generated rules created via maint.mk (generic maintainer rules).
 # This makefile is used only if you run GNU Make.
 # It is necessary if you want to build targets usually of interest
 # only to the maintainer.
 
-# Copyright (C) 2001, 2003, 2006-2009 Free Software Foundation, Inc.
+# Copyright (C) 2001, 2003, 2006-2009  Free Software Foundation, Inc.
+# Copyright (C) 2009  Stefano Lattarini
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -47,11 +48,10 @@ ALL_RECURSIVE_TARGETS =
 
 include Makefile
 
-# Some projects override e.g., _autoreconf here.
--include $(srcdir)/cfg.mk
-include $(srcdir)/maint.mk
+# Maintainer rules.
+include $(srcdir)/maint/maint.mk
 
-# Allow cfg.mk to override these.
+# Allow maint.mk to override these.
 _build-aux ?= build-aux
 _autoreconf ?= autoreconf
 
@@ -99,16 +99,15 @@ else
 srcdir = .
 
 # The package can override .DEFAULT_GOAL to run actions like autoreconf.
--include ./cfg.mk
-include ./maint.mk
+include ./maint/maint.mk
 
 ifeq ($(.DEFAULT_GOAL),abort-due-to-no-makefile)
 $(MAKECMDGOALS): abort-due-to-no-makefile
 endif
 
 abort-due-to-no-makefile:
-	@echo There seems to be no Makefile in this directory.   1>&2
-	@echo "You must run ./configure before running \`make'." 1>&2
+	@echo There seems to be no Makefile in this directory.   >&2
+	@echo "You must run ./configure before running \`make'." >&2
 	@exit 1
 
 endif
@@ -129,3 +128,5 @@ ifneq ($(filter $(ALL_RECURSIVE_TARGETS), $(MAKECMDGOALS)), )
 .NOTPARALLEL:
 endif
 endif
+
+# vim: ft=make ts=4 sw=4 noet
