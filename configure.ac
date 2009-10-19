@@ -15,7 +15,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 #
 
 AC_PREREQ([2.64])
-AC_INIT([Ratfor Testsuite], [0.9d], [stefano.lattarini@gmail.com])
+AC_INIT([Ratfor Testsuite], [0.9e], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([tests/ifelse-ambiguity_f77.test])
 AC_CONFIG_MACRO_DIR([m4])
@@ -65,7 +65,6 @@ AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
 # Determine the list of tests to be skipped.
 #
 
-#TODO: wrap in a macro
 m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
 AC_ARG_VAR([RAT4_TESTSUITE_XFAIL_TESTS],
            [List of testcases expected to fail with your version of

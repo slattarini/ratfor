@@ -1,6 +1,6 @@
 List of user-visible changes of Ratfor Testsuite.
 
-New in XXX
+New in 0.9e
 -----------
  * Now the testsuite should work also with mksh (the MirBSD Korn Shell) on
    Linux systems (previously a bug in the interaction between the GNU C
