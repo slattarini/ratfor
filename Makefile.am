@@ -32,7 +32,7 @@ distcheck-hook:
 # leave behind some temporary files, and this causes "make distcheck" to
 # fail.  So we clean up those temporary files by hand if ${SHELL} is
 # determined to be Zsh 3.x
-distclean-local:
+mostlyclean-local:
 	@case `$(SHELL) -c 'echo "$$ZSH_VERSION"'` in \
 	   3.*) ;; \
 	     *) exit 0;; \
