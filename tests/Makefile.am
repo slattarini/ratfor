@@ -88,9 +88,15 @@ AM_TEST_LOG_FLAGS += $(TEST_SHELL)
 # case the test directory or any of its subdirectories was made unwritable
 # by the testsuite.
 clean-local-testdirs:
-	: we are not interested in errors of find, just in those of rm
-	find *.dir -type d '!' -perm -200 -exec chmod u+w {} ';' || :
-	rm -rf *.dir
+	@set -e; \
+	 vrun() { echo " $$*"; "$$@"; }; \
+	 set x *.dir; shift; \
+	 if test "$$#,$$1" = "1,*.dir"; then \
+	   : there is no test directory to clean; \
+	 else \
+	   vrun find "$$@" -type d '!' -perm -200 -exec chmod u+w {} ';'; \
+	   vrun rm -rf "$$@" || exit 1; \
+	 fi
 .PHONY: clean-local-testdirs
 clean-local: clean-local-testdirs
 
