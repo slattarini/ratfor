@@ -1,0 +1,43 @@
+## -*- Makefile.am -*-
+## Copied from SteLib at 2009-10-20 19:56:11 +0200.  DO NOT EDIT!
+## Usually included by tests/Makefile.am
+
+# temporary files used in the `check-list-of-tests' target
+tmk = tests-in-makefile-list.tmp
+tfs = tests-on-filesystem-list.tmp
+tdiffs = diff-in-tests-lists.tmp
+
+# Check that the list of tests as given by $(ALL_TESTS) is equal to the
+# list of all *.test scripts in the current directory.
+check-list-of-tests:
+	@set -e; \
+	 LANG=C; export LANG; \
+	 LANGUAGE=C; export LANGUAGE; \
+	 LC_ALL=C; export LC_ALL; \
+	 echo "****--------------------------------------------"; \
+	 echo "** Checking consistency of list of tests..."; \
+	 for t in $(ALL_TESTS); do \
+	    echo "$$t"; \
+	 done > $(tmk); \
+	 (cd $(srcdir) && for t in *.test; do \
+	    echo "$$t"; \
+	 done) > $(tfs); \
+	 if $(DIFF_U) $(tmk) $(tfs) > $(tdiffs); then \
+	    echo "** OK"; : No diffs; \
+	    e=0; \
+	 else \
+	    echo "*** ERROR ***" >&2; \
+	    echo " List of tests in Makefile an on filesystem differ" >&2; \
+	    echo " + $(DIFF_U) in-makefile on-filesystem" >&2; \
+	    cat $(tdiffs) >&2; \
+	    e=1; \
+	 fi; \
+	 echo "****--------------------------------------------"; \
+	 rm -f $(tmk) $(tfs) $(tdiffs); \
+	 exit $$e;
+
+MOSTLYCLEANFILES += $(tmk) $(tfs) $(tdiffs)
+
+.PHONY: check-list-of-tests
+
+## vim: ft=automake noet sw=4 ts=4

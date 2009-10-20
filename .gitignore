@@ -5,7 +5,6 @@
 /aclocal.m4
 /build-aux/missing
 /build-aux/install-sh
-/tests/TestsList.am
 
 Makefile
 Makefile.in
