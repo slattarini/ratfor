@@ -51,6 +51,25 @@ static char forstk[MAXFORSTK];  /* stack of reinit strings  */
  * Private Functions.
  */
 
+static bool
+token_requires_automatic_line_continuation(int t)
+{
+    switch(t) {
+        case COMMA:
+        case PLUS:
+        case MINUS:
+        case STAR:
+        case LPAREN:
+        case AND:
+        case BAR:
+        case BANG:
+        case EQUALS:
+        case UNDERLINE:
+            return true;
+    }
+    return false;
+}
+
 /* balpar - copy balanced paren string */
 static void
 balpar(void)
@@ -83,8 +102,7 @@ balpar(void)
         synerr("missing parenthesis in condition.");
 }
 
-/* eatup - process rest of statement; interpret continuations 
-XXX: but is not interpretation of continuation already done in io.c ??? */
+/* eatup - process rest of statement; interpret automatic continuations */
 static void
 eatup(void)
 {
@@ -108,10 +126,7 @@ eatup(void)
         }
         /* check for tokens that automatically enable a line
          * continuation */
-        if (t == COMMA || t == PLUS || t == MINUS || t == STAR
-            || t == LPAREN || t == AND || t == BAR || t == BANG
-            || t == EQUALS || t == UNDERLINE)
-        {
+        if (token_requires_automatic_line_continuation(t)) {
             while (is_newline(get_token(ptoken, MAXTOK)))
                 /* empty body */;
             put_back_string(ptoken);
