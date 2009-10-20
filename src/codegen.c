@@ -65,6 +65,9 @@ token_requires_automatic_line_continuation(int t)
         case BANG:
         case EQUALS:
         case UNDERLINE:
+        case SLASH:
+        case OPERSTRCAT:
+        case OPEREXP:
             return true;
     }
     return false;
