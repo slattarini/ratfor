@@ -133,8 +133,12 @@ convert_relation_shortand(char token[], FILE *fp)
     return(SSTRLEN(token)-1);
 }
 
-/* Get raw ratfor token. Also deal with comments (# COMMENT...) and
- * verbatim lines (% VERBATIME LINE...) */
+/*
+ * get_raw_token() - get raw ratfor token.
+ * Also deal with comments (# COMMENT...) and verbatim lines
+ * (% VERBATIME LINE...).
+ * Return the type of the token read.
+ */
 static int
 get_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
