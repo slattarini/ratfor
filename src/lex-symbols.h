@@ -14,6 +14,8 @@
 #define DIGIT           2
 #define ALPHA           3
 #define STRING          4
+#define OPEREXP         5
+#define OPERSTRCAT      6
 
 #define LEXBREAK        10
 #define LEXDIGITS       11

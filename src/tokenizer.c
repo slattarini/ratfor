@@ -202,6 +202,24 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
             put_back_char(lexstr[i+1]);
         tok = DIGIT;
     }
+    else if (tok == STAR) { /* look for fortran `*' or `**' operators */
+        if ((c = ngetch(fp)) == STAR) {
+            lexstr[++i] = c;
+            tok = OPEREXP;
+        } else {
+            put_back_char(c);
+        }
+        lexstr[++i] = EOS;
+    }
+    else if (tok == SLASH) { /* look for fortran `/' or `//' operators */
+        if ((c = ngetch(fp)) == SLASH) {
+            lexstr[++i] = c;
+            tok = OPERSTRCAT;
+        } else {
+            put_back_char(c);
+        }
+        lexstr[++i] = EOS;
+    }
     else if (c == SQUOTE || c == DQUOTE) {
         /* XXX: handle escaped quotes inside a string */
         for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
@@ -274,7 +292,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         synerr_fatal("non-alphanumeric name.");
     }
     skip_blanks(fp);
-    c = get_raw_token(ptoken, MAXTOK, fp);
+    c = get_raw_token(ptoken, MAXTOK, fp); /*XXX: t2 here instead of c? */
     if (!defn_with_paren) { /* define name def */
         put_back_string(ptoken);
         i = 0;
@@ -288,7 +306,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
             put_back_char(c);
     }
     else { /* define (name, def) */
-        if (c != COMMA)
+        if (c != COMMA) /*XXX: t2 here instead of c? */
             synerr_fatal("missing comma in define.");
         /* else got (name, */
         nlpar = 0;
