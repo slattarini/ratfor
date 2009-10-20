@@ -118,6 +118,7 @@ ALL_TESTS = \
   no-semicolons.test \
   no-string-directive.test \
   no-tabs.test \
+  non-alpha-tokens.test \
   outfile-cantcreate-fail.test \
   outfile-dash-is-stdout.test \
   outfile-devnull.test \
