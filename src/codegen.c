@@ -51,6 +51,15 @@ static char forstk[MAXFORSTK];  /* stack of reinit strings  */
  * Private Functions.
  */
 
+/* Copy string at &from[i] into string at &to[j] */
+static void
+scopy(const char from[], int i, char to[], int j)
+{
+    int k1, k2;
+    for (k1 = i, k2 = j; (to[k2] = from[k1]) != EOS; k1++, k2++)
+        /* empty body */;
+}
+
 /*
  * Convert string str[] to integer, skipping leading blanks and stopping at
  * the first non-numeric character in str[].  Return the converted integer

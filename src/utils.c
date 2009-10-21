@@ -19,15 +19,6 @@ char
     return(p);
 }
 
-/* scopy - copy string at from[i] to to[j] */
-void
-scopy(const char from[], int i, char to[], int j)
-{
-    int k1, k2;
-    for (k1 = i, k2 = j; (to[k2] = from[k1]) != EOS; k1++, k2++)
-        /* empty body */;
-}
-
 /* look - look-up definition of `name', copy it in defn */
 bool
 look(const char name[], char defn[])
