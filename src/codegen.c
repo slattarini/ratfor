@@ -56,7 +56,7 @@ static char forstk[MAXFORSTK];  /* stack of reinit strings  */
  * the first non-numeric character in str[].  Return the converted integer
  */
 static int
-ctoi(const char str[])
+string_to_integer(const char str[])
 {
     int i = 0, n = 0;
     while (is_blank(str[i]))
@@ -211,7 +211,7 @@ brknxt(int sp, int lextyp[], int labval[], int token)
     n = 0;
     t = get_nonblank_token(ptoken, MAXTOK);
     if (is_all_digits(ptoken)) { /* have break n or next n */
-        n = ctoi(ptoken) - 1;
+        n = string_to_integer(ptoken) - 1;
     } else if (t != SEMICOL) { /* default case */
         put_back_string(ptoken);
     }
@@ -539,7 +539,7 @@ caslab (int *n, int *t)
         synerr ("invalid case label.");
         *n = 0;
     } else {
-        *n = sign * ctoi(tok);
+        *n = sign * string_to_integer(tok);
     }
     do { /* ignore blank lines */;
         *t = get_nonblank_token (tok, MAXTOK);
