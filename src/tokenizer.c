@@ -208,23 +208,12 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     /* TODO: handle escaped quotes inside a string */
 
-    int i, c, quote_char;
+    int i, quote_char;
 
     /*TODO: assert quote_char == " || quote_char == ' ??? */
     quote_char = lexstr[0] = ngetch(fp);
 
     for (i = 1; (lexstr[i] = ngetch(fp)) != quote_char; i++) {
-        /* XXX: but is not this already done by io.c:ngetch()? */
-        if (lexstr[i] == UNDERLINE) {
-            c = ngetch(fp);
-            if (is_newline(c)) {
-                c = ngetch(fp);
-                lexstr[i] = c;
-            } else {
-                put_back_char(c);
-            }
-        }
-        /* deal with errors */
         if (is_newline(lexstr[i])) {
             synerr("missing quote.");
         } else if (i >= toksiz - 1) {
