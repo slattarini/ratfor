@@ -32,6 +32,32 @@ static const char KEYWORD_DEFINE[] = "define";
  * Private Functions.
  */
 
+/* Convert (signed) integer n to a string, saving it in `str'.
+ * Return the legnth of the converted string. */
+static int
+itoc(int n, char str[], int size)
+{
+    int i, j, k, sign;
+    char c;
+
+    sign = (n < 0 ? -1 : 1);
+    n *= sign; /* turn n into its absolute value */
+    i = 0;
+    do {
+        str[i++] = n % 10 + DIG0;
+    } while ((n /= 10) > 0 && i < size-2);
+    if (sign < 0 && i < size - 1)
+        str[i++] = '-';
+    str[i] = EOS;
+    /* reverse the string and plug it back in
+       NOTE: the cast to int avoid spurious compiler warnings */
+    for (j = 0, k = ((int) strlen(str)) - 1; j < k; j++, k--) {
+        c = str[j];
+        str[j] = str[k];
+        str[k] = c;
+    }
+    return(i-1);
+}
 
 static void
 dispatch_comment(FILE *fp)
