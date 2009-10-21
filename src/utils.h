@@ -3,7 +3,6 @@
 BEGIN_C_DECLS
 
 char *strsave(const char *);
-bool look(const char[], char[]);
 
 END_C_DECLS
 #endif

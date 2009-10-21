@@ -62,6 +62,18 @@ integer_to_string(int n, char str[], int size)
     return(i-1);
 }
 
+/* Look-up definition of name[] in user-defined macros. If it's not found,
+   return false, else and copy the definition in defn[] and return true. */
+static bool
+look(const char name[], char defn[])
+{
+    struct hashlist *p;
+    if ((p = lookup(name)) == NULL)
+        return(false);
+    strcpy(defn, p->def); /* XXX potential overflow here! */
+    return(true);
+}
+
 static void
 dispatch_comment(FILE *fp)
 {
