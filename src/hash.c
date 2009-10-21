@@ -9,25 +9,18 @@
 
 static struct hashlist *hashtab[HASHMAX];
 
-/*
- * hash - for a hash value for string s
- *
- */
 static int
 hash(const char *s)
 {
     int hashval;
+
     for (hashval = 0; *s != '\0';)
         hashval += *s++;
     return (hashval % HASHMAX);
 }
 
-/*
- * lookup - lookup for a string s in the hash table
- *
- */
 C_DECL struct hashlist *
-lookup(const char *s)
+hash_lookup(const char *s)
 {
     struct hashlist *np;
 
@@ -37,17 +30,13 @@ lookup(const char *s)
     return(NULL);       /* not found */
 }
 
-/*
- * install - install a string name in hashtable and its value def
- *
- */
 C_DECL struct hashlist*
-install(const char *name, const char *def)
+hash_install(const char *name, const char *def)
 {
     int hashval;
     struct hashlist *np;
 
-    if ((np = lookup(name)) == NULL) { /* not found.. */
+    if ((np = hash_lookup(name)) == NULL) { /* not found */
         /* cast needed to avoid errors with c++ compilers */
         np = (struct hashlist *) malloc(sizeof(*np));
         if (np == NULL)
@@ -57,9 +46,9 @@ install(const char *name, const char *def)
         hashval = hash(np->name);
         np->next = hashtab[hashval];
         hashtab[hashval] = np;
-    } else { /* found.. */
+    } else { /* found */
         /* cast needed to avoid compiler warning */
-        free((void *)np->def); /* free prev.. */
+        free((void *)np->def);
     }
     if ((np->def = strsave(def)) == NULL)
         return(NULL);

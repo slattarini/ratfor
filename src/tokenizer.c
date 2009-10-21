@@ -68,7 +68,7 @@ static bool
 defn_lookup(const char name[], char defn[])
 {
     struct hashlist *p;
-    if ((p = lookup(name)) == NULL)
+    if ((p = hash_lookup(name)) == NULL)
         return(false);
     strcpy(defn, p->def); /* XXX potential overflow here! */
     return(true);
@@ -432,7 +432,7 @@ deftok(char token[], int toksiz, FILE *fp)
         } else if (STREQ(token, KEYWORD_DEFINE)) {
             /* get definition for token, save it in tkdefn */
             getdef(token, toksiz, tkdefn, MAXDEFLEN, fp);
-            install(token, tkdefn);
+            hash_install(token, tkdefn);
         } else if (!defn_lookup(token, tkdefn)) {
             break; /* undefined */
         } else {

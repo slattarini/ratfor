@@ -17,8 +17,8 @@ struct hashlist {
     struct hashlist *next; /* next in chain */
 };
 
-struct hashlist *install(const char *, const char *);
-struct hashlist *lookup(const char *);
+struct hashlist *hash_install(const char *, const char *);
+struct hashlist *hash_lookup(const char *);
 
 END_C_DECLS
 
