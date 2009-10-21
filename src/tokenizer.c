@@ -35,7 +35,7 @@ static const char KEYWORD_DEFINE[] = "define";
 /* Convert (signed) integer n to a string, saving it in `str'.
  * Return the legnth of the converted string. */
 static int
-itoc(int n, char str[], int size)
+integer_to_string(int n, char str[], int size)
 {
     int i, j, k, sign;
     char c;
@@ -219,7 +219,7 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
             c = c - DIG0;
         }
         put_back_char(lexstr[0]);
-        i = itoc(n, lexstr, toksiz);
+        i = integer_to_string(n, lexstr, toksiz);
     }
     else {
         put_back_char(lexstr[i--]);
