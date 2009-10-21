@@ -5,7 +5,7 @@
 #include "rat4-common.h"
 
 #include "utils.h"
-#include "lookup.h"
+#include "hash.h"
 
 static struct hashlist *hashtab[HASHMAX];
 
@@ -17,7 +17,6 @@ static int
 hash(const char *s)
 {
     int hashval;
-
     for (hashval = 0; *s != '\0';)
         hashval += *s++;
     return (hashval % HASHMAX);

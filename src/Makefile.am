@@ -24,7 +24,7 @@ ratfor_SOURCES = \
 	error.c error.h \
 	io.c io.h \
 	xopen.c xopen.h \
-	lookup.c lookup.h \
+	hash.c hash.h \
 	init.c init.h \
 	tokenizer.c tokenizer.h \
 	parser.c parser.h \

@@ -9,7 +9,7 @@
 #include "io.h"
 #include "xopen.h"
 #include "error.h"
-#include "lookup.h"
+#include "hash.h"
 #include "lex-symbols.h"
 #include "rat4-global.h"
 

@@ -8,7 +8,6 @@ BEGIN_C_DECLS
 /*
  * from K&R "The C Programming language"
  * Table lookup routines structure and definitions
- *
  */
 
 /* basic table entry */
