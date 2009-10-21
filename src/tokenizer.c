@@ -131,7 +131,19 @@ convert_relation_shortand(char token[], FILE *fp)
     return(SSTRLEN(token));
 }
 
-/* read alphannumeric token from fp, save it in lexstr, return the lenght of
+static bool
+char_can_be_composed(int c)
+{
+    switch(c) {
+        case SLASH:
+        case STAR:
+            return true;
+    }
+    return false;
+}
+
+
+/* read alphanumeric token from fp, save it in lexstr, return the lenght of
  * the token read */
 static int
 get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
@@ -154,6 +166,7 @@ get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 out:
     return(i+1);
 }
+
 /* read numerical token from fp, save it in lexstr, return the lenght of
  * the token read */
 static int
@@ -188,15 +201,37 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
     return(i+1);
 }
 
-static bool
-char_can_be_composed(int c)
+/* read "quoted string" token from fp, save it in lexstr, return the
+ * lenght of the token read */
+static int
+get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    switch(c) {
-        case SLASH:
-        case STAR:
-            return true;
+    /* TODO: handle escaped quotes inside a string */
+
+    int i, c, quote_char;
+
+    /*TODO: assert quote_char == " || quote_char == ' ??? */
+    quote_char = lexstr[0] = ngetch(fp);
+
+    for (i = 1; (lexstr[i] = ngetch(fp)) != quote_char; i++) {
+        /* XXX: but is not this already done by io.c:ngetch()? */
+        if (lexstr[i] == UNDERLINE) {
+            c = ngetch(fp);
+            if (is_newline(c)) {
+                c = ngetch(fp);
+                lexstr[i] = c;
+            } else {
+                put_back_char(c);
+            }
+        }
+        if (is_newline(lexstr[i]) || i >= toksiz - 1) {
+            synerr("missing quote.");
+            put_back_char(lexstr[i]);
+            lexstr[i] = lexstr[0];
+            break;
+        }
     }
-    return false;
+    return(i+1);
 }
 
 /*
@@ -244,27 +279,9 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         tok = DIGIT;
     }
     else if (c == SQUOTE || c == DQUOTE) {
-        /* XXX: handle escaped quotes inside a string */
-        for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
-            /* XXX: but is not this already done by io.c:ngetch()? */
-            if (lexstr[i] == UNDERLINE) {
-                c = ngetch(fp);
-                if (is_newline(c)) {
-                    c = ngetch(fp);
-                    lexstr[i] = c;
-                } else {
-                    put_back_char(c);
-                }
-            }
-            if (is_newline(lexstr[i]) || i >= toksiz-1) {
-                synerr("missing quote.");
-                put_back_char(lexstr[i]);
-                lexstr[i] = lexstr[0];
-                break;
-            }
-        }
+        put_back_char(c); /* so that we can read back the whole token */
+        toklen = get_quoted_string_raw_token(lexstr, toksiz, fp);
         tok = STRING;
-        toklen = i+1;
     }
     else if (c == PERCENT) {
         /* XXX: make this lazily done */
