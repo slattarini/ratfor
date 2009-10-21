@@ -175,7 +175,7 @@ eatup(void)
 }
 
 
-/* is_all_digits - return true if str is all digits */
+/* is_all_digits - return true if str[] contins only digit characters */
 static bool
 is_all_digits(const char str[])
 {
