@@ -4,7 +4,7 @@ BEGIN_C_DECLS
 
 char *strsave(const char *);
 int ctoi(const char[], int *);
-int itoc(int, char[], int size);
+int itoc(int, char[], int);
 void scopy(const char[], int, char[], int);
 bool look(const char[], char[]);
 

@@ -41,20 +41,21 @@ ctoi(const char in[], int *i)
     return(k);
 }
 
-/* itoc - special version of itoa */
+/* Convert (signed) integer n to a string, saving it in `str'.
+ * Return the legnth of the converted string. */
 int
 itoc(int n, char str[], int size)
 {
     int i, j, k, sign;
     char c;
 
-    if ((sign = n) < 0)
-        n = -n;
+    sign = (n < 0 ? -1 : 1);
+    n *= sign; /* turn n into its absolute value */
     i = 0;
     do {
         str[i++] = n % 10 + DIG0;
     } while ((n /= 10) > 0 && i < size-2);
-    if (sign < 0 && i < size-1)
+    if (sign < 0 && i < size - 1)
         str[i++] = '-';
     str[i] = EOS;
     /* reverse the string and plug it back in
