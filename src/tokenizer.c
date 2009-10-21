@@ -65,7 +65,7 @@ integer_to_string(int n, char str[], int size)
 /* Look-up definition of name[] in user-defined macros. If it's not found,
    return false, else and copy the definition in defn[] and return true. */
 static bool
-look(const char name[], char defn[])
+defn_lookup(const char name[], char defn[])
 {
     struct hashlist *p;
     if ((p = lookup(name)) == NULL)
@@ -428,13 +428,13 @@ deftok(char token[], int toksiz, FILE *fp)
 
     while ((t = get_raw_token(token, toksiz, fp)) != EOF) {
         if (t != ALPHA) {
-            break;  /* non-alpha */
+            break; /* non-alpha */
         } else if (STREQ(token, KEYWORD_DEFINE)) {
             /* get definition for token, save it in tkdefn */
             getdef(token, toksiz, tkdefn, MAXDEFLEN, fp);
             install(token, tkdefn);
-        } else if (!look(token, tkdefn)) {
-            break;  /* undefined */
+        } else if (!defn_lookup(token, tkdefn)) {
+            break; /* undefined */
         } else {
             /* Push replacement onto input, with newlines substituted
              * by "bell" characters (ascii 007). This hack is needed to
