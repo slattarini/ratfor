@@ -1,10 +1,6 @@
 #include "rat4-common.h"
-
 #include "utils.h"
 #include "lookup.h"
-
-#include <ctype.h>
-
 
 /*
  * U T I L I T Y  R O U T I N E S
