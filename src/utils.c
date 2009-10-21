@@ -23,22 +23,23 @@ char
     return(p);
 }
 
-/* ctoi - convert string at in[*i] to int, increment i */
+/* Convert string at str[*offset] to integer, and increment *offset
+ * so that it points to the next non-numeric character in str[] */
 int
-ctoi(const char in[], int *i)
+ctoi(const char str[], int *offset)
 {
-    int k, j;
+    int i, n;
 
-    j = *i;
-    while (is_blank(in[j]))
-        j++;
-    for (k = 0; in[j] != EOS; j++) {
-        if (in[j] < DIG0 || in[j] > DIG9)
+    i = *offset;
+    while (is_blank(str[i]))
+        i++;
+    for (n = 0; str[i] != EOS; i++) {
+        if (str[i] < DIG0 || str[i] > DIG9)
             break;
-        k = 10 * k + in[j] - DIG0;
+        n = 10 * n + (str[i] - DIG0);
     }
-    *i = j;
-    return(k);
+    *offset = i;
+    return(n);
 }
 
 /* Convert (signed) integer n to a string, saving it in `str'.
