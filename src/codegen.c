@@ -51,6 +51,24 @@ static char forstk[MAXFORSTK];  /* stack of reinit strings  */
  * Private Functions.
  */
 
+/*
+ * Convert string str[] to integer, skipping leading blanks and stopping at
+ * the first non-numeric character in str[].  Return the converted integer
+ */
+static int
+ctoi(const char str[])
+{
+    int i = 0, n = 0;
+    while (is_blank(str[i]))
+        i++;
+    for (; str[i] != EOS; i++) {
+        if (str[i] < DIG0 || str[i] > DIG9)
+            break;
+        n = 10 * n + (str[i] - DIG0);
+    }
+    return(n);
+}
+
 static bool
 token_requires_automatic_line_continuation(int t)
 {
