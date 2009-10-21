@@ -59,13 +59,12 @@ static int
 char_type(char c)
 {
     int t;
-
     if (isdigit(c))
         t = DIGIT;
     else if (isupper(c) || islower(c))
         t = LETTER;
     else
-        t = c;
+        t = c; /*XXX: "OTHER" */
     return(t);
 }
 
@@ -75,7 +74,6 @@ char_type(char c)
 static int
 convert_relation_shortand(char token[], FILE *fp)
 {
-
     if ((token[1] = ngetch(fp)) == EQUALS) {
         token[2] = 'e';
     } else {
@@ -106,13 +104,13 @@ convert_relation_shortand(char token[], FILE *fp)
         case EQUALS:
             if (token[1] != EQUALS) { /* variable assignement */
                 token[2] = EOS;
-                return(0);
+                return(1);
             }
             token[1] = 'e';
             token[2] = 'q';
             break;
         case AND:
-            if ((token[1] = ngetch(fp)) != AND) /* look for && or & */ 
+            if ((token[1] = ngetch(fp)) != AND) /* look for && or & */
                 put_back_char(token[1]);
             token[1] = 'a';
             token[2] = 'n';
@@ -125,12 +123,80 @@ convert_relation_shortand(char token[], FILE *fp)
             token[1] = 'o';
             token[2] = 'r';
             break;
-        default: /* can't happen */ 
+        default: /* can't happen */
             token[1] = EOS;
             break;
     }  /* switch(token[0]) */
     token[0] = PERIOD;
-    return(SSTRLEN(token)-1);
+    return(SSTRLEN(token));
+}
+
+/* read alphannumeric token from fp, save it in lexstr, return the lenght of
+ * the token read */
+static int
+get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
+{
+    int i;
+    for (i = 0; i < toksiz - 2; i++) {
+        lexstr[i] = ngetch(fp);
+        switch(char_type(lexstr[i])) {
+            case LETTER:
+            case DIGIT:
+            case UNDERLINE:
+            case DOLLAR:
+            case PERIOD:
+                break;
+            default:
+                put_back_char(lexstr[i--]);
+                goto out;
+        }
+    }
+out:
+    return(i+1);
+}
+/* read numerical token from fp, save it in lexstr, return the lenght of
+ * the token read */
+static int
+get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
+{
+    int i, c, b, n;
+    b = 0; /* in case alternate base number */
+    for (i = 0; i < toksiz - 2; i++) {
+        lexstr[i] = ngetch(fp);
+        if (char_type(lexstr[i]) != DIGIT)
+            break;
+        b = 10*b + lexstr[i] - DIG0;
+    }
+    if (lexstr[i] == RADIX && b >= 2 && b <= 36) {
+        /* n%ddd... */
+        for (n = 0; ; n = b*n + c) {
+            c = lexstr[0] = ngetch(fp);
+            if (c >= 'a' && c <= 'z')
+                c = c - 'a' + DIG9 + 1;
+            else if (c >= 'A' && c <= 'Z')
+                c = c - 'A' + DIG9 + 1;
+            if (c < DIG0 || c >= DIG0 + b)
+                break;
+            c = c - DIG0;
+        }
+        put_back_char(lexstr[0]);
+        i = itoc(n, lexstr, toksiz);
+    }
+    else {
+        put_back_char(lexstr[i--]);
+    }
+    return(i+1);
+}
+
+static bool
+char_can_be_composed(int c)
+{
+    switch(c) {
+        case SLASH:
+        case STAR:
+            return true;
+    }
+    return false;
 }
 
 /*
@@ -142,9 +208,10 @@ convert_relation_shortand(char token[], FILE *fp)
 static int
 get_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    int i, b, n, tok;
-    int ctyp; /* the type of the first char of the token being read */
-    char c;
+    int tok;
+    int toklen; /* the lenght of the token read */
+    int c, nc;
+    int i = 0; /* XXX: temporary */
     c = lexstr[0] = ngetch(fp);
     if (is_blank(c)) {
         lexstr[0] = BLANK;
@@ -166,68 +233,17 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
-    i = 0;
-    ctyp = char_type(c);
-    if (ctyp == LETTER) { /* alphanumeric token */
-        for (i = 0; i < toksiz - 3; i++) {
-            lexstr[i+1] = ngetch(fp);
-            ctyp = char_type(lexstr[i+1]);
-            /* Test for DOLLAR added by BM, 7-15-80 */
-            if (ctyp != LETTER && ctyp != DIGIT && ctyp != UNDERLINE
-                && ctyp != DOLLAR && ctyp != PERIOD)
-                break;
-        }
-        put_back_char(lexstr[i+1]);
+    toklen = 1;
+    if (char_type(c) == LETTER) {
+        put_back_char(c); /* so that we can read back the whole token */
+        toklen = get_alphanumeric_raw_token(lexstr, toksiz, fp);
         tok = ALPHA;
-    }
-    else if (ctyp == DIGIT) { /* number */
-        b = c - DIG0; /* in case alternate base number */
-        for (i = 0; i < toksiz - 3; i++) {
-            lexstr[i+1] = ngetch(fp);
-            if (char_type(lexstr[i+1]) != DIGIT)
-                break;
-            b = 10*b + lexstr[i+1] - DIG0;
-        }
-        if (lexstr[i+1] == RADIX && b >= 2 && b <= 36) {
-            /* n%ddd... */
-            for (n = 0; ; n = b*n + c) {
-                c = lexstr[0] = ngetch(fp);
-                if (c >= 'a' && c <= 'z')
-                    c = c - 'a' + DIG9 + 1;
-                else if (c >= 'A' && c <= 'Z')
-                    c = c - 'A' + DIG9 + 1;
-                if (c < DIG0 || c >= DIG0 + b)
-                    break;
-                c = c - DIG0;
-            }
-            put_back_char(lexstr[0]);
-            i = itoc(n, lexstr, toksiz);
-        }
-        else
-            put_back_char(lexstr[i+1]);
+    } else if (char_type(c) == DIGIT) {
+        put_back_char(c); /* so that we can read back the whole token */
+        toklen = get_numerical_raw_token(lexstr, toksiz, fp);
         tok = DIGIT;
     }
-    else if (ctyp == STAR) { /* look for fortran `*' or `**' operators */
-        if ((c = ngetch(fp)) == STAR) {
-            lexstr[++i] = c;
-            tok = OPEREXP;
-        } else {
-            put_back_char(c);
-            tok = STAR;
-        }
-        lexstr[++i] = EOS;
-    }
-    else if (ctyp == SLASH) { /* look for fortran `/' or `//' operators */
-        if ((c = ngetch(fp)) == SLASH) {
-            lexstr[++i] = c;
-            tok = OPERSTRCAT;
-        } else {
-            put_back_char(c);
-            tok = SLASH;
-        }
-        lexstr[++i] = EOS;
-    }
-    else if (ctyp == SQUOTE || ctyp == DQUOTE) {
+    else if (c == SQUOTE || c == DQUOTE) {
         /* XXX: handle escaped quotes inside a string */
         for (i = 1; (lexstr[i] = ngetch(fp)) != lexstr[0]; i++) {
             /* XXX: but is not this already done by io.c:ngetch()? */
@@ -248,6 +264,7 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
             }
         }
         tok = STRING;
+        toklen = i+1;
     }
     else if (c == PERCENT) {
         /* XXX: make this lazily done */
@@ -260,18 +277,30 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
     }
     else if (c == GREATER || c == LESS || c == NOT
              || c == BANG || c == CARET || c == EQUALS
-             || c == AND || c == OR)
-    {
-        i = convert_relation_shortand(lexstr, fp);
-        tok = ctyp; /*XXX: temporary hack */
+             || c == AND || c == OR
+    ) {
+        toklen = convert_relation_shortand(lexstr, fp);
+        tok = c; /*XXX: temporary hack */
+    } else if (char_can_be_composed(c)) {
+        /* TODO: wrap in a subroutine */
+        nc = ngetch(fp); /* peek next character */
+        if (c == STAR && nc == STAR) { /* fortran `**' operator */
+            lexstr[++i] = STAR;
+            tok = OPEREXP;
+        } else if (c == SLASH && nc == SLASH) { /* fortran `//' operator */
+            lexstr[++i] = SLASH;
+            tok = OPERSTRCAT;
+        } else { /* nothing special, put back the peeked character */
+            put_back_char(nc);
+            tok = c;
+        }
     } else {
-        tok = ctyp; /*XXX: temporary hack */
+        tok = c;
     }
 
-    if (i >= toksiz - 1)
+    if (toklen >= toksiz)
         synerr("token too long.");
-    lexstr[i+1] = EOS;
-
+    lexstr[toklen] = EOS;
     return(tok);
 }
 
