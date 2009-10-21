@@ -1,5 +1,10 @@
 List of user-visible changes of Public Domain Ratfor.
 
+New in XXX
+-----------
+ * Fixed a bug which prevented the automatical enabling of warnings
+   flags in the C compiler.
+
 New in 1.0m
 -----------
  * The testsuite have been fixed to work also with gfortran version 4.0.
