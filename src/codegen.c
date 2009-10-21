@@ -187,16 +187,17 @@ BEGIN_C_DECLS
 void
 brknxt(int sp, int lextyp[], int labval[], int token)
 {
-    int i, n;
+    int n, i, offset;
     char t, ptoken[MAXTOK];
 
     n = 0;
     t = get_nonblank_token(ptoken, MAXTOK);
     if (is_all_digits(ptoken)) { /* have break n or next n */
-        i = 0;
-        n = ctoi(ptoken, &i) - 1;
-    } else if (t != SEMICOL) /* default case */
+        offset = 0;
+        n = ctoi(ptoken, &offset) - 1;
+    } else if (t != SEMICOL) { /* default case */
         put_back_string(ptoken);
+    }
     for (i = sp; i >= 0; i--)
         if (lextyp[i] == LEXWHILE || lextyp[i] == LEXDO
             || lextyp[i] == LEXFOR || lextyp[i] == LEXREPEAT) {
@@ -465,7 +466,6 @@ retcode(void)
     xfer = true;
 }
 
-
 /* untils - generate code for until or end of repeat */
 void
 untils(int lab, int token)
@@ -508,7 +508,7 @@ static int
 caslab (int *n, int *t)
 {
     char tok[MAXTOK];
-    int i, s;
+    int offset, s;
 
     *t = get_nonblank_token (tok, MAXTOK);
     while (is_newline(*t))
@@ -526,8 +526,8 @@ caslab (int *n, int *t)
         *n = 0;
     }
     else {
-        i = 0;
-        *n = s * ctoi (tok, &i);
+        offset = 0;
+        *n = s * ctoi(tok, &offset);
     }
     do { /* ignore blank lines */; 
         *t = get_nonblank_token (tok, MAXTOK);
