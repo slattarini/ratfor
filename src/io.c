@@ -56,9 +56,8 @@ ngetch(FILE *fp)
             ++lineno[inclevel];
         }
     }
-    if (is_strict_newline(c)) {
+    if (is_strict_newline(c))
         ++lineno[inclevel];
-    }
     
     return(c);
 }
@@ -67,11 +66,11 @@ ngetch(FILE *fp)
 
 /* put_back_string() - push string back onto input */
 void
-put_back_string(const char in[])
+put_back_string(const char str[])
 {
-    int i;
-    for (i = strlen(in) - 1; i >= 0; i--)
-        put_back_char(in[i]);
+    const char *s;
+    for (s = str + strlen(str) - 1; s >= str; s--)
+        put_back_char(*s);
 }
 
 /* put_back_char() - push character back onto input */
