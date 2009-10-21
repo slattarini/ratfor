@@ -187,14 +187,13 @@ BEGIN_C_DECLS
 void
 brknxt(int sp, int lextyp[], int labval[], int token)
 {
-    int n, i, offset;
+    int n, i;
     char t, ptoken[MAXTOK];
 
     n = 0;
     t = get_nonblank_token(ptoken, MAXTOK);
     if (is_all_digits(ptoken)) { /* have break n or next n */
-        offset = 0;
-        n = ctoi(ptoken, &offset) - 1;
+        n = ctoi(ptoken) - 1;
     } else if (t != SEMICOL) { /* default case */
         put_back_string(ptoken);
     }
@@ -508,7 +507,7 @@ static int
 caslab (int *n, int *t)
 {
     char tok[MAXTOK];
-    int offset, s;
+    int s;
 
     *t = get_nonblank_token (tok, MAXTOK);
     while (is_newline(*t))
@@ -526,10 +525,9 @@ caslab (int *n, int *t)
         *n = 0;
     }
     else {
-        offset = 0;
-        *n = s * ctoi(tok, &offset);
+        *n = s * ctoi(tok);
     }
-    do { /* ignore blank lines */; 
+    do { /* ignore blank lines */;
         *t = get_nonblank_token (tok, MAXTOK);
     } while (is_newline(*t));
     return(0); /* expected to be ignored */

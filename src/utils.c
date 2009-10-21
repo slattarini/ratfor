@@ -23,22 +23,21 @@ char
     return(p);
 }
 
-/* Convert string at str[*offset] to integer, and increment *offset
- * so that it points to the next non-numeric character in str[] */
+/*
+ * Convert string str[] to integer, skipping leading blanks and stopping at
+ * the first non-numeric character in str[].  Return the converted integer
+ */
 int
-ctoi(const char str[], int *offset)
+ctoi(const char str[])
 {
-    int i, n;
-
-    i = *offset;
+    int i = 0, n = 0;
     while (is_blank(str[i]))
         i++;
-    for (n = 0; str[i] != EOS; i++) {
+    for (; str[i] != EOS; i++) {
         if (str[i] < DIG0 || str[i] > DIG9)
             break;
         n = 10 * n + (str[i] - DIG0);
     }
-    *offset = i;
     return(n);
 }
 
