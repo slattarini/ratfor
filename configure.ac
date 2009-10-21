@@ -107,7 +107,7 @@ AC_C_INLINE
 # Checks for library functions.
 #
 
-for func in getopt strerror vfprintf; do
+for func in getopt strerror vfprintf strdup; do
     AC_CHECK_FUNC([$func], [:],
         [AC_MSG_ERROR([No proper `$func' subroutine found])])
 done

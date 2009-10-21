@@ -1,9 +1,6 @@
 #include "rat4-common.h"
 #include "rat4-global.h"
-
 #include <stdarg.h>
-
-#include "utils.h"
 #include "error.h"
 
 BEGIN_C_DECLS
@@ -16,7 +13,8 @@ int exit_status = EXIT_SUCCESS;
  */
 
 
-/* Ugly defines to avoid too much code duplication.  Read the body of the
+/*
+ * Ugly defines to avoid too much code duplication.  Read the body of the
  * `synerr()' function to understand how this macros work.  By the way,
  * the code would be much simplified if we could use variadic macros, but
  * for the moment we are restraining ourselves to C89.

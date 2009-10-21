@@ -5,7 +5,6 @@
 #include <ctype.h>
 
 #include "tokenizer.h"
-#include "utils.h"
 #include "io.h"
 #include "xopen.h"
 #include "error.h"
@@ -466,7 +465,7 @@ push_file_stack(const char *path)
     /* skip leading white space in path */
     for (i = 0; is_blank(path[i]); i++)
         /* empty body */;
-    if ((path = strsave(&path[i])) == NULL) {
+    if ((path = strdup(&path[i])) == NULL) {
         synerr_include("memory error.");
         return;
     }

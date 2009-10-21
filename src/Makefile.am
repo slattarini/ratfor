@@ -20,7 +20,6 @@ ratfor_SOURCES = \
 	rat4-common.h \
 	lex-symbols.h \
 	main.c \
-	utils.c utils.h \
 	error.c error.h \
 	io.c io.h \
 	xopen.c xopen.h \

@@ -3,8 +3,6 @@
  * Table lookup routines
  */
 #include "rat4-common.h"
-
-#include "utils.h"
 #include "hash.h"
 
 static struct hashlist *hashtab[HASHMAX];
@@ -41,7 +39,7 @@ hash_install(const char *name, const char *def)
         np = (struct hashlist *) malloc(sizeof(*np));
         if (np == NULL)
             return(NULL);
-        if ((np->name = strsave(name)) == NULL)
+        if ((np->name = strdup(name)) == NULL)
             return(NULL);
         hashval = hash(np->name);
         np->next = hashtab[hashval];
@@ -50,7 +48,7 @@ hash_install(const char *name, const char *def)
         /* cast needed to avoid compiler warning */
         free((void *)np->def);
     }
-    if ((np->def = strsave(def)) == NULL)
+    if ((np->def = strdup(def)) == NULL)
         return(NULL);
     return(np);
 }
