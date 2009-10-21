@@ -145,7 +145,19 @@ AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
 # This code *must* be set after any check on cc, c headers, c functions
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
-for flag in -Wall -Wextra -Wshadow -pedantic $rat4_maybe_werror; do
+for flag in \
+    -Wall \
+    -Wextra \
+    -Wshadow \
+    -Wnested-externs \
+    -Wwrite-strings \
+    -Wmissing-declarations \
+    -Wc++-compat \
+    -Wsign-conversion \
+    -Wdeclaration-after-statement \
+    -pedantic \
+    $rat4_maybe_werror \
+; do
     AX_CACHE_CHECK_CC_FLAG([$flag], [], [], [CFLAGS="$CFLAGS $flag"])
 done
 AS_UNSET([flag])
