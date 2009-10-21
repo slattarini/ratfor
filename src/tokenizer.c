@@ -224,12 +224,17 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
                 put_back_char(c);
             }
         }
-        if (is_newline(lexstr[i]) || i >= toksiz - 1) {
+        /* deal with errors */
+        if (is_newline(lexstr[i])) {
             synerr("missing quote.");
-            put_back_char(lexstr[i]);
-            lexstr[i] = lexstr[0];
-            break;
+        } else if (i >= toksiz - 1) {
+            synerr("string too long.");
+        } else {
+            continue; /* no err, go to next iteration */
         }
+        put_back_char(lexstr[i]);
+        lexstr[i] = lexstr[0];
+        break;
     }
     return(i+1);
 }
