@@ -28,13 +28,8 @@ void
 scopy(const char from[], int i, char to[], int j)
 {
     int k1, k2;
-
-    k2 = j;
-    for (k1 = i; from[k1] != EOS; k1++) {
-        to[k2] = from[k1];
-        k2++;
-    }
-    to[k2] = EOS;
+    for (k1 = i, k2 = j; (to[k2] = from[k1]) != EOS; k1++, k2++)
+        /* empty body */;
 }
 
 /* look - look-up definition of `name', copy it in defn */
