@@ -423,7 +423,7 @@ static int
 deftok(char token[], int toksiz, FILE *fp)
 {
     char tkdefn[MAXDEFLEN];
-    int i, t;
+    int t;
 
     while ((t = get_raw_token(token, toksiz, fp)) != EOF) {
         if (t != ALPHA) {
@@ -435,16 +435,11 @@ deftok(char token[], int toksiz, FILE *fp)
         } else if (!defn_lookup(token, tkdefn)) {
             break; /* undefined */
         } else {
-            /* Push replacement onto input, with newlines substituted
-             * by "bell" characters (ascii 007). This hack is needed to
-             * keep the count of line in input correct even if expansion
-             * of multiline macros is involved. */
-            for (i = SSTRLEN(tkdefn) - 1; i >= 0; i--) {
-                if (is_newline(tkdefn[i]))
-                    put_back_char(FKNEWLINE);
-                else
-                    put_back_char(tkdefn[i]);
-            }
+            /* Push replacement onto input, with newlines properly
+             * substituted by "fake newlines". This hack is needed
+             * to keep the count of line in input correct even if
+             *expansion of multiline macros is involved. */
+            put_back_string_cooked(tkdefn);
         }
     }
     return(t);

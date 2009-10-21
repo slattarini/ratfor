@@ -13,23 +13,35 @@ static char buf[BUFSIZE];   /* pushed-back chars buffer */
 static int bp = -1;         /* pushed-back chars buffer offset */
 
 /*
- * The two following subroutines are part of an hack needed to keep the
- * count of line numbers correct even when expansion multiline macros
+ * The three following subroutines are part of an hack needed to keep
+ * the count of line numbers correct even when expansion multiline macros
  * (defined through the `define' builtin) is involved .
  */
 
-static inline
-void putc_(const char c)
+static inline void
+putc_(const char c)
 {
     putchar((c == FKNEWLINE) ? NEWLINE : c);
 }
 
-static inline
-void puts_(const char *s)
+static inline void
+puts_(const char *s)
 {
     while (*s != EOS)
         putc_(*s++);
 }
+
+static inline void
+pbstr_(const char str[], const bool cooked)
+{
+    const char *s;
+    for (s = str + strlen(str) - 1; s >= str; s--)
+        if (!cooked)
+            put_back_char(*s);
+        else
+            put_back_char(is_newline(*s) ? FKNEWLINE: *s);
+}
+
 
 /* get next char (either pushed back or new from the stream) */
 #define NGETC_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
@@ -64,13 +76,19 @@ ngetch(FILE *fp)
 
 #undef NGETC_
 
-/* put_back_string() - push string back onto input */
+/* Push string back onto input. */
 void
 put_back_string(const char str[])
 {
-    const char *s;
-    for (s = str + strlen(str) - 1; s >= str; s--)
-        put_back_char(*s);
+    pbstr_(str, false);
+}
+
+/* Push string back onto input, replacing newline characters with
+ * FKNEWLINE characters */
+void
+put_back_string_cooked(const char str[])
+{
+    pbstr_(str, true);
 }
 
 /* put_back_char() - push character back onto input */
