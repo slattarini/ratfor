@@ -9,8 +9,8 @@
 
 #define BUFSIZE 2048        /* mostly arbitrary */
 
-static char buf[BUFSIZE];   /* pushed-back chars */
-static int bp = -1;         /* pushback buffer pointer */
+static char buf[BUFSIZE];   /* pushed-back chars buffer */
+static int bp = -1;         /* pushed-back chars buffer offset */
 
 /*
  * The two following subroutines are part of an hack needed to keep the
