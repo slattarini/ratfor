@@ -132,7 +132,7 @@ convert_relation_shortand(char token[], FILE *fp)
 }
 
 static bool
-char_can_be_composed(int c)
+can_char_be_composed(int c)
 {
     switch(c) {
         case SLASH:
@@ -298,7 +298,7 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
     ) {
         toklen = convert_relation_shortand(lexstr, fp);
         tok = c; /*XXX: temporary hack */
-    } else if (char_can_be_composed(c)) {
+    } else if (can_char_be_composed(c)) {
         /* TODO: wrap in a subroutine */
         nc = ngetch(fp); /* peek next character */
         if (c == STAR && nc == STAR) { /* fortran `**' operator */
