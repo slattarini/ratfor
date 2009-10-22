@@ -57,8 +57,9 @@ itoc(int n, char str[], int size)
     if (sign < 0 && i < size-1)
         str[i++] = '-';
     str[i] = EOS;
-    /* reverse the string and plug it back in */
-    for (j = 0, k = strlen(str) - 1; j < k; j++, k--) {
+    /* reverse the string and plug it back in
+       NOTE: the cast to int avoid spurious compiler warnings */
+    for (j = 0, k = ((int) strlen(str)) - 1; j < k; j++, k--) {
         c = str[j];
         str[j] = str[k];
         str[k] = c;
