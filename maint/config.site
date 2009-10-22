@@ -7,9 +7,9 @@
 #
 
 # Always enable `-Werror' flag for C compiler, if supported.
-enable_werror_cflag=yes
+enable_werror_cflag=${enable_werror_cflag-'yes'}
 
 # Always import maintainer rules in GNUmakefile.
-enable_maintainer_make_rules=yes
+enable_maintainer_make_rules=${enable_maintainer_make_rules-'yes'}
 
 # vim: ft=sh ts=4 sw=4 et
