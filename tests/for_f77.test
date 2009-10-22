@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Test the `for' statement (by compiling and running the generated
-# fortran code)
+# Basic tests on the `for' statement (by compiling and running the
+# generated fortran code)
 
 . ./TestsAux/defs.sh || exit 99
 
@@ -13,34 +13,21 @@ program testfor
     integer x
 
     write(*,200)
-    
+
     for(x = 0; x < 10; x = x + 2)
         write(*,100) x
-    
+
     write(*,200)
-    
+
     for (x = 10; x > 1; x = x - 2)
         write(*,100) x
-    
+
     write(*,200)
-    
+
     for(x = 3; x <= 24; x = x * 2) {
         write(*,100) x
     }
-    
-    write(*,200)
-    
-    x = 1
-    for(; x < 5; x = x  + 1)
-        write(*,100) x
-    
-    write(*,200)
-    
-    for(x = 3; x < 9;) {
-        x = x + 2
-        write(*,100) x
-    }
-    
+
     write(*,200)
 
 100 format(I2)
@@ -67,15 +54,6 @@ cat > exp <<EOF
 6
 12
 24
----
-1
-2
-3
-4
----
-5
-7
-9
 ---
 EOF
 

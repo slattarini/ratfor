@@ -12,7 +12,7 @@ SUBDIRS = TestsAux
 
 # Might be updated later (also in included files).  Do not remove these
 # definitions.
-MOSTLYCLEANFILES = 
+MOSTLYCLEANFILES =
 EXTRA_DIST =
 
 
@@ -64,6 +64,7 @@ ALL_TESTS = \
   define-whitespaces.test \
   devnull-input.test \
   empty-input.test \
+  for-with-empty-clauses_f77.test \
   for_f77.test \
   forever_f77.test \
   function-name-invalid.test \
@@ -85,6 +86,7 @@ ALL_TESTS = \
   include-nested-deep.test \
   include-nested.test \
   include-no-uppercase-alias.test \
+  include-nonalpha.test \
   include-recursive.test \
   include-relpath.test \
   include-stress.test \
@@ -101,7 +103,9 @@ ALL_TESTS = \
   label-fail-unexpected-eof.test \
   label-line-continuation.test \
   label-line-continuation_f77.test \
+  line-continuation-automatic.test \
   line-continuation-basic.test \
+  line-continuation-in-string.test \
   line-continuation-multiple.test \
   line-continuation-stress1.test \
   line-continuation-stress2.test \
@@ -142,6 +146,7 @@ ALL_TESTS = \
   stress3_f77.test \
   switch-fail-no-braces.test \
   switch-fail.test \
+  switch-non-positive-values_f77.test \
   switch_f77.test \
   synerr-basic.test \
   synerr-define-lineno.test \

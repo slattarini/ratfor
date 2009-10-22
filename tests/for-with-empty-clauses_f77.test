@@ -1,0 +1,131 @@
+#!/bin/sh
+
+# Test the `for' statement with empty clauses (by compiling and
+# running the generated fortran code)
+
+. ./TestsAux/defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<EOF
+program testfor
+    implicit none
+    integer x
+
+    write(*,200) 'empty none'
+    for(x = 0; x < 3; x = x + 1) {
+        write(*,100) x
+    }
+
+    write(*,200) 'empty 1'
+    x = 0
+    for(; x < 3; x = x + 1) {
+        write(*,100) x
+    }
+
+    write(*,200) 'empty 2'
+    for (x = 0; ; x = x + 1) {
+        if (x >= 3)
+            goto 1000
+        write(*,100) x
+    }; 1000 continue
+
+    write(*,200) 'empty 3'
+    for(x = 0; x < 3;) {
+        write(*,100) x
+        x = x + 1
+    };
+
+    write(*,200) 'empty 1, 2'
+    x = 0
+    for(; ; x = x  + 1) {
+        if (x >= 3)
+            goto 2000
+        write(*,100) x
+    }; 2000 continue
+
+    write(*,200) 'empty 1, 3'
+    x = 0
+    for(; x < 3; ) {
+        write(*,100) x
+        x = x + 1
+    };
+
+    write(*,200) 'empty 2, 3'
+    for(x = 0; ;) {
+        if (x >= 3)
+            goto 3000
+        write(*,100) x
+        x = x + 1
+    }; 3000 continue
+
+    write(*,200) 'empty 1, 2, 3'
+    x = 0
+    for(;;) {
+        if (x >= 3)
+            goto 4000
+        write(*,100) x
+        x = x + 1
+    }; 4000 continue
+
+    write(*,200) ''
+
+100 format(I2)
+200 format('~~~ ', A20)
+    call halt
+end
+EOF
+
+cat > exp <<EOF
+~~~ empty none
+0
+1
+2
+~~~ empty 1
+0
+1
+2
+~~~ empty 2
+0
+1
+2
+~~~ empty 3
+0
+1
+2
+~~~ empty 1, 2
+0
+1
+2
+~~~ empty 1, 3
+0
+1
+2
+~~~ empty 2, 3
+0
+1
+2
+~~~ empty 1, 2, 3
+0
+1
+2
+~~~
+EOF
+
+cat tst.r
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_CMD ./tst.exe || testcase_FAIL
+ws_normalize <stdout >got
+
+cat exp
+cat got
+
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

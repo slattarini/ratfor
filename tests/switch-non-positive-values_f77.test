@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Test the `switch/case' statement (by compiling and running the generated
-# fortran code)
+# Test that the `switch/case' statement works also with non-positive
+# integer constants (test done by compiling and running the generated
+# fortran code).
 
 . ./TestsAux/defs.sh || exit 99
 
@@ -11,16 +12,18 @@ cat > tst.r <<EOF
 program testswtich
     integer i
 100 format(A20);
-    for(i = 1; i <= 6; i = i + 1) {
+    for(i = -3; i <= 3; i = i + 1) {
         switch(i) {
+        case 0:
+            write(*,100) 'ZERO';
         case 1:
-            write(*,100) 'ONE';
-        case 2:
-            write(*,100) 'TWO';
-        case 3, 4:
-            write(*,100) 'SOME';
+            write(*,100) 'PLUS ONE';
+        case -1:
+            write(*,100) 'MINUS ONE';
+        case -2, +2:
+            write(*,100) 'PLUS/MINUS TWO';
         default:
-            write(*,100) 'MANY';
+            write(*,100) 'PLUS/MINUS MANY';
         }
     }
     call halt
@@ -28,12 +31,13 @@ end
 EOF
 
 cat > exp <<EOF
-ONE
-TWO
-SOME
-SOME
-MANY
-MANY
+PLUS/MINUS MANY
+PLUS/MINUS TWO
+MINUS ONE
+ZERO
+PLUS ONE
+PLUS/MINUS TWO
+PLUS/MINUS MANY
 EOF
 
 cat tst.r

@@ -1,0 +1,66 @@
+#!/bin/sh
+
+# Test line continuation by `_' in strings.
+
+. ./TestsAux/defs.sh || exit 99
+
+cat > tst.r <<\EOF
+'abc_
+def'
+
+'abc_
+ def'
+
+'abc__
+def'
+
+'i_
+j_
+k_
+l'
+
+"foo_
+bar"
+
+"p_
+q_
+r_
+s"
+
+"f_o_o"
+"bar_"
+
+'b_a_z'
+'quux__'
+EOF
+
+$SED -e 's/^/"/' -e 's/$/"/' >exp <<\EOF
+abcdef
+abc def
+abc_def
+ijkl
+foobar
+pqrs
+f_o_o
+bar_
+b_a_z
+quux__
+EOF
+
+cat tst.r
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+$SED -e '/^[cC]/d' \
+     -e "s/$ws1p/ /g" \
+     -e "s/^$ws0p//" \
+     -e "s/'/\"/g" \
+   <stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

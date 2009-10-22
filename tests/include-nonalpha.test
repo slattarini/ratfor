@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Check that `include' works when passed as argument a atring containing
+# non-alphanumeric tokens.
+
+. ./TestsAux/defs.sh || exit 99
+
+inc='n_o_n=alph@-inclu,d:e.d' #XXX: add a `~', `%'? a `$'?
+cat >"$inc" <<EOF
+inc1
+inc2
+EOF
+
+cat > tst.r <<EOF
+main1
+include $inc
+main2
+EOF
+
+cat > exp <<\EOF
+main1
+inc1
+inc2
+main2
+EOF
+
+cat tst.r
+cat "$inc"
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
