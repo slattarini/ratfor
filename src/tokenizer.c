@@ -130,7 +130,7 @@ convert_relation_shortand(char token[], FILE *fp)
             break;
     }  /* switch(token[0]) */
     token[0] = PERIOD;
-    return(strlen(token)-1);
+    return(SSTRLEN(token)-1);
 }
 
 /* Get raw ratfor token. Also deal with comments (# COMMENT...) and
@@ -329,7 +329,7 @@ deftok(char token[], int toksiz, FILE *fp)
              * by "bell" characters (ascii 007). This hack is needed to
              * keep the count of line in input correct even if expansion
              * of multiline macros is involved. */
-            for (i = strlen(tkdefn) - 1; i >= 0; i--) {
+            for (i = SSTRLEN(tkdefn) - 1; i >= 0; i--) {
                 if (is_newline(tkdefn[i]))
                     put_back_char(FKNEWLINE);
                 else
@@ -419,7 +419,7 @@ get_token(char token[], int toksiz)
             if (!STREQ(token, KEYWORD_INCLUDE))
                 return(tok);
             /* deal with file inclusion */
-            for (i = 0; ; i = strlen(path)) {
+            for (i = 0; ; i = SSTRLEN(path)) {
                 /* XXX possible segfault here */
                 t = deftok(&path[i], MAXPATH, infile[inclevel]);
                 if (is_stmt_ending(t))

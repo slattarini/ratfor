@@ -68,6 +68,10 @@
 
 #define STREQ(x, y) (strcmp((x),(y)) == 0)
 
+/* help to avoid irrelevant compiler warnings w.r.t. signed/unsigned
+ * conversion */
+#define SSTRLEN(s) ((int) strlen(s))
+
 /* simulate booleans if not present */
 #ifdef HAVE_STDBOOL_H
 #  include <stdbool.h>

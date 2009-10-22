@@ -285,7 +285,7 @@ forcode(int *lab)
     }
     fordep++; /* stack reinit clause */
     for (j = 0, i = 1; i < fordep; i++) /* find end *** should i = 1 ??? *** */
-        j += strlen(&forstk[j]) + 1;
+        j += SSTRLEN(&forstk[j]) + 1;
     forstk[j] = EOS; /* null, in case no reinit */
     nlpar = 0;
     t = get_nonblank_token(token, MAXTOK);
@@ -301,10 +301,10 @@ forcode(int *lab)
             break;
         }
         if (nlpar >= 0 && !is_newline(t) && t != UNDERLINE) { /* XXX: underline? */
-            if ((j + strlen(token)) >= MAXFORSTK)
+            if ((j + SSTRLEN(token)) >= MAXFORSTK)
                 synerr_fatal("for clause too long.");
             scopy(token, 0, forstk, j);
-            j += strlen(token);
+            j += SSTRLEN(token);
         }
     }
     tlab++; /* label for next's */
@@ -320,8 +320,8 @@ fors(int lab)
     xfer = false;
     outnum(lab);
     for (j = 0, i = 1; i < fordep; i++)
-        j += strlen(&forstk[j]) + 1;
-    if (strlen(&forstk[j]) > 0) {
+        j += SSTRLEN(&forstk[j]) + 1;
+    if (forstk[j] != EOS) {
         outtab();
         outstr(&forstk[j]);
         outdon();
