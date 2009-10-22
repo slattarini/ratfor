@@ -507,25 +507,21 @@ static int
 caslab (int *n, int *t)
 {
     char tok[MAXTOK];
-    int s;
+    int sign;
 
     *t = get_nonblank_token (tok, MAXTOK);
     while (is_newline(*t))
         *t = get_nonblank_token (tok, MAXTOK);
     if (*t == EOF)
         return(*t);
-    if (*t == MINUS)
-        s = -1;
-    else
-        s = 1;
+    sign = (*t == MINUS ? -1 : 1);
     if (*t == MINUS || *t == PLUS)
         *t = get_nonblank_token (tok, MAXTOK);
     if (*t != DIGIT) {
         synerr ("invalid case label.");
         *n = 0;
-    }
-    else {
-        *n = s * ctoi(tok);
+    } else {
+        *n = sign * ctoi(tok);
     }
     do { /* ignore blank lines */;
         *t = get_nonblank_token (tok, MAXTOK);
