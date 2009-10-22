@@ -6,6 +6,9 @@
 # DO NOT DISTRIBUTE THIS FILE.
 #
 
+# Enable silent-rules by default.
+enable_silent_rules=${enable_silent_rules-'yes'}
+
 # Always enable `-Werror' flag for C compiler, if supported.
 enable_werror_cflag=${enable_werror_cflag-'yes'}
 
