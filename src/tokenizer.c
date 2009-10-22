@@ -32,8 +32,11 @@ static const char KEYWORD_DEFINE[] = "define";
  * Private Functions.
  */
 
-/* Convert (signed) integer n to a string, saving it in `str'.
- * Return the legnth of the converted string. */
+/*
+ * Convert string str[] to integer, skipping leading blanks and stopping at
+ * the first non-numeric character in str[].  Does not recognize negative
+ * integers.  Return the converted integer.
+ */
 static int
 integer_to_string(int n, char str[], int size)
 {
