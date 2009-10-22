@@ -4,6 +4,7 @@
 
 #include <ctype.h>
 
+#include "tokenizer.h"
 #include "utils.h"
 #include "io.h"
 #include "xopen.h"
