@@ -14,7 +14,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 # Autoconf's initializations.
 #
 
-AC_PREREQ([2.64])
+AC_PREREQ([2.62])
 AC_INIT([Ratfor Testsuite], [0.9e], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([tests/ifelse-ambiguity_f77.test])

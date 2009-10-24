@@ -14,7 +14,7 @@ Introduction and general infomration
   To bootstrap checked-out sources, just run
     $ autoreconf -vi
   from the top directory. Note that to do this you'll need to have
-  installed the latest version of autoconf (2.64) and automake (1.11).
+  installed the latest version of autoconf (2.62) and automake (1.11).
 
 
  Configuring and building
