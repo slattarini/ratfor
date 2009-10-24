@@ -1,5 +1,9 @@
 List of user-visible changes of Ratfor Testsuite.
 
+New in XXX
+-----------
+ * Silent rules in the Makefiles are not enabled by default anymore.
+
 New in 0.9e
 -----------
  * Now the testsuite should work also with mksh (the MirBSD Korn Shell) on

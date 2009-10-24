@@ -41,7 +41,9 @@ AX_INCLUDE_MAINT_CONFIG_SITE
 
 AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror -Wno-override color-tests
                        parallel-tests no-installinfo no-texinfo.tex])
-AM_SILENT_RULES([yes]) # make `--enable-silent-rules' the default
+dnl: enable `silent-rules' support, but make silent rules disabled by
+dnl: default
+AM_SILENT_RULES([no])
 
 #
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
