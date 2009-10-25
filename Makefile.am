@@ -8,20 +8,20 @@ ACLOCAL_AMFLAGS = -I m4 --install
 SUBDIRS = tests
 
 # List of extra files to be put in the distributed tarball.
-EXTRA_DIST =
-# List of files which must not be put in the distributed tarball.
-no_dist_files =
+EXTRA_DIST = \
+  HACKING \
+  GNUmakefile \
+  maint/maint.mk \
+  maint/strict-distcheck.mk \
+  maint/release.mk \
+  maint/developer.mk \
+  maint/prj-post-cfg.mk
 
-EXTRA_DIST += HACKING
-EXTRA_DIST += GNUmakefile
-EXTRA_DIST += maint/maint.mk
-EXTRA_DIST += maint/strict-distcheck.mk
-EXTRA_DIST += maint/release.mk
-EXTRA_DIST += maint/developer.mk
-EXTRA_DIST += maint/prj-post-cfg.mk
-no_dist_files += maint/config.site
-no_dist_files += maint/local-cfg.mk
-no_dist_files += maint/personal/*
+# List of files which must not be put in the distributed tarball.
+no_dist_files = \
+  maint/config.site \
+  maint/local-cfg.mk \
+  maint/personal/*
 
 # Check that we do not erronously include in the tarball any file which is
 # not meant for distribution.
