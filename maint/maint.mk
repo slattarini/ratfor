@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2009-10-01 17:04:52 +0200.  DO NOT EDIT!
+# Copied from SteLib at 2009-10-25 17:36:47 +0100.  DO NOT EDIT!
 # Contains maintainer-specific rules. Included by top-level GNUmakefile.
 
 # Do not save the original name or timestamp in the .tar.gz file.
@@ -17,7 +17,7 @@ ifeq ($(ENABLE_MAINTAINER_MAKE_RULES),yes)
 
 #--------------------------------------------------------------------------
 
-# Directory containing most maintainer-specific stuff
+# Directory containing most maintainer-specific stuff.
 maintdir = $(srcdir)/maint
 abs_maintdir = $(abs_srcdir)/maint
 
@@ -46,6 +46,7 @@ export LC_ALL = C
 # Include maintainer rules, subdivided in sub-makefiles for clarity
 # and modularity.
 #
+include $(maintdir)/developer.mk
 include $(maintdir)/strict-distcheck.mk
 include $(maintdir)/release.mk
 
