@@ -85,7 +85,7 @@ AS_UNSET([badtests])
 
 for tst in $RAT4_TESTSUITE_XFAIL_TESTS; do
   AS_CASE([$tst], [*.test], [], [tst="$tst.test"])
-  AC_MSG_NOTICE([the testcase `$tst' will be skipped])
+  AC_MSG_NOTICE([the testcase `$tst' will be expected to fail])
 done
 AS_UNSET([tst])
 
