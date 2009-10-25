@@ -10,8 +10,11 @@ EXTRA_DIST = \
   xfail-tests.txt \
   HACKING \
   GNUmakefile \
-  maint/maint.mk maint/strict-distcheck.mk maint/release.mk \
-  maint/prj-post-cfg.mk maint/local-cfg-mk.samples
+  maint/maint.mk \
+  maint/strict-distcheck.mk \
+  maint/release.mk \
+  maint/developer.mk \
+  maint/prj-post-cfg.mk
 
 if ENABLE_MAINTAINER_MAKE_RULES
   # variable used by maint.mk
