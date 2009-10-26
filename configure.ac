@@ -114,16 +114,8 @@ done
 AS_UNSET([func])
 
 #
-#  Enable compiler warnings.
+#  Enable maintainer-specific make rules, on user request.
 #
-
-# Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
-# should be added (when supported) to $CFLAGS.
-AX_ARG_ENABLE(
-    [werror-cflag],
-    [enable the `-Werror' C compiler flag, if supported],dnl '`# font-lock
-    [rat4_maybe_werror=-Werror],
-    [rat4_maybe_werror=''])
 
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
 # rules should be imported in the GNUmakefile.
@@ -139,6 +131,18 @@ AX_ARG_ENABLE(
 m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
 AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
                [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
+
+#
+#  Enable compiler warnings.
+#
+
+# Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
+# should be added (when supported) to $CFLAGS.
+AX_ARG_ENABLE(
+    [werror-cflag],
+    [enable the `-Werror' C compiler flag, if supported],dnl '`# font-lock
+    [rat4_maybe_werror=-Werror],
+    [rat4_maybe_werror=''])
 
 # Enable as many compiler warnings as possible (this is tailered to gcc,
 # but should not cause failures of problems for other compilers).
