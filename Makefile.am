@@ -53,19 +53,6 @@ DISTCHECK_CONFIGURE_FLAGS = \
 	'RATFOR=$(RATFOR)' \
 	'RAT4_TESTSUITE_XFAIL_TESTS=$(RAT4_TESTSUITE_XFAIL_TESTS)'
 
-# We don't support install targets.
-RAT4_INSTALL_TARGETS = \
-  install install-data install-exec \
-  install-dvi install-html install-info install-ps install-pdf \
-  uninstall
-$(RAT4_INSTALL_TARGETS):
-	@(echo ==========================================================; \
-	  echo '$(PACKAGE_NAME) dot not support "install-like" targets.';  \
-	  echo "The target \`$@' is therefore a no-op.";                   \
-	  echo ==========================================================) \
-	 | sed 's/^/WARNING: /' >&2
-
-
 # This is defined here so that it can be extended in maint/*.mk, if needed.
 distcheck-hook:
 
