@@ -5,15 +5,10 @@
 # DO NOT DISTRIBUTE THIS FILE!
 #
 
-define normalize-huge-strictdistcheck-sh-code
-  case '$(HUGE_STRICTDISTCHECK)' in
-    [yY]|[yY]es|YES|[tT]rue|1) echo yes;;
-    *) echo no;;
-  esac
-endef
-HUGE_STRICTDISTCHECK := $(shell $(normalize-huge-strictdistcheck-sh-code))
+huge_strict-distcheck := $(call normalize-boolean,$(HUGE_STRICTDISTCHECK))
 
 stefano-lattarini_uname := $(shell uname)
+
 
 ## ----------- ##
 ##  GNU/Linux  ##
@@ -30,7 +25,7 @@ ifeq ($(stefano-lattarini_uname),Linux)
     /usr/local/bin/pcc \
     /usr/bin/g++ \
     /usr/bin/gcc
-  ifeq ($(HUGE_STRICTDISTCHECK),yes)
+  ifeq ($(huge_strict-distcheck),yes)
     strict_distcheck_c_compilers += \
       $(stefano-lattarini_devel-dir)/bin/gcc-2.95-wrapper \
       /opt/vintage/bin/gcc-4.0 \
@@ -44,7 +39,7 @@ ifeq ($(stefano-lattarini_uname),Linux)
     NONE \
     /usr/bin/fort77 \
     /usr/bin/gfortran
-  ifeq ($(HUGE_STRICTDISTCHECK),yes)
+  ifeq ($(huge_strict-distcheck),yes)
     strict_distcheck_f77_compilers += \
       /opt/vintage/bin/gfortran-4.0
   endif
@@ -62,7 +57,7 @@ ifeq ($(stefano-lattarini_uname),Linux)
     $(stefano-lattarini_devel-dir)/bin/zsh4/sh \
     /bin/ksh \
     /opt/bin/heirloom-sh
-  ifeq ($(HUGE_STRICTDISTCHECK),yes)
+  ifeq ($(huge_strict-distcheck),yes)
     strict_distcheck_shells += \
       $(stefano-lattarini_devel-dir)/bin/zsh3/sh \
       /bin/mksh \
@@ -91,7 +86,7 @@ ifeq ($(stefano-lattarini_uname),FreeBSD)
     /usr/local/bin/pcc \
     /usr/bin/g++ \
     /usr/bin/gcc
-  ifeq ($(HUGE_STRICTDISTCHECK),yes)
+  ifeq ($(huge_strict-distcheck),yes)
     strict_distcheck_c_compilers += \
       /usr/local/bin/gcc34
   endif
@@ -102,7 +97,7 @@ ifeq ($(stefano-lattarini_uname),FreeBSD)
     NONE \
     /usr/local/opt/bin/g77 \
     /usr/local/bin/gfortran44
-  ifeq ($(HUGE_STRICTDISTCHECK),yes)
+  ifeq ($(huge_strict-distcheck),yes)
     strict_distcheck_f77_compilers += \
       /usr/local/bin/g95
   endif
@@ -121,7 +116,7 @@ ifeq ($(stefano-lattarini_uname),FreeBSD)
     /usr/local/bin/ksh \
     /usr/local/bin/mksh \
     /usr/local/bin/bash
-  ifeq ($(HUGE_STRICTDISTCHECK),yes)
+  ifeq ($(huge_strict-distcheck),yes)
     strict_distcheck_shells += \
       /usr/local/bin/ksh93 \
       /usr/local/bin/pdksh
@@ -131,9 +126,13 @@ ifeq ($(stefano-lattarini_uname),FreeBSD)
 endif # $(stefano-lattarini_uname) == FreeBSD
 
 
-# Sanity check.
+## -------------- ##
+##  Sanity check  ##
+## -------------- ##
+
 ifneq ($(stefano-lattarini_have-recognized-uname),yes)
   $(error System has unrecognized uname '$(stefano-lattarini_uname)')
 endif
+
 
 # vim: ft=make ts=4 sw=4 noet

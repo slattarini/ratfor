@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2009-10-25 16:29:25 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2009-10-26 02:00:57 +0100.  DO NOT EDIT!
 # Contains maintainer-specific rules. Included by top-level GNUmakefile.
 
 # Do not save the original name or timestamp in the .tar.gz file.
@@ -15,7 +15,7 @@ GZIP_ENV = '--no-name --best $(gzip_rsyncable)'
 #
 ifeq ($(ENABLE_MAINTAINER_MAKE_RULES),yes)
 
-#--------------------------------------------------------------------------
+#==========================================================================
 
 # Directory containing most maintainer-specific stuff.
 maintdir = $(srcdir)/maint
@@ -31,6 +31,27 @@ _autoreconf := $(shell echo "$${AUTORECONF:-autoreconf}")
 # equal. Doing it here saves us from having to set LC_ALL elsewhere in
 # this makefile, or in makefiles included by it.
 export LC_ALL = C
+
+#--------------------------------------------------------------------------
+
+#
+# Helper & utility macros.
+#
+
+define _maint_normalize-boolean-sh-code
+  x=`echo '$(1)' | sed -e 's/^[ 	]*//' -e 's/[ 	]*$$//'`;
+  case "$$x" in
+    [yY]|[yY]es|YES|[tT]rue|1) echo yes;;
+    *) echo no;;
+  esac;
+endef
+
+# don't leave leading spaces in the body of the macro
+define normalize-boolean
+$(shell $(call _maint_normalize-boolean-sh-code,$(1)))
+endef
+
+#--------------------------------------------------------------------------
 
 #
 # Read local definitions and overrides, if any.
@@ -55,7 +76,7 @@ include $(maintdir)/release.mk
 #
 -include $(maintdir)/prj-post-cfg.mk
 
-#--------------------------------------------------------------------------
+#==========================================================================
 
 endif # $(ENABLE_MAINTAINER_MAKE_RULES) == yes
 
