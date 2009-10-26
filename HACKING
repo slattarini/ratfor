@@ -141,9 +141,10 @@ C++ Compatibility
 Testsuite
 ---------
 
-  Currently, the testsuite comprises only blackbox test scripts.
-  Can be run with `make check'.  For more details, refer to file
-  `blackbox-tests/README'.
+  Currently, the testsuite comprises only blackbox test scripts.  It does
+  so by using the "Ratfor Testsuite" package as a git submodule.  For more
+  details about that package, refer to files `blackbox-tests/README' and
+  `blackbox-tests/HACKING'.
 
 
 Fixing bugs
