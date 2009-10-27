@@ -21,4 +21,8 @@ verbatim-stress.test
 # produce bogus diagnostic messages.
 switch-fail.test
 
+# Automatic line continuation still doesn't work for some operators and for
+# relational operators (`&&', `<=', `||' etc.)
+line-continuation-automatic.test
+
 # vim: ft=conf ts=4 sw=4 et

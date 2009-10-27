@@ -11,11 +11,6 @@ pwd
 $GIT submodule init
 $GIT submodule update
 
-cd blackbox-tests
-pwd
-./bootstrap.sh --no-autoreconf
-cd ..
-
 pwd
 $AUTORECONF -vi
 
