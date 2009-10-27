@@ -1,0 +1,31 @@
+## -*- Makefile.am -*-
+## Copied from SteLib at 2009-10-27 14:52:59 +0100.  DO NOT EDIT!
+## Usually included by Makefile.am
+
+# If config.status or configure are run by Zsh 3.x, they can erroneously
+# leave behind some temporary files, and this causes "make distcheck" to
+# fail.  So, to be safe, we clean up those temporary files.
+.PHONY: mostlyclean-configure-tmp
+mostlyclean-configure-tmp:
+	@set +e; \
+	 e=0; \
+	 xrun() { echo " $$*"; "$$@" || { e=1; return 1; } }; \
+	 xrun rm -f conftest*; \
+	 xrun rm -f confdefs.h; \
+## temporary directories left by config.status are tricky to find
+	 for d in conf*; do \
+	   for f in subs.awk defines.awk; do \
+	     if test -f "$$d/$$f" \
+	         && $(FGREP) 'PACKAGE_NAME' "$$d/$$f" >/dev/null \
+	         && $(FGREP) '$(PACKAGE_NAME)' "$$d/$$f" >/dev/null; \
+	     then \
+	       xrun rm -f "$$d"/*; \
+	       xrun rmdir "$$d"; \
+## break the `for f' loop
+	       break; \
+	     fi; \
+	   done; \
+	 done; \
+	 exit $$e
+
+## vim: ft=automake noet sw=4 ts=4
