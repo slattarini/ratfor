@@ -71,17 +71,21 @@ mostlyclean-local:
 	   xrun rm -f confdefs.h; \
 	   : temporary directories left by config.status are tricky to find; \
 	   for d in conf*; do \
-	     if test -f "$$d/subs.awk" \
-	         && $(FGREP) "PACKAGE_NAME" "$$d/subs.awk" >/dev/null \
-	         && $(FGREP) '$(PACKAGE_NAME)' "$$d/subs.awk" >/dev/null; \
-	     then \
-	       xrun rm -f "$$d"/*; \
-	       xrun rmdir "$$d"; \
-	     fi; \
+	     for f in subs.awk defines.awk; do \
+	       if test -f "$$d/$$f" \
+	           && $(FGREP) "PACKAGE_NAME" "$$d/$$f" >/dev/null \
+	           && $(FGREP) '$(PACKAGE_NAME)' "$$d/$$f" >/dev/null; \
+	       then \
+	         xrun rm -f "$$d"/*; \
+	         xrun rmdir "$$d"; \
+## break the `for f' loop
+	         break; \
+	       fi; \
+	     done; \
 	   done; \
 	   xrun cd "$$ocwd" || { \
 	     echo "$@: FATAL: cannot chdir back to \`$$ocwd'" >&2;  \
-		 exit 1; \
+	     exit 1; \
 	   }; \
 	 done; \
 	 exit $$e
