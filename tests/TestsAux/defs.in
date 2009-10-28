@@ -333,16 +333,15 @@ run_CMD ()
 # Wrapper around `run_CMD $F77', to facilitate any present or future
 # workaround for bugs/limitations in Fortran compilers.
 run_F77() {
-    # NOTE: all internal variables used here starts with the `_run77'
+    # NOTE: all internal variables used here starts with the `run77'
     # prefix, to minimize possibility of name clashes with global
     # variables defined in user code.
-    : 'entering run_F77(): become quiet'
     set +x # xtrace verbosity stops here
-    _run77_opts='' # options to be passed to run_CMD
+    run77_opts='' # options to be passed to run_CMD
     while test $# -gt 0; do
         case "$1" in
-            -e) _run77_opts="${_run77_opts} $1 $2"; shift;;
-            -m) _run77_opts="${_run77_opts} $1";;
+            -e) run77_opts="$run77_opts $1 $2"; shift;;
+            -m) run77_opts="$run77_opts $1";;
             --) shift; break;;
             # Be more liberal about unrecognized options: stop parsing
             # and pass the rest of arguments and options verbatim to
@@ -353,18 +352,17 @@ run_F77() {
         shift
     done
     # file providing the custom `halt' procedure
-    _run77_haltf=$testaux_builddir/halt.f
-    if test ! -f "${_run77_haltf}"; then
-        testcase_HARDERROR "auxiliary source file \`${_run77_haltf}'" \
+    run77_haltf=$testaux_builddir/halt.f
+    if test ! -f "$run77_haltf"; then
+        testcase_HARDERROR "auxiliary source file \`$run77_haltf'" \
                            "not found"
     fi
     if test $# -eq 1; then
-        _run77_aout=`echo "$1" | $SED -e 's/\.f\(77\)\?$//'`.exe
-        set x "$1" -o "${_run77_aout}"; shift;
+        run77_aout=`echo "$1" | $SED -e 's/\.f\(77\)\?$//'`.exe
+        set x "$1" -o "$run77_aout"; shift;
     fi
     set -x # xtrace verbosity restart here
-    : "jumping from run_F77() to run_CMD"
-    run_CMD -c "$F77" ${_run77_opts} -- "${_run77_haltf}" ${1+"$@"}
+    run_CMD -c "$F77" $run77_opts -- "$run77_haltf" ${1+"$@"}
 }
 
 # Testsuite utilities have always precedence over system ones.
