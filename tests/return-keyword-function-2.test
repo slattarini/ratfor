@@ -1,6 +1,7 @@
 #!/bin/sh
 
-# Check that ratfor generate proper code for `return' statement.
+# Check that ratfor generate proper code for `return' statement
+# in functions.
 
 . ./TestsAux/defs.sh || exit 99
 
