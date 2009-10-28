@@ -244,13 +244,13 @@ rm_rf() {
 # -------------------------------------------------------------------------
 # Usage:
 #   either
-#     run_CMD [-e STATUS] [-i FILE] [-m] [--] COMMAND [ARGUMENTS..]
+#     run_CMD [-e STATUS] [-m] [--] COMMAND [ARGUMENTS..]
 #   or:
-#     run_CMD -c COMMAND [-e STATUS] [-i FILE] [-m] [--]  [ARGUMENTS..]
+#     run_CMD -c COMMAND [-e STATUS] [-m] [--]  [ARGUMENTS..]
 # -------------------------------------------------------------------------
 # Run the given COMMAND (can be an external commnds, a shell function or
-# shell builtin) with ARGUMENTS (and with standard input taken from FILE,
-# if option `-i' is given), and fail if COMMAND does not exit with STATUS.
+# shell builtin) with ARGUMENTS, and fail if COMMAND does not exit with
+# STATUS.
 # If status is "VOID" or "IGNORE", any exit value of the command is
 # acceptable.  If STATUS is "FAIL", then any exit value of the command
 # *but 0* is acceptable.  Default STATUS is "IGNORED".
@@ -268,14 +268,12 @@ run_CMD ()
     # in user code.
     : 'entering run_CMD(): become quiet'
     set +x # xtrace verbosity stops here
-    _run_stdin=-
     _run_expected_exitcode=0
     _run_mix_stdout_and_stderr=no
     _run_cmd=0; unset _run_cmd
     while test $# -gt 0; do
         case "$1" in
             -e) _run_expected_exitcode=$2; shift;;
-            -i) _run_stdin=$2; shift;;
             -c) _run_cmd=$2; shift;;
             -m) _run_mix_stdout_and_stderr=yes;;
             --) shift; break;;
@@ -299,9 +297,6 @@ run_CMD ()
         _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdall 2>&1'
     else
         _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdout 2>stderr'
-    fi
-    if test x"${_run_stdin}" != x"-"; then
-        _run_evald_cmd="${_run_evald_cmd}"' <"${_run_stdin}"'
     fi
     _run_evald_cmd="${_run_evald_cmd} || _run_exitcode=\$?"
     eval "${_run_evald_cmd}"
@@ -333,8 +328,8 @@ run_CMD ()
     return ${_run_rc}
 }
 
-# run_F77 [-e STATUS] [-i FILE] [-m] [--] [ARGUMENTS..]
-# -----------------------------------------------------
+# run_F77 [-e STATUS] [-m] [--] [ARGUMENTS..]
+# -------------------------------------------
 # Wrapper around `run_CMD $F77', to facilitate any present or future
 # workaround for bugs/limitations in Fortran compilers.
 run_F77() {
@@ -346,7 +341,7 @@ run_F77() {
     _run77_opts='' # options to be passed to run_CMD
     while test $# -gt 0; do
         case "$1" in
-            -e|-i) _run77_opts="${_run77_opts} $1 $2"; shift;;
+            -e) _run77_opts="${_run77_opts} $1 $2"; shift;;
             -m) _run77_opts="${_run77_opts} $1";;
             --) shift; break;;
             # Be more liberal about unrecognized options: stop parsing

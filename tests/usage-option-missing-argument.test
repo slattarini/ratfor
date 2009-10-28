@@ -1,11 +1,12 @@
 #!/bin/sh
 
-# Check that ratfor barfs if the `-o' option is given without an argument
+# Check that ratfor barfs if the `-o' or `-l' option is given without an
+# argument.
 
 . ./TestsAux/defs.sh || exit 99
 
 for opt in o l; do
-    run_CMD -e 2 -i /dev/null -- "$RATFOR" "-$opt" || testcase_FAIL
+    run_CMD -e 2 -- "$RATFOR" "-$opt" </dev/null || testcase_FAIL
     $GREP "^$ratfor_rx: \`-$opt': option requires an argument" stderr || \
       testcase_FAIL
     $GREP "^Usage:" stderr || testcase_FAIL
