@@ -337,9 +337,11 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         nc = ngetch(fp); /* peek next character */
         if (c == STAR && nc == STAR) { /* fortran `**' operator */
             lexstr[++i] = STAR;
+            toklen++;
             tok = OPEREXP;
         } else if (c == SLASH && nc == SLASH) { /* fortran `//' operator */
             lexstr[++i] = SLASH;
+            toklen++;
             tok = OPERSTRCAT;
         } else { /* nothing special, put back the peeked character */
             put_back_char(nc);
