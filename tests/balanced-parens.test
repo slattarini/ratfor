@@ -1,0 +1,23 @@
+#!/bin/sh
+
+# Check that ratfor does not give spurious errors about
+# "unbalanced parentheses".
+
+. ./TestsAux/defs.sh || exit 99
+
+cat >tst.r <<EOF
+x=(y)
+(a)
+()
+((b))
+(())
+(a(b(c(d)e)f)g)h
+a(b(c(d(e)f)g)h)
+EOF
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

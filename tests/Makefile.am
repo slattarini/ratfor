@@ -37,6 +37,7 @@ ALL_TESTS = \
   000sanity-runF77.test \
   000sanity-timer-cc.test \
   000sanity-timer.test \
+  balanced-parens.test \
   break-fail.test \
   break_f77.test \
   case-sensibility-basic.test \
