@@ -115,7 +115,7 @@ escape_for_grep() {
     esac | $SED -e 's/\.\|\*\|\?\|\[\|\]\|\\\|\^\|\$/\\&/g'
 }
 
-# useful when grepping the path of the ratfor executable in error messages
+# Useful when grepping the path of the ratfor executable in error messages
 # produced by rator.
 ratfor_rx=`escape_for_grep "$RATFOR"`
 
