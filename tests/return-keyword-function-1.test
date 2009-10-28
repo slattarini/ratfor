@@ -1,11 +1,11 @@
 #!/bin/sh
 
-# Check that ratfor generate correct code for a `return' statement
+# Check that ratfor generate correct code for a `return' statement.
 
 . ./TestsAux/defs.sh || exit 99
 
 
-cat > tst.r <<EOF
+tr '^' ' ' > tst.r <<EOF
 function f1
     return 1+1
 end
@@ -15,10 +15,10 @@ function f2()
 end
 
 function f3(x)
-    return (3 +  3)
+    return (3^+^^^3)
 end
 
-function f4; return(4  - 4); end
+function f4; return(4^^-^4); end
 EOF
 
 cat tst.r

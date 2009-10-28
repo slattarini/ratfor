@@ -1,7 +1,9 @@
 #!/bin/sh
 
 # Check that the `return' statements work inside a function (checks done
-# by compiling & running generated fortran code).
+# by compiling & running generated fortran code).  This test might be
+# supersed by the `return-keyword...' tests, but we won't remove it anyway,
+# faithful to our policy of never removing working tests.
 
 . ./TestsAux/defs.sh || exit 99
 

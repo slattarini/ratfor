@@ -1,6 +1,8 @@
 #!/bin/sh
 
-# Check that the `return' statements work inside a function.
+# Check that the `return' statements work inside a function.  This test
+# might be supersed by the `return-keyword...' tests, but we won't remove
+# it anyway, faithful to our policy of never removing working tests.
 
 . ./TestsAux/defs.sh || exit 99
 
@@ -12,7 +14,7 @@ EOF
 
 run_CMD "$RATFOR" tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout | ws_normalize >stdout-t
-mv stdout-t stdout
+mv -f stdout-t stdout
 $GREP '^foo *= *1$' stdout || testcase_FAIL
 $GREP '^return$' stdout || testcase_FAIL
 

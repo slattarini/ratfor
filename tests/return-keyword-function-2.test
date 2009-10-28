@@ -1,0 +1,88 @@
+#!/bin/sh
+
+# Check that ratfor generate proper code for `return' statement.
+
+. ./TestsAux/defs.sh || exit 99
+
+cat >tst01.r <<EOF
+function func
+return 1
+EOF
+
+cat >tst02.r <<EOF
+function func { return 1 }
+EOF
+
+cat >tst03.r <<EOF
+function func; return 1
+EOF
+
+cat >tst04.r <<EOF
+function func()
+return 1
+EOF
+
+tr '@' "$TAB" >tst05.r <<EOF
+function func@() { return 1 }
+EOF
+
+cat >tst06.r <<EOF
+function func (); return 1
+EOF
+
+cat >tst07.r <<EOF
+function func
+return 1; x = 2 + 3
+EOF
+
+cat >tst08.r <<EOF
+function func
+return(1+(x//15+2)**2)
+EOF
+
+cat >tst09.r <<EOF
+function func
+return 'qwerty'
+EOF
+
+cat >tst10.r <<EOF
+function func
+return 1 x = 2 + 3 @ 4 'str ' ***/.$
+EOF
+
+cat tst01.r
+cat tst02.r
+cat tst03.r
+cat tst04.r
+cat tst05.r
+cat tst06.r
+cat tst07.r
+cat tst08.r
+cat tst09.r
+cat tst10.r
+
+# Usage: check_return INPUT-NUM RETURN-VALUE
+check_func_return() {
+    n=$1
+    r=`escape_for_grep "$2"`
+    run_CMD "$RATFOR" tst$n.r || testcase_FAIL
+    test ! -s stderr || testcase_FAIL
+    mv stdout stdout$n || testcase_HARDERROR
+    grep "^ *return *$" stdout$n || testcase_FAIL
+    grep "^ *func *= *$r *$" stdout$n || testcase_FAIL
+}
+
+check_func_return 01 "1"
+check_func_return 02 "1"
+check_func_return 03 "1"
+check_func_return 04 "1"
+check_func_return 05 "1"
+check_func_return 06 "1"
+check_func_return 07 "1"
+check_func_return 08 "(1+(x//15+2)**2)"
+check_func_return 09 "'qwerty'"
+check_func_return 10 "1 x = 2 + 3 @ 4 'str ' ***/.$"
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

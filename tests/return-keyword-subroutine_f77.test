@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Check that ratfor generate correct code for a `return' statement inside
+# a subroutine (check done by compiling & running the generated code).
+
+. ./TestsAux/defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<EOF
+integer function foo()
+    foo = 5; return
+end
+
+subroutine bar
+    integer foo
+    write(*,10); 10 format('OK')
+    write(*,20) foo(); 20 format(i1)
+    return
+    write(*,30); 30 format('BAD')
+end
+
+program testreturn
+    write(*,100); 100 format('start')
+    call bar
+    write(*,200); 200 format('end')
+    call halt
+end
+EOF
+
+cat tst.r
+
+cat > exp <<EOF
+start
+OK
+5
+end
+EOF
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_CMD ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
