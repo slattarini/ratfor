@@ -366,9 +366,17 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
 static void
 getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
 {
-    int i, nlpar, t, t2;
+    int i, j, nlpar, t, t2;
     bool defn_with_paren;
-    char c, ptoken[MAXTOK]; /* temporary buffer for token */
+    char ptoken[MAXTOK]; /* temporary buffer for token */
+
+    /* hackish internal macro to avoid code duplication below */
+#   define EXTEND_DEFN_WITH_TOKEN_(token_) \
+        for (j = 0; token_[j] != EOS; i++, j++) { \
+            if (i >= defsiz) \
+                synerr_fatal("definition too long."); \
+            def[i] = token_[j]; \
+        }
 
     skip_blanks(fp);
     if ((t = get_raw_token(ptoken, MAXTOK, fp)) != LPAREN) {
@@ -389,37 +397,36 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         synerr_fatal("non-alphanumeric name.");
     }
     skip_blanks(fp);
-    c = get_raw_token(ptoken, MAXTOK, fp); /*XXX: t2 here instead of c? */
     if (!defn_with_paren) { /* define name def */
-        put_back_string(ptoken);
         i = 0;
-        do {
-            c = ngetch(fp);
-            if (i > defsiz)
-                synerr_fatal("definition too long.");
-            def[i++] = c;
-        } while (c != SHARP && !is_newline(c) && c != EOF && c != PERCENT);
-        if (c == SHARP || c == PERCENT)
-            put_back_char(c);
-    }
-    else { /* define (name, def) */
-        if (c != COMMA) /*XXX: t2 here instead of c? */
+        for (;;) {
+            t2 = get_raw_token(ptoken, MAXTOK, fp);
+            if (is_newline(t2) || t2 == EOF) {
+                put_back_string(ptoken);
+                break;
+            }
+            EXTEND_DEFN_WITH_TOKEN_(ptoken);
+        }
+        def[i] = EOS;
+    } else { /* define (name, def) */
+        if (get_raw_token(ptoken, MAXTOK, fp) != COMMA)
             synerr_fatal("missing comma in define.");
         /* else got (name, */
-        nlpar = 0;
-        for (i = 0; nlpar >= 0; i++) {
-            if (i > defsiz)
-                synerr_fatal("definition too long.");
-            else if ((def[i] = ngetch(fp)) == EOF)
+        for (i = 0, nlpar = 0; nlpar >= 0; /* empty clause */) {
+            t2 = get_raw_token(ptoken, MAXTOK, fp);
+            if (t2 == EOF)
                 synerr_fatal("missing right paren.");
-            else if (def[i] == LPAREN)
+            else if (t2 == LPAREN)
                 nlpar++;
-            else if (def[i] == RPAREN)
+            else if (t2 == RPAREN)
                 nlpar--;
-            /* else normal character in def[i] */
+            EXTEND_DEFN_WITH_TOKEN_(ptoken);
         }
+        /* TODO: assert def[i-1] == ')' */
+        def[i-1] = EOS;
     }
-    def[i-1] = EOS;
+    /* get rid of temporary internal macro */
+#   undef EXTEND_DEFN_WITH_TOKEN_
 }
 
 /* Get token, expanding macro calls and processing macro definitions. */
