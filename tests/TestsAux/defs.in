@@ -240,7 +240,7 @@ rm_rf() {
 }
 
 # -------------------------------------------------------------------------
-# run_CMD: run a command with bellsand whistles.
+# run_CMD: run a command with bells and whistles.
 # -------------------------------------------------------------------------
 # Usage:
 #   either
@@ -248,84 +248,83 @@ rm_rf() {
 #   or:
 #     run_CMD -c COMMAND [-e STATUS] [-m] [--]  [ARGUMENTS..]
 # -------------------------------------------------------------------------
-# Run the given COMMAND (can be an external commnds, a shell function or
-# shell builtin) with ARGUMENTS, and fail if COMMAND does not exit with
-# STATUS.
-# If status is "VOID" or "IGNORE", any exit value of the command is
-# acceptable.  If STATUS is "FAIL", then any exit value of the command
-# *but 0* is acceptable.  Default STATUS is "IGNORED".
+# Run the given COMMAND with ARGUMENTS; returns with failure (return status
+# `1') if COMMAND does not exit with STATUS (more details are given below).
 # Also, save standard output and standard error from COMMAND, by default
 # respectively in files `stdout' and `stderr' (in the current directory),
-# or togheter in the file `stdall' (in the current directory) if the `-m'
-# option is given.  All the redirections are done without triggering the
-# zsh4 bug related to `-x' shell switch (described in details in the
-# tests/README file).
-# -------------------------------------------------------------------------
-run_CMD ()
-{
-    # NOTE: all internal variables used here starts with the `_run' prefix,
-    # to minimize possibility of name clashes with global variables defined
-    # in user code.
-    : 'entering run_CMD(): become quiet'
-    set +x # xtrace verbosity stops here
-    _run_expected_exitcode=0
-    _run_mix_stdout_and_stderr=no
-    _run_cmd=0; unset _run_cmd
+# or together in the file `stdall' (in the current directory) if the `-m'
+# option is given.
+# Note that command must be an external command, not a shell function or
+# shell builtin.
+# If STATUS is numeric, the exit value of COMMAND must match it exactly.
+# If STATUS is "FAIL" or "FAILURE", then any exit value of COMMAND *but 0*
+# is acceptable. If STATUS is "IGNORE" or "IGNORED", any exit value of
+# COMMAND is acceptable, and run_command returns with success regardless
+# of that value. Default STATUS is `0'.
+run_CMD() {
+    set +x # xtrace verbosity temporarly disabled in this function
+    run_exitcode_expected=0
+    run_mix_stdout_and_stderr=no
     while test $# -gt 0; do
-        case "$1" in
-            -e) _run_expected_exitcode=$2; shift;;
-            -c) _run_cmd=$2; shift;;
-            -m) _run_mix_stdout_and_stderr=yes;;
+        case $1 in
+            -e) run_exitcode_expected=$2; shift;;
+            -m) run_mix_stdout_and_stderr=yes;;
             --) shift; break;;
-            -?) testcase_HARDERROR "run_CMD(): invalid option '$1'";;
-             *) break;;
+            -?) testcase_HARDERROR "run_commmand: invalid switch \`$1'";;
+            *) break;;
         esac
         shift
     done
-    if test x${_run_cmd+"set"} != x"set"; then
-        # the command is specified by the first non-option argument
-        case $# in
-            0) testcase_HARDERROR "run_CMD(): missing COMMAND argument";;
-            *) _run_cmd=$1; shift;;
-        esac
-    elif test -z "${_run_cmd}"; then
-        # the user should have provided a valid command with the -c option
-        testcase_HARDERROR "run_CMD(): specified empty COMMAND"
-    fi
-    _run_exitcode=0
-    if test x"${_run_mix_stdout_and_stderr}" = x"yes"; then
-        _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdall 2>&1'
+    case $# in
+        0) testcase_HARDERROR "run_command: missing COMMAND argument";;
+        *) run_cmd=$1; shift;;
+    esac
+    if test x"$run_mix_stdout_and_stderr" = x"yes"; then
+        run_evald_cmd='"$run_cmd" ${1+"$@"} >stdall 2>&1'
     else
-        _run_evald_cmd='"${_run_cmd}" ${1+"$@"} >stdout 2>stderr'
+        run_evald_cmd='"$run_cmd" ${1+"$@"} >stdout 2>stderr'
     fi
-    _run_evald_cmd="${_run_evald_cmd} || _run_exitcode=\$?"
-    eval "${_run_evald_cmd}"
-    if test x"${_run_mix_stdout_and_stderr}" = x"yes"; then
-        echo "=== stdout and stderr"
+    # NOTE: do not use the apparently simpler construct:
+    #   if eval "$run_evald_cmd"; then
+    #     run_exitcode_got=0
+    #   else
+    #     run_exitcode_got=$?
+    #   fi
+    # as FreeBSD /bin/sh chokes on it when `set -e' is on.
+    if (eval "exec $run_evald_cmd"); then
+        run_exitcode_got=0
+    else
+        run_exitcode_got=$?
+    fi
+    if test x"$run_mix_stdout_and_stderr" = x"yes"; then
+        set -x
         cat stdall
-        echo "==="
+        { set +x; } 2>/dev/null
     else
-        echo "=== stderr"
-        cat stderr
-        echo "=== stdout"
+        set -x
+        cat stderr >&2
         cat stdout
-        echo "==="
+        { set +x; } 2>/dev/null
     fi
-    case ${_run_expected_exitcode} in
-        VOID|void|IGNORE|ignore|${_run_exitcode})
-            _run_rc=0
+    case $run_exitcode_expected in
+        IGNORE|ignore|IGNORED|ignored|$run_exitcode_got)
+            run_rc=0
             ;;
         FAIL|fail|FAILURE|failure)
-            test ${_run_exitcode} -gt 0 && _run_rc=0 || _run_rc=1
+            if test $run_exitcode_got -gt 0; then
+                run_rc=0
+            else
+                run_rc=1
+            fi
             ;;
         *)
-            _run_rc=1
+            run_rc=1
             ;;
     esac
-    set -x # xtrace verbosity restart here
-    : "exit status ${_run_exitcode} (expecting ${_run_expected_exitcode})"
-    : "leaving run_CMD()"
-    return ${_run_rc}
+    echo "run_command: exit status $run_exitcode_got (expecting" \
+         "$run_exitcode_expected)"
+    set -x # restart xtrace verbosity
+    return $run_rc
 }
 
 # run_F77 [-e STATUS] [-m] [--] [ARGUMENTS..]
@@ -362,7 +361,7 @@ run_F77() {
         set x "$1" -o "$run77_aout"; shift;
     fi
     set -x # xtrace verbosity restart here
-    run_CMD -c "$F77" $run77_opts -- "$run77_haltf" ${1+"$@"}
+    run_CMD $run77_opts -- "$F77" "$run77_haltf" ${1+"$@"}
 }
 
 # Testsuite utilities have always precedence over system ones.
