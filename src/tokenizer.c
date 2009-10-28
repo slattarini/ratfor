@@ -279,7 +279,7 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
     int tok;
     int toklen; /* the lenght of the token read */
     int c, nc;
-    int i = 0; /* XXX: temporary */
+    int i; /* XXX: temporary */
     c = lexstr[0] = ngetch(fp);
     if (is_blank(c)) {
         lexstr[0] = BLANK;
@@ -301,7 +301,6 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
-    toklen = 1;
     if (char_type(c) == LETTER) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_alphanumeric_raw_token(lexstr, toksiz, fp);
@@ -319,10 +318,12 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
     else if (c == PERCENT) {
         /* XXX: make this lazily done */
         outasis(fp);  /* direct copy of protected */
+        toklen = 1;
         tok = NEWLINE;
     }
     else if (c == SHARP) {
         dispatch_comment(fp);
+        toklen = 1;
         tok = lexstr[0] = NEWLINE;
     }
     else if (c == GREATER || c == LESS || c == NOT
@@ -333,20 +334,23 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         tok = c; /*XXX: temporary hack */
     } else if (can_char_be_composed(c)) {
         /* TODO: wrap in a subroutine */
+        i = 0;
         nc = ngetch(fp); /* peek next character */
         if (c == STAR && nc == STAR) { /* fortran `**' operator */
             lexstr[++i] = STAR;
-            toklen++;
+            toklen = 2;
             tok = OPEREXP;
         } else if (c == SLASH && nc == SLASH) { /* fortran `//' operator */
             lexstr[++i] = SLASH;
-            toklen++;
+            toklen = 2;
             tok = OPERSTRCAT;
         } else { /* nothing special, put back the peeked character */
             put_back_char(nc);
+            toklen = 1;
             tok = c;
         }
     } else {
+        toklen = 1;
         tok = c;
     }
 
