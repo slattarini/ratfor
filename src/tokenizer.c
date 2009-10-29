@@ -319,7 +319,7 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
     } else if (isdigit(c)) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_numerical_raw_token(lexstr, toksiz, fp);
-        tok = TOKT_DIGIT;
+        tok = TOKT_DIGITS;
     }
     else if (c == SQUOTE || c == DQUOTE) {
         put_back_char(c); /* so that we can read back the whole token */

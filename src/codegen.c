@@ -543,7 +543,7 @@ caslab (int *n, int *t)
     sign = (*t == MINUS ? -1 : 1);
     if (*t == MINUS || *t == PLUS)
         *t = get_nonblank_token (tok, MAXTOK);
-    if (*t != TOKT_DIGIT) {
+    if (*t != TOKT_DIGITS) {
         synerr ("invalid case label.");
         *n = 0;
     } else {
