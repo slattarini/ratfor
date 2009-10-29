@@ -142,6 +142,7 @@ ALL_TESTS = \
   return-keyword-function-2.test \
   return-keyword-function_f77.test \
   return-keyword-subroutine_f77.test \
+  simple-assignement.test \
   startlabel-default.test \
   startlabel-user-choice.test \
   stmt-stack-stress_f77.test \
