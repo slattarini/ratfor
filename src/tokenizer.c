@@ -131,8 +131,8 @@ convert_relation_shortand(char token[], int toksiz, FILE *fp)
             break;
         case EQUALS:
             if (token[1] != EQUALS) { /* variable assignement */
-                token[2] = EOS;
-                return(1);
+                token[1] = EOS;
+                goto out;
             }
             token[1] = 'e';
             token[2] = 'q';
@@ -156,7 +156,8 @@ convert_relation_shortand(char token[], int toksiz, FILE *fp)
             break;
     }  /* switch(token[0]) */
     token[0] = PERIOD;
-    return(SSTRLEN(token));
+out:
+    return(TOKT_RELATN);
 }
 
 /* read alphanumeric token from fp, save it in lexstr, return the lenght of
@@ -165,14 +166,20 @@ static int
 get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int i;
-    for (i = 0; i < toksiz - 2; i++) {
+    for (i = 0; i < toksiz - 1; i++) {
         lexstr[i] = ngetch(fp);
         if (is_rat4_alnum(lexstr[i]))
             continue;
         put_back_char(lexstr[i--]);
         break;
     }
-    return(i+1);
+    if (i >= toksiz - 1) {
+        synerr("alphanumeric token too long.");
+        lexstr[i] = EOS;
+    } else {
+        lexstr[++i] = EOS;
+    }
+    return(TOKT_ALPHA);
 }
 
 /* read numerical token from fp, save it in lexstr, return the lenght of
@@ -180,18 +187,18 @@ get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 static int
 get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    int i, c, b, n;
+    int i, c, c2, b, n;
     b = 0; /* in case alternate base number */
-    for (i = 0; i < toksiz - 2; i++) {
+    for (i = 0; i < toksiz - 1; i++) {
         lexstr[i] = ngetch(fp);
         if (!is_digit(lexstr[i]))
             break;
-        b = 10*b + lexstr[i] - DIG0;
+        b = 10*b + (lexstr[i] - DIG0);
     }
     if (lexstr[i] == RADIX && b >= 2 && b <= 36) {
         /* n%ddd... */
         for (n = 0; ; n = b*n + c) {
-            c = lexstr[0] = ngetch(fp);
+            c = c2 = ngetch(fp);
             if (is_lower(c))
                 c = c - 'a' + DIG9 + 1;
             else if (is_upper(c))
@@ -200,13 +207,19 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
                 break;
             c = c - DIG0;
         }
-        put_back_char(lexstr[0]);
+        put_back_char(c2);
         i = integer_to_string(n, lexstr, toksiz);
-    }
-    else {
+    } else {
         put_back_char(lexstr[i--]);
     }
-    return(i+1);
+    if (i >= toksiz - 1) {
+        synerr("numeric constant too long.");
+        lexstr[i] = EOS;
+    } else {
+        lexstr[++i] = EOS;
+    }
+    lexstr[i] = EOS;
+    return(TOKT_DIGITS);
 }
 
 /* read "quoted string" token from fp, save it in lexstr, return the
@@ -224,7 +237,9 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
     for (i = 1; (lexstr[i] = ngetch(fp)) != quote_char; i++) {
         if (is_newline(lexstr[i])) {
             synerr("missing quote.");
-        } else if (i >= toksiz - 1) {
+        } else if (i >= toksiz - 2) {
+            /* we might still have space for closing quote, but will
+               surely lack space for string terminating character EOF */
             synerr("string too long.");
         } else {
             continue; /* no err, go to next iteration */
@@ -233,7 +248,8 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[i] = lexstr[0];
         break;
     }
-    return(i+1);
+    lexstr[++i] = EOS;
+    return(TOKT_STRING);
 }
 
 
@@ -244,7 +260,7 @@ get_operator_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int i, c, nc;
 #ifdef NDEBUG
-    /* TODO: assert toksiz >= 0 */
+    /* TODO: assert toksiz >= 2 */
 #else
     /* pacify compiler warnings */
     (void) toksiz;
@@ -260,17 +276,17 @@ get_operator_raw_token(char lexstr[], int toksiz, FILE *fp)
         }
     }
     lexstr[++i] = EOS;
-    return(i);
+    return(TOKT_OPERATOR);
 }
 
 /* read a non-alphanumeric token from fp (accounting for composed tokens),
  * save it in lexstr, save its type in *ptok, return the lenght of the
  * token read */
 static int
-get_non_alphanumeric_raw_token(char lexstr[], int toksiz, int *ptok,
-                               FILE *fp)
+get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    int toklen;
+    int tok;
+    /* TODO: assert toksiz >= 2 */
     lexstr[0] = ngetch(fp);
     put_back_char(lexstr[0]);
     switch (lexstr[0]) {
@@ -283,8 +299,8 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, int *ptok,
             } else {
                 outasis(fp); /* copy direct to output if % */
             }
-            *ptok = lexstr[0] = NEWLINE;
-            toklen = 1;
+            tok = lexstr[0] = NEWLINE;
+            lexstr[1] = EOS;
             break;
         case GREATER:
         case LESS:
@@ -294,26 +310,24 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, int *ptok,
         case CARET:
         case AND:
         case OR:
-            /* ratfor relational shodrtand */
-            *ptok = TOKT_RELATN;
-            toklen = convert_relation_shortand(lexstr, toksiz, fp);
+            /* maybe a ratfor relational shorthand */
+            tok = convert_relation_shortand(lexstr, toksiz, fp);
             break;
         case PLUS:
         case MINUS:
         case STAR:
         case SLASH:
             /* fortran opertor */
-            *ptok = TOKT_OPERATOR;
-            toklen = get_operator_raw_token(lexstr, toksiz, fp);
+            tok = get_operator_raw_token(lexstr, toksiz, fp);
             break;
         default:
             /* everything else */
             (void) ngetch(fp); /* TODO: assert == lexstr[0] */
-            *ptok = lexstr[0];
-            toklen = 1;
+            tok = lexstr[0];
+            lexstr[1] = EOS;
             break;
     }
-    return(toklen);
+    return(tok);
 }
 
 /*
@@ -326,7 +340,6 @@ static int
 get_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int tok;
-    int toklen; /* the lenght of the token read */
     int c;
     c = lexstr[0] = ngetch(fp);
     if (is_blank(c)) {
@@ -334,7 +347,6 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         while (is_blank(c)) /* compress many blanks to one */
             c = ngetch(fp);
         if (c == PERCENT) {
-            /* XXX: make this lazily done */
             outasis(fp); /* copy direct to output if % */
             c = NEWLINE;
         }
@@ -351,21 +363,14 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
     }
     put_back_char(c); /* so that we can read back the whole token */
     if (is_rat4_alpha(c)) {
-        toklen = get_alphanumeric_raw_token(lexstr, toksiz, fp);
-        tok = TOKT_ALPHA;
+        tok = get_alphanumeric_raw_token(lexstr, toksiz, fp);
     } else if (is_digit(c)) {
-        toklen = get_numerical_raw_token(lexstr, toksiz, fp);
-        tok = TOKT_DIGITS;
+        tok = get_numerical_raw_token(lexstr, toksiz, fp);
     } else if (c == SQUOTE || c == DQUOTE) {
-        toklen = get_quoted_string_raw_token(lexstr, toksiz, fp);
-        tok = TOKT_STRING;
+        tok = get_quoted_string_raw_token(lexstr, toksiz, fp);
     } else {
-        toklen = get_non_alphanumeric_raw_token(lexstr, toksiz, &tok, fp);
+        tok = get_non_alphanumeric_raw_token(lexstr, toksiz, fp);
     }
-    
-    if (toklen >= toksiz)
-        synerr("token too long.");
-    lexstr[toklen] = EOS;
     return(tok);
 }
 
