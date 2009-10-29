@@ -67,19 +67,38 @@ AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
 # Determine the list of tests to be skipped.
 #
 
+rat4_var_append() {
+    eval v=\$$1
+    if test -z "$2"; then
+        : # nothing to append
+    elif test -z "$v"; then
+        v=$2
+    else
+        v="$v $2"
+    fi
+    eval $1=\$v
+}
+
 m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
 AC_ARG_VAR([RAT4_TESTSUITE_XFAIL_TESTS],
            [List of testcases expected to fail with your version of
             Ratfor (list is empty by default)])
 
-for tst in $RAT4_TESTSUITE_XFAIL_TESTS; do
+old_RAT4_TESTSUITE_XFAIL_TESTS=$RAT4_TESTSUITE_XFAIL_TESTS
+RAT4_TESTSUITE_XFAIL_TESTS=''
+bad_xfail_tests=''
+for tst in $old_RAT4_TESTSUITE_XFAIL_TESTS; do
   AS_CASE([$tst], [*.test], [], [tst="$tst.test"])
-  test -f "$srcdir/tests/$tst" || bad_tests=${bad_tests+"$bad_tests "}$tst
+  if test -f "$srcdir/tests/$tst"; then
+    rat4_var_append RAT4_TESTSUITE_XFAIL_TESTS "$tst"
+  else
+    rat4_var_append bad_xfail_tests "$tst"
+  fi
 done
-AS_UNSET([tst])
+AS_UNSET([old_RAT4_TESTSUITE_XFAIL_TESTS])
 
-if test -n "$bad_tests"; then
-  AC_MSG_ERROR([invalid xfail-tests specified:$bad_tests])
+if test -n "$bad_xfail_tests"; then
+  AC_MSG_ERROR([invalid xfail-tests specified: $bad_xfail_tests])
 fi
 AS_UNSET([badtests])
 
@@ -87,6 +106,7 @@ for tst in $RAT4_TESTSUITE_XFAIL_TESTS; do
   AS_CASE([$tst], [*.test], [], [tst="$tst.test"])
   AC_MSG_NOTICE([the testcase `$tst' will be expected to fail])
 done
+
 AS_UNSET([tst])
 
 #
