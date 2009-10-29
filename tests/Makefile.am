@@ -104,7 +104,10 @@ ALL_TESTS = \
   label-fail-unexpected-eof.test \
   label-line-continuation.test \
   label-line-continuation_f77.test \
-  line-continuation-automatic.test \
+  line-continuation-automatic-operators.test \
+  line-continuation-automatic-others.test \
+  line-continuation-automatic-relationals-raw.test \
+  line-continuation-automatic-relationals.test \
   line-continuation-basic.test \
   line-continuation-in-string.test \
   line-continuation-multiple.test \

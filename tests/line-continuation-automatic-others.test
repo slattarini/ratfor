@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Test automatic line continuation on operators (test is done by grepping
+# ratfor output).
+
+. ./TestsAux/defs.sh || exit 99
+
+tr '._' " ${TAB}" >tst.r <<EOF
+a1,
+a2
+b1,__
+
+b2
+..c1,..__._
+.._._
+___
+....
+
+c2
+"~~~~~~"
+foo(
+)
+bar__.(__.
+...
+___
+._._
+
+)
+EOF
+
+cat >exp <<EOF
+a1,a2
+b1,b2
+c1,c2
+~~~~~~
+foo()
+bar()
+EOF
+
+$SED -e "s/$TAB/\\\\t/g" -e 's/$/$/' -e 's/^/^/' tst.r
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+$GREP -v '^[cC]' stdout | ws_normalize | $SED -e 's/ *()/()/'\
+  | $SED -e "s/^ *[\"']\\(~*\\)[\"'] *$/\1/" >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

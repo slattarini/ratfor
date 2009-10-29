@@ -1,0 +1,36 @@
+#!/bin/sh
+
+# Test automatic line continuation on raw relational symbols (test is done
+# by grepping ratfor output).
+
+. ./TestsAux/defs.sh || exit 99
+
+for rel in not and or eq neq gt lt ge le; do
+    echo "'TEST ${rel}'"
+    echo "r${SPACE}.${rel}.${NEWLINE}s"
+    echo "u${TAB}.${rel}.${SPACE}${NEWLINE}${SPACE}${NEWLINE}v"
+    echo "x.${rel}.${TAB}${NEWLINE}${NEWLINE}${SPACE}${TAB}${NEWLINE}y"
+done >tst.r
+
+for rel in not and or eq neq gt lt ge le; do
+    echo "TEST $rel"
+    echo "r.$rel.s"
+    echo "u.$rel.v"
+    echo "x.$rel.y"
+done >exp
+
+cat tst.r
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+$GREP -v '^[cC]' <stdout | ws_normalize \
+  | $SED -e "/'/!s/ *\\.\\([a-z]*\\)\\. */.\1./" \
+         -e "s/^'\\(.*\\)'$/\\1/" >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
