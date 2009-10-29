@@ -7,7 +7,6 @@
 #include "xopen.h"
 #include "error.h"
 #include "hash.h"
-#include "lex-symbols.h"
 #include "rat4-global.h"
 
 #define MAXPATH     1024    /* max length of the name of a file included */

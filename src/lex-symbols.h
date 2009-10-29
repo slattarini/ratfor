@@ -2,19 +2,9 @@
 #  define RAT4_LEX_SYMBOLS_H 1
 
 /*
- * L E X I C A L  A N A L Y S E R  S Y M B O L S
+ *  L E X I C A L  A N A L Y S E R  S Y M B O L S
  *
  */
-
-/* 
- * WARNING: the values of all these five macros must be smaller than the
- * numerical value of any ascii character that might be used in the input.
- */
-#define TOKT_DIGITS      1
-#define TOKT_ALPHA       2
-#define TOKT_STRING      3
-#define TOKT_OPERATOR    4
-#define TOKT_RELATN      5
 
 #define LEXBREAK        10
 #define LEXDIGITS       11

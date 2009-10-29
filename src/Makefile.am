@@ -19,6 +19,7 @@ ratfor_SOURCES = \
     rat4-global.h \
 	rat4-common.h \
 	lex-symbols.h \
+	tok-types.h \
 	main.c \
 	error.c error.h \
 	io.c io.h \
