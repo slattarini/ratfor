@@ -61,7 +61,8 @@ scopy(const char from[], int i, char to[], int j)
 
 /*
  * Convert string str[] to integer, skipping leading blanks and stopping at
- * the first non-numeric character in str[].  Return the converted integer
+ * the first non-numeric character in str[].  Does not recognize negative
+ * integers.  Return the converted integer.
  */
 static int
 string_to_integer(const char str[])
