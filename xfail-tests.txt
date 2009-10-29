@@ -23,6 +23,10 @@ switch-fail.test
 
 # Automatic line continuation still doesn't work for some operators and for
 # relational operators (`&&', `<=', `||' etc.)
-line-continuation-automatic.test
+line-continuation-automatic-relationals-raw.test
+
+# Even expressions with balanced parantheses might fail when placed at the
+# beginning of a statement.  Still no idea why.
+balanced-parens.test
 
 # vim: ft=conf ts=4 sw=4 et
