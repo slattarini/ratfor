@@ -29,9 +29,9 @@ static const char KEYWORD_DEFINE[] = "define";
  */
 
 /*
- * Convert string str[] to integer, skipping leading blanks and stopping at
- * the first non-numeric character in str[].  Does not recognize negative
- * integers.  Return the converted integer.
+ * Convert integer n to a string, upd to size - 1 characters, and save it
+ * in buffer str[].  Negative integers are supported.  Return the lenght
+ * of the converted string.
  */
 static int
 integer_to_string(int n, char str[], int size)
