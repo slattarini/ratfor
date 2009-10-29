@@ -181,7 +181,6 @@ can_char_be_composed(int c)
     return false;
 }
 
-
 /* read alphanumeric token from fp, save it in lexstr, return the lenght of
  * the token read */
 static int
@@ -267,6 +266,40 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
     return(i+1);
 }
 
+
+/* read a non-alphanumeric token from fp (accounting for composed tokens),
+ * save it in lexstr, save its type in *tokp, return the lenght of the
+ * token read */
+static int
+get_other_nonlpha_raw_token(char lexstr[], int toksiz, int *tokp, FILE *fp)
+{
+    int i, c, nc;
+#ifdef NDEBUG
+    /* TODO: assert toksiz >= 0 */
+#else
+    /* pacify compiler warnings */
+    (void) toksiz;
+#endif
+    i = 0;
+    c = lexstr[0] = ngetch(fp);
+    if (can_char_be_composed(c)) {
+        nc = ngetch(fp); /* peek next character */
+        if (c == STAR && nc == STAR) { /* fortran `**' operator */
+            lexstr[++i] = STAR;
+            *tokp = OPEREXP;
+        } else if (c == SLASH && nc == SLASH) { /* fortran `//' operator */
+            lexstr[++i] = SLASH;
+            *tokp = OPERSTRCAT;
+        } else { /* nothing special, put back the peeked character */
+            put_back_char(nc);
+            *tokp = c;
+        }
+    } else {
+        *tokp = c;
+    }
+        return (i+1);
+}
+
 /*
  * get_raw_token() - get raw ratfor token.
  * Also deal with comments (# COMMENT...) and verbatim lines
@@ -278,8 +311,7 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int tok;
     int toklen; /* the lenght of the token read */
-    int c, nc;
-    int i; /* XXX: temporary */
+    int c;
     c = lexstr[0] = ngetch(fp);
     if (is_blank(c)) {
         lexstr[0] = BLANK;
@@ -332,28 +364,11 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
     ) {
         toklen = convert_relation_shortand(lexstr, fp);
         tok = c; /*XXX: temporary hack */
-    } else if (can_char_be_composed(c)) {
-        /* TODO: wrap in a subroutine */
-        i = 0;
-        nc = ngetch(fp); /* peek next character */
-        if (c == STAR && nc == STAR) { /* fortran `**' operator */
-            lexstr[++i] = STAR;
-            toklen = 2;
-            tok = OPEREXP;
-        } else if (c == SLASH && nc == SLASH) { /* fortran `//' operator */
-            lexstr[++i] = SLASH;
-            toklen = 2;
-            tok = OPERSTRCAT;
-        } else { /* nothing special, put back the peeked character */
-            put_back_char(nc);
-            toklen = 1;
-            tok = c;
-        }
     } else {
-        toklen = 1;
-        tok = c;
+        put_back_char(c); /* so that we can read back the whole token */
+        toklen = get_other_nonlpha_raw_token(lexstr, toksiz, &tok, fp);
     }
-
+    
     if (toklen >= toksiz)
         synerr("token too long.");
     lexstr[toklen] = EOS;
