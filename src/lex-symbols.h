@@ -10,12 +10,12 @@
  * WARNING: the values of all these four macros must be smaller than the
  * numerical value of any ascii character that might be used in the input.
  */
-#define LETTER          1
-#define DIGIT           2
-#define ALPHA           3
-#define STRING          4
-#define OPEREXP         5
-#define OPERSTRCAT      6
+#define TOKT_LETTER      1
+#define TOKT_DIGIT       2
+#define TOKT_ALPHA       3
+#define TOKT_STRING      4
+#define TOKT_OPEREXP     5
+#define TOKT_OPERSTRCAT  6
 
 #define LEXBREAK        10
 #define LEXDIGITS       11

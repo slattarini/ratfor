@@ -92,8 +92,8 @@ token_requires_automatic_line_continuation(int t)
         case EQUALS:
         case UNDERLINE:
         case SLASH:
-        case OPERSTRCAT:
-        case OPEREXP:
+        case TOKT_OPERSTRCAT:
+        case TOKT_OPEREXP:
             return true;
     }
     return false;
@@ -543,7 +543,7 @@ caslab (int *n, int *t)
     sign = (*t == MINUS ? -1 : 1);
     if (*t == MINUS || *t == PLUS)
         *t = get_nonblank_token (tok, MAXTOK);
-    if (*t != DIGIT) {
+    if (*t != TOKT_DIGIT) {
         synerr ("invalid case label.");
         *n = 0;
     } else {

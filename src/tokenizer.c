@@ -99,9 +99,9 @@ char_type(char c)
 {
     int t;
     if (isdigit(c))
-        t = DIGIT;
+        t = TOKT_DIGIT;
     else if (isupper(c) || islower(c))
-        t = LETTER;
+        t = TOKT_LETTER;
     else
         t = c; /*XXX: "OTHER" */
     return(t);
@@ -190,8 +190,8 @@ get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
     for (i = 0; i < toksiz - 2; i++) {
         lexstr[i] = ngetch(fp);
         switch(char_type(lexstr[i])) {
-            case LETTER:
-            case DIGIT:
+            case TOKT_LETTER:
+            case TOKT_DIGIT:
             case UNDERLINE:
             case DOLLAR:
             case PERIOD:
@@ -214,7 +214,7 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
     b = 0; /* in case alternate base number */
     for (i = 0; i < toksiz - 2; i++) {
         lexstr[i] = ngetch(fp);
-        if (char_type(lexstr[i]) != DIGIT)
+        if (char_type(lexstr[i]) != TOKT_DIGIT)
             break;
         b = 10*b + lexstr[i] - DIG0;
     }
@@ -286,10 +286,10 @@ get_other_nonlpha_raw_token(char lexstr[], int toksiz, int *tokp, FILE *fp)
         nc = ngetch(fp); /* peek next character */
         if (c == STAR && nc == STAR) { /* fortran `**' operator */
             lexstr[++i] = STAR;
-            *tokp = OPEREXP;
+            *tokp = TOKT_OPEREXP;
         } else if (c == SLASH && nc == SLASH) { /* fortran `//' operator */
             lexstr[++i] = SLASH;
-            *tokp = OPERSTRCAT;
+            *tokp = TOKT_OPERSTRCAT;
         } else { /* nothing special, put back the peeked character */
             put_back_char(nc);
             *tokp = c;
@@ -333,19 +333,19 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
-    if (char_type(c) == LETTER) {
+    if (char_type(c) == TOKT_LETTER) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_alphanumeric_raw_token(lexstr, toksiz, fp);
-        tok = ALPHA;
-    } else if (char_type(c) == DIGIT) {
+        tok = TOKT_ALPHA;
+    } else if (char_type(c) == TOKT_DIGIT) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_numerical_raw_token(lexstr, toksiz, fp);
-        tok = DIGIT;
+        tok = TOKT_DIGIT;
     }
     else if (c == SQUOTE || c == DQUOTE) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_quoted_string_raw_token(lexstr, toksiz, fp);
-        tok = STRING;
+        tok = TOKT_STRING;
     }
     else if (c == PERCENT) {
         /* XXX: make this lazily done */
@@ -408,7 +408,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
     } else if (defn_with_paren && t2 == COMMA) {
         /* `define(name, def)' with empty name */
         synerr_fatal("empty name.");
-    } else if (t2 != ALPHA) {
+    } else if (t2 != TOKT_ALPHA) {
         synerr_fatal("non-alphanumeric name.");
     }
     skip_blanks(fp);
@@ -453,7 +453,7 @@ deftok(char token[], int toksiz, FILE *fp)
     int t;
 
     while ((t = get_raw_token(token, toksiz, fp)) != EOF) {
-        if (t != ALPHA) {
+        if (t != TOKT_ALPHA) {
             break; /* non-alpha */
         } else if (STREQ(token, KEYWORD_DEFINE)) {
             /* get definition for token, save it in tkdefn */
@@ -542,7 +542,7 @@ get_token(char token[], int toksiz)
                 put_back_string(current_function_name);
                 if (is_stmt_ending(t))
                     synerr("missing function name.");
-                else if (t != ALPHA)
+                else if (t != TOKT_ALPHA)
                     synerr("invalid function name `%s'",
                            current_function_name);
                 put_back_char(BLANK);

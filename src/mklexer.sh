@@ -60,7 +60,7 @@ lex(char lexstr[])
 
     if (tok == EOF || is_stmt_ending(tok) || tok == LBRACE || tok == RBRACE)
         /* nothing to do */;
-    else if (tok == DIGIT)
+    else if (tok == TOKT_DIGIT)
         tok = LEXDIGITS;
 EOF
 
