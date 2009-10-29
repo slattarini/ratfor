@@ -92,21 +92,6 @@ skip_blanks(FILE *fp)
     put_back_char(c);
 }
 
-/* Return character type -- this "type" is the character itself unless
- * it is a letter or a digit. */
-static int
-char_type(char c)
-{
-    int t;
-    if (isdigit(c))
-        t = TOKT_DIGIT;
-    else if (isupper(c) || islower(c))
-        t = TOKT_LETTER;
-    else
-        t = c; /*XXX: "OTHER" */
-    return(t);
-}
-
 /* Convert relational shorthands (e.g. `&&' => `.and.', '<' => '.gt.'),
  * write the resulting string in token[] itslef.  Return the lenght of
  * the resulting string. */
@@ -186,22 +171,16 @@ can_char_be_composed(int c)
 static int
 get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    int i;
+    int i, c;
     for (i = 0; i < toksiz - 2; i++) {
-        lexstr[i] = ngetch(fp);
-        switch(char_type(lexstr[i])) {
-            case TOKT_LETTER:
-            case TOKT_DIGIT:
-            case UNDERLINE:
-            case DOLLAR:
-            case PERIOD:
-                break;
-            default:
-                put_back_char(lexstr[i--]);
-                goto out;
-        }
+        c = lexstr[i] = ngetch(fp);
+        if (isdigit(c) || isupper(c) || islower(c))
+            continue;
+        if (c == UNDERLINE || c ==DOLLAR || c == PERIOD)
+            continue;
+        put_back_char(lexstr[i--]);
+        break;
     }
-out:
     return(i+1);
 }
 
@@ -214,7 +193,7 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
     b = 0; /* in case alternate base number */
     for (i = 0; i < toksiz - 2; i++) {
         lexstr[i] = ngetch(fp);
-        if (char_type(lexstr[i]) != TOKT_DIGIT)
+        if (lexstr[i] < DIG0 || lexstr[i] > DIG9)
             break;
         b = 10*b + lexstr[i] - DIG0;
     }
@@ -333,11 +312,11 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
-    if (char_type(c) == TOKT_LETTER) {
+    if (isupper(c) || islower(c)) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_alphanumeric_raw_token(lexstr, toksiz, fp);
         tok = TOKT_ALPHA;
-    } else if (char_type(c) == TOKT_DIGIT) {
+    } else if (isdigit(c)) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_numerical_raw_token(lexstr, toksiz, fp);
         tok = TOKT_DIGIT;
