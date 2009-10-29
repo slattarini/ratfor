@@ -1,5 +1,5 @@
-#ifndef RAT4_LEX_H
-#  define RAT4_LEX_H 1
+#ifndef RAT4_LEX_SYMBOLS_H
+#  define RAT4_LEX_SYMBOLS_H 1
 
 /*
  * L E X I C A L  A N A L Y S E R  S Y M B O L S
