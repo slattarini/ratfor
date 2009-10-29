@@ -16,7 +16,7 @@
          here greater than BUFSIZE in io.c */
 
 /*
- * Private Variables.
+ * PRIVATE VARIABLES.
  */
 
 static const char KEYWORD_INCLUDE[] = "include";
@@ -25,7 +25,7 @@ static const char KEYWORD_DEFINE[] = "define";
 
 
 /*
- * Private Functions.
+ * PRIVATE FUNCTIONS.
  */
 
 /*
@@ -89,12 +89,13 @@ skip_blanks(FILE *fp)
     put_back_char(c);
 }
 
-/* Convert relational shorthands (e.g. `&&' => `.and.', '<' => '.gt.'),
+/* Convert relational shorthands (e.g. `&&' --> `.and.', '<' --> '.lt.'),
  * write the resulting string in token[] itslef.  Return the lenght of
  * the resulting string. */
 static int
 convert_relation_shortand(char token[], FILE *fp)
 {
+    token[0] = ngetch(fp);
     if ((token[1] = ngetch(fp)) == EQUALS) {
         token[2] = 'e';
     } else {
@@ -145,7 +146,7 @@ convert_relation_shortand(char token[], FILE *fp)
             token[2] = 'r';
             break;
         default: /* can't happen */
-            token[1] = EOS;
+            abort();
             break;
     }  /* switch(token[0]) */
     token[0] = PERIOD;
@@ -230,11 +231,10 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
 }
 
 
-/* read a non-alphanumeric token from fp (accounting for composed tokens),
- * save it in lexstr, save its type in *tokp, return the lenght of the
- * token read */
+/* read an operator token (accounting for multi-charcater operators), save
+ * it in lexstr, and return the lenght of the token read */
 static int
-get_other_nonlpha_raw_token(char lexstr[], int toksiz, int *tokp, FILE *fp)
+get_operator_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int i, c, nc;
 #ifdef NDEBUG
@@ -245,27 +245,69 @@ get_other_nonlpha_raw_token(char lexstr[], int toksiz, int *tokp, FILE *fp)
 #endif
     i = 0;
     c = lexstr[0] = ngetch(fp);
-    switch(c) {
-        case PLUS:
-        case MINUS:
-            *tokp = TOKT_OPERATOR;
-            break;
-        case STAR:
-        case SLASH:
-            nc = ngetch(fp); /* peek next character */
-            if (c == nc) { /* fortran `**' or `//' operator */
-                lexstr[++i] = c;
-            } else {
-                put_back_char(nc);
-            }
-            *tokp = TOKT_OPERATOR;
-            break;
-        default:
-            *tokp = c;
-            break;
+    if (c == STAR || c == SLASH) {
+        nc = ngetch(fp); /* peek next character */
+        if (c == nc) { /* fortran `**' or `//' operator */
+            lexstr[++i] = c;
+        } else {
+            put_back_char(nc);
+        }
     }
     lexstr[++i] = EOS;
     return(i);
+}
+
+/* read a non-alphanumeric token from fp (accounting for composed tokens),
+ * save it in lexstr, save its type in *ptok, return the lenght of the
+ * token read */
+static int
+get_non_alphanumeric_raw_token(char lexstr[], int toksiz, int *ptok,
+                               FILE *fp)
+{
+    int toklen;
+    lexstr[0] = ngetch(fp);
+    put_back_char(lexstr[0]);
+    switch (lexstr[0]) {
+        case PERCENT:
+        case SHARP:
+            /* comment or verbatim string */
+            (void) ngetch(fp); /* TODO: assert == lexstr[0] */
+            if (lexstr[0] == SHARP) {
+                dispatch_comment(fp);
+            } else {
+                outasis(fp); /* copy direct to output if % */
+            }
+            *ptok = lexstr[0] = NEWLINE;
+            toklen = 1;
+            break;
+        case GREATER:
+        case LESS:
+        case EQUALS:
+        case NOT:
+        case BANG:
+        case CARET:
+        case AND:
+        case OR:
+            /* ratfor relational shodrtand */
+            *ptok = TOKT_RELATN;
+            toklen = convert_relation_shortand(lexstr, fp);
+            break;
+        case PLUS:
+        case MINUS:
+        case STAR:
+        case SLASH:
+            /* fortran opertor */
+            *ptok = TOKT_OPERATOR;
+            toklen = get_operator_raw_token(lexstr, toksiz, fp);
+            break;
+        default:
+            /* everything else */
+            (void) ngetch(fp); /* TODO: assert == lexstr[0] */
+            *ptok = lexstr[0];
+            toklen = 1;
+            break;
+    }
+    return(toklen);
 }
 
 /*
@@ -301,40 +343,18 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
+    put_back_char(c); /* so that we can read back the whole token */
     if (is_rat4_alpha(c)) {
-        put_back_char(c); /* so that we can read back the whole token */
         toklen = get_alphanumeric_raw_token(lexstr, toksiz, fp);
         tok = TOKT_ALPHA;
     } else if (is_digit(c)) {
-        put_back_char(c); /* so that we can read back the whole token */
         toklen = get_numerical_raw_token(lexstr, toksiz, fp);
         tok = TOKT_DIGITS;
-    }
-    else if (c == SQUOTE || c == DQUOTE) {
-        put_back_char(c); /* so that we can read back the whole token */
+    } else if (c == SQUOTE || c == DQUOTE) {
         toklen = get_quoted_string_raw_token(lexstr, toksiz, fp);
         tok = TOKT_STRING;
-    }
-    else if (c == PERCENT) {
-        /* XXX: make this lazily done */
-        outasis(fp);  /* direct copy of protected */
-        toklen = 1;
-        tok = NEWLINE;
-    }
-    else if (c == SHARP) {
-        dispatch_comment(fp);
-        toklen = 1;
-        tok = lexstr[0] = NEWLINE;
-    }
-    else if (c == GREATER || c == LESS || c == NOT
-             || c == BANG || c == CARET || c == EQUALS
-             || c == AND || c == OR
-    ) {
-        toklen = convert_relation_shortand(lexstr, fp);
-        tok = TOKT_RELATN; /*XXX: temporary hack */
     } else {
-        put_back_char(c); /* so that we can read back the whole token */
-        toklen = get_other_nonlpha_raw_token(lexstr, toksiz, &tok, fp);
+        toklen = get_non_alphanumeric_raw_token(lexstr, toksiz, &tok, fp);
     }
     
     if (toklen >= toksiz)
@@ -487,7 +507,7 @@ pop_file_stack(void)
 
 
 /*
- * Public Functions.
+ * PUBLIC FUNCTIONS.
  */
 
 BEGIN_C_DECLS
