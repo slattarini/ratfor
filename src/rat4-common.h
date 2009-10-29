@@ -87,6 +87,57 @@
 #  endif /* !__cplusplus */
 #endif /* HAVE_STDBOOL_H */
 
+/*
+ * We cannot use the <ctype.h> macros like `isalpha()', `isblank()',
+ * `isdigit()', etc, since they are locale-dependent.  So we define our
+ * own versions, tailored to our needs.
+ */
+
+static inline bool
+is_upper(int c)
+{
+    return((c >= 'A' && c <= 'Z') ? true : false);
+}
+
+static inline bool
+is_lower(int c)
+{
+    return((c >= 'a' && c <= 'z') ? true : false);
+}
+
+static inline bool
+is_digit(int c)
+{
+    return((c >= DIG0 && c <= DIG9) ? true : false);
+}
+
+static inline bool
+is_strict_alpha(int c)
+{
+    return((is_upper(c) || is_lower(c)) ? true : false);
+}
+
+static inline bool
+is_strict_alnum(int c)
+{
+    return((is_strict_alpha(c) || is_digit(c)) ? true : false);
+}
+
+static inline bool
+is_rat4_alpha(int c)
+{
+    if (is_strict_alpha(c) || c == UNDERLINE || c == DOLLAR || c == PERIOD)
+        return true;
+    else
+        return false;
+}
+
+static inline bool
+is_rat4_alnum(int c)
+{
+    return((is_rat4_alpha(c) || is_digit(c)) ? true : false);
+}
+
 static inline bool
 is_blank(int c)
 {
@@ -113,6 +164,7 @@ is_stmt_ending(int c)
 {
     return((is_newline(c) || c == SEMICOL) ? true : false);
 }
+
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

@@ -2,8 +2,6 @@
 
 #include "rat4-common.h"
 
-#include <ctype.h>
-
 #include "tokenizer.h"
 #include "io.h"
 #include "xopen.h"
@@ -171,12 +169,10 @@ can_char_be_composed(int c)
 static int
 get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    int i, c;
+    int i;
     for (i = 0; i < toksiz - 2; i++) {
-        c = lexstr[i] = ngetch(fp);
-        if (isdigit(c) || isupper(c) || islower(c))
-            continue;
-        if (c == UNDERLINE || c ==DOLLAR || c == PERIOD)
+        lexstr[i] = ngetch(fp);
+        if (is_rat4_alnum(lexstr[i]))
             continue;
         put_back_char(lexstr[i--]);
         break;
@@ -193,7 +189,7 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
     b = 0; /* in case alternate base number */
     for (i = 0; i < toksiz - 2; i++) {
         lexstr[i] = ngetch(fp);
-        if (lexstr[i] < DIG0 || lexstr[i] > DIG9)
+        if (!is_digit(lexstr[i]))
             break;
         b = 10*b + lexstr[i] - DIG0;
     }
@@ -201,9 +197,9 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
         /* n%ddd... */
         for (n = 0; ; n = b*n + c) {
             c = lexstr[0] = ngetch(fp);
-            if (c >= 'a' && c <= 'z')
+            if (is_lower(c))
                 c = c - 'a' + DIG9 + 1;
-            else if (c >= 'A' && c <= 'Z')
+            else if (is_upper(c))
                 c = c - 'A' + DIG9 + 1;
             if (c < DIG0 || c >= DIG0 + b)
                 break;
@@ -312,11 +308,11 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
-    if (isupper(c) || islower(c)) {
+    if (is_rat4_alpha(c)) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_alphanumeric_raw_token(lexstr, toksiz, fp);
         tok = TOKT_ALPHA;
-    } else if (isdigit(c)) {
+    } else if (is_digit(c)) {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_numerical_raw_token(lexstr, toksiz, fp);
         tok = TOKT_DIGITS;
