@@ -153,17 +153,6 @@ convert_relation_shortand(char token[], FILE *fp)
     return(SSTRLEN(token));
 }
 
-static bool
-can_char_be_composed(int c)
-{
-    switch(c) {
-        case SLASH:
-        case STAR:
-            return true;
-    }
-    return false;
-}
-
 /* read alphanumeric token from fp, save it in lexstr, return the lenght of
  * the token read */
 static int
@@ -257,22 +246,27 @@ get_other_nonlpha_raw_token(char lexstr[], int toksiz, int *tokp, FILE *fp)
 #endif
     i = 0;
     c = lexstr[0] = ngetch(fp);
-    if (can_char_be_composed(c)) {
-        nc = ngetch(fp); /* peek next character */
-        if (c == STAR && nc == STAR) { /* fortran `**' operator */
-            lexstr[++i] = STAR;
-            *tokp = TOKT_OPEREXP;
-        } else if (c == SLASH && nc == SLASH) { /* fortran `//' operator */
-            lexstr[++i] = SLASH;
-            *tokp = TOKT_OPERSTRCAT;
-        } else { /* nothing special, put back the peeked character */
-            put_back_char(nc);
+    switch(c) {
+        case PLUS:
+        case MINUS:
+            *tokp = TOKT_OPERATOR;
+            break;
+        case STAR:
+        case SLASH:
+            nc = ngetch(fp); /* peek next character */
+            if (c == nc) { /* fortran `**' or `//' operator */
+                lexstr[++i] = c;
+            } else {
+                put_back_char(nc);
+            }
+            *tokp = TOKT_OPERATOR;
+            break;
+        default:
             *tokp = c;
-        }
-    } else {
-        *tokp = c;
+            break;
     }
-        return (i+1);
+    lexstr[++i] = EOS;
+    return(i);
 }
 
 /*
@@ -338,7 +332,7 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
              || c == AND || c == OR
     ) {
         toklen = convert_relation_shortand(lexstr, fp);
-        tok = c; /*XXX: temporary hack */
+        tok = TOKT_RELATN; /*XXX: temporary hack */
     } else {
         put_back_char(c); /* so that we can read back the whole token */
         toklen = get_other_nonlpha_raw_token(lexstr, toksiz, &tok, fp);

@@ -7,14 +7,14 @@
  */
 
 /* 
- * WARNING: the values of all these four macros must be smaller than the
+ * WARNING: the values of all these five macros must be smaller than the
  * numerical value of any ascii character that might be used in the input.
  */
 #define TOKT_DIGITS      1
 #define TOKT_ALPHA       2
 #define TOKT_STRING      3
-#define TOKT_OPEREXP     4
-#define TOKT_OPERSTRCAT  5
+#define TOKT_OPERATOR    4
+#define TOKT_RELATN      5
 
 #define LEXBREAK        10
 #define LEXDIGITS       11

@@ -82,18 +82,9 @@ token_requires_automatic_line_continuation(int t)
 {
     switch(t) {
         case COMMA:
-        case PLUS:
-        case MINUS:
-        case STAR:
         case LPAREN:
-        case AND:
-        case BAR:
-        case BANG:
-        case EQUALS:
-        case UNDERLINE:
-        case SLASH:
-        case TOKT_OPERSTRCAT:
-        case TOKT_OPEREXP:
+        case TOKT_OPERATOR:
+        case TOKT_RELATN:
             return true;
     }
     return false;
@@ -540,8 +531,8 @@ caslab (int *n, int *t)
         *t = get_nonblank_token (tok, MAXTOK);
     if (*t == EOF)
         return(*t);
-    sign = (*t == MINUS ? -1 : 1);
-    if (*t == MINUS || *t == PLUS)
+    sign = ((tok[0] == MINUS && tok[1] == EOS) ? -1 : 1);
+    if ((tok[0] == MINUS || tok[0] == PLUS) && tok[1] == EOS)
         *t = get_nonblank_token (tok, MAXTOK);
     if (*t != TOKT_DIGITS) {
         synerr ("invalid case label.");
