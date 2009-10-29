@@ -537,7 +537,8 @@ get_token(char token[], int toksiz)
                 return(tok);
             /* deal with file inclusion */
             for (i = 0; ; i = SSTRLEN(path)) {
-                /* XXX possible segfault here */
+                if (i >= MAXPATH)
+                    synerr_fatal("name of included file too long.");
                 t = deftok(&path[i], MAXPATH, infile[inclevel]);
                 if (is_stmt_ending(t))
                     break;
