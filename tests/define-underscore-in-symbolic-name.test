@@ -1,19 +1,19 @@
 #!/bin/sh
 
-# Check use of `define' with macros having underscores in names.
+# Check use of `define' with macros having dollar characters (`$') in
+# their names.
 
 . ./TestsAux/defs.sh || exit 99
 
-cat >tst.r <<EOF
+# WARNING: and underscore followed by a newline trigger line continuation,
+# so we must be sure that no line here ends with an underscore.
+$SED -e 's/_$/_ /' >tst.r <<EOF
 define sym1     text
 define sym_1    t_e_x_t
 
-define _        underscore
-define __       doubleunderscore
-
 define foo      x0
 define fo_o     x1
-define fo_o     x2
+define fo__o    x2
 define f_o_o    x3
 define f__o_o   x4
 define f__o__o  x5
@@ -22,15 +22,14 @@ define __foo    x7
 define foo_     x8
 define foo__    x9
 
+define _        underscore
+define __       doubleunderscore
+
 sym1
 sym_1
-
-_
-__
-
 foo
 fo_o
-fo_o
+fo__o
 f_o_o
 f__o_o
 f__o__o
@@ -38,13 +37,13 @@ _foo
 __foo
 foo_
 foo__
+_
+__
 EOF
 
 cat >exp <<EOF
 text
 t_e_x_t
-underscore
-doubleunderscore
 x0
 x1
 x2
@@ -55,9 +54,11 @@ x6
 x7
 x8
 x9
+underscore
+doubleunderscore
 EOF
 
-cat tst.r
+$SED -e 's/$/$/' -e 's/^/^/' tst.r
 
 run_CMD "$RATFOR" tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL

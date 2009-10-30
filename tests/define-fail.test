@@ -5,24 +5,44 @@
 . ./TestsAux/defs.sh || exit 99
 
 tcnt=0
+e=0
 baddef() {
     tcnt=`expr $tcnt + 1` || testcase_HARDERROR
     echo "$1" > tst$tcnt.r
     cat tst$tcnt.r
-    run_CMD -e 1 "$RATFOR" tst$tcnt.r || testcase_FAIL
+    run_CMD -e 1 "$RATFOR" tst$tcnt.r || {
+        { set +x; } 2>/dev/null
+        echo " **!!! ERROR !!!**" >&2
+        echo " *** Unexpected success on input \`$1'" >&2
+        set -x
+        e=1
+    }
     mv stdout stdout$tcnt
     mv stderr stderr$tcnt
-    $FGREP "$2" stderr$tcnt || testcase_FAIL
+    $FGREP "$2" stderr$tcnt || {
+        { set +x; } 2>/dev/null
+        echo " **!!! ERROR !!!**" >&2
+        echo " *** Not found expected error message on input \`$1'" >&2
+        set -x
+        e=1
+    }
 }
 
 baddef  'define 11 eleven'  'non-alphanumeric name'
 baddef  'define 1s foo'     'non-alphanumeric name'
 baddef  'define @ foo'      'non-alphanumeric name'
+baddef  'define / foo'      'non-alphanumeric name'
+baddef  'define .foo bar'   'non-alphanumeric name'
 baddef  'define , xxx'      'non-alphanumeric name'
 baddef  'define'            'empty name'
 baddef  'define; x y'       'empty name'
+baddef  'define(, xxx)'     'empty name'
 baddef  'define( , xxx)'    'empty name'
 
-testcase_PASS
+case $e in
+    0) testcase_PASS;;
+    1) testcase_FAIL;;
+    *) testcase_HARDERROR "unexpected e=$e";;
+esac
 
 # vim: ft=sh ts=4 sw=4 et

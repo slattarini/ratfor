@@ -48,6 +48,7 @@ ALL_TESTS = \
   define-basic.test \
   define-basic_f77.test \
   define-case-sensibility.test \
+  define-dollar-in-symbolic-name.test \
   define-fail.test \
   define-long-definition.test \
   define-long-name.test \
@@ -56,12 +57,13 @@ ALL_TESTS = \
   define-multiline_f77.test \
   define-nested.test \
   define-nested_f77.test \
+  define-no-dot-in-symbolic-name.test \
   define-no-uppercase-alias.test \
   define-redefine.test \
   define-semicolon.test \
   define-semicolon_f77.test \
   define-stress_f77.test \
-  define-underscores.test \
+  define-underscore-in-symbolic-name.test \
   define-whitespaces.test \
   devnull-input.test \
   empty-input.test \

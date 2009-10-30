@@ -1,0 +1,71 @@
+#!/bin/sh
+
+# Check use of `define' with macros having dollar characters (`$') in
+# their names.
+
+. ./TestsAux/defs.sh || exit 99
+
+cat >tst.r <<'EOF'
+define sym1     text
+define sym$1    t@e$x_t
+
+define foo      x0
+define fo$o     x1
+define fo$$o    x2
+define f$o$o    x3
+define f$$o$o   x4
+define f$$o$$o  x5
+define $foo     x6
+define $$foo    x7
+define foo$     x8
+define foo$$    x9
+
+define $        dollar
+define $$       doubledollar
+
+sym1
+sym$1
+foo
+fo$o
+fo$$o
+f$o$o
+f$$o$o
+f$$o$$o
+$foo
+$$foo
+foo$
+foo$$
+$
+$$
+EOF
+
+cat >exp <<'EOF'
+text
+t@e$x_t
+x0
+x1
+x2
+x3
+x4
+x5
+x6
+x7
+x8
+x9
+dollar
+doubledollar
+EOF
+
+run_CMD "$RATFOR" tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
