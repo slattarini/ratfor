@@ -154,8 +154,6 @@ eatup(void)
             while (is_newline(get_token(ptoken, MAXTOK)))
                 /* empty body */;
             put_back_string(ptoken);
-            if (t == UNDERLINE) /* XXX: ??? */
-                token[0] = EOS;
         }
         if (t == LPAREN)
             nlpar++;
