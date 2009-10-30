@@ -83,6 +83,8 @@ and dollar characters (e.g. B_FLAG, $LENGTH are valid names), but cannot
 begin with a digit (e.g. 3WAY is an invalid name).
 Upper case is not equivalent to lower case in parameter names.
 
+.B "WARNING: the following is currently unsupported"
+
       string name "character string"          or
       string name(size) "character string"
 
