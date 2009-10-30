@@ -260,7 +260,7 @@ get_operator_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int i, c, nc;
 #ifdef NDEBUG
-    /* TODO: assert toksiz >= 2 */
+    /* TODO: assert toksiz >= 3 */
 #else
     /* pacify compiler warnings */
     (void) toksiz;
@@ -286,7 +286,7 @@ static int
 get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
     int tok;
-    /* TODO: assert toksiz >= 2 */
+    /* TODO: assert toksiz >= 3 */
     lexstr[0] = ngetch(fp);
     put_back_char(lexstr[0]);
     switch (lexstr[0]) {
