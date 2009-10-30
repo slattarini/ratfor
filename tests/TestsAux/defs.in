@@ -74,6 +74,7 @@ case "${RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL-}" in
     *)
         RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL=yes
         export RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL
+        echo "$0: re-executing with $SHELL"
         exec $SHELL "$0" ${1+"$@"}
         exit $E_HARD # NOTREACHED
         ;;
