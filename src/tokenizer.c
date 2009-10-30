@@ -93,7 +93,7 @@ skip_blanks(FILE *fp)
  * write the resulting string in token[] itslef.  Return the lenght of
  * the resulting string. */
 static int
-convert_relation_shortand(char token[], int toksiz, FILE *fp)
+convert_relational_shortand(char token[], int toksiz, FILE *fp)
 {
 #ifdef NDEBUG
     /* TODO: assert toksiz >= 6 */
@@ -311,7 +311,7 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
         case AND:
         case OR:
             /* maybe a ratfor relational shorthand */
-            tok = convert_relation_shortand(lexstr, toksiz, fp);
+            tok = convert_relational_shortand(lexstr, toksiz, fp);
             break;
         case PLUS:
         case MINUS:
