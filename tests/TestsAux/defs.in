@@ -65,15 +65,15 @@ set -e
 # However, if the user know in advance that the shell used to run the
 # test scripts is good enough, he can prevent the re-execution of the
 # scripts with $SHELL by adding the following definiton to the environment:
-#  RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL=yes
+#  RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL=yes
 #
-case "${RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL-}" in
+case "${RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL-}" in
     y|Y|yes|Yes|YES|1)
         : # go ahead with the current shell
         ;;
     *)
-        RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL=yes
-        export RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL
+        RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL=yes
+        export RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL
         exec $SHELL "$0" ${1+"$@"}
         exit $E_HARD # NOTREACHED
         ;;

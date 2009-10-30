@@ -208,7 +208,7 @@ AM_TEST_LOG_FLAGS = # will be updated later
 # To improve the overall speed of our slow testsuite, let it know that
 # it is already being run with the proper $SHELL (as found by configure),
 # so that the test scripts won't re-execute themselves with $SHELL
-AM_TEST_LOG_FLAGS += RAT4_TESTSUITE_RUNNING_WITH_CONFIG_SHELL='yes'
+AM_TEST_LOG_FLAGS += RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL='yes'
 
 # To run the test scripts with the "better" shell available, while leaving
 # the possibility to the user to override the choice.
