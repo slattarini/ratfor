@@ -12,7 +12,7 @@ cat > bar.r <<EOF
 include foo.r
 EOF
 
-run_CMD -e 1 timer -t 10 "$RATFOR" foo.r || testcase_FAIL
+run_command -e 1 timer -t 10 "$RATFOR" foo.r || testcase_FAIL
 test -s stderr || testcase_FAIL "ratfor did not print error any message" \
                                 "on recursive include"
 

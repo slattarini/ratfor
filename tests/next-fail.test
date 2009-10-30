@@ -18,7 +18,7 @@ $AWK '/# *ERR/{ print "tst.r:" NR ": illegal next." }' "$data" >exp
 
 cat tst.r
 
-run_CMD -e 1 "$RATFOR" tst.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tst.r || testcase_FAIL
 mv stderr got
 
 cat exp

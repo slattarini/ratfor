@@ -17,7 +17,7 @@ EOF
 
 cat tst.r
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 $GREP '100.*foo' stdout || testcase_FAIL
 $GREP '200.*bar' stdout || testcase_FAIL
 

@@ -6,12 +6,12 @@
 . ./TestsAux/defs.sh || exit 99
 
 echo function > tst1.r
-run_CMD -e 1 "$RATFOR" tst1.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tst1.r || testcase_FAIL
 mv stderr stderr1
 $FGREP 'missing function name' stderr1 || testcase_FAIL
 
 echo 'function; foo' > tst2.r
-run_CMD -e 1 "$RATFOR" tst2.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tst2.r || testcase_FAIL
 mv stderr stderr2
 $FGREP 'missing function name' stderr2 || testcase_FAIL
 

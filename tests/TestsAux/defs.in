@@ -241,13 +241,13 @@ rm_rf() {
 }
 
 # -------------------------------------------------------------------------
-# run_CMD: run a command with bells and whistles.
+# run_command: run a command with bells and whistles.
 # -------------------------------------------------------------------------
 # Usage:
 #   either
-#     run_CMD [-e STATUS] [-m] [--] COMMAND [ARGUMENTS..]
+#     run_command [-e STATUS] [-m] [--] COMMAND [ARGUMENTS..]
 #   or:
-#     run_CMD -c COMMAND [-e STATUS] [-m] [--]  [ARGUMENTS..]
+#     run_command -c COMMAND [-e STATUS] [-m] [--]  [ARGUMENTS..]
 # -------------------------------------------------------------------------
 # Run the given COMMAND with ARGUMENTS; returns with failure (return status
 # `1') if COMMAND does not exit with STATUS (more details are given below).
@@ -262,7 +262,7 @@ rm_rf() {
 # is acceptable. If STATUS is "IGNORE" or "IGNORED", any exit value of
 # COMMAND is acceptable, and run_command returns with success regardless
 # of that value. Default STATUS is `0'.
-run_CMD() {
+run_command() {
     set +x # xtrace verbosity temporarly disabled in this function
     run_exitcode_expected=0
     run_mix_stdout_and_stderr=no
@@ -330,14 +330,14 @@ run_CMD() {
 
 # run_F77 [-e STATUS] [-m] [--] [ARGUMENTS..]
 # -------------------------------------------
-# Wrapper around `run_CMD $F77', to facilitate any present or future
+# Wrapper around `run_command $F77', to facilitate any present or future
 # workaround for bugs/limitations in Fortran compilers.
 run_F77() {
     # NOTE: all internal variables used here starts with the `run77'
     # prefix, to minimize possibility of name clashes with global
     # variables defined in user code.
     set +x # xtrace verbosity stops here
-    run77_opts='' # options to be passed to run_CMD
+    run77_opts='' # options to be passed to run_command
     while test $# -gt 0; do
         case "$1" in
             -e) run77_opts="$run77_opts $1 $2"; shift;;
@@ -362,7 +362,7 @@ run_F77() {
         set x "$1" -o "$run77_aout"; shift;
     fi
     set -x # xtrace verbosity restart here
-    run_CMD $run77_opts -- "$F77" "$run77_haltf" ${1+"$@"}
+    run_command $run77_opts -- "$F77" "$run77_haltf" ${1+"$@"}
 }
 
 # Testsuite utilities have always precedence over system ones.

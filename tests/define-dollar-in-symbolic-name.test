@@ -56,7 +56,7 @@ dollar
 doubledollar
 EOF
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got

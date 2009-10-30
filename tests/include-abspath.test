@@ -12,7 +12,7 @@ mkdir "$abs_tmp_dir"
 echo 'foobar' > "$abs_tmp_dir/inc.r"
 echo "include $abs_tmp_dir/inc.r" > tst.r
 
-run_CMD "$RATFOR" tst.r || {
+run_command "$RATFOR" tst.r || {
     rm -rf "$abs_tmp_dir"
     testcase_FAIL
 }

@@ -12,7 +12,7 @@ while(true) {
 100 continue
 EOF
 
-run_CMD -e 1 "$RATFOR" -l 100 tst.r || testcase_FAIL
+run_command -e 1 "$RATFOR" -l 100 tst.r || testcase_FAIL
 $FGREP ':4: possible label conflict' stderr || testcase_FAIL
 
 testcase_PASS

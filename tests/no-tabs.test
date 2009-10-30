@@ -39,11 +39,11 @@ BAZ@
 @BAZ@
 EOF
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 mv stdout stdout1
 $FGREP "$TAB" stdout1 && testcase_FAIL
 
-run_CMD "$RATFOR" -C tst.r || testcase_FAIL
+run_command "$RATFOR" -C tst.r || testcase_FAIL
 mv stdout stdout2
 $FGREP "$TAB" stdout2 && testcase_FAIL
 

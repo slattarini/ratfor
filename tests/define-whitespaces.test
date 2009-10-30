@@ -13,7 +13,7 @@ b:sym2:b
 c:sym3:c
 EOF
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 
 $FGREP 'a: text1:a' stdout  || testcase_FAIL
 $FGREP 'b:text2 :b' stdout  || testcase_FAIL

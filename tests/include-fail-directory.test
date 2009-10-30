@@ -16,7 +16,7 @@ include dir.d
 stillalive
 EOF
 
-run_CMD -e 1 "$RATFOR" tst.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tst.r || testcase_FAIL
 r='include: dir\.d: cannot open for reading: [iI]s a directory'
 $GREP "^tst\\.r:1: $r" stderr || testcase_FAIL
 $GREP "^tst\\.r:3: $r" stderr || testcase_FAIL

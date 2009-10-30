@@ -22,7 +22,7 @@ test -f true.exe && test -x true.exe || {
     testcase_FAIL
 }
 
-run_CMD ./true.exe
+run_command ./true.exe
 test -s stdout && testcase_FAIL
 test -s stderr && testcase_FAIL
 
@@ -53,7 +53,7 @@ test -f hw.exe && test -x hw.exe || {
     testcase_FAIL
 }
 
-run_CMD ./hw.exe
+run_command ./hw.exe
 test -s stderr && testcase_FAIL
 mv stdout got
 

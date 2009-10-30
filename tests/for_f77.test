@@ -59,10 +59,10 @@ EOF
 
 cat tst.r
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
-run_CMD ./tst.exe || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
 ws_normalize <stdout >got
 
 cat exp

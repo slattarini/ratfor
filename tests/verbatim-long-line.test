@@ -9,7 +9,7 @@ longline=$s$s$s$s$s$s$s$s$s$s$s$s$s
 
 echo "%$longline" >tst.r
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 $GREP "^$longline$" stdout || testcase_FAIL
 
 testcase_PASS

@@ -30,7 +30,7 @@ EOF
 
 cat tst.r
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 $GREP -v '^[cC]' <stdout | ws_strip >got
 
 cat exp

@@ -7,7 +7,7 @@
 for i in 0 1 42; do
     (echo "#!/bin/sh"; echo "exit $i") > "exit$i"
     chmod a+x "exit$i"
-    run_CMD -e $i -- timer -t 10 "./exit$i" || testcase_FAIL
+    run_command -e $i -- timer -t 10 "./exit$i" || testcase_FAIL
     test ! -s stdout || testcase_FAIL
     test ! -s stderr || testcase_FAIL
 done
@@ -18,29 +18,29 @@ mkdir tmp-bin
 chmod a+x tmp-bin/'echo'
 oPATH=$PATH
 PATH=`pwd`/tmp-bin:$oPATH; export PATH
-run_CMD -e 133 -- timer -t 10 'echo' NO || testcase_FAIL
+run_command -e 133 -- timer -t 10 'echo' NO || testcase_FAIL
 test -s stdout && testcase_FAIL
 $FGREP YES stderr || testcase_FAIL
 PATH=$oPATH; export PATH
 unset oPATH
 
-run_CMD -e 99 timer || testcase_FAIL
+run_command -e 99 timer || testcase_FAIL
 $FGREP 'missing argument' stderr || testcase_FAIL
-run_CMD -e 99 timer -x || testcase_FAIL
+run_command -e 99 timer -x || testcase_FAIL
 $FGREP 'invalid option' stderr || testcase_FAIL
-run_CMD -e 99 timer -t || testcase_FAIL
+run_command -e 99 timer -t || testcase_FAIL
 $FGREP 'option requires an argument' stderr || testcase_FAIL
 
 ls -l none || :
 test ! -f none
-run_CMD -e 127 timer ./none || testcase_FAIL
+run_command -e 127 timer ./none || testcase_FAIL
 $GREP './none: [nN]o such file or directory' stderr || testcase_FAIL
 
 : > noexec
 chmod a-x noexec
 ls -l noexec || :
 test ! -x noexec
-run_CMD -e 126 timer ./noexec || testcase_FAIL
+run_command -e 126 timer ./noexec || testcase_FAIL
 $GREP './noexec: [pP]ermission denied' stderr || testcase_FAIL
 
 testcase_PASS

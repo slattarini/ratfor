@@ -71,7 +71,7 @@ Writing test cases
 
   Use `set -e' to catch failures you might not have thought of.
 
-  Use the subroutine `run_CMD' if you need to run a program to later
+  Use the subroutine `run_command' if you need to run a program to later
   analyze its standard output and/or standard error.
 
   When running the Fortran 77 compiler, use the subroutine `run_F77'
@@ -80,7 +80,7 @@ Writing test cases
   instead of:
     $F77 [OPTIONS] ARGS
   or:
-    run_CMD $F77 [OPTIONS] [ARGS]
+    run_command $F77 [OPTIONS] [ARGS]
   Or, if you must compile only one source file (the usual case) just use:
     run_F77 foo.f
   The use of run_F77 is meant to facilitate working around possible bugs
@@ -169,13 +169,13 @@ Writing test cases
   If you must run a program to later analize its stderr, do *not* run it
   by doing e.g.:
     [WRONG]  PROG 2>foo.txt
-  Instead, use the run_CMD subroutine (defined in tests/TestsAux/defs.in),
-  as in:
-    [GOOD]   run_CMD PROG; mv stderr foo.txt
-  You can't use the apparently simpler form `PROG 2>stderr.txt' because of
-  a nasty bug of the zsh shell (at least of some 4.x versions).
-  In details: if you run command when `set -x' is active, and redirect its
-  standard error to a file, then zsh writes also the *trace* for the
+  Instead, use the `run_command' subroutine (defined in the file
+  `tests/TestsAux/defs.in'), as in:
+    [GOOD]   run_command PROG; mv stderr foo.txt
+  You can't use the apparently simpler form `PROG 2>stderr.txt' because
+  of a nasty bug of the zsh shell (at least of some 4.x versions).
+  In details: if you run command when `set -x' is active, and redirect
+  its standard error to a file, then zsh writes also the *trace* for the
   command into that file, instead that into the original standard error.
   For example:
     $ zsh -c -x 'true 2>file'; echo "SHOULD BE EMPTY: `cat file`"

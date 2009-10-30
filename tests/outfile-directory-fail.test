@@ -7,7 +7,7 @@
 mkdir tst.d
 echo 'junk' > tst.r
 
-run_CMD -e 1 "$RATFOR" -o tst.d tst.r || testcase_FAIL
+run_command -e 1 "$RATFOR" -o tst.d tst.r || testcase_FAIL
 rx='tst\.d: cannot open for writing: [iI]s a directory'
 $GREP "$rx" stderr || testcase_FAIL
 

@@ -5,7 +5,7 @@
 . ./TestsAux/defs.sh || exit 99
 
 echo 'repeat nothing' >tst.r
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 test ! -s stderr || testcase_FAIL
 testcase_PASS
 

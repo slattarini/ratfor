@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Testsuite sanity check: check the `run_CMD' subroutine.
+# Testsuite sanity check: check the `run_command' subroutine.
 
 . ./TestsAux/defs.sh || exit 99
 
@@ -25,7 +25,7 @@ EOF
 chmod a+x test_script
 
 test_cleanup
-run_CMD test_script 1 || testcase_FAIL
+run_command test_script 1 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL
@@ -33,7 +33,7 @@ test x"`cat stdout`" = x"OUT1" || testcase_FAIL
 test x"`cat stderr`" = x"ERR1" || testcase_FAIL
 
 test_cleanup
-run_CMD ./test_script 2 || testcase_FAIL
+run_command ./test_script 2 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL
@@ -41,7 +41,7 @@ test x"`cat stdout`" = x"OUT2" || testcase_FAIL
 test x"`cat stderr`" = x"ERR2" || testcase_FAIL
 
 test_cleanup
-run_CMD "$cwd"/test_script 3 || testcase_FAIL
+run_command "$cwd"/test_script 3 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL
@@ -49,7 +49,7 @@ test x"`cat stdout`" = x"OUT3" || testcase_FAIL
 test x"`cat stderr`" = x"ERR3" || testcase_FAIL
 
 test_cleanup
-run_CMD -e 0 test_script 4 || testcase_FAIL
+run_command -e 0 test_script 4 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL
@@ -57,14 +57,14 @@ test x"`cat stdout`" = x"OUT4" || testcase_FAIL
 test x"`cat stderr`" = x"ERR4" || testcase_FAIL
 
 test_cleanup
-run_CMD -m test_script 5 || testcase_FAIL
+run_command -m test_script 5 || testcase_FAIL
 test -f stdout && testcase_FAIL
 test -f stderr && testcase_FAIL
 test -f stdall || testcase_FAIL
 test x"`tr '\012' '@' <stdall`" = x"OUT5@ERR5@" || testcase_FAIL
 
 test_cleanup
-run_CMD -e 15 test_script 6 15 || testcase_FAIL
+run_command -e 15 test_script 6 15 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL
@@ -72,7 +72,7 @@ test x"`cat stdout`" = x"OUT6" || testcase_FAIL
 test x"`cat stderr`" = x"ERR6" || testcase_FAIL
 
 test_cleanup
-run_CMD -e FAIL test_script 7 3 || testcase_FAIL
+run_command -e FAIL test_script 7 3 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL
@@ -80,7 +80,7 @@ test x"`cat stdout`" = x"OUT7" || testcase_FAIL
 test x"`cat stderr`" = x"ERR7" || testcase_FAIL
 
 test_cleanup
-run_CMD -e IGNORE test_script 8 0 || testcase_FAIL
+run_command -e IGNORE test_script 8 0 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL
@@ -88,7 +88,7 @@ test x"`cat stdout`" = x"OUT8" || testcase_FAIL
 test x"`cat stderr`" = x"ERR8" || testcase_FAIL
 
 test_cleanup
-run_CMD -e IGNORE test_script 9 1 || testcase_FAIL
+run_command -e IGNORE test_script 9 1 || testcase_FAIL
 test -f stdout || testcase_FAIL
 test -f stderr || testcase_FAIL
 test -f stdall && testcase_FAIL

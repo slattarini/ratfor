@@ -6,14 +6,14 @@
 
 echo "define .foo bar" > tstB1.r
 cat tstB1.r
-run_CMD -e 1 "$RATFOR" tstB1.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tstB1.r || testcase_FAIL
 mv stdout stdoutB1
 mv stderr stderrB1
 $FGREP "non-alphanumeric name" stderrB1 || testcase_FAIL
 
 echo "define . bar" > tstB2.r
 cat tstB2.r
-run_CMD -e 1 "$RATFOR" tstB2.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tstB2.r || testcase_FAIL
 mv stdout stdoutB2
 mv stderr stderrB2
 $FGREP "non-alphanumeric name" stderrB2 || testcase_FAIL
@@ -28,7 +28,7 @@ cat >exp <<'EOF'
 .y z.y
 EOF
 
-run_CMD -e 0 "$RATFOR" tstG.r || testcase_FAIL
+run_command -e 0 "$RATFOR" tstG.r || testcase_FAIL
 mv stdout stdoutG
 mv stderr stderrG
 test -s stderrG && testcase_FAIL

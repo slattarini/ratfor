@@ -26,10 +26,10 @@ EOF
 cat tst.r
 cat ctrl.r
 
-run_CMD "$RATFOR" ctrl.r && test ! -s stderr || testcase_HARDERROR
+run_command "$RATFOR" ctrl.r && test ! -s stderr || testcase_HARDERROR
 mv stdout exp
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 mv stdout got
 

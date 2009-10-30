@@ -33,7 +33,7 @@ EOF
 
 $AWK '{print NR ":" $0}' tst.r
 
-run_CMD -e 1 "$RATFOR" tst.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tst.r || testcase_FAIL
 
 $FGREP 'tst.r:2: illegal right brace' stderr || testcase_FAIL
 $FGREP 'tst.r:10: illegal case' stderr || testcase_FAIL

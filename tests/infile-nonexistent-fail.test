@@ -6,7 +6,7 @@
 
 test ! -f none.r
 
-run_CMD -e 1 "$RATFOR" none.r || testcase_FAIL
+run_command -e 1 "$RATFOR" none.r || testcase_FAIL
 rx='none\.r: cannot open for reading: [nN]o such file or directory'
 $GREP "$rx" stderr || testcase_FAIL
 test -s stdout && testcase_FAIL

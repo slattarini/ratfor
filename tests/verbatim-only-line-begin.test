@@ -11,7 +11,7 @@ b = 1; %&&
  %&&
 EOF
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 $FGREP "&&" stdout && testcase_FAIL
 
 testcase_PASS

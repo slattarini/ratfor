@@ -9,7 +9,7 @@ cat > tst.r <<EOF
 "# keep me"
 EOF
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 $GREP -i 'throw me away' stdout && testcase_FAIL
 $GREP 'keep me' stdout || testcase_FAIL
 

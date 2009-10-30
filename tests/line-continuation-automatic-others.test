@@ -39,7 +39,7 @@ EOF
 
 $SED -e "s/$TAB/\\\\t/g" -e 's/$/$/' -e 's/^/^/' tst.r
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout | ws_normalize | $SED -e 's/ *()/()/'\
   | $SED -e "s/^ *[\"']\\(~*\\)[\"'] *$/\1/" >got
 

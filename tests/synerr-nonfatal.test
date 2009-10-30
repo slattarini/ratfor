@@ -10,7 +10,7 @@ foo
 bar
 ALIVE
 EOF
-run_CMD -e 1 "$RATFOR" tst.r || testcase_FAIL
+run_command -e 1 "$RATFOR" tst.r || testcase_FAIL
 $FGREP 'illegal right brace' stderr || testcase_FAIL
 $FGREP -i ALIVE stdout || testcase_FAIL
 

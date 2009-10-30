@@ -10,7 +10,7 @@ while(true) {
 }
 EOF
 
-run_CMD "$RATFOR" tst.r || testcase_FAIL
+run_command "$RATFOR" tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout >stdout1
 $GREP '^23000 ' stdout1 || testcase_FAIL
 $EGREP -v '^( |2300[0-9]) ' && testcase_FAIL
