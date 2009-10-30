@@ -78,8 +78,8 @@ will include the named \fIfile\fR in the input.
       define name value
 
 defines name as a symbolic parameter with the indicated value.
-Names of symbolic parameters may contain letters, digits, periods, and
-underline character but must begin with a letter (e.g.  B.FLAG).
+Names of symbolic parameters may contain letters, digits, and underline
+character but must begin with a letter (e.g. B_FLAG).
 Upper case is not equivalent to lower case in parameter names.
 
       string name "character string"          or

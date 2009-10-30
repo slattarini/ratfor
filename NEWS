@@ -2,6 +2,10 @@ List of user-visible changes of Public Domain Ratfor.
 
 New in XXX
 -----------
+ * Ratfor does not handle the dot character `.' as an alphanumeric
+   character anymore.  This change should have few visible consequences,
+   the most important of which is probably the fact that the `define'
+   builtin can't anymore define symbolic constants containing dots.
  * Fixed a bug which prevented the automatical enabling of warnings
    flags in the C compiler.
 
@@ -15,7 +19,7 @@ New in 1.0m
 New in 1.0l
 -----------
  * Public Domain Ratfor uses files imported from SteLib (e.g. `maint.mk',
-   `GNUmakefile' and `ax_check_cc_flag.m4'). Some related reorganization
+   `GNUmakefile' and `ax_check_cc_flag.m4').  Some related reorganization
    and modifications have been required.
 
 New in 1.0k

@@ -126,7 +126,7 @@ is_strict_alnum(int c)
 static inline bool
 is_rat4_alpha(int c)
 {
-    if (is_strict_alpha(c) || c == UNDERLINE || c == DOLLAR || c == PERIOD)
+    if (is_strict_alpha(c) || c == UNDERLINE || c == DOLLAR)
         return true;
     else
         return false;
