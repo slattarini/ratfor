@@ -104,9 +104,12 @@ usage_error() {
 # external script or executable, it can't be a shell builtin or a
 # shell function.
 background() {
-    # The `env' ensures that cmd is an external program, not a shell
-    # function or shell builtin.
-    env "$@" &
+    # The `env' ensures that COMMAND is an external program, not a shell
+    # function or shell builtin.  The redirection `<&0' ensure that the
+    # shell keep the original stdin for COMMAND, instead of redirecting
+    # it from /dev/null (as is usually done automatically with background
+    # commands)
+    env "$@" 0<&0 &
 }
 
 # Usage: xkill SIGNUM PID
