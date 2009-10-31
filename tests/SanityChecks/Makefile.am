@@ -5,9 +5,9 @@
 # Testsuite.
 
 
-# --------------- #
-#  MISCELLANEOUS  #
-# --------------- #
+## --------------- ##
+##  MISCELLANEOUS  ##
+## --------------- ##
 
 # Might be updated later (also in included files).  Do not remove these
 # definitions.
@@ -15,9 +15,9 @@ MOSTLYCLEANFILES =
 EXTRA_DIST =
 
 
-# --------------- #
-#  LIST OF TESTS  #
-# --------------- #
+## --------------- ##
+##  LIST OF TESTS  ##
+## --------------- ##
 
 EXTRA_DIST += $(ALL_TESTS)
 
@@ -38,21 +38,21 @@ ALL_TESTS = \
 # Run all tests by default.
 TESTS = $(ALL_TESTS)
 
-# --------------------------------- #
-#  TESTSUITE ENVIRONMENT AND SETUP  #
-# --------------------------------- #
+## --------------------------------- ##
+##  TESTSUITE ENVIRONMENT AND SETUP  ##
+## --------------------------------- ##
 
 include ../TestsEnvironment.am
 
-# ------------------- #
-#  TESTSUITE CLEANUP  #
-# ------------------- #
+## ------------------- ##
+##  TESTSUITE CLEANUP  ##
+## ------------------- ##
 
 include ../LocalCleanup.am 
 
-# ----------------------------------------- #
-#  CONSISTENCY CHECKS ON THE LIST OF TESTS  #
-# ----------------------------------------- #
+## ----------------------------------------- #à
+##  CONSISTENCY CHECKS ON THE LIST OF TESTS  ##
+## ----------------------------------------- ##
 
 include ../CheckTestsList.am
 check-local: check-list-of-tests

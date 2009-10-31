@@ -3,9 +3,9 @@
 ##
 # Makefile for the tests in the Ratfor Testsuite.
 
-# --------------- #
-#  MISCELLANEOUS  #
-# --------------- #
+## --------------- ##
+##  MISCELLANEOUS  ##
+## --------------- ##
 
 # WARNING: the order *is* significant here!
 SUBDIRS = TestsAux SanityChecks .
@@ -15,9 +15,9 @@ SUBDIRS = TestsAux SanityChecks .
 MOSTLYCLEANFILES =
 EXTRA_DIST =
 
-# --------------- #
-#  LIST OF TESTS  #
-# --------------- #
+## --------------- ##
+##  LIST OF TESTS  ##
+## --------------- ##
 
 EXTRA_DIST += $(ALL_TESTS)
 
@@ -173,9 +173,9 @@ ALL_TESTS = \
 # Run all tests by default.
 TESTS = $(ALL_TESTS)
 
-# ---------------------------------------- #
-#  REQUIREMENTS AND DEPENDENCIES OF TESTS  #
-# ---------------------------------------- #
+## ---------------------------------------- ##
+##  REQUIREMENTS AND DEPENDENCIES OF TESTS  ##
+## ---------------------------------------- ##
 
 EXTRA_DIST += integers-many-bases.data
 integers-many-bases.log: integers-many-bases.data
@@ -185,21 +185,21 @@ EXTRA_DIST += break-next-fail.data
 break-fail.test: break-next-fail.data
 next-fail.test: break-next-fail.data
 
-# --------------------------------- #
-#  TESTSUITE ENVIRONMENT AND SETUP  #
-# --------------------------------- #
+## --------------------------------- ##
+##  TESTSUITE ENVIRONMENT AND SETUP  ##
+## --------------------------------- ##
 
 include TestsEnvironment.am
 
-# ------------------- #
-#  TESTSUITE CLEANUP  #
-# ------------------- #
+## ------------------- ##
+##  TESTSUITE CLEANUP  ##
+## ------------------- ##
 
 include LocalCleanup.am 
 
-# ----------------------------------------- #
-#  CONSISTENCY CHECKS ON THE LIST OF TESTS  #
-# ----------------------------------------- #
+## ----------------------------------------- ##
+##  CONSISTENCY CHECKS ON THE LIST OF TESTS  ##
+## ----------------------------------------- ##
 
 include CheckTestsList.am
 check-local: check-list-of-tests
