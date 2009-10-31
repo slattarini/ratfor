@@ -110,7 +110,7 @@ echo "$xline" >>exp
 
 cat tst.r
 
-run_command "$RATFOR" tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
 run_command timer -t 15 ./tst.exe || testcase_FAIL

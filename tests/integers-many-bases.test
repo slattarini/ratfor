@@ -62,7 +62,7 @@ cat "$input" | (
 : TEST DATA READ
 
 cat tst.r
-run_command "$RATFOR" tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FAIL
 test -s stderr && testcase_FAIL
 $GREP -v '^[cC]' <stdout >got
 makeup got exp

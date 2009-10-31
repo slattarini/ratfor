@@ -26,7 +26,7 @@ EOF
 cat tst.r
 cat foo.r
 
-run_command "$RATFOR" tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FAIL
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
 
 cat exp

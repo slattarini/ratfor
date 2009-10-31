@@ -18,7 +18,7 @@ EOF
 
 echo 'ALIVE' > exp
 
-run_command -e 1 "$RATFOR" tst.r || testcase_FAIL
+run_RATFOR -e 1 tst.r || testcase_FAIL
 $FGREP 'illegal right brace' stderr || testcase_FAIL
 $FGREP 'illegal next' stderr || testcase_FAIL
 mv stdout tst.f

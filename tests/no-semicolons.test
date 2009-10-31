@@ -28,7 +28,7 @@ DoNothing
 StillDoNothing
 EOF
 
-run_command "$RATFOR" tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FAIL
 $FGREP ';' stdout && testcase_FAIL
 
 testcase_PASS

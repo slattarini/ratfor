@@ -11,12 +11,12 @@ while(true) {
 }
 EOF
 
-run_command "$RATFOR" -l 100 tst.r || testcase_FAIL
+run_RATFOR -l 100 tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout >stdout1
 $GREP '^100 ' stdout1 || testcase_FAIL
 $EGREP -v '^( |10[0-9])' stdout2 && testcase_FAIL
 
-run_command "$RATFOR" -l 60000 tst.r || testcase_FAIL
+run_RATFOR -l 60000 tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout >stdout2
 $GREP '^60000 ' stdout2 || testcase_FAIL
 $EGREP -v '^( |6000[0-9])' stdout2 && testcase_FAIL

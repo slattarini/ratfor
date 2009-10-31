@@ -13,19 +13,19 @@ echo "foo; %$vtext" >tst3.r
 echo "define bar quux; %$vtext" >tst4.r
 (echo "%$vtext2"; echo "foo is safe") >tst5.r
 
-run_command timer -t 5 "$RATFOR" tst1.r || testcase_FAIL
+run_RATFOR tst1.r || testcase_FAIL
 mv stdout stdout1
 $GREP "$vtext" stdout1 && testcase_FAIL
 
-run_command timer -t 5 "$RATFOR" tst2.r || testcase_FAIL
+run_RATFOR tst2.r || testcase_FAIL
 mv stdout stdout3
 $GREP "^$vtext$" stdout3 || testcase_FAIL
 
-run_command timer -t 5 "$RATFOR" tst4.r || testcase_FAIL
+run_RATFOR tst4.r || testcase_FAIL
 mv stdout stdout4
 $GREP "^$vtext$" stdout4 || testcase_FAIL
 
-run_command timer -t 5 "$RATFOR" tst5.r || testcase_FAIL
+run_RATFOR tst5.r || testcase_FAIL
 mv stdout stdout5
 $GREP "^$vtext2$" stdout5 || testcase_FAIL
 $GREP "foo is safe" stdout5 || testcase_FAIL

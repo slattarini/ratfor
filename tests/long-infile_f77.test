@@ -39,7 +39,7 @@ $AWK </dev/null >>exp-t "BEGIN {
     }
 }"
 
-run_command "$RATFOR" -l $startlab tst.r || testcase_FAIL
+run_RATFOR -l $startlab tst.r || testcase_FAIL
 mv stdout tst.f
 
 run_F77 tst.f || testcase_FAIL

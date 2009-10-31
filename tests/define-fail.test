@@ -10,7 +10,7 @@ baddef() {
     tcnt=`expr $tcnt + 1` || testcase_HARDERROR
     echo "$1" > tst$tcnt.r
     cat tst$tcnt.r
-    run_command -e 1 "$RATFOR" tst$tcnt.r || {
+    run_RATFOR -e 1 tst$tcnt.r || {
         { set +x; } 2>/dev/null
         echo " **!!! ERROR !!!**" >&2
         echo " *** Unexpected success on input \`$1'" >&2

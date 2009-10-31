@@ -45,9 +45,9 @@ inject_line_continuations <tst.r >tst_.r
 cat tst.r
 cat tst_.r
 
-run_command timer -t 5 "$RATFOR" tst.r || testcase_HARDERROR
+run_RATFOR tst.r || testcase_HARDERROR
 mv stdout exp
-run_command timer -t 5 "$RATFOR" tst_.r || testcase_FAIL
+run_RATFOR tst_.r || testcase_FAIL
 mv stdout got
 
 cat exp

@@ -74,17 +74,27 @@ Writing test cases
   Use the subroutine `run_command' if you need to run a program to later
   analyze its standard output and/or standard error.
 
+  When running the ratfor preprocessor, use the subroutine `run_RATFOR'
+  instead of directly calling $RATOR.  For example, use:
+    run_RATFOR -- [OPTIONS] ARGS
+  instead of:
+    $RATFOR [OPTIONS] ARGS
+  or even of:
+    run_command $RATFOR [OPTIONS] [ARGS]
+  See the documentation of run_RATFOR for more information.
+
   When running the Fortran 77 compiler, use the subroutine `run_F77'
   instead of directly calling $F77.  For example, use:
     run_F77 -- [OPTIONS] ARGS
   instead of:
     $F77 [OPTIONS] ARGS
-  or:
+  or even of:
     run_command $F77 [OPTIONS] [ARGS]
   Or, if you must compile only one source file (the usual case) just use:
     run_F77 foo.f
   The use of run_F77 is meant to facilitate working around possible bugs
-  in supported Fortran 77 compilers.
+  in supported Fortran 77 compilers.  See the documentation of run_F77 for
+  more information.
 
   Do not use the Fortran builtin `stop', since some compilers has bugs
   which can lead to an incorrect behaviour of that builtin (e.g. binaries

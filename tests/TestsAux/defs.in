@@ -365,6 +365,45 @@ run_F77() {
     run_command $run77_opts -- "$F77" "$run77_haltf" ${1+"$@"}
 }
 
+# run_RATFOR [-e STATUS] [-m] [-t TIMEOUT] [--] [ARGUMENTS..]
+# -----------------------------------------------------------
+# Wrapper around `run_command $RATFOR', to work around possible problems
+# in the execution of the ratfor preprcessor.  In particular, we keep
+# ratfor controlled by the `timer' script, so that even if it hangs, it
+# won't cause the whole testsuite to hang (this happened too many times
+# already).
+run_RATFOR() {
+    # NOTE: all internal variables used here starts with the `run4'
+    # prefix, to minimize possibility of name clashes with global
+    # variables defined in user code.
+    set +x  # xtrace verbosity stops here
+    run4_opts=''  # options to be passed to run_command
+    run4_timeout=5  # the timeout given to ratfor
+    while test $# -gt 0; do
+        case "$1" in
+            -e) run4_opts="$run4_opts $1 $2"; shift;;
+            -m) run4_opts="$run4_opts $1";;
+            -t) run4_timeout=$2; shift;;
+            --) shift; break;;
+            # Be more liberal about unrecognized options: stop parsing
+            # and pass the rest of arguments and options verbatim to
+            # COMMAND.  This makes the use of run_RATFOR more convenient.
+            -*) break;;
+             *) break;;
+        esac
+        shift
+    done
+    run4_timer=$testaux_builddir/timer  # the timer script
+    if test ! -f "$run4_timer"; then
+        testcase_HARDERROR "\`timer' script not found"
+    elif test ! -x "$run4_timer"; then
+        testcase_HARDERROR "\`timer' script not executable"
+    fi
+    set -x # xtrace verbosity restart here
+    run_command $run4_opts -- "$run4_timer" -t "$run4_timeout" -- \
+                "$RATFOR" ${1+"$@"}
+}
+
 # Testsuite utilities have always precedence over system ones.
 must_be_directory "$testaux_srcdir"
 PATH=${testaux_srcdir}${PATH+":$PATH"}

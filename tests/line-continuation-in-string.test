@@ -49,7 +49,7 @@ EOF
 
 cat tst.r
 
-run_command "$RATFOR" tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FAIL
 $SED -e '/^[cC]/d' \
      -e "s/$ws1p/ /g" \
      -e "s/^$ws0p//" \

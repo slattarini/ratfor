@@ -26,8 +26,9 @@ my_run_rat4() {
     n=$1
     shift
     cat tst-$n.r
-    run_command $* "$RATFOR" tst-$n.r || testcase_FAIL
-    mv stdout stdout.$n
+    run_RATFOR $* -- tst-$n.r || testcase_FAIL
+    $SED -e '/^[cC]/d' stdout >stdout.$n
+    rm -f stdout
     mv stderr stderr.$n
 }
 
@@ -42,7 +43,9 @@ my_run_rat4 2-2 -e 0 || testcase_FAIL
 $FGREP upper stdout.2-2 || testcase_FAIL
 
 my_run_rat4 3 -e 0 || testcase_FAIL
-$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout.3 >got3
+ws_normalize <stdout.3 | grep '.' >got3
+cat exp3
+cat got3
 $DIFF_U exp3 got3 || testcase_FAIL
 
 testcase_PASS

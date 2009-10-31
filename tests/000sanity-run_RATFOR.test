@@ -1,0 +1,83 @@
+#!/bin/sh
+
+# Testsuite sanity check: check the `run_RATFOR' subroutine.
+
+. ./TestsAux/defs.sh || exit 99
+
+cwd=`pwd`
+
+cat >tst.sh <<'EOF'
+#!/bin/sh
+e=0
+for x
+do
+    case $x in
+        E=*) e=`echo "$x" | sed 's/^E=//'`;;
+          *) echo x"$x" | sed 's/^x//';;
+    esac
+done
+cat
+exit $e
+EOF
+chmod +x tst.sh
+
+cat >tst.txt <<'EOF'
+line 1
+line  2
+LINE 3
+EOF
+
+cat >xsleep.sh <<'EOF'
+#!/bin/sh
+t=${1-3}
+sleep $t
+echo xsleep success
+EOF
+chmod +x xsleep.sh
+
+cat >xsleep.txt <<'EOF'
+xsleep success
+EOF
+
+cat tst.sh
+cat tst.txt
+
+cat xsleep.sh
+cat xsleep.txt
+
+RATFOR=$cwd/tst.sh
+
+exec </dev/null
+
+run_RATFOR \
+  && run_RATFOR -e 0 \
+  && run_RATFOR -e 1 -- E=1 \
+  && run_RATFOR -e 2 E=2 \
+  && run_RATFOR -k -w \
+  && run_RATFOR -e 33 -k E=33 -e 11 \
+  && $GREP '^-k$' stdout \
+  && $GREP '^-e$' stdout \
+  && $GREP '^11$' stdout \
+|| testcase_FAIL
+
+run_RATFOR <tst.txt || testcase_FAIL
+$DIFF_U tst.txt stdout || testcase_FAIL
+
+exec <tst.txt
+run_RATFOR || testcase_FAIL
+$DIFF_U tst.txt stdout || testcase_FAIL
+exec </dev/null
+
+RATFOR=$cwd/xsleep.sh
+
+run_RATFOR || testcase_FAIL
+$DIFF_U xsleep.txt stdout || testcase_FAIL
+
+run_RATFOR -e 254 -t 1 && $FGREP 'timed out' stderr || testcase_FAIL
+run_RATFOR -e 254 -- 7 && $FGREP 'timed out' stderr || testcase_FAIL
+
+# -*-*-
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

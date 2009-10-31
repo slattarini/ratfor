@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Check that ratfor works on very long input files
+# Check that ratfor works on very long input files.
 
 . ./TestsAux/defs.sh || exit 99
 
@@ -16,8 +16,14 @@ $AWK </dev/null >tst.r "BEGIN {
 }"
 
 $GREP -v '^#' <tst.r | ws_normalize >exp
+wc -l tst.r
+wc -c tst.r
+sed '22q' tst.r
 
-run_command "$RATFOR" -l $startlab tst.r || testcase_FAIL
+# Ratfor might require quite a long time to process such a large file,
+# so be sure to leave it some times (say 30 seconds) before considering
+# it timed out (default with run_RATFOR would be 5 or 10 seconds).
+run_RATFOR -t 30 -- -l $startlab tst.r || testcase_FAIL
 grep -v '^[cC]' <stdout | ws_normalize >got
 
 $DIFF_U exp got || testcase_FAIL

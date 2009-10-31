@@ -24,7 +24,7 @@ EOF
 
 $SED 's/^ *\([^ ]*\)  *\([^ ]*\) *$/  .\2. \2/' <map >exp
 
-run_command "$RATFOR" map || testcase_FAIL
+run_RATFOR map || testcase_FAIL
 $GREP -v '^[cC]' stdout | ws_normalize | $SED 's/^/  /' > got
 
 cat exp
