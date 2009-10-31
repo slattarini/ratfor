@@ -1,5 +1,5 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2009-10-20 19:56:11 +0200.  DO NOT EDIT!
+## Copied from SteLib at 2009-10-31 18:53:34 +0100.  DO NOT EDIT!
 ## Usually included by tests/Makefile.am
 
 # temporary files used in the `check-list-of-tests' target
@@ -14,8 +14,9 @@ check-list-of-tests:
 	 LANG=C; export LANG; \
 	 LANGUAGE=C; export LANGUAGE; \
 	 LC_ALL=C; export LC_ALL; \
-	 echo "****--------------------------------------------"; \
-	 echo "** Checking consistency of list of tests..."; \
+	 echo '****--------------------------------------------------------'; \
+	 echo '** Checking consistency of list of tests in directory'; \
+	 echo '**  $(abs_srcdir) ...'; \
 	 for t in $(ALL_TESTS); do \
 	    echo "$$t"; \
 	 done > $(tmk); \
@@ -32,7 +33,7 @@ check-list-of-tests:
 	    cat $(tdiffs) >&2; \
 	    e=1; \
 	 fi; \
-	 echo "****--------------------------------------------"; \
+	 echo '****--------------------------------------------------------'; \
 	 rm -f $(tmk) $(tfs) $(tdiffs); \
 	 exit $$e;
 
