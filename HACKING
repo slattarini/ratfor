@@ -68,6 +68,10 @@ C Coding Style
 
   Mostly K&R style.
 
+  Use indentation of four character.
+
+  Do not use tab characters in C headers and source files, *ever*.
+
   For variables: do not use CamelCase or mixedCase, but use only
   names_with_undercores.
 
@@ -78,8 +82,6 @@ C Coding Style
   Do not use typedefs (apart the already exising typedef `bool' for
   booleans): it's better know the real type of what is being declared
   and used, even if that means a bit more typing.
-
-  Do not use tab characters in C headers and source files, *ever*.
 
   Preprocessor statements (#if and such) *must* start at column one. To
   indent preprocessor directives you should put the # at the beginning
