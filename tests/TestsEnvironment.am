@@ -11,9 +11,9 @@ TEST_EXTENSIONS = .test
 TEST_LOG_COMPILER = env # because we need to pass env vars to test scripts
 AM_TEST_LOG_FLAGS = # will be updated later
 
-# To improve the overall speed of our slow testsuite, let it know that
-# it is already being run with the proper $SHELL (as found by configure),
-# so that the test scripts won't re-execute themselves with $SHELL
+# We must ensure that code in defs.sh does not force the test scripts to
+# be re-executed witth $CONFIG_SHELL, otherwise the user cannot override
+# the shell which runs the test scripts by properly setting $(TEST_SHELL).
 AM_TEST_LOG_FLAGS += RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL='yes'
 
 # To run the test scripts with the "better" shell available, while leaving
