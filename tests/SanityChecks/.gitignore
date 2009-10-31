@@ -1,0 +1,6 @@
+/*.log
+/*.log-t
+/*.dir
+
+/Makefile
+/Makefile.in

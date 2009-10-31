@@ -160,7 +160,12 @@ AX_PROG_DIFF_U
 # Make GNUmakefile available also in VPATH builds.
 AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
-AC_CONFIG_FILES([Makefile tests/Makefile tests/TestsAux/Makefile])
+AC_CONFIG_FILES([
+    Makefile
+    tests/Makefile
+    tests/TestsAux/Makefile
+    tests/SanityChecks/Makefile
+])
 
 # Be sure to make the generated files readonly, to avoid that absent-minded
 # developers modify them instead of the files they are generated from.

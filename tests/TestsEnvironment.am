@@ -1,0 +1,24 @@
+## -*- Makefile.am -*-
+## Makefile fragment, included by Makefile.am
+
+# All the tests scripts should and with one of these extensions.
+TEST_EXTENSIONS = .test
+
+# Since we are using the new the new `parallel-tests' functionality
+# of automake, use $(TEST_LOG_COMPILER) instead of $(TESTS_ENVIRONMENT),
+# as it is the new recommended way to go, $(TESTS_ENVIRONMENT) being
+# now tought as user-reserved.
+TEST_LOG_COMPILER = env # because we need to pass env vars to test scripts
+AM_TEST_LOG_FLAGS = # will be updated later
+
+# To improve the overall speed of our slow testsuite, let it know that
+# it is already being run with the proper $SHELL (as found by configure),
+# so that the test scripts won't re-execute themselves with $SHELL
+AM_TEST_LOG_FLAGS += RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL='yes'
+
+# To run the test scripts with the "better" shell available, while leaving
+# the possibility to the user to override the choice.
+TEST_SHELL = $(SHELL) # user-overridable
+AM_TEST_LOG_FLAGS += $(TEST_SHELL)
+
+## vim: ft=automake noet sw=4 ts=4

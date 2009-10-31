@@ -3,27 +3,23 @@
 ##
 # Makefile for the tests in the Ratfor Testsuite.
 
-
 # --------------- #
 #  MISCELLANEOUS  #
 # --------------- #
 
-SUBDIRS = TestsAux
+# WARNING: the order *is* significant here!
+SUBDIRS = TestsAux SanityChecks .
 
 # Might be updated later (also in included files).  Do not remove these
 # definitions.
 MOSTLYCLEANFILES =
 EXTRA_DIST =
 
-
 # --------------- #
 #  LIST OF TESTS  #
 # --------------- #
 
-
 EXTRA_DIST += $(ALL_TESTS)
-
-TEST_EXTENSIONS = .test
 
 # Defined at configure time.
 XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
@@ -33,11 +29,6 @@ XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 # with consistency checks done by  the `check-list-of-tests' target defined
 # in `CheckTestList.am'.
 ALL_TESTS = \
-  000sanity-run_F77.test \
-  000sanity-run_RATFOR.test \
-  000sanity-run_command.test \
-  000sanity-timer-cc.test \
-  000sanity-timer.test \
   balanced-parens.test \
   break-fail.test \
   break_f77.test \
@@ -182,7 +173,6 @@ ALL_TESTS = \
 # Run all tests by default.
 TESTS = $(ALL_TESTS)
 
-
 # ---------------------------------------- #
 #  REQUIREMENTS AND DEPENDENCIES OF TESTS  #
 # ---------------------------------------- #
@@ -199,46 +189,13 @@ next-fail.test: break-next-fail.data
 #  TESTSUITE ENVIRONMENT AND SETUP  #
 # --------------------------------- #
 
-# Since we are using the new the new `parallel-tests' functionality
-# of automake, use $(TEST_LOG_COMPILER) instead of $(TESTS_ENVIRONMENT),
-# as it is the new recommended way to go, $(TESTS_ENVIRONMENT) being
-# now tought as user-reserved.
-TEST_LOG_COMPILER = env # because we need to pass env vars to test scripts
-AM_TEST_LOG_FLAGS = # will be updated later
-
-# To improve the overall speed of our slow testsuite, let it know that
-# it is already being run with the proper $SHELL (as found by configure),
-# so that the test scripts won't re-execute themselves with $SHELL
-AM_TEST_LOG_FLAGS += RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL='yes'
-
-# To run the test scripts with the "better" shell available, while leaving
-# the possibility to the user to override the choice.
-TEST_SHELL = $(SHELL) # user-overridable
-AM_TEST_LOG_FLAGS += $(TEST_SHELL)
-
+include TestsEnvironment.am
 
 # ------------------- #
 #  TESTSUITE CLEANUP  #
 # ------------------- #
 
-# Remove any directory left behind the the test scripts (this is needed
-# especially if the shell used in test des not properly support the `-e'
-# flag and the trap of `EXIT' signal). The `find' command is needed in
-# case the test directory or any of its subdirectories was made unwritable
-# by the testsuite.
-clean-local-testdirs:
-	@set -e; \
-	 vrun() { echo " $$*"; "$$@"; }; \
-	 set x *.dir; shift; \
-	 if test "$$#,$$1" = "1,*.dir"; then \
-	   : there is no test directory to clean; \
-	 else \
-	   vrun find "$$@" -type d '!' -perm -200 -exec chmod u+w {} ';'; \
-	   vrun rm -rf "$$@" || exit 1; \
-	 fi
-.PHONY: clean-local-testdirs
-clean-local: clean-local-testdirs
-
+include LocalCleanup.am 
 
 # ----------------------------------------- #
 #  CONSISTENCY CHECKS ON THE LIST OF TESTS  #
@@ -246,6 +203,5 @@ clean-local: clean-local-testdirs
 
 include CheckTestsList.am
 check-local: check-list-of-tests
-
 
 ## vim: ft=automake noet sw=4 ts=4
