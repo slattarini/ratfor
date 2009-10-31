@@ -59,7 +59,7 @@ set -e
 
 #
 # By default, the test scripts are run with the /bin/sh shell, but this
-# might be a rather limited shell. And in this case, configure probably
+# might be a rather limited shell.  And in this case, configure probably
 # detected a better shell and saved it in the AC_SUBST'd variable $SHELL.
 # So let's by default rerun with the shell in $SHELL, just to be safe.
 # However, if the user know in advance that the shell used to run the
@@ -259,9 +259,9 @@ rm_rf() {
 # shell builtin.
 # If STATUS is numeric, the exit value of COMMAND must match it exactly.
 # If STATUS is "FAIL" or "FAILURE", then any exit value of COMMAND *but 0*
-# is acceptable. If STATUS is "IGNORE" or "IGNORED", any exit value of
+# is acceptable.  If STATUS is "IGNORE" or "IGNORED", any exit value of
 # COMMAND is acceptable, and run_command returns with success regardless
-# of that value. Default STATUS is `0'.
+# of that value.  Default STATUS is `0'.
 run_command() {
     set +x # xtrace verbosity temporarly disabled in this function
     run_exitcode_expected=0
