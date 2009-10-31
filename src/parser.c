@@ -15,7 +15,7 @@
  */
 
 /* shared among unstak() and parser() */
-static int sp;
+static int sp = 0;
 static int labval[MAXSTACK];
 static int lextyp[MAXSTACK];
 
