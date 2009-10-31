@@ -119,6 +119,56 @@ C Coding Style
     ... /* content of header file here */
     #endif /* RAT4_FOO_H */
 
+  It's ok, and even recommended, to enclose statements in curly brackets
+  to increase readability, even when this is not strictly necessary.
+  For example, instead of this:
+    ...
+    /* BAD */
+    for (i = 0; i < SIZE; i++)
+        /* init array */
+        a[i] = i + 1
+    ...
+  do this:
+    ...
+    /*  GOOD */
+    for (i = 0; i < SIZE; i++) {
+        /* init array */
+        a[i] = i + 1
+    }
+    ...
+  and instead of this:
+    ...
+    /* MIGHT BE CONFUSING */
+    if (x > 3)
+        error()
+    else
+        y++:
+    if (y > 4)
+        do_something();
+    ...
+  do this:
+    ...
+    /* BETTER */
+    if (x > 3) {
+        error()
+    } else {
+        y++:
+    }
+    if (y > 4)
+        do_something();
+    ...
+  On the contrary, there's no need of adding curly brackets here:
+    ...
+    /* ACCEPTABLE */
+    for (i = 0; i < SIZE; i++)
+        if (a[i] < 0)
+            a[i] = 0
+    if (x > 3)
+        error()
+    ...
+    but adding them won't hurt either, unless it hampers readability
+    (e.g. by making the body of a function too long).
+
 
 C++ Compatibility
 -----------------
