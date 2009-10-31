@@ -159,14 +159,12 @@ parse(void)
                 /* end of statement - prepare to unstack */
                 switch(token) {
                     case RBRACE:
-                        if (lextyp[sp] == LBRACE) {
+                        if (lextyp[sp] == LBRACE)
                             sp--;
-                        } else if (lextyp[sp] == LEXSWITCH) {
+                        else if (lextyp[sp] == LEXSWITCH)
                             swend(labval[sp--]);
-                        }
-                        else {
+                        else
                             synerr("illegal right brace.");
-                        }
                         break;
                     case LEXOTHER:
                         otherstmt(lexstr);
