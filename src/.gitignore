@@ -3,3 +3,4 @@
 *.obj
 ratfor
 lexer.c
+lexer.c-t
