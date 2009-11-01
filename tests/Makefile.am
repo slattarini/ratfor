@@ -131,7 +131,6 @@ ALL_TESTS = \
   outfile-overwrite.test \
   outfile-unwritable-fail.test \
   outfile.test \
-  rel-transl.test \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
@@ -157,6 +156,7 @@ ALL_TESTS = \
   synerr-nonfatal.test \
   synerr-nonfatal_f77.test \
   synerr-stdin.test \
+  translate-relationals.test \
   usage-option-missing-argument.test \
   usage-option-unknown.test \
   usage-too-many-args.test \
