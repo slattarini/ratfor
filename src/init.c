@@ -12,14 +12,17 @@
 
 #ifdef __cplusplus
 
-/* DEFINE HERE global variables DECLARED IN "rat4-global.h".
+/* Define here ALL the global variables declared in "rat4-global.h".
    This is REQUIRED by C++ compilers. */
 
-/* text of current function name */
-char current_function_name[MAXFUNCNAME];
+/* text of current subprogram (function or subroutine) name */
+char current_subprogram_name[MAXFUNCNAME];
 
 /* true if comments should be kept, false otherwise */
 bool keep_comments;
+
+/* type of current subprogram (function, subroutine, everithing else) */
+enum subprg_t current_subprogram_type;
 
 /* level of file inclusion; init = 1 */
 int inclevel;
@@ -48,7 +51,8 @@ init(int x_startlab, int x_keep_comments, const char *x_filename)
     filename[0] = x_filename;   /* filename of first file */
     infile[0] = x_infile;       /* file handle of first file */
     keep_comments = x_keep_comments;
-    current_function_name[0] = EOS;
+    current_subprogram_name[0] = EOS;
+    current_subprogram_type = SUBPRG_NONE;
     set_starting_label(x_startlab);
 }
 

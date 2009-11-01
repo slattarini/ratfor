@@ -19,9 +19,11 @@
  * PRIVATE VARIABLES.
  */
 
-static const char KEYWORD_INCLUDE[] = "include";
-static const char KEYWORD_FUNCTION[] = "function";
-static const char KEYWORD_DEFINE[] = "define";
+static const char KEYWORD_FUNCTION[]    = "function";
+static const char KEYWORD_SUBROUTINE[]  = "subroutine";
+static const char KEYWORD_END[]         = "end";
+static const char KEYWORD_INCLUDE[]     = "include";
+static const char KEYWORD_DEFINE[]      = "define";
 
 
 /*
@@ -471,6 +473,36 @@ deftok(char token[], int toksiz, FILE *fp)
     return(t);
 }
 
+/* Read function or subroutine name, save it in global variable
+   `current_subprogram_name' */
+static void
+get_subprog_name(enum subprg_t subprogram_type, FILE *fp)
+{
+    const char *subprogram_str = NULL;
+    int t;
+
+    switch (subprogram_type) {
+        case SUBPRG_FUNC:
+            subprogram_str = "function";
+            break;
+        case SUBPRG_SUBR:
+            subprogram_str = "subroutine";
+            break;
+        default: /* can't happen */
+            abort();
+            break;
+    }
+    skip_blanks(fp);
+    t = deftok(current_subprogram_name, MAXFUNCNAME, fp);
+    put_back_string(current_subprogram_name);
+    if (is_stmt_ending(t))
+        synerr("missing %s name.", subprogram_str);
+    else if (t != TOKT_ALPHA)
+        synerr("invalid %s name `%s'", subprogram_str,
+               current_subprogram_name);
+    put_back_char(BLANK);
+}
+
 /* Open path and push it on the input files stack. Deal with errors. */
 /* XXX: re-add support for quoted filenames, sooner or later */
 static void
@@ -535,16 +567,15 @@ get_token(char token[], int toksiz)
     while (inclevel >= 0) {
         while ((tok = deftok(token, toksiz, infile[inclevel])) != EOF) {
             if (STREQ(token, KEYWORD_FUNCTION)) {
-                skip_blanks(infile[inclevel]);
-                t = deftok(current_function_name, MAXFUNCNAME,
-                           infile[inclevel]);
-                put_back_string(current_function_name);
-                if (is_stmt_ending(t))
-                    synerr("missing function name.");
-                else if (t != TOKT_ALPHA)
-                    synerr("invalid function name `%s'",
-                           current_function_name);
-                put_back_char(BLANK);
+                get_subprog_name(SUBPRG_FUNC, infile[inclevel]);
+                current_subprogram_type = SUBPRG_FUNC;
+                return(tok);
+            } else if (STREQ(token, KEYWORD_SUBROUTINE)) {
+                get_subprog_name(SUBPRG_SUBR, infile[inclevel]);
+                current_subprogram_type = SUBPRG_SUBR;
+                return(tok);
+            } else if (STREQ(token, KEYWORD_END)) {
+                current_subprogram_type = SUBPRG_NONE;
                 return(tok);
             }
             if (!STREQ(token, KEYWORD_INCLUDE))

@@ -87,6 +87,13 @@
 #  endif /* !__cplusplus */
 #endif /* HAVE_STDBOOL_H */
 
+/* Enumeration representing possible types of subprograms in Fortran. */
+enum subprg_t {
+    SUBPRG_FUNC, /* function */
+    SUBPRG_SUBR, /* subroutine */
+    SUBPRG_NONE  /* everything else */
+};
+
 /*
  * We cannot use the <ctype.h> macros like `isalpha()', `isblank()',
  * `isdigit()', etc, since they are locale-dependent.  So we define our

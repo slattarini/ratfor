@@ -3,8 +3,12 @@
 
 #include "rat4-common.h"
 
-/* text of current function name */
-C_DECL char current_function_name[MAXFUNCNAME];
+/* type of current subprogram (function, subroutine, everything else) */
+C_DECL enum subprg_t current_subprogram_type;
+
+/* text of current subprogram (function or subroutine) name (it should
+   be empty outside functions and subroutines) */
+C_DECL char current_subprogram_name[MAXFUNCNAME];
 
 /* true if comments should be kept, false otherwise */
 C_DECL bool keep_comments;

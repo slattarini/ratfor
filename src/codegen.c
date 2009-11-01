@@ -462,6 +462,7 @@ void repcode(int *lab)
 }
 
 /* retcode - generate code for return */
+/* TODO: error if arg is given to `return' in subroutine */
 void
 retcode(void)
 {
@@ -471,7 +472,7 @@ retcode(void)
     if (!is_stmt_ending(t) && t != RBRACE) {
         put_back_string(token);
         outtab();
-        outstr(current_function_name);
+        outstr(current_subprogram_name);
         outch(EQUALS);
         eatup();
         outdon();
