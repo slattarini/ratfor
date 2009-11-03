@@ -6,6 +6,7 @@
  *
  */
 
+/* TODO: make this an enum */
 #define LEXBREAK        10
 #define LEXDIGITS       11
 #define LEXDO           12
