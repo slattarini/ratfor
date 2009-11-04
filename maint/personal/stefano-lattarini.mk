@@ -19,7 +19,7 @@ ifeq ($(stefano-lattarini_uname),Linux)
   stefano-lattarini_devel-dir := $(HOME)/devel/linux
   stefano-lattarini_have-recognized-uname := yes
 
-  # Fortran compilers to be used by the reatfor testsuite, when doing a
+  # Fortran compilers to be used by the ratfor testsuite, when doing a
   # strict-distcheck.
   strict_distcheck_f77_compilers = \
     NONE \
@@ -66,7 +66,7 @@ ifeq ($(stefano-lattarini_uname),FreeBSD)
 
   stefano-lattarini_have-recognized-uname := yes
 
-  # Fortran compilers to be used by the reatfor testsuite, when doing a
+  # Fortran compilers to be used by the ratfor testsuite, when doing a
   # strict-distcheck.
   strict_distcheck_f77_compilers = \
     NONE \
