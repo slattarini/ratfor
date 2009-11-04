@@ -1,5 +1,5 @@
 #!/bin/sh
-# This file, if presen, is read by our Autoconf-generated "configure"
+# This file, if present, is read by our Autoconf-generated "configure"
 # script.
 #
 # This file is meant to be used by *maintainers only*.
