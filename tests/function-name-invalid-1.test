@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Check that ratfor complains if the keyword `function' is followed
+# by a non-alphanumeric token (basic checks).
+
+. ./TestsAux/defs.sh || exit 99
+ls -l "$srcdir"/subprog-name-invalid.sh
+. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+check_default_subprog_badnames 'function'
+
+testcase_done
+
+# vim: ft=sh ts=4 sw=4 et

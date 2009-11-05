@@ -1,0 +1,53 @@
+#!/bin/sh
+
+# Check (with f77) that processing of `return' keyword works also for
+# convoluted usages.
+
+. ./TestsAux/defs.sh || exit 99
+
+require_fortran_compiler
+
+cat >tst.r <<\EOF
+    real function rfunc1()
+        return 2.0
+    end
+    integer function ifunc2(i, j)
+        integer i, j
+        ifunc2 = i + j
+        return
+    end
+    subroutine bar()
+        write(*,10); 10 format('bar ok');
+        return
+        write(*,20); 20 format('EPIC FAIL');
+    end
+    program returnstress
+        write(*,100) rfunc1()
+        write(*,200) ifunc2(1,2)
+        write(*,200) ifunc2(3,4)
+100     format(F3.1)
+200     format(I1)
+        call bar
+        call halt
+    end
+EOF
+
+
+cat > exp <<EOF
+2.0
+3
+7
+bar ok
+EOF
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+mv stdout got
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

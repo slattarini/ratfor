@@ -62,8 +62,11 @@ ALL_TESTS = \
   for-with-empty-clauses_f77.test \
   for_f77.test \
   forever_f77.test \
-  function-name-invalid.test \
-  function-name-missing.test \
+  function-name-invalid-1.test \
+  function-name-invalid-2.test \
+  function-name-invalid-3.test \
+  function-name-missing-1.test \
+  function-name-missing-2.test \
   function-return.test \
   function-return_f77.test \
   goto_f77.test \
@@ -111,6 +114,7 @@ ALL_TESTS = \
   long-infile.test \
   long-infile_f77.test \
   nested-loops_f77.test \
+  nested-subprogram-fail.test \
   next-fail.test \
   next_f77.test \
   no-curly-brackets.test \
@@ -134,9 +138,14 @@ ALL_TESTS = \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
+  return-a-value-from-subroutine-fail.test \
   return-keyword-function-1.test \
   return-keyword-function-2.test \
+  return-keyword-function-and-subroutine.test \
   return-keyword-function_f77.test \
+  return-keyword-outside-subprogram-fail.test \
+  return-keyword-stress_f77.test \
+  return-keyword-subroutine.test \
   return-keyword-subroutine_f77.test \
   simple-assignement.test \
   startlabel-default.test \
@@ -145,6 +154,12 @@ ALL_TESTS = \
   stress1_f77.test \
   stress2_f77.test \
   stress3_f77.test \
+  subprogram-name-invalid-not-repeated.test \
+  subroutine-name-invalid-1.test \
+  subroutine-name-invalid-2.test \
+  subroutine-name-invalid-3.test \
+  subroutine-name-missing-1.test \
+  subroutine-name-missing-2.test \
   switch-fail-no-braces.test \
   switch-fail.test \
   switch-non-positive-values_f77.test \
@@ -184,6 +199,18 @@ integers-many-bases_f77.log: integers-many-bases.data
 EXTRA_DIST += break-next-fail.data
 break-fail.test: break-next-fail.data
 next-fail.test: break-next-fail.data
+
+EXTRA_DIST += subprog-name-invalid.sh
+subroutine-name-missing-1.log: subprog-name-invalid.sh
+subroutine-name-missing-2.log: subprog-name-invalid.sh
+subroutine-name-invalid-1.log: subprog-name-invalid.sh
+subroutine-name-invalid-2.log: subprog-name-invalid.sh
+subroutine-name-invalid-3.log: subprog-name-invalid.sh
+function-name-missing-1.log: subprog-name-invalid.sh
+function-name-missing-2.log: subprog-name-invalid.sh
+function-name-invalid-1.log: subprog-name-invalid.sh
+function-name-invalid-2.log: subprog-name-invalid.sh
+function-name-invalid-3.log: subprog-name-invalid.sh
 
 ## --------------------------------- ##
 ##  TESTSUITE ENVIRONMENT AND SETUP  ##

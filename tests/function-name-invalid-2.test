@@ -1,0 +1,33 @@
+#!/bin/sh
+
+# Check that ratfor complains if the keyword `function' is followed
+# by a non-alphanumeric token, even when expansion of user-defined
+# macros is involved.
+
+. ./TestsAux/defs.sh || exit 99
+ls -l "$srcdir"/subprog-name-invalid.sh
+. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+
+write_testfile() {
+    do_define BADNAME "$2"
+    do_prefix "$1 BADNAME" "${3-}"
+}
+check_default_subprog_badnames 'function'
+
+write_testfile() {
+    do_define SUBPROG "$1"
+    do_prefix "SUBPROG $2" "${3-}"
+}
+check_default_subprog_badnames 'function'
+
+write_testfile() {
+    do_define BADNAME "$2"
+    do_define SUBPROG "$1"
+    do_prefix "SUBPROG BADNAME" "${3-}"
+}
+check_default_subprog_badnames 'function'
+
+testcase_done
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,50 @@
+#!/bin/sh
+
+# Check that ratfor give proper error messages if `return' is given an
+# argument inside a subroutine.
+
+. ./TestsAux/defs.sh || exit 99
+
+$SED 's/^ *[0-9][0-9]*: *//' >tst.r <<EOF
+01: subroutine sub1 { return 1 } end
+02: subroutine sub2(); return x; end
+03: subroutine sub3()
+04:   return(0)
+05: end
+06: subroutine sub4 { 
+07:   return(1+2);
+08: } end
+09: subroutine sub5() { 
+10:   return 1 + 2;
+11: } end
+12: subroutine sub6 { return @; } end
+13: subroutine sub7 { return(.); } end
+14: fnord subroutine sub8 { return x } end
+15: foo bar subroutine sub9(); return x; end
+16: a b c 1 2 3 subroutine sub10
+17:   return x
+18: end
+EOF
+
+$AWK '{ printf("%2d:  %s\n", NR, $0) }' tst.r
+
+errmsg="return statement with argument inside a subroutine"
+err_at_line() {
+    $GREP "^tst\\.r:$1: $errmsg" stderr || testcase_FAIL
+}
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+
+err_at_line 1
+err_at_line 2
+err_at_line 4
+err_at_line 7
+err_at_line 12
+err_at_line 13
+err_at_line 14
+err_at_line 15
+err_at_line 17
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,48 @@
+#!/bin/sh
+
+# Check that ratfor does not give two times the same error messages if
+# the keyword `function' or `subroutine' are followed by a non-alphanumeric
+# token.
+
+. ./TestsAux/defs.sh || exit 99
+ls -l "$srcdir"/subprog-name-invalid.sh
+. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+e=0
+i=0
+for badname in \
+    '1' '12' '123' '1a' '123a' '1abc' '123abc' \
+    '@' '+' '-' '*' '.' ',' ':' '/' '=' '?' \
+    '(' ')' '[' ']' '{' '}' \
+    '!' '^' '~' \
+    '!=' '^=' '~=' '==' \
+    '==' '>' '>=' '<' '<=' \
+    '&' '&&' '|' '||' \
+; do
+    i=`expr $i + 1`
+    for subprogtype in 'function' 'subroutine'; do
+        tst=$i-tst-$subprogtype.r
+        stderr=$i-stderr-$subprogtype
+        stdout=$i-stdout-$subprogtype
+        echo "$subprogtype $badname" >"$tst"
+        cat "$tst"
+        run_RATFOR -e IGNORE "$tst"
+        mv stderr "$stderr"
+        mv stdout "$stdout"
+        errcount=`$FGREP "invalid $subprogtype name" "$stderr" | wc -l`
+        if test $errcount -gt 1; then
+            : "*** FAILURE ABOVE ***"
+            : Too many error messages: $errcount
+            e=1
+        fi
+    done
+done
+
+: e=$e
+case $e in
+    0) testcase_PASS;;
+    1) testcase_FAIL;;
+    *) testcase_HARDERROR;;
+esac
+
+# vim: ft=sh ts=4 sw=4 et

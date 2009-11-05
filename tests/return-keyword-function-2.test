@@ -6,20 +6,20 @@
 . ./TestsAux/defs.sh || exit 99
 
 cat >tst01.r <<EOF
-function func
+integer function func
 return 1
 EOF
 
 cat >tst02.r <<EOF
-function func { return 1 }
+character function func { return 1 }
 EOF
 
 cat >tst03.r <<EOF
-function func; return 1
+foo bar function func; return 1
 EOF
 
 cat >tst04.r <<EOF
-function func()
+100 function func()
 return 1
 EOF
 
@@ -28,12 +28,12 @@ function func@() { return 1 }
 EOF
 
 cat >tst06.r <<EOF
-function func (); return 1
+: @ && ... ! == x=y , $ _ function func ! (); return 55
 EOF
 
 cat >tst07.r <<EOF
 function func
-return 1; x = 2 + 3
+return 99; x = 2 + 3
 EOF
 
 cat >tst08.r <<EOF
@@ -42,7 +42,7 @@ return(1+(x//15+2)**2)
 EOF
 
 cat >tst09.r <<EOF
-function func
+muuu function func
 return 'qwerty'
 EOF
 
@@ -68,6 +68,7 @@ check_func_return() {
     r=`escape_for_grep "$2"`
     run_RATFOR tst$n.r || testcase_FAIL
     test ! -s stderr || testcase_FAIL
+    rm -f stderr
     mv stdout stdout$n || testcase_HARDERROR
     grep "^ *return *$" stdout$n || testcase_FAIL
     grep "^ *func *= *$r *$" stdout$n || testcase_FAIL
@@ -78,8 +79,8 @@ check_func_return 02 "1"
 check_func_return 03 "1"
 check_func_return 04 "1"
 check_func_return 05 "1"
-check_func_return 06 "1"
-check_func_return 07 "1"
+check_func_return 06 "55"
+check_func_return 07 "99"
 check_func_return 08 "(1+(x//15+2)**2)"
 check_func_return 09 "'qwerty'"
 check_func_return 10 "1 x = 2 + 3 @ 4 'str ' ***/.$"

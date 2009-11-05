@@ -1,0 +1,15 @@
+#!/bin/sh
+
+# Check that ratfor complains with a user-friendly error message even if
+# the keyword `subroutine' is followed by a relational shortand (e.g. `&&'
+# or `>=').
+
+. ./TestsAux/defs.sh || exit 99
+ls -l "$srcdir"/subprog-name-invalid.sh
+. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+check_problematic_subprog_badnames 'subroutine'
+
+testcase_done
+
+# vim: ft=sh ts=4 sw=4 et

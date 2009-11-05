@@ -1,0 +1,14 @@
+#!/bin/sh
+
+# Check that ratfor complains if the keyword `function' is not followed
+# by a function name.
+
+. ./TestsAux/defs.sh || exit 99
+ls -l "$srcdir"/subprog-name-invalid.sh
+. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+check_default_subprog_missnames 'function'
+
+testcase_done
+
+# vim: ft=sh ts=4 sw=4 et

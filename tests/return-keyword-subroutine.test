@@ -1,0 +1,55 @@
+#!/bin/sh
+
+# Check that ratfor generate proper code for `return' statement
+# in subroutine.
+
+. ./TestsAux/defs.sh || exit 99
+
+cat >tst1.r <<EOF
+subroutine subr
+return
+EOF
+
+cat >tst2.r <<EOF
+foo subroutine subr
+return
+EOF
+
+cat >tst3.r <<EOF
+subroutine subr { return }
+EOF
+
+cat >tst4.r <<EOF
+1 2 3 subroutine subr { return }
+EOF
+
+cat >tst5.r <<EOF
+! @ .. : = y/z || a == b && c < d && subroutine subr; return
+EOF
+
+cat >tst6.r <<EOF
+subroutine subr()
+return
+EOF
+
+tr '@' "$TAB" >tst7.r <<EOF
+, , subroutine subr@() { return }
+EOF
+
+cat >tst8.r <<EOF
+$TAB $TAB subroutine subr (); return
+EOF
+
+for i in 1 2 3 4 5 6 7 8; do
+    cat tst$i.r
+    run_RATFOR tst$i.r || testcase_FAIL
+    test ! -s stderr || testcase_FAIL
+    rm -f stderr
+    mv stdout stdout$i
+    grep "^ *return *$" stdout$i || testcase_FAIL
+    grep "^ *subr *=" stdout$i && testcase_FAIL
+done
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
