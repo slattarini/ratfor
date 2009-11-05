@@ -39,7 +39,10 @@ $AWK </dev/null >>exp-t "BEGIN {
     }
 }"
 
-run_RATFOR -l $startlab tst.r || testcase_FAIL
+# Ratfor might require quite a long time to process such a large file,
+# so be sure to leave it some times (say 3 minutes) before considering
+# it timed out (default with run_RATFOR would be 5 or 10 seconds).
+run_RATFOR -t 180 -- -l $startlab tst.r || testcase_FAIL
 mv stdout tst.f
 
 run_F77 tst.f || testcase_FAIL
