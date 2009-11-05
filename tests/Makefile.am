@@ -33,8 +33,10 @@ ALL_TESTS = \
   break-fail.test \
   break_f77.test \
   case-sensibility-basic.test \
+  comments-basic.test \
+  comments-keep.test \
+  comments-keep_f77.test \
   comments-no-hang.test \
-  comments.test \
   common-block.test \
   common-block_f77.test \
   data-statement.test \
@@ -99,8 +101,6 @@ ALL_TESTS = \
   infile-unreadable-fail.test \
   integers-many-bases.test \
   integers-many-bases_f77.test \
-  keepcomment.test \
-  keepcomment_f77.test \
   label-conflict.test \
   label-fail-empty-statement.test \
   label-fail-misplaced-paren.test \
