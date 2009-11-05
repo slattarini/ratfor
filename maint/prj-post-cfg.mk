@@ -11,6 +11,13 @@ strict_distcheck_configure_flags += \
   RAT4_TESTSUITE_XFAIL_TESTS='$(RAT4_TESTSUITE_XFAIL_TESTS)'
 
 #
+# The ratfor program to be used in strict-distcheck: currently, it's the
+# same ratfor determined at configure time.
+#
+
+strict_distcheck_configure_flags += RATFOR='$(RATFOR)'
+
+#
 # Fortran compilers to be used by the ratfor testsuite, when doing a
 # strict-distcheck.
 #
