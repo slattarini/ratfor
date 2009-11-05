@@ -21,8 +21,10 @@ switch-fail.test
 # relational operators (`&&', `<=', `||' etc.)
 line-continuation-automatic-relationals-raw.test
 
-# Even expressions with balanced parantheses might fail when placed at the
-# beginning of a statement.  Still no idea why.
-balanced-parens.test
+# Due to the way public domain ratfor performs translation of relational
+# shorthands, error messages involving them might sometimes result slighty
+# botched and unclear, so these tests won't pass.
+function-name-invalid-3.test
+subroutine-name-invalid-3.test
 
 # vim: ft=conf ts=4 sw=4 et

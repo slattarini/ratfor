@@ -1,4 +1,15 @@
-List of BUGS for the public domain ratfor preprocessor.
+List of BUGS for the Public Domain Ratfor preprocessor.
+
+ ---
+
+Due to the way public domain ratfor performs translation of relational
+shorthands, error messages involving them might sometimes result slighty
+botched and unclear.  For example, the following input:
+  function &&
+produced the diagnostic:
+  "invalid function name `.and.'"
+instead of the more precise one:
+  "invalid function name `&&'"
 
  ---
 
@@ -13,17 +24,6 @@ A more convoluted example:
   define SYM2 SYM3
   define SYM3 SYM1
  
- ---
-
-This is a limitation rather than a bug.
-
-The `return' keyword being used outside any function defition is not
-flagged as an error, so that at the main level a ratfor stament like:
-  return 1
-is translated to fortran code like:
-  =1
-  return
-
  ---
 
 This is not a bug but a design error in both AT&T ratfor and this

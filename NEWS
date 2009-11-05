@@ -2,6 +2,10 @@ List of user-visible changes of Public Domain Ratfor.
 
 New in XXX
 -----------
+ * The handling of the return statement has been improved and strenghened,
+   especially with reference to error messages.  For example, a return
+   statement outside a function or subroutine is now flagged as an error,
+   as is a return statement with arguments inside a subroutine.
  * Ratfor does not handle the dot character `.' as an alphanumeric
    character anymore.  This change should have few visible consequences,
    the most important of which is probably the fact that the `define'

@@ -30,6 +30,9 @@ static const char selse[]       = "else";
 static const char sendif[]      = "endif";
 static const char sgoto[]       = "goto";
 static const char sreturn[]     = "return";
+static const char sfunction[]   = "function";
+static const char ssubroutine[] = "subroutine";
+static const char send[]        = "end";
 
 
 /*
@@ -91,6 +94,54 @@ token_requires_automatic_line_continuation(int t)
     return false;
 }
 
+static const char *
+stringyfy_subprog_type(enum subprg_t subprogram_type)
+{
+    switch (subprogram_type) {
+        case SUBPRG_FUNC:
+            return("function");
+            break;
+        case SUBPRG_SUBR:
+            return("subroutine");
+            break;
+        case SUBPRG_NONE:
+            return(NULL);
+            break;
+        default: /* can't happen */
+            abort();
+            break;
+    }
+}
+
+/* peek_subprog_name - read function or subroutine name, save it in global
+ * variable `current_subprogram_name' */
+static void
+peek_subprog_name(enum subprg_t subprogram_type)
+{
+    const char *new_subprogram_str, *old_subprogram_str;
+    int t;
+
+    new_subprogram_str = stringyfy_subprog_type(subprogram_type);
+    old_subprogram_str = stringyfy_subprog_type(current_subprogram_type);
+
+    /* TODO: assert new_subprogram_str != NULL */
+
+    if (current_subprogram_type != SUBPRG_NONE) {
+        synerr("%s defined into %s body.", new_subprogram_str,
+               old_subprogram_str);
+    }
+    current_subprogram_type = subprogram_type;
+    t = get_nonblank_token(current_subprogram_name, MAXFUNCNAME);
+    put_back_string(current_subprogram_name);
+    if (is_stmt_ending(t)) {
+        synerr("missing %s name.", new_subprogram_str);
+    } else if (t != TOKT_ALPHA) {
+        synerr("invalid %s name `%s'", new_subprogram_str,
+               current_subprogram_name);
+    }
+    put_back_char(BLANK);
+}
+
 /* balpar - copy balanced paren string */
 static void
 balpar(void)
@@ -134,34 +185,42 @@ eatup(void)
     char ptoken[MAXTOK], token[MAXTOK];
     int nlpar, t;
 
-    nlpar = 0;
-    do {
+    for (nlpar = 0; nlpar >= 0; outstr(token)) {
         t = get_token(token, MAXTOK);
-        if (is_stmt_ending(t))
+        if (is_stmt_ending(t)) {
             break;
-        if (t == RBRACE || t == LBRACE) {
+        } else if (t == RBRACE || t == LBRACE) {
             put_back_string(token);
             break;
-        }
-        if (t == EOF) {
+        } else if (t == EOF) {
             synerr_eof();
             put_back_string(token);
             break;
         }
-        /* check for tokens that automatically enable a line
-         * continuation */
         if (token_requires_automatic_line_continuation(t)) {
+            /* a token that automatically enable a line continuation */
             while (is_newline(get_token(ptoken, MAXTOK)))
                 /* empty body */;
             put_back_string(ptoken);
         }
-        if (t == LPAREN)
+        /* keep track of pairs of open/closed parentheses */
+        if (t == LPAREN) {
             nlpar++;
-        else if (t == RPAREN)
+            continue;
+        } else if (t == RPAREN) {
             nlpar--;
-        outstr(token);
-
-    } while (nlpar >= 0);
+            continue;
+        }
+        /* keep track of current function/subroutine */
+        if (STREQ(token, sfunction)) {
+            peek_subprog_name(SUBPRG_FUNC);
+        } else if (STREQ(token, ssubroutine)) {
+            peek_subprog_name(SUBPRG_SUBR);
+        } else if (STREQ(token, send)) {
+            current_subprogram_name[0] = EOS;
+            current_subprogram_type = SUBPRG_NONE;
+        }
+    }
 
     if (nlpar != 0)
         synerr("unbalanced parentheses.");
@@ -194,7 +253,6 @@ outgo(int n)
     outnum(n);
     outdon();
 }
-
 
 /*
  * Public Functions.
@@ -428,8 +486,8 @@ otherstmt(char lexstr[])
 {
     xfer = false;
     outtab();
-    outstr(lexstr);
-    eatup();
+    put_back_string(lexstr);    /* so that we can eat it up again ... */
+    eatup();                    /* ... now, with the rest of the line */
     outdon();
 }
 
@@ -459,30 +517,6 @@ void repcode(int *lab)
     tlab = labgen(3);
     outcon(tlab);
     *lab = ++tlab; /* label to go on next's */
-}
-
-/* retcode - generate code for return */
-/* TODO: error if arg is given to `return' in subroutine */
-void
-retcode(void)
-{
-    char token[MAXTOK], t;
-
-    t = get_nonblank_token(token, MAXTOK);
-    if (!is_stmt_ending(t) && t != RBRACE) {
-        put_back_string(token);
-        outtab();
-        outstr(current_subprogram_name);
-        outch(EQUALS);
-        eatup();
-        outdon();
-    }
-    else if (t == RBRACE)
-        put_back_string(token);
-    outtab();
-    outstr(sreturn);
-    outdon();
-    xfer = true;
 }
 
 /* untils - generate code for until or end of repeat */
@@ -520,6 +554,40 @@ whiles(int lab)
     outgo(lab);
     ifend();
     outcon(lab+1); /* needed by e.g. break */
+}
+
+/* retcode - generate code for return */
+void
+retcode(void)
+{
+    char token[MAXTOK], t;
+
+    if (current_subprogram_type == SUBPRG_NONE) {
+        synerr("return statement outside any function or subroutine");
+        goto gen_raw_return_stmt;
+    }
+    t = get_nonblank_token(token, MAXTOK);
+    if (!is_stmt_ending(t) && t != RBRACE) {
+        put_back_string(token);
+        if (current_subprogram_type == SUBPRG_SUBR) {
+            synerr("return statement with argument inside a subroutine");
+            goto gen_raw_return_stmt;
+        } else {
+            outtab();
+            outstr(current_subprogram_name);
+            outch(EQUALS);
+            eatup();
+            outdon();
+            goto gen_raw_return_stmt;
+        }
+    } else if (t == RBRACE) {
+        put_back_string(token);
+    }
+gen_raw_return_stmt:
+    outtab();
+    outstr(sreturn);
+    outdon();
+    xfer = true;
 }
 
 /* caslab - get one case label */
