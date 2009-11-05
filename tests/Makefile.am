@@ -35,6 +35,10 @@ ALL_TESTS = \
   case-sensibility-basic.test \
   comments-no-hang.test \
   comments.test \
+  common-block.test \
+  common-block_f77.test \
+  data-statement.test \
+  data-statement_f77.test \
   define-balanced-paren.test \
   define-balanced-paren_f77.test \
   define-basic.test \
@@ -59,6 +63,7 @@ ALL_TESTS = \
   define-whitespaces.test \
   devnull-input.test \
   empty-input.test \
+  exponentiation-operator_f77.test \
   for-with-empty-clauses_f77.test \
   for_f77.test \
   forever_f77.test \
@@ -154,6 +159,7 @@ ALL_TESTS = \
   stress1_f77.test \
   stress2_f77.test \
   stress3_f77.test \
+  string-concatenation_f77.test \
   subprogram-name-invalid-not-repeated.test \
   subroutine-name-invalid-1.test \
   subroutine-name-invalid-2.test \

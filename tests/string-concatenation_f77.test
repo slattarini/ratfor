@@ -1,0 +1,56 @@
+#!/bin/sh
+
+# Check (with F77) that ratfor does not mess up the `//' (string
+# concatenation) operator (that already happened in practice, sadly).
+
+. ./TestsAux/defs.sh || exit 99
+
+require_fortran_compiler
+
+cat >tst.r <<EOF
+program teststrconcat
+    character str1*(5)
+    character str2*(2)
+    character str3*(5)
+    character str4*(1)
+    character str5*(50)
+    character str6*(50)
+    character str7*(50)
+    str1 = 'Hello'
+    str2 = ', '
+    str3 = 'World'
+    str4 = '!'
+    str5 = 'H' // 'ello,' // ' ' // 'W' // 'orld' // '!'
+    str6 = str1 // ', ' // str3 // '!'
+    str7 = str1 // str2 // str3 // str4
+10  format('^ ', A50, ' $')
+    write(*,10) str5
+    write(*,10) str6
+    write(*,10) str7
+    call halt
+end
+EOF
+
+cat >exp <<EOF
+^ Hello, World! $
+^ Hello, World! $
+^ Hello, World! $
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+$SED -e 's/  */ /g' stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

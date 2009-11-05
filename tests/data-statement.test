@@ -1,0 +1,25 @@
+#!/bin/sh
+
+# Check that data statements in input are not spoiled by improper
+# automatic line continuation.
+
+. ./TestsAux/defs.sh || exit 99
+
+cat >tst.r <<EOF
+data m/10/, n/20/, x/2.5/, y/2.5/
+alone
+data m,n/10,20/, x,y/2*2.5/
+alone
+data A/ 200 * 0.0/
+alone
+data r/0.3/$TAB
+alone
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP -i "data.*alone" stdout && testcase_FAIL
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

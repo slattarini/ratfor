@@ -5,14 +5,16 @@
 
 . ./TestsAux/defs.sh || exit 99
 
-for op in '=' '+' '-' '*' '/' '**' '//'; do
+# line continuation is not expected to work with e.g. `*' and `/'
+for op in '=' '+' '-' ; do
     echo "'TEST ${op}'"
     echo "r${SPACE}${op}${NEWLINE}s"
     echo "u${TAB}${op}${SPACE}${NEWLINE}${NEWLINE}v"
     echo "x${op}${TAB}${NEWLINE}${NEWLINE}${SPACE}${TAB}${TAB}${NEWLINE}y"
 done >tst.r
 
-for op in '=' '+' '-' '*' '/' '**' '//'; do
+# line continuation is not expected to work with e.g. `*' and `/'
+for op in '=' '+' '-'; do
     echo "TEST ${op}"
     echo "r${op}s"
     echo "u${op}v"

@@ -1,0 +1,62 @@
+#!/bin/sh
+
+# Check (with F77) that ratfor does not mess up the `**' (exponentiation)
+# operator (that already happened in practice, sadly).
+
+. ./TestsAux/defs.sh || exit 99
+
+require_fortran_compiler
+
+cat >tst.r <<EOF
+program testexpoent
+    implicit none
+    integer m, n
+    real r, s, t
+    m=2
+    n=3
+10  format(I1)
+20  format(F4.2)
+    write(*,10) m$TAB**  n
+    m = 3**(1+0)
+    write(*,10) m
+    m = 3 **$TAB(1+1)
+    write(*,10) m
+    r = 2
+    s = 0.5
+    t = (s)**(r)
+    write(*,20) t
+    t = s ** r
+    write(*,20) t
+    write(*,20) ( r $TAB **$TAB  s)
+    write(*,20) (r** 0.5)
+    call halt
+end
+EOF
+
+cat >exp <<EOF
+8
+3
+9
+0.25
+0.25
+1.41
+1.41
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+ws_normalize <stdout | $SED -e 's/^\./0./' >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et

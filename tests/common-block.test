@@ -1,0 +1,19 @@
+#!/bin/sh
+
+# Check that common block declarations in input are not involved
+# in improper automatic line continuation.
+
+. ./TestsAux/defs.sh || exit 99
+
+cat >tst.r <<EOF
+common /blockname/
+alone
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP -i "common.*alone" stdout && testcase_FAIL
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
