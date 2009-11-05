@@ -66,7 +66,8 @@ ALL_TESTS = \
   exponentiation-operator_f77.test \
   for-with-empty-clauses_f77.test \
   for_f77.test \
-  forever_f77.test \
+  forever1_f77.test \
+  forever2_f77.test \
   function-name-invalid-1.test \
   function-name-invalid-2.test \
   function-name-invalid-3.test \

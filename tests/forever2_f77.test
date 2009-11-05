@@ -1,0 +1,34 @@
+#!/bin/sh
+
+# Test (within reasonable limits) that `for(;;)' originates an
+# infinite loop.
+
+. ./TestsAux/defs.sh || exit 99
+
+require_fortran_compiler
+
+cat > tst.r <<EOF
+program testforever2
+    integer i
+    i = 0
+    for(;;) {
+        i = i + 1
+    }
+    write(*,10) i
+10  format(I50)
+    call halt
+end
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+# 254 means "timeout error"
+run_command -e 254 timer -t 15 ./tst.exe || testcase_FAIL
+test -s stdout && testcase_FAIL
+
+testcase_PASS
+
+# vim: ft=sh ts=4 sw=4 et
