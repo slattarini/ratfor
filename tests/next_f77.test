@@ -15,7 +15,7 @@ program testnext
 100 format(A20, ' / ', I20)
 150 format(A20, ' / ', A20)
 200 format('')
-    
+
     ###  WHILE  ###
     write(*,200)
     i = 1
@@ -25,7 +25,7 @@ program testnext
         next
         i = i + 1
     }
-    
+
     ###  WHILE  ###
     write(*,200)
     i = 1
@@ -36,7 +36,7 @@ program testnext
             next
         i = i + 1
     }
-    
+
     ###  FOR  ###
     write(*,200)
     for(i = 1; i < 4; i = i + 1) {
@@ -53,7 +53,7 @@ program testnext
             next
         i = i + 1
     }
-    
+
     ###  REPEAT  ###
     write(*,200)
     i = 1
@@ -63,7 +63,7 @@ program testnext
         next
         i = i + 1
     } until(i >= 4)
-    
+
     ###  REPEAT  ###
     write(*,200)
     i = 1
@@ -74,7 +74,7 @@ program testnext
             next
         i = i + 1
     } until(i >= 6)
-    
+
     #
     # WARNING: modifying the value of the looping variable in the body
     #          of a do-loop is a Fortran big no-no.
@@ -96,7 +96,7 @@ program testnext
             next
         write(*, 100) 'do2', i*10
     }
-    
+
     ###  STOP  ###
     write(*,200)
     call halt
@@ -112,7 +112,7 @@ echo "$xline" >>exp
 
 for kw in 'while' 'for' 'repeat'; do
     $SED "s/^$ws0p//" <<EOF
-        
+
         ${kw}1 / 1
         ${kw}1 / 2
         ${kw}1 / 3

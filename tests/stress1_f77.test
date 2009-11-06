@@ -24,7 +24,7 @@ integer function foo(a, b)
     }
     return 0
 end # foo
-    
+
 subroutine bar()
     integer m, n, t, foo
     define ONE 1

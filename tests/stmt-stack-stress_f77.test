@@ -34,17 +34,17 @@ BEGIN {
     print ""
     print ""
     print "write(*,600)"
-    
+
     print "x = 1"
     for(i = 1; i <= 50; i++)
         print "while(x < 8)"
     print "{ write(*,500)x; goto 100 }"
-    
+
     print ""
     print "100 continue"
     print "write(*,600)"
     print ""
-    
+
     N = 150
     print "y = 1"
     print "x = 1"
@@ -52,7 +52,7 @@ BEGIN {
         print loophead
     for (i = 1; i <= N; i++)
         print looptail
-    
+
     print ""
     print "write(*,600)"
     print ""

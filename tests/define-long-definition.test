@@ -39,11 +39,11 @@ $AWK '
         s = ""
         sprn = 0
     }
-    /^[cC]/{ 
-        next 
+    /^[cC]/{
+        next
     }
     /^      / {
-        if (sprn) 
+        if (sprn)
             print s
         sprn = 1;
         sub("^      ", "")
@@ -55,8 +55,8 @@ $AWK '
         s = s $0
         next
     }
-    END { 
-        if (sprn) 
+    END {
+        if (sprn)
             print s
     }
 ' <stdout >got

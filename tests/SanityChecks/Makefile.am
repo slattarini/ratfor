@@ -48,7 +48,7 @@ include ../TestsEnvironment.am
 ##  TESTSUITE CLEANUP  ##
 ## ------------------- ##
 
-include ../LocalCleanup.am 
+include ../LocalCleanup.am
 
 ## ----------------------------------------- #à
 ##  CONSISTENCY CHECKS ON THE LIST OF TESTS  ##

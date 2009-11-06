@@ -99,7 +99,7 @@ ws="[${SPACE}${TAB}]"
 ws0p="${ws}*" # zero or more white spaces
 ws1p="${ws}${ws0p}" # one or more white spaces
 # strip leading and trailing white spaces from input
-ws_strip() { 
+ws_strip() {
     $SED -e "s/^$ws0p//" -e "s/$ws0p$//"
 }
 # convert any sequence of tab and space chars to a single space char,
@@ -192,7 +192,7 @@ must_be_directory() {
     test -d "$1" || testcase_HARDERROR "${2-directory}" "\`$1' not found"
 }
 
-# Check that we have a valid fortran 77 compiler available, else 
+# Check that we have a valid fortran 77 compiler available, else
 # cause the testcase to be SKIP'd.
 require_fortran_compiler() {
     case "$F77" in

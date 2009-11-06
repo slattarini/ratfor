@@ -19,18 +19,18 @@ program testfor
     integer x
 
     write(*,$SEP)
-    
+
     goto 11
 10  write(*,$BAD)10
 11  write(*,$OK) 11
-    
+
     write(*,$SEP)
-    
+
     if (1 == 1)
         goto 21
 20  write(*,$BAD)20
 21  write(*,$OK)21
-    
+
     write(*,$SEP)
 
     for(x = 0; x < 9; x = x + 2) {
@@ -45,11 +45,11 @@ program testfor
 33  continue
 
     write(*,$SEP)
-    
+
     goto 40
     call halt
 40  write(*,$OK) 40
-    
+
     write(*,$SEP)
     call halt
 

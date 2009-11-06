@@ -23,7 +23,7 @@ for(;;)
     KWORD 2;    # ERR
 while(true)
     for(;;)
-        KWORD 3 # ERR 
+        KWORD 3 # ERR
 while(true)
     for(;;)
         KWORD 2

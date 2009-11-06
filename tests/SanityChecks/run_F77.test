@@ -39,7 +39,7 @@ cat >hello.f <<\EOF
       subroutine hello(s)
         character s*(*)
         write(*,100) s
-100     format('Hello, ', A, '!') 
+100     format('Hello, ', A, '!')
         return
       end
 EOF

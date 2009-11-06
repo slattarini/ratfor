@@ -12,7 +12,7 @@ program testnestloop
     implicit none
     integer x, y, z
     write(*,200)
-    
+
     y = 0
     for(x = 1; x < 7; x = x + 2)
         while(y < x)
@@ -30,7 +30,7 @@ program testnestloop
         y = y + 4
     }
     write(*,100) x, y
-    
+
     write(*,200)
     call halt
 100 format(I10,' ',I10)

@@ -229,7 +229,7 @@ include TestsEnvironment.am
 ##  TESTSUITE CLEANUP  ##
 ## ------------------- ##
 
-include LocalCleanup.am 
+include LocalCleanup.am
 
 ## ----------------------------------------- ##
 ##  CONSISTENCY CHECKS ON THE LIST OF TESTS  ##

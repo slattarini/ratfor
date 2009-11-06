@@ -28,12 +28,12 @@ define FALSE 1==0
 PROGBEGIN stressdefine
   implicit none
   real x, y
-  
+
   x = 1
 define p1 { y =
 define p2 2 }
   p1 p2
-  
+
   IF TRUE THEN write(*,10); 10 format('MUUU'); ENDIF
   IF FALSE THEN write(*,20); 20 format('UMMM'); ENDIF
 

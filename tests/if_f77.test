@@ -11,22 +11,22 @@ OK='write(*,100)'
 BAD='write(*,200)'
 cat > tst.r <<EOF
 program testif
-    
+
     if(1==1)
         $OK 1
     if (0 == 1)
         $BAD 2
-    
+
     if(0==1)
         $BAD 3
     else
         $OK 4
-    
+
     if (1 == 1)
         $OK 5
     else
         $BAD 6
-    
+
     call halt
 
 100 format('ok ',I1)

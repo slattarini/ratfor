@@ -129,7 +129,7 @@ xkill() {
     esac
     # Normalize error message.
     [ -n "${BASH_VERSION-}" ] && s=`echo X"$s" | $SED 's/^.*) - */:/'`
-    s=`expr "X$s" : 'X.*: *\([^:]*\)'` 
+    s=`expr "X$s" : 'X.*: *\([^:]*\)'`
     # We couldn't send signals to the process. This shouldn't
     # happen: abort.
     fatal "cannot send signal $sig to child process $pid: $s"
@@ -219,7 +219,7 @@ time=10  # default timeout (in seconds)
 
 while [ $# -gt 0 ]; do
     case "$1" in
-        -t) 
+        -t)
             if [ $# -ge 2 ]; then
                 time=$2; shift;
             else
@@ -229,13 +229,13 @@ while [ $# -gt 0 ]; do
         -t*)
             time=`expr "X$1" : 'X-t\(.*\)'`
             ;;
-        --) 
+        --)
             shift; break
             ;;
-        -*) 
+        -*)
             usage_error "'$1': invalid option"
             ;;
-        *) 
+        *)
             break
             ;;
     esac

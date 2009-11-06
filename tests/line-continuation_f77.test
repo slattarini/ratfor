@@ -9,7 +9,7 @@ require_fortran_compiler
 tr '@' ' ' > tst.r <<\EOF
 program testprog
 implicit none
-    
+
 in_
 teger _
 abc, ab_, c, x_

@@ -8,9 +8,9 @@ require_fortran_compiler
 
 cat >tst.r <<\EOF
     program testprogram
-        
+
         implicit none
-        
+
         define x1 x0
         define x0 1
         write(*,100) x1
@@ -20,13 +20,13 @@ cat >tst.r <<\EOF
         define y2 y1
         define y3 y2
         write(*,100) y3
-        
+
         define z3 z2
         define z2 z1
         define z1 z0
         define z0 3
         write(*,100) z3
-        
+
         define w2 w1
         define w1 w0
         define w0 4
@@ -35,11 +35,11 @@ cat >tst.r <<\EOF
         write(*,100) w2
         define w1 6
         write(*,100) w2
-        
+
 100     format(I1)
-        
+
         call halt
-    
+
     end # testprogram
 EOF
 

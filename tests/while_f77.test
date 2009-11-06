@@ -11,30 +11,30 @@ cat > tst.r <<EOF
 program testwhile
     implicit none
     integer x
-    
+
     write(*,200)
-    
+
     x = 0
     while(x < 8) {
         x = x + 2
         write(*,100) x
     }
-    
+
     write(*,200)
-    
+
     x = 20
     while (x >= 10)
         x = x -1
     write(*,100) x
-    
+
     write(*,200)
-    
+
     x = 14
     while(x > 5) x = x -1
     write(*,100) x
-    
+
     write(*,200)
-    
+
     call halt
 100 format(I1)
 200 format('---')
