@@ -29,7 +29,7 @@ A more convoluted example:
 This is not a bug but a design error in both AT&T ratfor and this
 public domain ratfor.
 
-The problem is with the switch statment.
+The problem is with the switch statement.
 It switches on an integer valued expression.
 It should switch on an integer variable.
 
