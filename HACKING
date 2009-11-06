@@ -1,4 +1,4 @@
-HACKING file for Public Domain Ratfor.
+HACKING file for C Ratfor.
 This file attempts to describe the rules to use when hacking it.
 
 
@@ -19,8 +19,8 @@ Bootstrap
 Git Submodules
 --------------
 
-  Public Domain Ratfor uses the "Ratfor Testsuite" package as a git
-  submodule, to do black-box testing.
+  C Ratfor uses the "Ratfor Testsuite" package as a git submodule, to do
+  black-box testing.
 
   This submodule is automatically fetched by the `mainr/bootstrap.sh'
   script.  If you want to fetch/update it indipendently, just run:

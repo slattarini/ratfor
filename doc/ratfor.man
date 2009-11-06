@@ -1,4 +1,4 @@
-.TH RATFOR 1 "Unknown Date" "Public Domain Ratfor" ""
+.TH RATFOR 1 "Unknown Date" "C Ratfor" ""
 .\"
 .SH NAME
 .B ratfor

@@ -1,4 +1,4 @@
-# configure.ac file for Public Domain Ratfor
+# configure.ac file for C Ratfor
 # Process this file with autoconf to produce a configure script.
 
 m4_pattern_forbid([^_RAT4_])
@@ -15,7 +15,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 #
 
 AC_PREREQ([2.62])
-AC_INIT([Public Domain Ratfor], [1.0m], [stefano.lattarini@gmail.com])
+AC_INIT([C Ratfor], [1.0m], [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([src/rat4-common.h])
 AC_CONFIG_HEADERS([config.h])

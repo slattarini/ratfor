@@ -1,7 +1,9 @@
-List of user-visible changes of Public Domain Ratfor.
+List of user-visible changes of C Ratfor.
 
 New in XXX
 -----------
+ * The name of the package has been changed to "C Ratfor" (previously was
+   "Public Domain Ratfor").
  * The handling of the return statement has been improved and strenghened,
    especially with reference to error messages.  For example, a return
    statement outside a function or subroutine is now flagged as an error,

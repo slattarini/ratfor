@@ -1,5 +1,5 @@
 /*< 
-  Public Domain Ratfor
+  C Ratfor
  
 Usage
   ratfor [options] [-o output.f] [input.r]

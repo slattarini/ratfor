@@ -19,8 +19,8 @@ ifeq ($(stefano-lattarini_uname),Linux)
   stefano-lattarini_devel-dir := $(HOME)/devel/linux
   stefano-lattarini_have-recognized-uname := yes
 
-  # C/C++ compilers to be used to compile public domain ratfor, when
-  # doing a strict-distcheck.
+  # C/C++ compilers to be used to compile C Ratfor, when doing a
+  # strict-distcheck.
   strict_distcheck_c_compilers = \
     /usr/local/bin/pcc \
     /usr/bin/g++ \
@@ -33,7 +33,7 @@ ifeq ($(stefano-lattarini_uname),Linux)
       /usr/bin/gcc-3.4
   endif
 
-  # Fortran compilers to be used by the ratfor testsuite, when doing a
+  # Fortran compilers to be used by the Ratfor Testsuite, when doing a
   # strict-distcheck.
   strict_distcheck_f77_compilers = \
     NONE \
@@ -80,8 +80,8 @@ ifeq ($(stefano-lattarini_uname),FreeBSD)
 
   stefano-lattarini_have-recognized-uname := yes
 
-  # C/C++ compilers to be used to compile public domain ratfor, when
-  # doing a strict-distcheck.
+  # C/C++ compilers to be used to compile C Ratfor, when doing a
+  # strict-distcheck.
   strict_distcheck_c_compilers = \
     /usr/local/bin/pcc \
     /usr/bin/g++ \
@@ -91,7 +91,7 @@ ifeq ($(stefano-lattarini_uname),FreeBSD)
       /usr/local/bin/gcc34
   endif
 
-  # Fortran compilers to be used by the ratfor testsuite, when doing a
+  # Fortran compilers to be used by the Ratfor Testsuite, when doing a
   # strict-distcheck.
   strict_distcheck_f77_compilers = \
     NONE \

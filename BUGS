@@ -1,10 +1,10 @@
-List of BUGS for the Public Domain Ratfor preprocessor.
+List of BUGS for the C Ratfor preprocessor.
 
  ---
 
-Due to the way public domain ratfor performs translation of relational
-shorthands, error messages involving them might sometimes result slighty
-botched and unclear.  For example, the following input:
+Due to the way C Ratfor performs translation of relational shorthands,
+error messages involving them might sometimes result slighty botched and
+unclear.  For example, the following input:
   function &&
 produced the diagnostic:
   "invalid function name `.and.'"
@@ -26,8 +26,7 @@ A more convoluted example:
  
  ---
 
-This is not a bug but a design error in both AT&T ratfor and this
-public domain ratfor.
+This is not a bug but a design error in both AT&T Ratfor and this C Ratfor.
 
 The problem is with the switch statement.
 It switches on an integer valued expression.

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Bootstrap the Public Domain Ratfor package from checked-out sources.
+# Bootstrap the C Ratfor package from checked-out sources.
 
 GIT=${GIT-"git"}
 AUTORECONF=${AUTORECONF-"autoreconf"}

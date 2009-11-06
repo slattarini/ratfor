@@ -1,5 +1,5 @@
 # List of blackbox tests from the Ratfor Testsuite subpackage which are
-# expected to fail with Public Domain Ratfor.
+# expected to fail with C Ratfor.
 # Blank lines and lines starting with `#' are ignored.
 
 # Currently, ratfor output strings with the same quoting they are input
@@ -21,9 +21,9 @@ switch-fail.test
 # relational operators (`&&', `<=', `||' etc.)
 line-continuation-automatic-relationals-raw.test
 
-# Due to the way public domain ratfor performs translation of relational
-# shorthands, error messages involving them might sometimes result slighty
-# botched and unclear, so these tests won't pass.
+# Due to the way C Ratfor performs translation of relational shorthands,
+# error messages involving them might sometimes result slighty botched and
+# unclear, so these tests won't pass.
 function-name-invalid-3.test
 subroutine-name-invalid-3.test
 
