@@ -12,9 +12,9 @@ Brief Description
   behaviour (where the "standardized" is to be interpreted as "passes all
   the tests defined in the Ratfor Testsuite").
 
-  This package is used in particular as the testsuite of the Public Domain
-  Ratfor (a ratfor proprocessor written in C and released in the public
-  domain).
+  This package is used in particular as the testsuite of C Ratfor (a ratfor
+  proprocessor written in C and whose implementation is loosely inspired to
+  the original Ratfor implementation by Kernighan & Plaugher).
 
 
 Configuration process
@@ -80,13 +80,13 @@ Ratfor preprocessor
   After that, the "Ratfor Testsuite" supbackage will be configured to use
   the ratfor preprocessor provided by the top-level package.
 
-  The strategy just described is exactly the one employed the the "Public
-  Domain Ratfor" package; for clarity, an excerpt from its `configure.ac'
-  file is presented (note that the "Public Domain Ratfor" package keeps
-  the "Ratfor Testsuite" subpackage in the `blackbox-tests' subdirectory):
+  The strategy just described is exactly the one employed the "C Ratfor"
+  package; for clarity, an excerpt from its `configure.ac' file is presented
+  (note that the "C Ratfor" package keeps the "Ratfor Testsuite" subpackage
+  in the `blackbox-tests' subdirectory):
 
     ...
-    AC_INIT([Public Domain Ratfor], ...)
+    AC_INIT([C Ratfor], ...)
     ... 
     # the testsuite is kept in a separate subpackage.
     AC_CONFIG_SUBDIRS([blackbox-tests])
