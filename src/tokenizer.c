@@ -131,7 +131,7 @@ convert_relational_shortand(char token[], int toksiz, FILE *fp)
         case EQUALS:
             if (token[1] != EQUALS) { /* variable assignement */
                 token[1] = EOS;
-                goto out;
+                return(EQUALS); /* token `=' isn't a relational shortand */
             }
             token[1] = 'e';
             token[2] = 'q';
@@ -155,7 +155,6 @@ convert_relational_shortand(char token[], int toksiz, FILE *fp)
             break;
     }  /* switch(token[0]) */
     token[0] = PERIOD;
-out:
     return(TOKT_RELATN);
 }
 
@@ -251,33 +250,6 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
     return(TOKT_STRING);
 }
 
-
-/* read an operator token (accounting for multi-charcater operators), save
- * it in lexstr, and return the lenght of the token read */
-static int
-get_operator_raw_token(char lexstr[], int toksiz, FILE *fp)
-{
-    int i, c, nc;
-#ifdef NDEBUG
-    /* TODO: assert toksiz >= 3 */
-#else
-    /* pacify compiler warnings */
-    (void) toksiz;
-#endif
-    i = 0;
-    c = lexstr[0] = ngetch(fp);
-    if (c == STAR || c == SLASH) {
-        nc = ngetch(fp); /* peek next character */
-        if (c == nc) { /* fortran `**' or `//' operator */
-            lexstr[++i] = c;
-        } else {
-            put_back_char(nc);
-        }
-    }
-    lexstr[++i] = EOS;
-    return(TOKT_OPERATOR);
-}
-
 /* read a non-alphanumeric token from fp (accounting for composed tokens),
  * save it in lexstr, save its type in *ptok, return the lenght of the
  * token read */
@@ -311,13 +283,6 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
         case OR:
             /* maybe a ratfor relational shorthand */
             tok = convert_relational_shortand(lexstr, toksiz, fp);
-            break;
-        case PLUS:
-        case MINUS:
-        case STAR:
-        case SLASH:
-            /* fortran opertor */
-            tok = get_operator_raw_token(lexstr, toksiz, fp);
             break;
         default:
             /* everything else */

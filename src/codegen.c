@@ -81,13 +81,70 @@ string_to_integer(const char str[])
     return(n);
 }
 
+/*
+ *  token_requires_automatic_line_continuation(t) -
+ *    - tell if token `t' should trigger an automatic line continuation.
+ *
+ *  OK, so why we don't attemp (anymore) to trigger line continuation not
+ *  only for `+' and `-', but also for `*' and `/' tokens?
+ *
+ *  The reason is that the `*' and `/' tokens cannot be simply assumed to be
+ *  Fortran operators, since they have way too much usages in Fortran (apart
+ *  being used as multiplication and divsion operators, of course).
+ *
+ *  For example, `*' can be used in write statements:
+ *      ...
+ *      WRITE(*,100) 2
+ *  100 FORMAT(I1)
+ *      ...
+ *  in the declaration of arrays passed as arguments to subprograms:
+ *      ...
+ *      SUBROUTINE LINREGR(N, X, Y)
+ *      INTEGER N
+ *      REAL X(*), Y(*)
+ *      ...
+ *  as part of the exponetiation operator:
+ *      ...
+ *      X = 2**3
+ *      ...
+ *  or when declaring constant strings:
+ *      ...
+ *      CHARACTER STR1*10
+ *      CHARACTER STR2*(*)
+ *      ...
+ *
+ *  Similarly, `/' can be used as part of the string-concatenation
+ *  operator:
+ *      ...
+ *      S1 = '123'
+ *      S2 = '456'
+ *      S3 = S1 // S2
+ *      ...
+ *  in the `common' statement:
+ *      ...
+ *      REAL ALPHA, BETA
+ *      COMMON /COEFF/ ALPHA, BETA
+ *      ...
+ *  or in the `data' satatement:
+ *      ...
+ *      REAL A(10,20)
+ *      DATA A/200 * 0.0/
+ *      ...
+ *  (and note that in the above code snippet the token `*' is used with
+ *  still another different meaning than those listed before!)
+ *
+ *  Thus, we make no assumption on the possible meaning of `/' and `*' in
+ *  input, and do not attempt line continuation for them.
+ */
 static bool
 token_requires_automatic_line_continuation(int t)
 {
-    switch(t) {
+    switch (t) {
         case COMMA:
         case LPAREN:
-        case TOKT_OPERATOR:
+        case PLUS:
+        case MINUS:
+        case EQUALS:
         case TOKT_RELATN:
             return true;
     }

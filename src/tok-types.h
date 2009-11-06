@@ -13,8 +13,7 @@
 #define TOKT_DIGITS      1
 #define TOKT_ALPHA       2
 #define TOKT_STRING      3
-#define TOKT_OPERATOR    4
-#define TOKT_RELATN      5
+#define TOKT_RELATN      4
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */
