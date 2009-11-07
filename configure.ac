@@ -70,6 +70,20 @@ AC_PROG_CC_STDC
 AM_PROG_CC_C_O
 
 #
+# See if $CC is a C++ compiler.
+#
+
+AC_MSG_CHECKING([wheter the C compiler is a C++ compiler])
+AC_COMPILE_IFELSE(
+    [AC_LANG_PROGRAM([[
+#ifdef __cplusplus
+  choke me
+#endif]])],
+    [rat4_c_compiler_is_cplusplus_compiler=no],
+    [rat4_c_compiler_is_cplusplus_compiler=yes])
+AC_MSG_RESULT([$rat4_c_compiler_is_cplusplus_compiler])
+
+#
 # Checks for programs.
 #
 
@@ -149,19 +163,22 @@ AX_ARG_ENABLE(
 # This code *must* be set after any check on cc, c headers, c functions
 # or c libraries, as stricter handling of warnings can interfere with
 # autoconf checks.
-for flag in \
-    -Wall \
-    -Wextra \
-    -Wshadow \
-    -Wnested-externs \
-    -Wwrite-strings \
-    -Wmissing-declarations \
-    -Wc++-compat \
-    -Wsign-conversion \
-    -Wdeclaration-after-statement \
-    -pedantic \
-    $rat4_maybe_werror \
-; do
+rat4_cc_warn_flags="
+    -Wall
+    -Wextra
+    -Wshadow
+    -Wmissing-declarations
+    -Wwrite-strings
+    -Wsign-conversion
+    -pedantic"
+if test x"$rat4_c_compiler_is_cplusplus_compiler" != x"yes"; then
+    rat4_cc_warn_flags="
+        $rat4_cc_warn_flags
+        -Wnested-externs
+        -Wc++-compat
+        -Wdeclaration-after-statement"
+fi
+for flag in $rat4_cc_warn_flags $rat4_maybe_werror; do
     AX_CACHE_CHECK_CC_FLAG([$flag], [], [], [CFLAGS="$CFLAGS $flag"])
 done
 AS_UNSET([flag])
