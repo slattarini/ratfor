@@ -87,7 +87,7 @@ AC_MSG_RESULT([$rat4_c_compiler_is_cplusplus_compiler])
 # Checks for programs.
 #
 
-AC_PROG_FGREP
+: # none needed yet
 
 #
 # Checks for headers.

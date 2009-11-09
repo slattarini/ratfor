@@ -1,5 +1,5 @@
-## -*- Makefile.am -*-
-## Copied from SteLib at 2009-10-27 14:52:59 +0100.  DO NOT EDIT!
+## -*- Automake -*-
+## Copied from SteLib at 2009-11-07 20:02:49 +0100.  DO NOT EDIT!
 ## Usually included by Makefile.am
 
 # If config.status or configure are run by Zsh 3.x, they can erroneously
@@ -8,24 +8,51 @@
 .PHONY: mostlyclean-configure-tmp
 mostlyclean-configure-tmp:
 	@set +e; \
-	 e=0; \
-	 xrun() { echo " $$*"; "$$@" || { e=1; return 1; } }; \
-	 xrun rm -f conftest*; \
-	 xrun rm -f confdefs.h; \
+## we don't want to force the user to set $(FGREP) in configure.ac or
+## in main makefile, so look for a suitable fgrep program when $(FGREP)
+## is not set
+	if test -z '$(FGREP)'; then \
+		for fgrep_t in 'fgrep' 'grep -F'; do \
+			if (echo '[' | $$fgrep_t '[') >/dev/null 2>&1; then \
+				fgrep=$$fgrep_t; \
+				break; \
+			fi; \
+		done; \
+		unset fgrep_t; \
+		if test -z "$$fgrep"; then \
+			echo "***" >&2; \
+			echo "*** $@: ERROR: no suitable \`fgrep' command found" >&2; \
+			echo "***" >&2; \
+			exit 1; \
+		fi; \
+		echo "$@: using fgrep program \`$$fgrep'"; \
+	else \
+		fgrep='$(FGREP)'; \
+	fi; \
+## auxilary shell function: verbosely execute a program, register its
+## outcome in case of failure
+	e=0; \
+	xrun() { \
+	 	echo " $$*"; \
+		"$$@" || { e=1; return 1; }; \
+	}; \
+## ---
+	xrun rm -f conftest*; \
+	xrun rm -f confdefs.h; \
 ## temporary directories left by config.status are tricky to find
-	 for d in conf*; do \
-	   for f in subs.awk defines.awk; do \
-	     if test -f "$$d/$$f" \
-	         && $(FGREP) 'PACKAGE_NAME' "$$d/$$f" >/dev/null \
-	         && $(FGREP) '$(PACKAGE_NAME)' "$$d/$$f" >/dev/null; \
-	     then \
-	       xrun rm -f "$$d"/*; \
-	       xrun rmdir "$$d"; \
+	for d in conf*; do \
+	  for f in subs.awk defines.awk; do \
+	    if test -f "$$d/$$f" \
+	        && $$fgrep 'PACKAGE_NAME' "$$d/$$f" >/dev/null \
+	        && $$fgrep '$(PACKAGE_NAME)' "$$d/$$f" >/dev/null; \
+	    then \
+	      xrun rm -f "$$d"/*; \
+	      xrun rmdir "$$d"; \
 ## break the `for f' loop
-	       break; \
-	     fi; \
-	   done; \
-	 done; \
-	 exit $$e
+	      break; \
+	    fi; \
+	  done; \
+	done; \
+	exit $$e
 
 ## vim: ft=automake noet sw=4 ts=4
