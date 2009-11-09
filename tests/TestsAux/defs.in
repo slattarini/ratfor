@@ -271,7 +271,7 @@ run_command() {
             -e) run_exitcode_expected=$2; shift;;
             -m) run_mix_stdout_and_stderr=yes;;
             --) shift; break;;
-            -?) testcase_HARDERROR "run_commmand: invalid switch \`$1'";;
+            -*) testcase_HARDERROR "run_commmand: invalid switch \`$1'";;
             *) break;;
         esac
         shift
