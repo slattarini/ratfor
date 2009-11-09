@@ -48,7 +48,7 @@ builddir=$top_builddir/tests
 testaux_srcdir=$srcdir/TestsAux
 testaux_builddir=$builddir/TestsAux
 
-# Symbolic names for exit statuses
+# Symbolic names for exit statuses.
 SUCCESS=0
 FAILURE=1
 E_SKIP=77 # test case skipped
@@ -131,33 +131,130 @@ cleanup_at_exit() {
     exit $rat4_exit_status
 }
 
-# Usage: testcase_PASS
-# Cause the current testcase to terminate with success.
-testcase_PASS() {
-    Exit $SUCCESS
+# Usage: _testcase_process_outcome ACTION [MESSAGE]
+# Process the outcome of a single test (there can be many in a test script).
+# This function is FOR INTERNAL USE ONLY.
+_testcase_process_outcome() {
+    set +x # xtrace verbosity temporarly disabled in this function
+    if test $# -eq 0; then
+        echo "*** $me: HARD ERROR: _testcase_process_outcome:"
+                      "missing ACTION" >&2
+        Exit $E_HARD
+    fi
+    testcase_process_outcome_action=`expr x"$1" : 'x-*\(.*\)' | tr '_' '-'`
+    testcase_process_outcome_raw_action=$1
+    shift
+    case $testcase_process_outcome_action in
+        reset-success)
+            test $# -eq 0 || echo "*** $me: RESET SUCCESS: $*" >&2
+            testcase_outcome=$SUCCESS
+            ;;
+        register-failure)
+            test $# -eq 0 || echo "*** $me: FAIL: $*" >&2
+            testcase_outcome=$FAILURE
+            ;;
+        fatal-failure)
+            test $# -eq 0 || echo "*** $me: FATAL FAILURE: $*" >&2
+            testcase_outcome=$FAILURE
+            testcase_DONE
+            ;;
+        skip)
+            test $# -eq 0 || echo "*** $me: SKIP: $*" >&2
+            testcase_outcome=$E_SKIP
+            testcase_DONE
+            ;;
+        hard-error)
+            test $# -eq 0 || echo "*** $me: HARD ERROR: $*" >&2
+            testcase_outcome=$E_HARD
+            testcase_DONE
+            ;;
+        *)
+            echo "*** $me: HARD ERROR:" \
+                 "_testcase_process_outcome: invalid ACTION" \
+                 "\`$testcase_process_outcome_raw_action'" >&2
+            Exit $E_HARD
+            ;;
+    esac
+    set -x # restart xtrace verbosity
 }
 
-# Usage: testcase_FAIL [WHY]
-# Cause the current testcase to terminate with failure, explaining
-# the cause of failure if WHY argument is given.
+# This function is here for backward-compatibility only.
+# DO NOT USE THIS FUNCTION IN NEW TESTS!
+testcase_PASS() {
+    { set +x; } 2>/dev/null
+    testcase_RESET_SUCCESS ${1+"$@"}
+    { set +x; } 2>/dev/null
+    testcase_DONE
+}
+
+# This function is here for backward-compatibility only.
+# DO NOT USE THIS FUNCTION IN NEW TESTS!
 testcase_FAIL() {
-    test $# -eq 0 || echo "$me: FAIL: $*"
-    Exit $FAILURE
+    { set +x; } 2>/dev/null
+    testcase_FATAL_FAILURE ${1+"$@"}
+}
+
+# Usage: testcase_RESET_SUCCESS [WHY]
+# Reset the outcome of the testscase to be "success", overriding any
+# previously registered failure.
+testcase_RESET_SUCCESS() {
+    _testcase_process_outcome --reset-success ${1+"$@"}
+}
+
+# Usage: testcase_REGISTER_FAILURE [WHY]
+# Cause the current testcase to register "failure" as its outcome,
+# explaining the cause of failure if WHY argument is given.
+testcase_REGISTER_FAILURE() {
+    _testcase_process_outcome --register-failure ${1+"$@"}
+}
+
+# Usage: testcase_FATAL_FAILURE [WHY]
+# Cause the current testcase to immeditely terminate with failure,
+# explaining the cause of failure if WHY argument is given.
+testcase_FATAL_FAILURE() {
+    _testcase_process_outcome --fatal-failure ${1+"$@"}
 }
 
 # Usage: testcase_SKIP [WHY]
 # Cause the current testcase to be SKIP'd, explaining why.
 testcase_SKIP() {
-    test $# -eq 0 || echo "$me: SKIPPED: $*"
-    Exit $E_SKIP
+    _testcase_process_outcome --skip ${1+"$@"}
 }
 
-# Usage: testcase_SKIP [WHY]
+# Usage: testcase_HARDERROR [WHY]
 # Cause the current testcase to be aborted with an "hard error",
-# explaining why.
+# explaining the cause of this error.
 testcase_HARDERROR() {
-    test $# -eq 0 || echo "$me: HARD ERROR: $*" >&2
-    Exit $E_HARD
+    _testcase_process_outcome --hard-error ${1+"$@"}
+}
+
+# Usage: testcase_DONE [MESSAGE]
+# Report the outcome of the testsuite (ans also the MESSAGE, if given),
+# then cause the the script to exit with a proper exit status.
+testcase_DONE() {
+    set +x # xtrace verbosity temporarly disabled in this function
+    test $# -eq 0 || echo "*** $me: TESTCASE DONE: $*" >&2
+    case ${testcase_outcome-$SUCCESS} in
+        $SUCCESS)
+            echo "*** $me: TESTCASE PASSED." >&2
+            ;;
+        $FAILURE)
+            echo "*** $me: TESTCASE FAILED." >&2
+            ;;
+        $E_SKIP)
+            echo "*** $me: TESTCASE SKIPPED." >&2
+            ;;
+        $E_HARD)
+            echo "*** $me: TESTCASE ERROR." >&2
+            ;;
+        *)
+            echo "*** $me: HARD ERROR: testcase_DONE:" \
+                          "invalid outcome \`$testcase_outcome'" >&2
+            testcase_outcome=$E_HARD
+            ;;
+    esac
+    set -x # restart xtrace verbosity
+    Exit $testcase_outcome
 }
 
 # Usage: must_be_directory DIRECTORY [DESC]
