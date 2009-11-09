@@ -94,6 +94,43 @@ TAB='	'
 NEWLINE='
 '
 
+# Usage: _testcase_msg [-p PREFIX-TO-MESSAGE] MESSAGE
+# Write a message on the standard error, with bells and whistles.
+# For INTERNAL USE ONLY.
+_testcase_msg() {
+    testcase_msg_prefix="*** $me"
+    # This function is expected to be run only when traces are turned off.
+    case $- in *x*)
+        set +x # otherwise we'll trigger an infinite loop!
+        _testcase_msg -p "_testcase_msg" -p "INTERNAL ERROR" \
+                      "called with shell tracing turned on"
+        _Exit $E_HARD
+        ;;
+    esac
+    while test $# -gt 0; do
+        case "$1" in
+            -p)
+                testcase_msg_prefix="$testcase_msg_prefix: $2"
+                shift
+                ;;
+            --)
+                shift
+                break
+                ;;
+            -*)
+                _testcase_msg -p "_testcase_msg" -p "INTERNAL ERROR" \
+                              "invalid switch \`$1'"
+                _Exit $E_HARD
+                ;;
+             *)
+                break
+                ;;
+        esac
+        shift
+    done
+    test $# -eq 0 || echo "$testcase_msg_prefix: $*" >&2
+}
+
 # We use a trap for cleanup.  This requires us to go through hoops to
 # get the right exit status transported through signals.  Also, more
 # hoops are required since there are shells (even some modern version
@@ -106,6 +143,7 @@ NEWLINE='
 # defined below (e.g. `testcase_FATAL_FAILURE' or `testcase_DONE').
 _Exit() {
     set +e
+    set +x
     testcase_exit_default=$1
     (exit $1); exit $1
 }
@@ -114,21 +152,37 @@ _Exit() {
 # failures and internal errors.  This function is for INTERNAL USE ONLY.
 _cleanup_at_exit() {
     testcase_exit_status=$?
-    set +e
     if test -n "${testcase_exit_signal-}"; then
-        echo "*** $me: caught signal $testcase_exit_signal" >&2
+        _testcase_msg "caught signal $testcase_exit_signal"
         testcase_exit_status=$E_HARD
     elif test -z "${testcase_exit_default-}"; then
-        echo "*** $me: internal error or untrapped failure" >&2
+        _testcase_msg "internal error or untrapped failure"
         testcase_exit_status=$E_HARD
     elif test x"$testcase_exit_default" != x"$testcase_exit_status"; then
-        echo "*** $me: exit status mismatch" >&2
+        _testcase_msg "exit status mismatch"
         testcase_exit_status=$E_HARD
     fi
-    case $testcase_exit_status,${keep_testdirs-} in
-        0,|0,n|0,no|0,NO) rm_rf ${testSubDir-};;
+    # wheter the temporary directory should be kept regardless of the
+    # result of the test script
+    case ${keep_testdirs-} in
+        ""|0|n|N|no|NO) keep_testdirs=no;;
+                     *) keep_testdirs=yes;;
     esac
-    echo "*** $me: EXIT $testcase_exit_status" >&2
+    # do cleanup if required
+    if test $testcase_exit_status !=  0; then
+        _testcase_msg -p "CLEANUP" "skip: the test failed"
+    elif test x"$keep_testdirs" = x"yes"; then
+        _testcase_msg -p "CLEANUP" "skip, as required by user" \
+                                   "(keep_testdirs=yes)"
+    else
+        _testcase_msg -p "CLEANUP" "remove temporary files"
+        set -x # temporarly re-enable traces (disabled in _Exit)
+        rm_rf ${testSubDir-}
+        { set +x; } 2>/dev/null
+        _testcase_msg -p "CLEANUP" "completed"
+    fi
+    # issue final message to the user, and exit
+    _testcase_msg "EXIT $testcase_exit_status"
     exit $testcase_exit_status
 }
 
@@ -138,8 +192,10 @@ _cleanup_at_exit() {
 _testcase_process_outcome() {
     set +x # xtrace verbosity temporarly disabled in this function
     if test $# -eq 0; then
-        echo "*** $me: HARD ERROR: _testcase_process_outcome:"
-                      "missing ACTION" >&2
+        _testcase_msg \
+            -p "_testcase_process_outcome" \
+            -p "INTERNAL ERROR" \
+            "missing ACTION"
         _Exit $E_HARD
     fi
     testcase_process_outcome_action=`expr x"$1" : 'x-*\(.*\)' | tr '_' '-'`
@@ -147,32 +203,33 @@ _testcase_process_outcome() {
     shift
     case $testcase_process_outcome_action in
         reset-success)
-            test $# -eq 0 || echo "*** $me: RESET SUCCESS: $*" >&2
+            _testcase_msg -p "RESET SUCCESS" ${1+"$@"}
             testcase_outcome=$SUCCESS
             ;;
         register-failure)
-            test $# -eq 0 || echo "*** $me: FAIL: $*" >&2
+            _testcase_msg -p "FAIL" ${1+"$@"}
             testcase_outcome=$FAILURE
             ;;
         fatal-failure)
-            test $# -eq 0 || echo "*** $me: FATAL FAILURE: $*" >&2
+            _testcase_msg -p "FATAL FAILURE" ${1+"$@"}
             testcase_outcome=$FAILURE
             testcase_DONE
             ;;
         skip)
-            test $# -eq 0 || echo "*** $me: SKIP: $*" >&2
+            _testcase_msg -p "SKIP" ${1+"$@"}
             testcase_outcome=$E_SKIP
             testcase_DONE
             ;;
         hard-error)
-            test $# -eq 0 || echo "*** $me: HARD ERROR: $*" >&2
+            _testcase_msg -p "HARD ERROR" ${1+"$@"}
             testcase_outcome=$E_HARD
             testcase_DONE
             ;;
         *)
-            echo "*** $me: HARD ERROR:" \
-                 "_testcase_process_outcome: invalid ACTION" \
-                 "\`$testcase_process_outcome_raw_action'" >&2
+            _testcase_msg \
+                -p "_testcase_process_outcome" \
+                -p "INTERNAL ERROR" \
+                "invalid ACTION \`$testcase_process_outcome_raw_action'"
             _Exit $E_HARD
             ;;
     esac
@@ -234,22 +291,22 @@ testcase_HARDERROR() {
 # then cause the the script to exit with a proper exit status.
 testcase_DONE() {
     set +x # xtrace verbosity temporarly disabled in this function
-    test $# -eq 0 || echo "*** $me: TESTCASE DONE: $*" >&2
+    _testcase_msg -p "TESTCASE DONE" ${1+"$@"}
     case ${testcase_outcome-$SUCCESS} in
         $SUCCESS)
-            echo "*** $me: TESTCASE PASSED." >&2
+            _testcase_msg "TESTCASE PASSED."
             ;;
         $FAILURE)
-            echo "*** $me: TESTCASE FAILED." >&2
+            _testcase_msg "TESTCASE FAILED."
             ;;
         $E_SKIP)
-            echo "*** $me: TESTCASE SKIPPED." >&2
+            _testcase_msg "TESTCASE SKIPPED."
             ;;
         $E_HARD)
-            echo "*** $me: TESTCASE ERROR." >&2
+            _testcase_msg "TESTCASE ERROR."
             ;;
         *)
-            echo "*** $me: HARD ERROR: testcase_DONE:" \
+            _testcase_msg -p "testcase_DONE" -p "INTERNAL ERROR" \
                           "invalid outcome \`$testcase_outcome'" >&2
             testcase_outcome=$E_HARD
             ;;
