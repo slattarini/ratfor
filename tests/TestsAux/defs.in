@@ -101,7 +101,7 @@ NEWLINE='
 # exit status to the exit trap when a syntax error is found.  Sigh.
 
 # Wrapper around exit, needed to pass the correct exit status to the exit
-# trap (see `cleanup_at_exit()') below.  This function is for INTERNAL USE
+# trap (see `_cleanup_at_exit()') below.  This function is for INTERNAL USE
 # ONLY; test scripts should be terminated using the `testcase_*' functions
 # defined below (e.g. `testcase_FATAL_FAILURE' or `testcase_DONE').
 _Exit() {
@@ -110,9 +110,9 @@ _Exit() {
     (exit $1); exit $1
 }
 
-# Our exit trap: should deal with normal termination, signals,
-# untrapped failures and internal errors.
-cleanup_at_exit() {
+# Our exit trap: should deal with normal termination, signals, untrapped
+# failures and internal errors.  This function is for INTERNAL USE ONLY.
+_cleanup_at_exit() {
     testcase_exit_status=$?
     set +e
     if test -n "${testcase_exit_signal-}"; then
@@ -512,7 +512,7 @@ fi
 export PATH
 
 # Setup cleanup traps.
-trap 'cleanup_at_exit' 0
+trap '_cleanup_at_exit' 0
 trap 'testcase_exit_signal=SIGHUP;  _Exit $E_HARD' 1
 trap 'testcase_exit_signal=SIGINT;  _Exit $E_HARD' 2
 trap 'testcase_exit_signal=SIGPIPE; _Exit $E_HARD' 13
