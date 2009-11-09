@@ -94,32 +94,6 @@ TAB='	'
 NEWLINE='
 '
 
-# Some shorthands for common sed regexps and commands.
-ws="[${SPACE}${TAB}]"
-ws0p="${ws}*" # zero or more white spaces
-ws1p="${ws}${ws0p}" # one or more white spaces
-# strip leading and trailing white spaces from input
-ws_strip() {
-    $SED -e "s/^$ws0p//" -e "s/$ws0p$//"
-}
-# convert any sequence of tab and space chars to a single space char,
-# and strip leading and trailing white spaces
-ws_normalize() {
-    $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"
-}
-
-# Escape a string so that it can be used literally in a grep search.
-escape_for_grep() {
-    case $# in
-        0) cat;;
-        *) echo "$*";;
-    esac | $SED -e 's/\.\|\*\|\?\|\[\|\]\|\\\|\^\|\$/\\&/g'
-}
-
-# Useful when grepping the path of the ratfor executable in error messages
-# produced by rator.
-ratfor_rx=`escape_for_grep "$RATFOR"`
-
 # We use a trap for cleanup.  This requires us to go through hoops to
 # get the right exit status transported through signals.  Also, more
 # hoops are required since there are shells (even some modern version
@@ -403,6 +377,32 @@ run_RATFOR() {
     run_command $run4_opts -- "$run4_timer" -t "$run4_timeout" -- \
                 "$RATFOR" ${1+"$@"}
 }
+
+# Some shorthands for common sed regexps and commands.
+ws="[${SPACE}${TAB}]"
+ws0p="${ws}*" # zero or more white spaces
+ws1p="${ws}${ws0p}" # one or more white spaces
+# strip leading and trailing white spaces from input
+ws_strip() {
+    $SED -e "s/^$ws0p//" -e "s/$ws0p$//"
+}
+# convert any sequence of tab and space chars to a single space char,
+# and strip leading and trailing white spaces
+ws_normalize() {
+    $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"
+}
+
+# Escape a string so that it can be used literally in a grep search.
+escape_for_grep() {
+    case $# in
+        0) cat;;
+        *) echo "$*";;
+    esac | $SED -e 's/\.\|\*\|\?\|\[\|\]\|\\\|\^\|\$/\\&/g'
+}
+
+# Useful when grepping the path of the ratfor executable in error messages
+# produced by rator.
+ratfor_rx=`escape_for_grep "$RATFOR"`
 
 # Testsuite utilities have always precedence over system ones.
 must_be_directory "$testaux_srcdir"
