@@ -106,30 +106,30 @@ NEWLINE='
 # defined below (e.g. `testcase_FATAL_FAILURE' or `testcase_DONE').
 _Exit() {
     set +e
-    rat4_exit_default=$1
+    testcase_exit_default=$1
     (exit $1); exit $1
 }
 
 # Our exit trap: should deal with normal termination, signals,
 # untrapped failures and internal errors.
 cleanup_at_exit() {
-    rat4_exit_status=$?
+    testcase_exit_status=$?
     set +e
-    if test -n "${rat4_exit_signal-}"; then
-        echo "$me: caught signal $rat4_exit_signal"
-        rat4_exit_status=$E_HARD
-    elif test -z "${rat4_exit_default-}"; then
+    if test -n "${testcase_exit_signal-}"; then
+        echo "$me: caught signal $testcase_exit_signal"
+        testcase_exit_status=$E_HARD
+    elif test -z "${testcase_exit_default-}"; then
         echo "$me: internal error or untrapped failure"
-        rat4_exit_status=$E_HARD
-    elif test x"$rat4_exit_default" != x"$rat4_exit_status"; then
+        testcase_exit_status=$E_HARD
+    elif test x"$testcase_exit_default" != x"$testcase_exit_status"; then
         echo "$me: exit status mismatch"
-        rat4_exit_status=$E_HARD
+        testcase_exit_status=$E_HARD
     fi
-    case $rat4_exit_status,${keep_testdirs-} in
+    case $testcase_exit_status,${keep_testdirs-} in
         0,|0,n|0,no|0,NO) rm_rf ${testSubDir-};;
     esac
-    echo "$me: exit $rat4_exit_status"
-    exit $rat4_exit_status
+    echo "$me: exit $testcase_exit_status"
+    exit $testcase_exit_status
 }
 
 # Usage: _testcase_process_outcome ACTION [MESSAGE]
@@ -513,10 +513,10 @@ export PATH
 
 # Setup cleanup traps.
 trap 'cleanup_at_exit' 0
-trap 'rat4_exit_signal=SIGHUP;  _Exit $E_HARD' 1
-trap 'rat4_exit_signal=SIGINT;  _Exit $E_HARD' 2
-trap 'rat4_exit_signal=SIGPIPE; _Exit $E_HARD' 13
-trap 'rat4_exit_signal=SIGTERM; _Exit $E_HARD' 15
+trap 'testcase_exit_signal=SIGHUP;  _Exit $E_HARD' 1
+trap 'testcase_exit_signal=SIGINT;  _Exit $E_HARD' 2
+trap 'testcase_exit_signal=SIGPIPE; _Exit $E_HARD' 13
+trap 'testcase_exit_signal=SIGTERM; _Exit $E_HARD' 15
 
 # Were the tests will run.
 rm_rf $me.dir
