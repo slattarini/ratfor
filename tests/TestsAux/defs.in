@@ -99,11 +99,12 @@ NEWLINE='
 # hoops are required since there are shells (even some modern version
 # of Bash, e.g. bash-3.2 or bash-4.0) which do not passes a "failure"
 # exit status to the exit trap when a syntax error is found.  Sigh.
-# So use `Exit STATUS' instead of `exit STATUS' inside the tests.
 
-# Wrapper around exit, needed to pass the correct exit status to the
-# exit trap (see `cleanup_at_exit()') below.
-Exit() {
+# Wrapper around exit, needed to pass the correct exit status to the exit
+# trap (see `cleanup_at_exit()') below.  This function is for INTERNAL USE
+# ONLY; test scripts should be terminated using the `testcase_*' functions
+# defined below (e.g. `testcase_FATAL_FAILURE' or `testcase_DONE').
+_Exit() {
     set +e
     rat4_exit_default=$1
     (exit $1); exit $1
@@ -139,7 +140,7 @@ _testcase_process_outcome() {
     if test $# -eq 0; then
         echo "*** $me: HARD ERROR: _testcase_process_outcome:"
                       "missing ACTION" >&2
-        Exit $E_HARD
+        _Exit $E_HARD
     fi
     testcase_process_outcome_action=`expr x"$1" : 'x-*\(.*\)' | tr '_' '-'`
     testcase_process_outcome_raw_action=$1
@@ -172,7 +173,7 @@ _testcase_process_outcome() {
             echo "*** $me: HARD ERROR:" \
                  "_testcase_process_outcome: invalid ACTION" \
                  "\`$testcase_process_outcome_raw_action'" >&2
-            Exit $E_HARD
+            _Exit $E_HARD
             ;;
     esac
     set -x # restart xtrace verbosity
@@ -254,7 +255,7 @@ testcase_DONE() {
             ;;
     esac
     set -x # restart xtrace verbosity
-    Exit $testcase_outcome
+    _Exit $testcase_outcome
 }
 
 # Usage: must_be_directory DIRECTORY [DESC]
@@ -512,10 +513,10 @@ export PATH
 
 # Setup cleanup traps.
 trap 'cleanup_at_exit' 0
-trap 'rat4_exit_signal=SIGHUP;  Exit $E_HARD' 1
-trap 'rat4_exit_signal=SIGINT;  Exit $E_HARD' 2
-trap 'rat4_exit_signal=SIGPIPE; Exit $E_HARD' 13
-trap 'rat4_exit_signal=SIGTERM; Exit $E_HARD' 15
+trap 'rat4_exit_signal=SIGHUP;  _Exit $E_HARD' 1
+trap 'rat4_exit_signal=SIGINT;  _Exit $E_HARD' 2
+trap 'rat4_exit_signal=SIGPIPE; _Exit $E_HARD' 13
+trap 'rat4_exit_signal=SIGTERM; _Exit $E_HARD' 15
 
 # Were the tests will run.
 rm_rf $me.dir
