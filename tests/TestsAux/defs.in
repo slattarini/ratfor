@@ -116,19 +116,19 @@ cleanup_at_exit() {
     testcase_exit_status=$?
     set +e
     if test -n "${testcase_exit_signal-}"; then
-        echo "$me: caught signal $testcase_exit_signal"
+        echo "*** $me: caught signal $testcase_exit_signal" >&2
         testcase_exit_status=$E_HARD
     elif test -z "${testcase_exit_default-}"; then
-        echo "$me: internal error or untrapped failure"
+        echo "*** $me: internal error or untrapped failure" >&2
         testcase_exit_status=$E_HARD
     elif test x"$testcase_exit_default" != x"$testcase_exit_status"; then
-        echo "$me: exit status mismatch"
+        echo "*** $me: exit status mismatch" >&2
         testcase_exit_status=$E_HARD
     fi
     case $testcase_exit_status,${keep_testdirs-} in
         0,|0,n|0,no|0,NO) rm_rf ${testSubDir-};;
     esac
-    echo "$me: exit $testcase_exit_status"
+    echo "*** $me: EXIT $testcase_exit_status" >&2
     exit $testcase_exit_status
 }
 
