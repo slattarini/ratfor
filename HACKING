@@ -106,17 +106,29 @@ Writing test cases
   called without arguments).  Use the `halt' subroutine insted (custom
   subroutine defined in auxiliary file `tests/halt.f').
 
-  Use either `testcase_PASS', `testcase_FAIL', `testcase_SKIP' or
-  `testcase_HARDERROR' to terminate a test.  If for some reason you need
-  to return with a custom exit status, use `Exit' rather than `exit'.
-  *Every* test must use a call to either `testcase_PASS', `testcase_FAIL',
-  `testcase_SKIP', `testcase_HARDERROR' or `Exit' to do normal termination.
-  If a test exits for another reason (e.g. a call to plain `exit', a failed
-  command when the `set -e' switch is active, a terminating signal, a
-  syntax error in shell code, ...) the test will end in an "hard error",
-  and will be considered FAIL'd.
+  Use `testcase_SKIP' to make a test script to be SKIP'd (also, provide a
+  reason for this skip, by passing a proper argument to testcase_SKIP).
+  Use `testcase_REGISTER_FAILURE' to register a non-fatal failure (which
+  shouldn't stop the test script immediately).
+  Use `testcase_FATAL_FAILURE' to issue a fatal failure (which should
+  cause the test script to exit immediately).
+  Use `testcase_HARDERROR' to issue a fatal error (e.g. when some
+  unexpected condition is met, or when some auxiliary command fails
+  unexpectedly -- obviously, this causes the immediate termination of
+  the test script).
+  Use `testcase_DONE' to cause normal termination of the test script (this
+  will cause the test to PASS if no failure has been encounterd, and will
+  cause it to FAIL otherwise).
 
-  Do *not* use the `testcase_*' or `Exit' subroutines in a subshell.
+  Do *not* use any of the the `testcase_*' subroutines described above in
+  a subshell.
+
+  Note that *every* test must use a call to either `testcase_DONE',
+  `testcase_SKIP' or `testcase_FATAL_FAILURE' to do normal termination.
+  If a test exits for another reason (e.g. a call to `testcase_HARDERROR',
+  a call to plain `exit', a failed command when the `set -e' switch is
+  active, a terminating signal, a syntax error in shell code, ...) the
+  test will end in an "hard error", and will be considered FAIL'd.
 
   Use $GREP, $FGREP, $EGREP, $SED, $AWK, instead of the corresponding
   commands.  Also prefer $DIFF_U on plain `diff'.  This list of tools might
