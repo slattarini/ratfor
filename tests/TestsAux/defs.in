@@ -292,7 +292,9 @@ testcase_HARDERROR() {
 testcase_DONE() {
     set +x # xtrace verbosity temporarly disabled in this function
     _testcase_msg -p "TESTCASE DONE" ${1+"$@"}
-    case ${testcase_outcome-$SUCCESS} in
+    # a test script is successful by default
+    testcase_outcome=${testcase_outcome-$SUCCESS}
+    case $testcase_outcome in
         $SUCCESS)
             _testcase_msg "TESTCASE PASSED."
             ;;
