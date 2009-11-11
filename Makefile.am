@@ -6,6 +6,10 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
+SUBDIRS = src doc blackbox-tests
+
+dist_doc_DATA = README BUGS NEWS
+
 # List of extra files to be put in the distributed tarball.
 EXTRA_DIST = \
   xfail-tests.txt \
@@ -45,10 +49,6 @@ else
   # variable used by maint.mk
   ENABLE_MAINTAINER_MAKE_RULES = no
 endif
-
-SUBDIRS = src doc blackbox-tests
-
-dist_doc_DATA = README BUGS NEWS
 
 # This is defined here so that it can be extended in maint/*.mk, if needed.
 distcheck-hook:
