@@ -23,9 +23,11 @@ no_dist_files = \
   maint/local-cfg.mk \
   maint/personal/*
 
-# Check that we do not erronously include in the tarball any file which is
-# not meant for distribution.
-dist-hook:
+# Check that we do not erreonously include in the tarball any file which
+# is not meant for distribution.
+dist-hook: dist-hook-check-no-dist-files
+.PHONY: dist-hook-check-no-dist-files
+dist-hook-check-no-dist-files:
 	@list='$(no_dist_files)'; for f in $$list; do \
 	  if test -r $(distdir)/$$f; then \
 	    bad_dist_files="$$bad_dist_files $$f"; \
@@ -41,14 +43,20 @@ dist-hook:
 	fi; \
 	exit 0
 
+# Version string management for distributed tarballs.
+dist-hook: dist-hook-create-tarball-version
+.PHONY: dist-hook-create-tarball-version
+dist-hook-create-tarball-version:
+	echo '$(VERSION)' > $(distdir)/.tarball-version
+
+# $(ENABLE_MAINTAINER_MAKE_RULES): variable used by maint.mk
 if ENABLE_MAINTAINER_MAKE_RULES
-  # variable used by maint.mk
   ENABLE_MAINTAINER_MAKE_RULES = yes
 else
-  # variable used by maint.mk
   ENABLE_MAINTAINER_MAKE_RULES = no
 endif
 
+# Configure settings that should be preserved also in `make distcheck'
 DISTCHECK_CONFIGURE_FLAGS = \
 	'RATFOR=$(RATFOR)' \
 	'RAT4_TESTSUITE_XFAIL_TESTS=$(RAT4_TESTSUITE_XFAIL_TESTS)'

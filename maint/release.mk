@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2009-10-01 17:06:12 +0200.  DO NOT EDIT!
+# Copied from SteLib at 2009-11-12 17:33:20 +0100.  DO NOT EDIT!
 # Contains maintainer-specific rules to create a beta or stable release.
 # Included by top-level maint.mk.
 
@@ -11,6 +11,11 @@ _rls_make := $(MAKE) --no-print-directory
 # _rls_version: $(VERSION) with some metacharacters quoted, to be used
 # e.g. in grep or sed commands.
 _rls_version := $(subst .,\.,$(VERSION))
+
+# Regular expressions (*not anchored*) for acceptable version strings.
+_rls_stable_version_rx := [0-9]\+\(\.[0-9]\+\)\+
+_rls_alpha_version_rx := $(_rls_stable_version_rx)[a-z]\+
+_rls_beta_version_rx := $(_rls_alpha_version_rx)
 
 # Path or name of git(1).
 GIT ?= git
@@ -42,47 +47,58 @@ git-no-diff-cached-check:
 	@rm -f $@.tmp;
 CLEAN_FILES += git-no-diff-cached-check.tmp
 
-.PHONY: version-for-stable-check
-version-ok-for-stable-check:
-	  @echo x'$(VERSION)' | egrep '^x[0-9]+(\.[0-9]+)+$$' >/dev/null || { \
-	    echo "$(_rls_ME): invalid version string for stable release:" \
-		     			 "$(VERSION)" >&2; \
-	    exit 1; \
-	  }
+.PHONY: check-version-alpha check-version-beta check-version-stable
+check-version-for-alpha check-version-beta check-version-stable:
+	@(set -u) >/dev/null 2>&1 && set -u; \
+	 reltype=`echo $@ | sed -e 's/^.*-//'`; \
+	 stable_version_rx='$(_rls_stable_version_rx)'; \
+	 alpha_version_rx='$(_rls_alpha_version_rx)'; \
+	 beta_version_rx='$(_rls_beta_version_rx)'; \
+	 eval "version_rx=\$${$${reltype}_version_rx}"; \
+	 echo x'$(VERSION)' | grep "^x$${version_rx}$$" >/dev/null || { \
+	   echo "$(_rls_ME): invalid version string for a $$reltype release:" \
+	                    "\`$(VERSION)'" >&2; \
+	   exit 1; \
+	 }
 
 .PHONY: news-up-to-date-check
 news-up-to-date-check:
 	@grep "^New in $(_rls_version)$$" $(srcdir)/NEWS >/dev/null || { \
-	   echo "$(_rls_ME): version \`$(VERSION)' not mentioned in NEWS" >&2;\
-	   exit 1; \
+	  echo "$(_rls_ME): version \`$(VERSION)' not mentioned in NEWS" >&2; \
+	  exit 1; \
 	 }
 
-.PHONY: version-git-tag-is-new-check
-version-git-tag-is-new-check:
-	@if $(GIT) tag | grep '^v$(_rls_version) *$$' >/dev/null; then \
-	  echo "$(_rls_ME): git tag \`v$(VERSION)' already exists" >&2; \
-	  exit 1; \
-	fi
+# FIXME: The code used to recover the tag message/annotation below is
+# FIXME: awkward and hackish; find a better way to do that.
+.PHONY: check-git-tag-alpha check-git-tag-beta check-git-tag-stable
+check-git-tag-alpha check-git-tag-beta check-git-tag-stable:
+	@reltype=`echo $@ | sed -e 's/^.*-//'`; \
+	 tag=`$(GIT) tag -l 'v$(VERSION)'`; \
+	 test -n "$$tag" || { \
+	   echo "$(_rls_ME): git tag \`v$(VERSION)' not found" >&2; \
+	   exit 1; \
+	 }; \
+	 exp_msg="$$reltype release $(VERSION)"; \
+	 tag_msg=`$(GIT) show --format=oneline "$$tag" | grep . | \
+	            sed -n -e 2p -e 2q`; \
+	 if test x"$$tag_msg" != x"$$exp_msg"; then \
+	   echo "$(_rls_ME): Git tag \`$$tag' has bad message" \
+	                    "\`$$tag_msg'">&2; \
+	   echo "$(_rls_ME): It should have message \`$$exp_msg'">&2; \
+	   exit 1; \
+	 fi;
 
 .PHONY: alpha beta stable
 ALL_RECURSIVE_TARGETS += alpha beta stable
 alpha beta stable:
-	$(_rls_make) GIT='$(GIT)' vc-nodiff-check
 	@[ x'$(VERSION)' != x ] || { \
-	  echo "$(_rls_ME): $@: no version given!" >&2; \
+	  echo '$(_rls_ME): $@: $$(VERSION) is empty!' >&2; \
 	  exit 1; \
 	}
-	$(_rls_make) version-git-tag-is-new-check
-	@if test x"$@" = x"stable"; then \
-	  echo "$(_rls_make) version-ok-for-stable-check"; \
-	  $(_rls_make) version-ok-for-stable-check || exit 1; \
-	fi
+	$(_rls_make) GIT='$(GIT)' vc-nodiff-check
+	$(_rls_make) check-version-$@
+	$(_rls_make) check-git-tag-$@
 	$(_rls_make) news-up-to-date-check
-	$(_rls_make) strict-distcheck
-	$(_rls_make) clean
-	$(_rls_make) dist
-	@echo ====
-	@echo "$(_rls_ME): creating a git tag for $@ release \`$(VERSION)'"
-	$(GIT) tag -a -m '$@ release $(VERSION)' 'v$(VERSION)'
+	$(_rls_make) distcheck
 
 # vim: ft=make ts=4 sw=4 noet
