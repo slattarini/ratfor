@@ -240,8 +240,6 @@ _testcase_process_outcome() {
 # DO NOT USE THIS FUNCTION IN NEW TESTS!
 testcase_PASS() {
     { set +x; } 2>/dev/null
-    testcase_RESET_SUCCESS ${1+"$@"}
-    { set +x; } 2>/dev/null
     testcase_DONE
 }
 
