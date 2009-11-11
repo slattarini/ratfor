@@ -5,7 +5,8 @@
 # shell builtin) by all test scripts of the Ratfor Testsuite.
 #
 
-# Shell initialization code, stolen from autoconf
+# Be more Bourne compatible.
+# (Snippet inspired to configure's initialization in Autoconf 2.64)
 DUALCASE=1; export DUALCASE # for MKS sh
 if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   emulate sh
@@ -14,12 +15,33 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
   # is contrary to our usage.  Disable this feature.
   alias -g '${1+"$@"}'='"$@"'
   setopt NO_GLOB_SUBST
+  # Zsh, when not directly starting in Bourne-compatibility mode, has some
+  # incompatibilities in the handling of `$0' which conflict with our usage
+  # (e.g., `$0' inside a file sourced with the `.' builtin is temporarly
+  # set to the name of the sourced file).  Work around this when possible,
+  # otherwise abort the script.
+  # Note that a bug in some versions of Zsh prevents us from resetting $0
+  # in a sourced script, so the use of $argv0.  For more info see:
+  #  <http://www.zsh.org/mla/workers/2009/msg01140.html>
+  if [[ "$0" = *.'test' ]]; then
+    # Good, FUNCTION_ARGZERO option was already off when this file was
+    # sourced.  Thus we've nothing to do.
+    argv0=$0
+  elif test -n "${functrace[-1]}"; then
+    # FUNCTION_ARGZERO option was on, but we have an easy workaround.
+    argv0=${functrace[-1]%:*}
+  else
+    # Give up.
+    echo "$0: (Zsh version $ZSH_VERSION) cannot determine the" \
+         "path of running test script" >&2
+    echo "$0:$LINENO: *** ABORT ***" >&2
+    exit 99
+  fi
 else
-    case `(set -o) 2>/dev/null` in
-        *posix*) set -o posix;;
-              *) ;;
-    esac
+  argv0=$0
+  case `(set -o) 2>/dev/null` in *posix*) set -o posix;; esac
 fi
+
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 (set -u) >/dev/null 2>&1 && set -u
 
@@ -74,8 +96,8 @@ case "${RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL-}" in
     *)
         RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL=yes
         export RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL
-        echo "$0: re-executing with $SHELL"
-        exec $SHELL "$0" ${1+"$@"}
+        echo "$argv0: re-executing with $SHELL"
+        exec $SHELL "$argv0" ${1+"$@"}
         exit $E_HARD # NOTREACHED
         ;;
 esac
@@ -86,7 +108,7 @@ esac
 exec <&-
 
 # Name of the running test script.
-me=`echo x/"$0" | $SED -e 's|.*/||' -e 's/\.test$//'`
+me=`echo x/"$argv0" | $SED -e 's|.*/||' -e 's/\.test$//'`
 
 # Symbolic names for whitespace characters.
 SPACE=' '
@@ -581,7 +603,7 @@ mkdir $me.dir
 cd ./$me.dir
 testSubDir=`pwd` # absolute path
 
-echo "=== Running test $0"
+echo "=== Running test $argv0"
 echo "# PWD: `pwd`"
 echo "# PATH: $PATH"
 echo "# F77: $F77"

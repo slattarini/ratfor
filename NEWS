@@ -3,6 +3,9 @@ List of user-visible changes of Ratfor Testsuite.
 New in 0.9f
 -----------
  * Silent rules in the Makefiles are not enabled by default anymore.
+ * With Zsh version 4.x or later, it's now possible to run the test scripts
+   with just e.g. `zsh foo.test', without needing to use the Zsh option
+   `-o no_function_argzero'.
  * When specifying to configure the list of test scripts expected to fail
    (through the variable `RAT4_TESTUITE_XFAIL_TESTS'), it's now possible
    to simply use test basenames rather than test fullnames (e.g. `foo'
