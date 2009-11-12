@@ -1,6 +1,6 @@
 List of user-visible changes of Ratfor Testsuite.
 
-New in XXX
+New in 0.9f
 -----------
  * Silent rules in the Makefiles are not enabled by default anymore.
  * When specifying to configure the list of test scripts expected to fail
