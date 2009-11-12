@@ -1,7 +1,10 @@
 /maint/config.site
 /maint/local-cfg.mk
 
-/build-aux/
+/build-aux/compile
+/build-aux/depcomp
+/build-aux/install-sh
+/build-aux/missing
 /autom4te.cache/
 /aclocal.m4
 

@@ -15,7 +15,9 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 #
 
 AC_PREREQ([2.62])
-AC_INIT([C Ratfor], [1.0m], [stefano.lattarini@gmail.com])
+AC_INIT([C Ratfor],
+        m4_esyscmd([build-aux/git-version-gen .tarball-version]),
+        [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([src/rat4-common.h])
 AC_CONFIG_HEADERS([config.h])
