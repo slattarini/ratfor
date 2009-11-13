@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2009-10-26 02:00:57 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2009-11-13 16:50:07 +0100.  DO NOT EDIT!
 # Contains maintainer-specific rules. Included by top-level GNUmakefile.
 
 # Do not save the original name or timestamp in the .tar.gz file.
@@ -25,7 +25,7 @@ abs_maintdir = $(abs_srcdir)/maint
 # regardless of the fact that make was called with or without the `-e'
 # switch. We use `$(_autoreconf)' since this is the same variable used
 # in top-level GNUmakefile.
-_autoreconf := $(shell echo "$${AUTORECONF:-autoreconf}")
+_autoreconf := $(shell echo "$${AUTORECONF:-autoreconf -vi}")
 
 # Prevent programs like 'sort' from considering distinct strings to be
 # equal. Doing it here saves us from having to set LC_ALL elsewhere in
