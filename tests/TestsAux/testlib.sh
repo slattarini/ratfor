@@ -1,6 +1,9 @@
 #!/bin/sh
+# Copied from SteLib at 2009-11-13 21:28:03 +0100.  DO NOT EDIT!
 #
-# Shell library to write test cases.
+# Shell library to write test cases.  The only documentation are the
+# comments and the description of variables/functions embedded in the
+# code below.
 #
 
 # Be more Bourne compatible.
@@ -92,7 +95,7 @@ if test x${srcdir+"set"} != x"set"; then
 fi
 case "$srcdir" in
     /*) : already an absolute path;;
-     *) srcdir=`cd "$srcdir" && pwd` || testcase_HARDERROR;;
+     *) srcdir=`cd "$srcdir" && pwd` || exit 99;;
 esac
 
 # The builddir is alwys the directory in which the script is run.
@@ -477,6 +480,6 @@ trap 'testcase_exit_signal=SIGTERM; _Exit $E_HARD' 15
 rm_rf ./"$me".dir
 mkdir ./"$me".dir
 cd ./"$me".dir
-testSubDir=`pwd` # absolute path
+testSubDir=`pwd` || testcase_HARDERROR # absolute path
 
 # vim: ft=sh ts=4 sw=4 et
