@@ -1,7 +1,8 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# Makefile for the ratfor/doc subdirectory.
+# C Ratfor: a ratfor preprocessor written in C.
+# Makefile for the doc/ subdirectory.
 
 dist_man1_MANS = ratfor.man
 

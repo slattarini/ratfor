@@ -1,7 +1,8 @@
 ## -*- Makefile.am -*-
 ## Process this file with automake to produce Makefile.in
 ##
-# Makefile for the src/ratfor subdirectory.
+# C Ratfor: a ratfor preprocessor written in C.
+# Makefile for the src/ subdirectory.
 
 bin_PROGRAMS = ratfor
 
