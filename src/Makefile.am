@@ -4,7 +4,7 @@
 # C Ratfor: a ratfor preprocessor written in C.
 # Makefile for the src/ subdirectory.
 
-bin_PROGRAMS = ratfor
+bin_PROGRAMS = c-ratfor
 
 ## we should not need to use $(BUILT_SOURCES) here
 lexer.c: mklexer.sh Makefile
@@ -16,7 +16,7 @@ lexer.c: mklexer.sh Makefile
 EXTRA_DIST = mklexer.sh
 MOSTLYCLEANFILES = lexer.c lexer.c-t
 
-ratfor_SOURCES = \
+c_ratfor_SOURCES = \
     rat4-global.h \
 	rat4-common.h \
 	lex-symbols.h \
@@ -32,7 +32,7 @@ ratfor_SOURCES = \
 	labgen.c labgen.h \
 	codegen.c codegen.h
 
-ratfor_SOURCES += lexer.h 
-nodist_ratfor_SOURCES = lexer.c
+c_ratfor_SOURCES += lexer.h
+nodist_c_ratfor_SOURCES = lexer.c
 
 ## vim: ft=automake noet sw=4 ts=4

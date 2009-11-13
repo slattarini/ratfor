@@ -1,6 +1,6 @@
 /.deps/
 *.o
 *.obj
-ratfor
+c-ratfor
 lexer.c
 lexer.c-t

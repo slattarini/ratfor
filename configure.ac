@@ -34,7 +34,7 @@ AC_CONFIG_SUBDIRS([blackbox-tests])
 # Ratfor program to be used in the testsuite. *Must* be an absolute path.
 # NOTE: when the configure script is running, the current working
 # directory (returned by `pwd') is the build directory.
-RATFOR=`pwd`/src/ratfor
+RATFOR=`pwd`/src/c-ratfor
 export RATFOR
 AC_MSG_NOTICE([exported RATFOR='$RATFOR'])
 
