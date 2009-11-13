@@ -66,31 +66,6 @@ FAILURE=1
 E_SKIP=77 # test case skipped
 E_HARD=99 # test case aborted due to some "hard error"
 
-#
-# XXX: TO BE REMOVED SOON
-#
-# By default, the test scripts are run with the /bin/sh shell, but this
-# might be a rather limited shell.  And in this case, configure probably
-# detected a better shell and saved it in the AC_SUBST'd variable $SHELL.
-# So let's by default rerun with the shell in $SHELL, just to be safe.
-# However, if the user know in advance that the shell used to run the
-# test scripts is good enough, he can prevent the re-execution of the
-# scripts with $SHELL by adding the following definiton to the environment:
-#  RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL=yes
-#
-case "${RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL-}" in
-    y|Y|yes|Yes|YES|1)
-        : # go ahead with the current shell
-        ;;
-    *)
-        RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL=yes
-        export RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL
-        echo "$argv0: re-executing with $SHELL"
-        exec $SHELL "$argv0" ${1+"$@"}
-        exit $E_HARD # NOTREACHED
-        ;;
-esac
-
 # Symbolic names for whitespace characters.
 SPACE=' '
 TAB='	'
