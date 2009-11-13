@@ -181,6 +181,9 @@ _Exit() {
 # failures and internal errors.  This function is for INTERNAL USE ONLY.
 _cleanup_at_exit() {
     testcase_exit_status=$?
+    # in case the script is not terminated by `_Exit()' (e.g. an uncatched
+    # failure while `set -e' is on, or a terminating signal).
+    set +x
     if test -n "${testcase_exit_signal-}"; then
         _testcase_msg "caught signal $testcase_exit_signal"
         testcase_exit_status=$E_HARD
