@@ -3,7 +3,7 @@
 # Test automatic line continuation on raw relational symbols (test is done
 # by grepping ratfor output).
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 for rel in not and or eq neq gt lt ge le; do
     echo "'TEST ${rel}'"

@@ -2,7 +2,7 @@
 
 # Check that the `repeat' statement does not require a following until
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 echo 'repeat nothing' >tst.r
 run_RATFOR tst.r || testcase_FAIL

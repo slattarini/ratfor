@@ -2,7 +2,7 @@
 
 # Check that ratfor uses 23000 as default internal starting label
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 while(true) {

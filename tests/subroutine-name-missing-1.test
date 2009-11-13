@@ -3,7 +3,7 @@
 # Check that ratfor complains if the keyword `subroutine' is not followed
 # by a subroutine name (basic checks).
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 ls -l "$srcdir"/subprog-name-invalid.sh
 . "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
 

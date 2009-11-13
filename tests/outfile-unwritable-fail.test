@@ -2,7 +2,7 @@
 
 # Check that ratfor barfs if given an unwritable file output file.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 : > tst.out
 chmod a-w tst.out

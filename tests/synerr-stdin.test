@@ -3,7 +3,7 @@
 # Check that the name of standard input in error messages is "(stdin)",
 # not "-".
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 echo '}' > tst.r
 run_RATFOR -e 1 <tst.r || testcase_FAIL

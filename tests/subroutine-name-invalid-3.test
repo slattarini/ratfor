@@ -4,7 +4,7 @@
 # the keyword `subroutine' is followed by a relational shortand (e.g. `&&'
 # or `>=').
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 ls -l "$srcdir"/subprog-name-invalid.sh
 . "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
 

@@ -3,7 +3,7 @@
 # Check that `include' works when passed as argument a atring containing
 # non-alphanumeric tokens.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 inc='n_o_n=alph@-inclu,d:e.d' #XXX: add a `~', `%'? a `$'?
 cat >"$inc" <<EOF

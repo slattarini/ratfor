@@ -3,7 +3,7 @@
 # Check that incorrect (and only incorrect) usages of the `break'
 # statement are caught.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 data="$srcdir/break-next-fail.data"
 

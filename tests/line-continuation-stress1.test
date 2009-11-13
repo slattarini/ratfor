@@ -2,7 +2,7 @@
 
 # Test line continuation by `_' (more complex usages).
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 tr '@' ' ' > tst.r <<\EOF
 #-------------------------------

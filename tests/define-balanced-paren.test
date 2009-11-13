@@ -2,7 +2,7 @@
 
 # Check that `define' works on text containing balanced parens.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 define(sym1, subr())

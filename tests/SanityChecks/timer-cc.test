@@ -7,7 +7,7 @@
 # a C compiler is not required by the Ratfor Testsuite, so we must
 # SKIP this test if compilations fail.
 
-. ../TestsAux/test-lib.sh || exit 99
+. ../TestsAux/rat4-t.sh || exit 99
 
 cat >xsleep.c <<\EOF
 #include <stdio.h>

@@ -3,7 +3,7 @@
 # Check that `include' fails on non-existent files.
 # WARNING: ratfor must not abort on failed include. Check for this, too.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 ls -l none.r 2>&1 || :
 test ! -f none.r

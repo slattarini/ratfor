@@ -2,7 +2,7 @@
 
 # Check that ratfor complains if a label is not followed by a statement
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 foo

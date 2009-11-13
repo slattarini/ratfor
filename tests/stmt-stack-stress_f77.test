@@ -3,7 +3,7 @@
 # Stress test for ratfor w.r.t. the stacking of loops (checks done by
 # compiling and running generated fortran code).
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 require_strong_fortran_compiler
 

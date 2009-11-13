@@ -2,7 +2,7 @@
 
 # Check that `define' fails with proper error messages if usen improperly.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 tcnt=0
 e=0

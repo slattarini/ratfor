@@ -3,7 +3,7 @@
 # Check (with F77) that ratfor does not mess up the `//' (string
 # concatenation) operator (that already happened in practice, sadly).
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

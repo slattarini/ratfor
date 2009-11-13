@@ -3,7 +3,7 @@
 # Check that ratfor complains if nested subprograms (a.k.a. functions or
 # subroutines) are found.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst1.r <<EOF
 function f1

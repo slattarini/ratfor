@@ -2,7 +2,7 @@
 
 # Test "deeply" nested `include'.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 (set -C) >/dev/null 2>&1 && set -C
 

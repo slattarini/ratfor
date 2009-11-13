@@ -2,7 +2,7 @@
 
 # Check the use of `%' to output lines verbatim
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 vtext="{|| bar VeRbAtIm $TAB &&}"
 vtext2="define foo bar; $vtext"

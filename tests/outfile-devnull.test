@@ -3,7 +3,7 @@
 # Check that ratfor accept a non-regular file, namely `/dev/null', as its
 # outfile
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 echo 'junk' > tst.r
 

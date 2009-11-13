@@ -2,7 +2,7 @@
 
 # Testsuite sanity check: check the `run_F77' subroutine.
 
-. ../TestsAux/test-lib.sh || exit 99
+. ../TestsAux/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

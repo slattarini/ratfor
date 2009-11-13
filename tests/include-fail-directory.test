@@ -3,7 +3,7 @@
 # Check that `include' fails on directories.
 # WARNING: ratfor must not abort on failed include. Check for this, too.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 mkdir dir.d
 ls -ld dir.d 2>&1 || :

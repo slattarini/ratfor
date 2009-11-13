@@ -1,8 +1,6 @@
 #!/bin/sh
-# @configure_input@
 #
-# Common definitions and environments setting read (with the `source'
-# shell builtin) by all test scripts of the Ratfor Testsuite.
+# Shell library to write test cases.
 #
 
 # Be more Bourne compatible.
@@ -45,30 +43,22 @@ fi
 (unset CDPATH) >/dev/null 2>&1 && unset CDPATH
 (set -u) >/dev/null 2>&1 && set -u
 
+# Make errors fatal.
+set -e
+
 # NLS nuisances: we want to run in plain C locale, for repeatibility
 LC_ALL=C; export LC_ALL
 LANGUAGE=C; export LANGUAGE
 LANG=C; export LANG
 
-# Configured data, metadata and testing tools.
-PACKAGE_VERSION='@PACKAGE_VERSION@'
-PACKAGE_NAME='@PACKAGE_NAME@'
-EXEEXT='@EXEEXT@'
-GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
-EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
-FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
-SED=${RAT4_TESTSUITE_SED-'@SED@'}
-AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
-SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
-DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
-F77=${RAT4_TESTSUITE_F77-'@F77@'}
-RATFOR=${RAT4_TESTSUITE_RATFOR-'@RATFOR@'}
-top_srcdir='@abs_top_srcdir@'
-top_builddir='@abs_top_builddir@'
-srcdir=$top_srcdir/tests
-builddir=$top_builddir/tests
-testaux_srcdir=$srcdir/TestsAux
-testaux_builddir=$builddir/TestsAux
+# Testing tools.
+GREP=${GREP-'grep'}
+EGREP=${EGREP-'egrep'}
+FGREP=${FGREP-'fgrep'}
+SED=${SED-'sed'}
+AWK=${AWK-'awk'}
+SHELL=${SHELL-'/bin/sh'}
+DIFF_U=${DIFF_U-'diff'}
 
 # Symbolic names for exit statuses.
 SUCCESS=0
@@ -76,9 +66,8 @@ FAILURE=1
 E_SKIP=77 # test case skipped
 E_HARD=99 # test case aborted due to some "hard error"
 
-# Make errors fatal.
-set -e
-
+#
+# XXX: TO BE REMOVED SOON
 #
 # By default, the test scripts are run with the /bin/sh shell, but this
 # might be a rather limited shell.  And in this case, configure probably
@@ -102,6 +91,17 @@ case "${RAT4_TESTSUITE_NO_REEXEC_WITH_CONFIG_SHELL-}" in
         ;;
 esac
 
+# Symbolic names for whitespace characters.
+SPACE=' '
+TAB='	'
+NEWLINE='
+'
+
+# Some shorthands for common sed regexps and commands.
+ws="[${SPACE}${TAB}]"
+ws0p="${ws}*" # zero or more white spaces
+ws1p="${ws}${ws0p}" # one or more white spaces
+
 # In a test script, it is an error if any command which must read from
 # standard input does so without first redirecting it; so close stdin
 # to make such an error sticking out clearly.
@@ -110,11 +110,18 @@ exec <&-
 # Name of the running test script.
 me=`echo x/"$argv0" | $SED -e 's|.*/||' -e 's/\.test$//'`
 
-# Symbolic names for whitespace characters.
-SPACE=' '
-TAB='	'
-NEWLINE='
-'
+# Find out srcdir, if not explicitly given. Always use an absolute path.
+if test x${srcdir+"set"} != x"set"; then
+   srcdir=`echo x"$argv0" | sed -e 's/^x//' -e 's,/[^\\/]*$,,'`
+   test x"$srcdir" != x"$argv0" || srcdir=.
+fi
+case "$srcdir" in
+    /*) : already an absolute path;;
+     *) srcdir=`cd "$srcdir" && pwd` || testcase_HARDERROR;;
+esac
+
+# The builddir is alwys the directory in which the script is run.
+builddir=`pwd` # absolute path
 
 # Usage: _testcase_msg [-p PREFIX-TO-MESSAGE] MESSAGE
 # Write a message on the standard error, with bells and whistles.
@@ -341,64 +348,6 @@ testcase_DONE() {
     _Exit $testcase_outcome
 }
 
-# Usage: must_be_directory DIRECTORY [DESC]
-# Check that the given DIRECTORY exists, else die with an "hard error".
-must_be_directory() {
-    test -d "$1" || testcase_HARDERROR "${2-directory}" "\`$1' not found"
-}
-
-# Check that we have a valid fortran 77 compiler available, else
-# cause the testcase to be SKIP'd.
-require_fortran_compiler() {
-    case "$F77" in
-        "") testcase_HARDERROR "variable \`\$F77' is empty";;
-      NONE) testcase_SKIP "Fotran 77 compiler should not be used" \
-                          "(variable \`\$F77' is set to \`NONE')";;
-    esac
-}
-
-# Check that we have available a valid fortran 77 compiler without silly
-# limits, else cause the testcase to be SKIP'd.
-require_strong_fortran_compiler() {
-    require_fortran_compiler
-    #XXX: move this checks at configure times?
-    f77check_opwd=`pwd`
-    f77check_ok=no
-    mkdir f77check.d \
-      && cd f77check.d \
-      && $AWK 'BEGIN {
-            print "      program testf77"
-            for(i = 1; i <= 8192; i++)
-                printf("%-5d i%d = 1\n", i, i)
-            print "      stop"
-            print "      end"
-        }'> f77check.f </dev/null \
-      && "$F77" -o f77check.exe f77check.f \
-      && f77check_ok=yes
-    cd "$f77check_opwd"
-    rm_rf f77check.d
-    if test x"$f77check_ok" = x"no"; then
-        testcase_SKIP "Fotran 77 compiler \`$F77' is too limited"
-    fi
-}
-
-# "Safer" version of `rm -rf', useful for directories which are either
-# unwritable or have unwritable subdirectories.
-rm_rf() {
-    test $# -gt 0 || return 0  # do nothing if no argument is given
-    rm_rf__status=0
-    for rm_rf__file in "$@"; do
-        # the only interesting exit status is that of rm(1): ignore
-        # errors in find(1)
-        if test -d "$rm_rf__file"; then
-            find "$rm_rf__file" -type d '!' -perm -200 \
-                 -exec chmod u+w {} ";" || :
-        fi
-        rm -rf "$rm_rf__file" || rm_rf__status=1
-    done
-    return $rm_rf__status
-}
-
 # -------------------------------------------------------------------------
 # run_command: run a command with bells and whistles.
 # -------------------------------------------------------------------------
@@ -488,92 +437,30 @@ run_command() {
     return $run_rc
 }
 
-# run_F77 [-e STATUS] [-m] [--] [ARGUMENTS..]
-# -------------------------------------------
-# Wrapper around `run_command $F77', to facilitate any present or future
-# workaround for bugs/limitations in Fortran compilers.
-run_F77() {
-    # NOTE: all internal variables used here starts with the `run77'
-    # prefix, to minimize possibility of name clashes with global
-    # variables defined in user code.
-    set +x # xtrace verbosity stops here
-    run77_opts='' # options to be passed to run_command
-    while test $# -gt 0; do
-        case "$1" in
-            -e) run77_opts="$run77_opts $1 $2"; shift;;
-            -m) run77_opts="$run77_opts $1";;
-            --) shift; break;;
-            # Be more liberal about unrecognized options: stop parsing
-            # and pass the rest of arguments and options verbatim to
-            # COMMAND.  This makes the use of run_F77 more convenient.
-            -*) break;;
-             *) break;;
-        esac
-        shift
+# "Safer" version of `rm -rf', useful for directories which are either
+# unwritable or have unwritable subdirectories.
+rm_rf() {
+    test $# -gt 0 || return 0  # do nothing if no argument is given
+    rm_rf__status=0
+    for rm_rf__file in "$@"; do
+        # the only interesting exit status is that of rm(1): ignore
+        # errors in find(1)
+        if test -d "$rm_rf__file"; then
+            find "$rm_rf__file" -type d '!' -perm -200 \
+                 -exec chmod u+w {} ";" || :
+        fi
+        rm -rf "$rm_rf__file" || rm_rf__status=1
     done
-    # file providing the custom `halt' procedure
-    run77_haltf=$testaux_builddir/halt.f
-    if test ! -f "$run77_haltf"; then
-        testcase_HARDERROR "auxiliary source file \`$run77_haltf'" \
-                           "not found"
-    fi
-    if test $# -eq 1; then
-        run77_aout=`echo "$1" | $SED -e 's/\.f\(77\)\?$//'`.exe
-        set x "$1" -o "$run77_aout"; shift;
-    fi
-    set -x # xtrace verbosity restart here
-    run_command $run77_opts -- "$F77" "$run77_haltf" ${1+"$@"}
+    return $rm_rf__status
 }
 
-# run_RATFOR [-e STATUS] [-m] [-t TIMEOUT] [--] [ARGUMENTS..]
-# -----------------------------------------------------------
-# Wrapper around `run_command $RATFOR', to work around possible problems
-# in the execution of the ratfor preprcessor.  In particular, we keep
-# ratfor controlled by the `timer' script, so that even if it hangs, it
-# won't cause the whole testsuite to hang (this happened too many times
-# already).
-run_RATFOR() {
-    # NOTE: all internal variables used here starts with the `run4'
-    # prefix, to minimize possibility of name clashes with global
-    # variables defined in user code.
-    set +x  # xtrace verbosity stops here
-    run4_opts=''  # options to be passed to run_command
-    run4_timeout=5  # the timeout given to ratfor
-    while test $# -gt 0; do
-        case "$1" in
-            -e) run4_opts="$run4_opts $1 $2"; shift;;
-            -m) run4_opts="$run4_opts $1";;
-            -t) run4_timeout=$2; shift;;
-            --) shift; break;;
-            # Be more liberal about unrecognized options: stop parsing
-            # and pass the rest of arguments and options verbatim to
-            # COMMAND.  This makes the use of run_RATFOR more convenient.
-            -*) break;;
-             *) break;;
-        esac
-        shift
-    done
-    run4_timer=$testaux_builddir/timer  # the timer script
-    if test ! -f "$run4_timer"; then
-        testcase_HARDERROR "\`timer' script not found"
-    elif test ! -x "$run4_timer"; then
-        testcase_HARDERROR "\`timer' script not executable"
-    fi
-    set -x # xtrace verbosity restart here
-    run_command $run4_opts -- "$run4_timer" -t "$run4_timeout" -- \
-                "$RATFOR" ${1+"$@"}
-}
-
-# Some shorthands for common sed regexps and commands.
-ws="[${SPACE}${TAB}]"
-ws0p="${ws}*" # zero or more white spaces
-ws1p="${ws}${ws0p}" # one or more white spaces
-# strip leading and trailing white spaces from input
+# Strip leading and trailing white spaces from input.
 ws_strip() {
     $SED -e "s/^$ws0p//" -e "s/$ws0p$//"
 }
-# convert any sequence of tab and space chars to a single space char,
-# and strip leading and trailing white spaces
+
+# Convert any sequence of tab and space chars to a single space char,
+# and strip leading and trailing white spaces.
 ws_normalize() {
     $SED -e "s/$ws1p/ /g" -e "s/^ *//" -e "s/ *$//"
 }
@@ -585,19 +472,21 @@ escape_for_grep() {
         *) echo "$*";;
     esac | $SED -e 's/\.\|\*\|\?\|\[\|\]\|\\\|\^\|\$/\\&/g'
 }
-
-# Useful when grepping the path of the ratfor executable in error messages
-# produced by rator.
-ratfor_rx=`escape_for_grep "$RATFOR"`
-
-# Testsuite utilities have always precedence over system ones.
-must_be_directory "$testaux_srcdir"
-PATH=${testaux_srcdir}${PATH+":$PATH"}
-if test x"$testaux_srcdir" != x"$testaux_builddir"; then
-    must_be_directory "$testaux_builddir"
-    PATH=${testaux_builddir}${PATH+":$PATH"}
-fi
-export PATH
+# Escape a string so that it can be used literally in an egrep search.
+escape_for_egrep() {
+    case $# in
+        0) cat;;
+        *) echo "$*";;
+    esac | {
+      # from the GNU grep manpage:
+      #  "Traditional  egrep  did  not  support  the { meta-character,
+      #   and some egrep implementations support \{ instead, so portable
+      #   scripts should avoid { in grep -E patterns and should use [{]
+      # to match a literal `{'."
+      $SED -e 's/\.\|\*\|\?\|+\|\[\|\]\|\\\|\^\|\$\|)\|(/\\&/g' \
+           -e 's/{/[{]/g'
+   }
+}
 
 # Setup cleanup traps.
 trap '_cleanup_at_exit' 0
@@ -607,18 +496,9 @@ trap 'testcase_exit_signal=SIGPIPE; _Exit $E_HARD' 13
 trap 'testcase_exit_signal=SIGTERM; _Exit $E_HARD' 15
 
 # Were the tests will run.
-rm_rf $me.dir
-mkdir $me.dir
-cd ./$me.dir
+rm_rf ./"$me".dir
+mkdir ./"$me".dir
+cd ./"$me".dir
 testSubDir=`pwd` # absolute path
-
-echo "=== Running test $argv0"
-echo "# PWD: `pwd`"
-echo "# PATH: $PATH"
-echo "# F77: $F77"
-echo "# RATFOR: $RATFOR"
-
-# Turn on shell traces.
-set -x
 
 # vim: ft=sh ts=4 sw=4 et

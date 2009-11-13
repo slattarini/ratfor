@@ -2,7 +2,7 @@
 
 # Check the the `define' builtin deal gracefully with long macro names.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 sym='WOWThisTrulyIsAVeryVeryVERYLongNameForSuchAnIncrediblySimpleMacro'
 x1='xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx1'

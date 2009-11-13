@@ -2,7 +2,7 @@
 
 # Check that `define(SYM, VALUE)' works if VALUE contains semicolons.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 define(sym1, a = 1; b = 1; c = 1;)

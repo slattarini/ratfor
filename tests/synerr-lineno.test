@@ -2,7 +2,7 @@
 
 # Check that line numbers in error messages are ok
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 echo '}' > tst1.r
 run_RATFOR -e 1 tst1.r || testcase_FAIL

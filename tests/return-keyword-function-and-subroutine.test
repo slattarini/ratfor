@@ -4,7 +4,7 @@
 # even when mixed definitions of functions and suvìbriutines are
 # seen.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst1.r <<EOF
 function func1

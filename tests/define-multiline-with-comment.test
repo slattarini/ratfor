@@ -4,7 +4,7 @@
 # there are comments involved.  This test avoid regressions related to
 # an annoying bug that occurred in practice.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 define(sym,#

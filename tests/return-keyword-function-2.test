@@ -3,7 +3,7 @@
 # Check that ratfor generate proper code for `return' statement
 # in functions.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat >tst01.r <<EOF
 integer function func

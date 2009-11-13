@@ -2,7 +2,7 @@
 
 # Check that the `include' statement abort ratofor on recursive inclusion.
 
-. ./TestsAux/test-lib.sh || exit 99
+. ./TestsAux/rat4-t.sh || exit 99
 
 cat > foo.r <<EOF
 include bar.r
