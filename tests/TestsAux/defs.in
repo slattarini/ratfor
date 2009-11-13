@@ -384,15 +384,19 @@ require_strong_fortran_compiler() {
 
 # "Safer" version of `rm -rf', useful for directories which are either
 # unwritable or have unwritable subdirectories.
-# TODO: support more than one argument
 rm_rf() {
     test $# -gt 0 || return 0  # do nothing if no argument is given
-    # the only interesting exit status is that of rm(1): ignore errors
-    # in find(1)
-    if test -d "$1"; then
-        find "$1" -type d '!' -perm -200 -exec chmod u+w {} ";" || :
-    fi
-    rm -rf "$1"
+    rm_rf__status=0
+    for rm_rf__file in "$@"; do
+        # the only interesting exit status is that of rm(1): ignore
+        # errors in find(1)
+        if test -d "$rm_rf__file"; then
+            find "$rm_rf__file" -type d '!' -perm -200 \
+                 -exec chmod u+w {} ";" || :
+        fi
+        rm -rf "$rm_rf__file" || rm_rf__status=1
+    done
+    return $rm_rf__status
 }
 
 # -------------------------------------------------------------------------
