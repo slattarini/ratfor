@@ -2,7 +2,7 @@
 
 # Check that `%' to output verbatim also very long lines
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 s=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 longline=$s$s$s$s$s$s$s$s$s$s$s$s$s

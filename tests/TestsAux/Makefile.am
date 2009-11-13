@@ -5,6 +5,6 @@
 # Testsuite.
 
 check_SCRIPTS = timer
-check_DATA = defs.sh halt.f
+check_DATA = test-lib.sh halt.f
 
 ## vim: ft=automake noet sw=4 ts=4

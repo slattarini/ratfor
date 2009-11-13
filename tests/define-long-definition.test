@@ -3,7 +3,7 @@
 # Check the the `define' builtin deal gracefully with long macro defs.
 # This testcase is a bit hackish.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 s=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 s1=$s$s$s$s$s$s$s$s

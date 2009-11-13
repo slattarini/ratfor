@@ -4,7 +4,7 @@
 # the keyword `function' is followed by a relational shortand (e.g. `&&'
 # or `>=').
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 ls -l "$srcdir"/subprog-name-invalid.sh
 . "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
 

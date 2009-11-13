@@ -2,7 +2,7 @@
 
 # Check basics of `define' (with f77)
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

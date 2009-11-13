@@ -3,7 +3,7 @@
 # Check use of `define' with macros having dollar characters (`$') in
 # their names.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat >tst.r <<'EOF'
 define sym1     text

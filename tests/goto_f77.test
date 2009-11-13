@@ -4,7 +4,7 @@
 # statements (for, while, ...). Done by compiling and running the
 # generated fortran code
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

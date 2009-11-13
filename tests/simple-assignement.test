@@ -3,7 +3,7 @@
 # Check that simple assignement of a variable works.  Although incredible,
 # thare have already been some bugs breaking this simple input.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat >tst.r <<EOF
 x = y

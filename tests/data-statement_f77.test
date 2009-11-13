@@ -2,7 +2,7 @@
 
 # Check (with F77) that data statement works smoothly in ratfor.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

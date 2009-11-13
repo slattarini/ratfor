@@ -2,7 +2,7 @@
 
 # Check `include' on paths containing `.' or `..'
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 mkdir subdir
 echo 'include ./inc.r' > tstdot.r

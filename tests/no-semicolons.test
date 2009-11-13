@@ -2,7 +2,7 @@
 
 # Check that semicolons are not improperly passed down in ratfor output.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat > tst.r <<\EOF
 ;

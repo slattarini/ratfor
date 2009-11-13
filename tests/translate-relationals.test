@@ -2,7 +2,7 @@
 
 # Check translation of `<' in '.lt.', `==' in `.eq.', `&&' in `.and.', etc.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat >map <<EOF
   &&  and

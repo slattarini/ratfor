@@ -3,7 +3,7 @@
 # Check that incorrect usages of the `switch/case' statement are caught
 # (well, do not check here about missing `{' after `switch').
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat > tst.dat <<EOF
 case 1          |   illegal case or default

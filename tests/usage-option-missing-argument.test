@@ -3,7 +3,7 @@
 # Check that ratfor barfs if the `-o' or `-l' option is given without an
 # argument.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 for opt in o l; do
     run_RATFOR -e 2 -- "-$opt" </dev/null || testcase_FAIL

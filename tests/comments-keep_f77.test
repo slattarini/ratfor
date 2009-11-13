@@ -3,7 +3,7 @@
 # Check that comments kept by the `-C' switch does not interfere with the
 # "real" ratfor output
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

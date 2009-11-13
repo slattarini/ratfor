@@ -3,7 +3,7 @@
 # Check that common block declarations in input are not involved
 # in improper automatic line continuation.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat >tst.r <<EOF
 common /blockname/

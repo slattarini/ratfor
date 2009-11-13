@@ -3,7 +3,7 @@
 # Check that the `repeat' statement does not require a following until
 # (check done by compiling and running the generated fortran code).
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

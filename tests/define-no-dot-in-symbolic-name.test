@@ -2,7 +2,7 @@
 
 # Check that we can't `define' macros containing dots.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 echo "define .foo bar" > tstB1.r
 cat tstB1.r

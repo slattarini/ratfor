@@ -3,7 +3,7 @@
 # Test (within reasonable limits) that `for(;;)' originates an
 # infinite loop.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

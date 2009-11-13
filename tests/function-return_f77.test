@@ -5,7 +5,7 @@
 # supersed by the `return-keyword...' tests, but we won't remove it anyway,
 # faithful to our policy of never removing working tests.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

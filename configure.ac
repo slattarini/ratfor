@@ -172,7 +172,7 @@ AC_CONFIG_FILES([
 # Be sure to make the generated files readonly, to avoid that absent-minded
 # developers modify them instead of the files they are generated from.
 # It has already happened too many times.
-AC_CONFIG_FILES([tests/TestsAux/defs.sh:tests/TestsAux/defs.in],
+AC_CONFIG_FILES([tests/TestsAux/test-lib.sh:tests/TestsAux/test-lib.in],
                 [chmod a-w tests/TestsAux/defs.sh])
 AC_CONFIG_FILES([tests/TestsAux/halt.f:tests/TestsAux/halt.in],
                 [chmod a-w tests/TestsAux/halt.f])

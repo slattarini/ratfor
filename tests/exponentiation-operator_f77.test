@@ -3,7 +3,7 @@
 # Check (with F77) that ratfor does not mess up the `**' (exponentiation)
 # operator (that already happened in practice, sadly).
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

@@ -4,7 +4,7 @@
 # might be supersed by the `return-keyword...' tests, but we won't remove
 # it anyway, faithful to our policy of never removing working tests.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat > tst.r <<EOF
 function foo

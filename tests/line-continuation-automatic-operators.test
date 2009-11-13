@@ -3,7 +3,7 @@
 # Test automatic line continuation on operators (test done by
 # grepping ratfor output).
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 # line continuation is not expected to work with e.g. `*' and `/'
 for op in '=' '+' '-' ; do

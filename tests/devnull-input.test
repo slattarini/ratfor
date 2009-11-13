@@ -2,7 +2,7 @@
 
 # Check that ratfor works on /dev/null
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 run_RATFOR /dev/null || testcase_FAIL
 

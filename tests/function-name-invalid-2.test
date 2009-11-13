@@ -4,7 +4,7 @@
 # by a non-alphanumeric token, even when expansion of user-defined
 # macros is involved.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 ls -l "$srcdir"/subprog-name-invalid.sh
 . "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
 

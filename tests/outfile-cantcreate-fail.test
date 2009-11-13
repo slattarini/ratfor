@@ -3,7 +3,7 @@
 # Check that ratfor barfs when trying to create output file in an
 # unwritable directory.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 mkdir tst.d
 chmod a-w tst.d

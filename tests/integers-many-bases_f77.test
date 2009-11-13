@@ -3,7 +3,7 @@
 # Check the ratfor support for integers in bases != 10 (format: b%ddd...)
 # The checks are done compiling and runing the ratfor output.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 require_fortran_compiler
 

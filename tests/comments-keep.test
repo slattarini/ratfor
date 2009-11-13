@@ -2,7 +2,7 @@
 
 # Check that `-C' switch of ratfor preserve comments in output.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat >tst.r <<EOF
 # this is a "%c@mm3nt%'!

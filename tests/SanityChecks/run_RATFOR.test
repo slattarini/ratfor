@@ -2,7 +2,7 @@
 
 # Testsuite sanity check: check the `run_RATFOR' subroutine.
 
-. ../TestsAux/defs.sh || exit 99
+. ../TestsAux/test-lib.sh || exit 99
 
 cwd=`pwd`
 

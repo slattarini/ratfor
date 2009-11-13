@@ -2,7 +2,7 @@
 
 # Check that 'define' is case-sensible w.r.t. the symbol name.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 cat >tst.r <<EOF
 define sym1 foo

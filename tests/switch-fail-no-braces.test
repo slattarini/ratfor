@@ -2,7 +2,7 @@
 
 # Check that incorrect usages of the `switch/case' statement are caught.
 
-. ./TestsAux/defs.sh || exit 99
+. ./TestsAux/test-lib.sh || exit 99
 
 $SED 's/ *#.*$//' > tst.r <<EOF
 switch(1)       # 01
