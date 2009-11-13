@@ -200,7 +200,9 @@ _cleanup_at_exit() {
         _testcase_msg -p "CLEANUP" "remove temporary files"
         set -x # temporarly re-enable traces (disabled in _Exit)
         rm_rf ${testSubDir-}
-        { set +x; } 2>/dev/null
+        # Apparently, the `set +x' with redirected stderr is executed in
+        # a subshell by Solaris Sh, so repeat it without redirection.
+        { set +x; } 2>/dev/null; set +x
         _testcase_msg -p "CLEANUP" "completed"
     fi
     # issue final message to the user, and exit
@@ -451,13 +453,14 @@ run_command() {
     if test x"$run_mix_stdout_and_stderr" = x"yes"; then
         set -x
         cat stdall
-        { set +x; } 2>/dev/null
     else
         set -x
         cat stderr >&2
         cat stdout
-        { set +x; } 2>/dev/null
     fi
+    # Apparently, the `set +x' with redirected stderr is executed in
+    # a subshell by Solaris Sh, so repeat it without redirection.
+    { set +x; } 2>/dev/null; set +x
     case $run_exitcode_expected in
         IGNORE|ignore|IGNORED|ignored|$run_exitcode_got)
             run_rc=0
