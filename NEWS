@@ -1,6 +1,6 @@
 List of user-visible changes of C Ratfor.
 
-New in XXX
+New in 1.0n
 -----------
  * The name of the package has been changed to "C Ratfor" (previously was
    "Public Domain Ratfor").  Also, the name of the installed ratfor binary
