@@ -190,8 +190,10 @@ _cleanup_at_exit() {
         ""|0|n|N|no|NO) keep_testdirs=no;;
                      *) keep_testdirs=yes;;
     esac
-    # do cleanup if required
-    if test $testcase_exit_status !=  0; then
+    # do cleanup, if required
+    if test $testcase_exit_status = 77; then
+        _testcase_msg -p "CLEANUP" "skip: the test was skipped"
+    elif test $testcase_exit_status != 0; then
         _testcase_msg -p "CLEANUP" "skip: the test failed"
     elif test x"$keep_testdirs" = x"yes"; then
         _testcase_msg -p "CLEANUP" "skip, as required by user" \
