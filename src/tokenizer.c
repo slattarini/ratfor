@@ -532,6 +532,50 @@ get_nonblank_token(char token[], int toksiz)
     return(tok);
 }
 
+/* Save next input token in lexstr[], and return its lexical type (if it's
+ * a keyword) or its token type (otherwise). */
+int
+lex(char lexstr[], int toksiz)
+{
+    int tok;
+
+    /* skip empty lines, get next token, copy it in lexstr */
+    do {
+        tok = get_nonblank_token(lexstr, toksiz);
+    } while (is_newline(tok));
+
+    /* if lexstr[] is a ratfor keyword, update its token type accordingly,
+     * else leave it unchanged */
+    if (STREQ(lexstr, "break"))
+        tok = LEXBREAK;
+    else if (STREQ(lexstr, "case"))
+        tok = LEXCASE;
+    else if (STREQ(lexstr, "default"))
+        tok = LEXDEFAULT;
+    else if (STREQ(lexstr, "do"))
+        tok = LEXDO;
+    else if (STREQ(lexstr, "else"))
+        tok = LEXELSE;
+    else if (STREQ(lexstr, "for"))
+        tok = LEXFOR;
+    else if (STREQ(lexstr, "if"))
+        tok = LEXIF;
+    else if (STREQ(lexstr, "next"))
+        tok = LEXNEXT;
+    else if (STREQ(lexstr, "repeat"))
+        tok = LEXREPEAT;
+    else if (STREQ(lexstr, "return"))
+        tok = LEXRETURN;
+    else if (STREQ(lexstr, "switch"))
+        tok = LEXSWITCH;
+    else if (STREQ(lexstr, "until"))
+        tok = LEXUNTIL;
+    else if (STREQ(lexstr, "while"))
+        tok = LEXWHILE;
+
+    return(tok);
+}
+
 END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

@@ -6,33 +6,19 @@
 
 bin_PROGRAMS = c-ratfor
 
-## we should not need to use $(BUILT_SOURCES) here
-lexer.c: mklexer.sh Makefile
-	$(AM_V_GEN): \
-	  && rm -f $@ $@-t \
-	  && $(srcdir)/mklexer.sh >$@-t \
-	  && chmod a-w $@-t \
-	  && mv $@-t $@
-EXTRA_DIST = mklexer.sh
-MOSTLYCLEANFILES = lexer.c lexer.c-t
-
 c_ratfor_SOURCES = \
     rat4-global.h \
 	rat4-common.h \
-	lex-symbols.h \
-	tok-types.h \
 	main.c \
 	error.c error.h \
 	io.c io.h \
 	xopen.c xopen.h \
 	hash.c hash.h \
 	init.c init.h \
+	tok-types.h \
 	tokenizer.c tokenizer.h \
 	parser.c parser.h \
 	labgen.c labgen.h \
 	codegen.c codegen.h
-
-c_ratfor_SOURCES += lexer.h
-nodist_c_ratfor_SOURCES = lexer.c
 
 ## vim: ft=automake noet sw=4 ts=4

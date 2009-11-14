@@ -4,7 +4,6 @@
 #include "io.h"         /* for `put_back_string()' */
 #include "error.h"      /* for `synerr*()' */
 #include "tokenizer.h"
-#include "lexer.h"
 #include "codegen.h"
 #include "parser.h"
 
@@ -20,19 +19,18 @@ static int labval[MAXSTACK];
 static int lextyp[MAXSTACK];
 
 static bool
-detected_unusual_error(int token, const char lexstr [])
+detected_unusual_error(int token)
 {
     char tmptok[MAXTOK];
 
-    if (token == LEXOTHER && lexstr[0] == LPAREN) {
-        token = lex(tmptok); /* peek at next token */
+    if (token == LPAREN) {
+        token = get_nonblank_token(tmptok, MAXTOK); /* peek at next token */
         put_back_string(tmptok);
-        if (token == LEXDIGITS) {
+        if (token == TOKT_DIGITS) {
             synerr("label following left parenthesis.");
             return(true);
-            }
-    } else if (token == LEXDIGITS) {
-        /* cannot use lex() here, since it skips statement endings */
+        }
+    } else if (token == TOKT_DIGITS) {
         token = get_nonblank_token(tmptok, MAXTOK); /* peek at next token */
         put_back_string(tmptok);
         if (token == SEMICOL) {
@@ -85,11 +83,11 @@ parse(void)
     int lab, i, token;
 
     lextyp[0] = EOF;
-    while ((token = lex(lexstr)) != EOF) {
+    while ((token = lex(lexstr, MAXTOK)) != EOF) {
         
         /* some errors, if not treated specially, may give confusing
          * diagnostic, so we try to detect them in an ad-hoc way */
-        if (detected_unusual_error(token, lexstr))
+        if (detected_unusual_error(token))
             continue;
 
         /* do code generation */
@@ -123,7 +121,7 @@ parse(void)
                 else
                     cascode(labval[i], token);
                 break;
-            case LEXDIGITS:
+            case TOKT_DIGITS:
                 labelc(lexstr);
                 break;
             case LEXELSE:
@@ -136,13 +134,13 @@ parse(void)
         
         /* manange stack of statements */
         switch(token) {
+            case TOKT_DIGITS:
             case LEXIF:
             case LEXELSE:
             case LEXWHILE:
             case LEXFOR:
             case LEXREPEAT:
             case LEXDO:
-            case LEXDIGITS:
             case LEXSWITCH:
             case LBRACE:
                 sp++; /* beginning of statement */
@@ -166,9 +164,6 @@ parse(void)
                         else
                             synerr("illegal right brace.");
                         break;
-                    case LEXOTHER:
-                        otherstmt(lexstr);
-                        break;
                     case LEXBREAK:
                     case LEXNEXT:
                         brknxt(sp, lextyp, labval, token);
@@ -176,8 +171,11 @@ parse(void)
                     case LEXRETURN:
                         retcode();
                         break;
+                    default:
+                        otherstmt(lexstr);
+                        break;
                 }
-                token = lex(lexstr); /* peek at next token */
+                token = lex(lexstr, MAXTOK); /* peek at next token */
                 put_back_string(lexstr);
                 unstak(token);
         }

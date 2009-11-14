@@ -4,7 +4,6 @@
 #include "io.h"
 #include "error.h"
 #include "tokenizer.h"
-#include "lex-symbols.h"
 #include "labgen.h"
 #include "codegen.h"
 

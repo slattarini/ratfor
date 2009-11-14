@@ -4,8 +4,11 @@
 #include "tok-types.h"
 
 BEGIN_C_DECLS
+
 int get_token(char[], int);
-int get_nonblank_token(char token[], int toksiz);
+int get_nonblank_token(char[], int);
+int lex(char[], int);
+
 END_C_DECLS
 
 #endif
