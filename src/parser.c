@@ -112,14 +112,16 @@ parse(void)
                 break;
             case LEXCASE:
             case LEXDEFAULT:
-                for (i = sp; i >= 0; i--)
-                    if (lextyp[i] == LEXSWITCH)
-                        break;
-                if (i < 0)
-                    /* XXX: better error message */
-                    synerr("illegal case or default.");
-                else
+                for (i = sp; i >= 0 && lextyp[i] != LEXSWITCH; i--)
+                    /* empty body */;
+                if (i < 0) {
+                    if (token == LEXCASE)
+                        synerr("illegal case");
+                    else
+                        synerr("illegal default");
+                } else {
                     cascode(labval[i], token);
+                }
                 break;
             case TOKT_DIGITS:
                 labelc(lexstr);
