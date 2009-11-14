@@ -112,9 +112,15 @@ parse(void)
                 break;
             case LEXCASE:
             case LEXDEFAULT:
-                for (i = sp; i >= 0 && lextyp[i] != LEXSWITCH; i--)
-                    /* empty body */;
-                if (i < 0) {
+                /* only permit case/default in the immediate block after a
+                 * switch statement, not in blocks nested into it */
+                for (i = sp; i >= 0 ; i--) {
+                    if (lextyp[i] == LBRACE)
+                        continue; /* ignore */
+                    else
+                        break; /* unmatched statement */
+                }
+                if (i < 0 || lextyp[i] != LEXSWITCH) {
                     if (token == LEXCASE)
                         synerr("illegal case");
                     else
