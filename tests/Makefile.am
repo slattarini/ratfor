@@ -80,6 +80,7 @@ ALL_TESTS = \
   goto_f77.test \
   if_f77.test \
   ifelse-ambiguity_f77.test \
+  illegal-case-default.test \
   include-abspath.test \
   include-basic.test \
   include-case-sensible.test \
