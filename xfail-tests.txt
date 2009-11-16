@@ -15,7 +15,7 @@ verbatim-stress.test
 
 # Errors about switch/case are correctly recognized, but can sometimes still
 # produce bogus diagnostic messages.
-switch-fail.test
+switch-fail-case-label-invalid.test
 
 # Automatic line continuation still doesn't work for some operators and for
 # relational operators (`&&', `<=', `||' etc.)

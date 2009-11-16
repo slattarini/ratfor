@@ -23,8 +23,7 @@ AC_CONFIG_SRCDIR([src/rat4-common.h])
 AC_CONFIG_HEADERS([config.h])
 AC_CONFIG_MACRO_DIR([m4])
 AC_CONFIG_AUX_DIR([build-aux])
-# the testsuite is kept in a separate subpackage.
-AC_CONFIG_SUBDIRS([blackbox-tests])
+AC_CONFIG_SUBDIRS([tests/blackbox])
 
 #
 # Define and pass proper values of precious variables to the recursively
@@ -204,7 +203,13 @@ AH_TOP([/* Support for C++ compilers */
 # Do output.
 #
 
-AC_CONFIG_FILES([Makefile doc/Makefile src/Makefile])
+AC_CONFIG_FILES([
+    Makefile
+    doc/Makefile
+    src/Makefile
+    tests/Makefile
+    tests/graybox/Makefile
+])
 # Make GNUmakefile available also in VPATH builds.
 AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 

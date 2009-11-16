@@ -6,7 +6,7 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-SUBDIRS = src doc blackbox-tests
+SUBDIRS = src doc tests
 
 dist_doc_DATA = README BUGS NEWS
 

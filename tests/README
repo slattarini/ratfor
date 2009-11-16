@@ -1,0 +1,11 @@
+This is the README file for the testsuite of C Ratfor preprocessor.
+
+The directory `graybox' contains "graybox-style" test scripts tailored to
+this implementation of Ratfor.  These tests are tailored to the limits,
+weak spots and previous bugs of "C Ratfor" (so they should provide also
+regression testing).
+
+The directory `ratfor-sustesuite-subpackage' contains a copy of the package
+"The Ratfor Testuite", providing black-box tests for a generic Ratfor
+implementation.  Refer to file `ratfor-testsuite-subpackage/README' for
+more information
