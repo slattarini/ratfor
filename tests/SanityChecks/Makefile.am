@@ -21,9 +21,6 @@ EXTRA_DIST =
 
 EXTRA_DIST += $(ALL_TESTS)
 
-# Defined at configure time.
-XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
-
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
