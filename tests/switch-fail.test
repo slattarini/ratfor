@@ -1,62 +1,64 @@
 #!/bin/sh
 
-# Check that incorrect usages of the `switch/case' statement are caught
-# (well, do not check here about missing `{' after `switch').
+# Check that incorrect usages of the `case'/`default' inside a `switch'
+# are caught.
+
+# TODO: divide into two distinct tests
 
 . ./TestsAux/rat4-t.sh || exit 99
 
-cat > tst.dat <<EOF
-case 1          |   illegal case or default
-;
-case 1: pass    |   illegal case or default
-;
-default         |   illegal case or default
-;
-default:        |   illegal case or default
-;
-switch(1) {
-    case:       |   invalid case label
-}
-switch(1) {
-    case x:     |   invalid case label
-}
-switch(1) {
-    case;       |   invalid case label
+: ::::::::::::::::: :
+:  WRITE TEST DATA  :
+: ::::::::::::::::: :
 
-}
+n=0
+for case_ in 'case:' 'case x:' 'case;' 'case (1):' 'case /:'; do
+  n=`expr $n + 1`
+  cat > tst$n.r <<EOF
 switch(1) {
-    case (1):   |   invalid case label
+    $case_
 }
+EOF
+done
+
+cat >tst-dup1.r <<EOF
 switch(1) {
-    case 1:
-        pass
-    case 1:     |   duplicated case label
-        pass
-}
-switch(1) {
-    case 0, 1:
-        pass
-    case 1, 2:  |   duplicated case label
-        pass
+    case 1: pass
+    case 1: pass
 }
 EOF
 
-$AWK '{ printf("%02d: %s\n", NR, $0) }' tst.dat
+cat >tst-dup2.r <<EOF
+switch(1) {
+    case 0, 1: pass
+    case 1, 2: pass
+}
+EOF
 
-$SED -e 's/ *|.*$//' <tst.dat >tst.r
-$AWK -F '|' '($2 != "") { print "tst.r:" NR ": " $2 }' <tst.dat \
-  | $SED -e "s/$ws0p:$ws1p/: /" -e "s/$ws0p$/./" >exp
+: :::::::::: :
+:  DO TESTS  :
+: :::::::::: :
 
-cat tst.r
+i=1
+while test $i -le $n; do
+  i=`expr $i + 1`
+  cat tst$n.r
+  run_RATFOR -e 1 tst$i.r || testcase_REGISTER_FAILURE
+  mv stdout stdout$i
+  mv stderr stderr$i
+  $EGREP "^tst$i\.r:2: (invalid case label|illegal case syntax)" stderr$i \
+    || testcase_REGISTER_FAILURE
+done
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
-mv stderr got
+for i in 1 2; do
+  cat tst-dup$i.r
+  run_RATFOR -e 1 tst-dup$i.r || testcase_REGISTER_FAILURE
+  mv stdout stdout-dup$i
+  mv stderr stderr-dup$i
+  $EGREP "^tst-dup$i\.r:3: duplicated case label" stderr-dup$i \
+    || testcase_REGISTER_FAILURE
+done
 
-cat exp
-cat got
-
-$DIFF_U exp got || testcase_FAIL
-
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
