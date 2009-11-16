@@ -1,0 +1,32 @@
+#!/bin/sh
+
+# Check that duplicated `case' labels are correctly diagnosed.
+
+. ./TestsAux/rat4-t.sh || exit 99
+
+cat >tst1.r <<EOF
+switch(1) {
+    case 1: pass
+    case 1: pass
+}
+EOF
+
+cat >tst2.r <<EOF
+switch(1) {
+    case 0, 1: pass
+    case 1, 2: pass
+}
+EOF
+
+for i in 1 2; do
+  cat tst$i.r
+  run_RATFOR -e 1 tst$i.r || testcase_REGISTER_FAILURE
+  mv stdout stdout$i
+  mv stderr stderr$i
+  $EGREP "^tst$i\.r:3: duplicate(d)? case label" stderr$i \
+    || testcase_REGISTER_FAILURE
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

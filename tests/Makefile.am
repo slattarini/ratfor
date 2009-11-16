@@ -168,8 +168,9 @@ ALL_TESTS = \
   subroutine-name-invalid-3.test \
   subroutine-name-missing-1.test \
   subroutine-name-missing-2.test \
+  switch-fail-case-label-duplicated.test \
+  switch-fail-case-label-invalid.test \
   switch-fail-no-braces.test \
-  switch-fail.test \
   switch-non-positive-values_f77.test \
   switch_f77.test \
   synerr-basic.test \
