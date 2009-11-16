@@ -2,7 +2,7 @@
 
 # Testsuite sanity check: check the `run_command' subroutine.
 
-. ../../lib/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 NL='
 '

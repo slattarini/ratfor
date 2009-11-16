@@ -39,19 +39,19 @@ TESTS = $(ALL_TESTS)
 ##  TESTSUITE ENVIRONMENT AND SETUP  ##
 ## --------------------------------- ##
 
-include ../../lib/TestsEnvironment.am
+include ../lib/TestsEnvironment.am
 
 ## ------------------- ##
 ##  TESTSUITE CLEANUP  ##
 ## ------------------- ##
 
-include ../../lib/LocalCleanup.am
+include ../lib/LocalCleanup.am
 
 ## ----------------------------------------- ##
 ##  CONSISTENCY CHECKS ON THE LIST OF TESTS  ##
 ## ----------------------------------------- ##
 
-include ../../lib/CheckTestsList.am
+include ../lib/CheckTestsList.am
 check-local: check-list-of-tests
 
 ## vim: ft=automake noet sw=4 ts=4

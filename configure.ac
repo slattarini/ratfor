@@ -165,8 +165,8 @@ AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 AC_CONFIG_FILES([
     Makefile
     lib/Makefile
+    sanity-checks/Makefile
     tests/Makefile
-    tests/SanityChecks/Makefile
 ])
 
 # Be sure to make the generated files readonly, to avoid that absent-minded

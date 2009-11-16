@@ -2,7 +2,7 @@
 
 # Testsuite sanity check: checks on the `timer' auxiliary program.
 
-. ../../lib/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 for i in 0 1 42; do
     (echo "#!/bin/sh"; echo "exit $i") > "exit$i"

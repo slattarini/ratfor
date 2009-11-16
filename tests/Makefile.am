@@ -7,9 +7,6 @@
 ##  MISCELLANEOUS  ##
 ## --------------- ##
 
-# WARNING: the order *is* significant here!
-SUBDIRS = SanityChecks .
-
 # Might be updated later (also in included files).  Do not remove these
 # definitions.
 MOSTLYCLEANFILES =
