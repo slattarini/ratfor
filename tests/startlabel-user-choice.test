@@ -3,7 +3,7 @@
 # Check that ratfor honors the user's choiche of internal starting label
 # (see `-l' option)
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 while(true) {

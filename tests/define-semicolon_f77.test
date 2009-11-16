@@ -2,7 +2,7 @@
 
 # Check that `define(SYM, VALUE)' works if VALUE contains semicolons.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

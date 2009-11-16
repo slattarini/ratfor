@@ -2,7 +2,7 @@
 
 # Check that 'include' works on absolute paths.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 # We can't use `pwd` as the absolute directory since it could
 # contain spaces or other "weird" characters.

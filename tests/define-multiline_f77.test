@@ -2,7 +2,7 @@
 
 # Check (with f77) that `define(SYM, VALUE)' works on multi-line VALUE.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

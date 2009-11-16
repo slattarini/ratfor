@@ -3,7 +3,7 @@
 # Check the use of `%' to output lines verbatim enough to keep the
 # fortran compiler happy.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

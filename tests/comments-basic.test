@@ -2,7 +2,7 @@
 
 # Check that ratfor comments (and only real ratfor comments) are discarded.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat > tst.r <<EOF
 # throw me away

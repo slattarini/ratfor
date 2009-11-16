@@ -3,7 +3,7 @@
 # Check that ratfor generate correct code for a `return' statement inside
 # a subroutine (check done by compiling & running the generated code).
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

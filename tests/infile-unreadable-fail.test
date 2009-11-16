@@ -2,7 +2,7 @@
 
 # Check that ratfor barfs if input file does not exist.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 : > unread.r
 chmod a-r unread.r

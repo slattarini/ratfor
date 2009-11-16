@@ -3,7 +3,7 @@
 # Test automatic line continuation on relational symbols (test is done
 # by grepping ratfor output).
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 for rel in \
   '!' \

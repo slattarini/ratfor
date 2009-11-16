@@ -2,7 +2,7 @@
 
 # Check that ratfor continue its execution on non-fatal syntax errors.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat > tst.r <<EOF
 foo

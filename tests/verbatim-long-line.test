@@ -2,7 +2,7 @@
 
 # Check that `%' to output verbatim also very long lines
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 s=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 longline=$s$s$s$s$s$s$s$s$s$s$s$s$s

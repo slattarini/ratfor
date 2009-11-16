@@ -2,7 +2,7 @@
 
 # Check that line numbers in error messages are ok, even in included files
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat > top.r <<EOF
 #1

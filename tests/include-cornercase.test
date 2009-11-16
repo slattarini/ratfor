@@ -2,7 +2,7 @@
 
 # Check some corner-cases in the usage of `include' (w.r.t. semicolons).
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 for i in 1 2 3 4; do
   (echo "x$i"; echo "y$i") > inc$i.r

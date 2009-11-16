@@ -3,7 +3,7 @@
 # Check that ratfor give proper error messages if `return' is used outside
 # any subprogram (function or subroutine).
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 i=0
 errmsg="return statement outside any function or subroutine"

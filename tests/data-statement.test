@@ -3,7 +3,7 @@
 # Check that data statements in input are not spoiled by improper
 # automatic line continuation.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 data m/10/, n/20/, x/2.5/, y/2.5/

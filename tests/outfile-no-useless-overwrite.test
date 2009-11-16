@@ -3,7 +3,7 @@
 # Check that ratfor does not overwrite its output file if the opening of
 # the input file fails
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 mkdir tst.out
 echo 'saved' > safe

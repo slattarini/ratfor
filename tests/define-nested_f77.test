@@ -2,7 +2,7 @@
 
 # Check nested definitions with `define' (with f77)
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

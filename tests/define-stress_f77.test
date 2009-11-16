@@ -2,7 +2,7 @@
 
 # Stress test for the `define' builting (done with the aid of f77)
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 require_fortran_compiler
 

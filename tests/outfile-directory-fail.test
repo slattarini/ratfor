@@ -2,7 +2,7 @@
 
 # Check that ratfor barfs if given a directory as output file.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 mkdir tst.d
 echo 'junk' > tst.r

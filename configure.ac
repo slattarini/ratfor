@@ -164,20 +164,17 @@ AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
 AC_CONFIG_FILES([
     Makefile
+    lib/Makefile
     tests/Makefile
-    tests/TestsAux/Makefile
     tests/SanityChecks/Makefile
 ])
 
 # Be sure to make the generated files readonly, to avoid that absent-minded
 # developers modify them instead of the files they are generated from.
 # It has already happened too many times.
-AC_CONFIG_FILES([tests/TestsAux/rat4-t.sh:tests/TestsAux/rat4-t.in],
-                [chmod a-w tests/TestsAux/rat4-t.sh])
-AC_CONFIG_FILES([tests/TestsAux/halt.f:tests/TestsAux/halt.in],
-                [chmod a-w tests/TestsAux/halt.f])
-AC_CONFIG_FILES([tests/TestsAux/timer:tests/TestsAux/timer.in],
-                [chmod a-w,a+x tests/TestsAux/timer])
+AC_CONFIG_FILES([lib/rat4-t.sh:lib/rat4-t.in], [chmod a-w lib/rat4-t.sh])
+AC_CONFIG_FILES([lib/halt.f:lib/halt.in], [chmod a-w lib/halt.f])
+AC_CONFIG_FILES([lib/timer:lib/timer.in], [chmod a-w,a+x lib/timer])
 
 AC_OUTPUT
 

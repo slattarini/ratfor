@@ -2,7 +2,7 @@
 
 # Check that ratfor works on very long input files (process, compile & run)
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 require_strong_fortran_compiler
 

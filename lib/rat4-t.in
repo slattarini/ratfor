@@ -22,8 +22,8 @@ F77=${RAT4_TESTSUITE_F77-'@F77@'}
 RATFOR=${RAT4_TESTSUITE_RATFOR-'@RATFOR@'}
 top_srcdir='@abs_top_srcdir@'
 top_builddir='@abs_top_builddir@'
-testaux_srcdir=$top_srcdir/tests/TestsAux
-testaux_builddir=$top_builddir/tests/TestsAux
+testaux_srcdir=$top_srcdir/lib
+testaux_builddir=$top_builddir/lib
 
 # Sanity checks.
 case $top_srcdir in /*);; *)

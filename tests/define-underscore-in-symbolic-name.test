@@ -3,7 +3,7 @@
 # Check use of `define' with macros having dollar characters (`$') in
 # their names.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 # WARNING: and underscore followed by a newline trigger line continuation,
 # so we must be sure that no line here ends with an underscore.

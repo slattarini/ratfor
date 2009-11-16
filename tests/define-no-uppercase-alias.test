@@ -2,7 +2,7 @@
 
 # Check the `DEFINE' is not a valid alias for `define'.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 tr '_' "$TAB" >tst.r <<EOF
 DEFINE sym1 foo

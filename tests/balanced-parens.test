@@ -3,7 +3,7 @@
 # Check that ratfor does not give spurious errors about
 # "unbalanced parentheses".
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 x=(y)

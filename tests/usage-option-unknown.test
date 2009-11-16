@@ -2,7 +2,7 @@
 
 # Check that ratfor barfs if given an unwritable file output file.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 echo 'junk' > tst.r
 

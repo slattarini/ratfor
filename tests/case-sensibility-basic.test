@@ -2,7 +2,7 @@
 
 # Basic checks about case-sensibility of ratfor
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 
 echo fooBAR > tst.r

@@ -2,7 +2,7 @@
 
 # Check tha symbols defined with `define' can be redefined.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat >tst.r <<EOF
 define sym foo

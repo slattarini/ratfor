@@ -3,7 +3,7 @@
 # Check that `include' fails on unredable files
 # WARNING: ratfor must not abort on failed include. Check for this, too.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 echo 'NOTINCLUDED' > unread.r
 chmod a-r unread.r

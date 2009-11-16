@@ -3,7 +3,7 @@
 # Check that illegal occurrences of the `default' and `case' keywords
 # are diagnosed correctly.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat > tst.dat <<EOF
 01: case

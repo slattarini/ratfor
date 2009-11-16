@@ -2,7 +2,7 @@
 
 # Stress testing for the `include' statement.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 (set -C) >/dev/null 2>&1 && set -C
 

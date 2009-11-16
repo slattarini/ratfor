@@ -3,9 +3,6 @@
 # Shell functions and setting for the Ratfor Testsuite test scripts.
 #
 
-testaux_srcdir=$top_srcdir/tests/TestsAux
-testaux_builddir=$top_builddir/tests/TestsAux
-
 # Usage: must_be_directory DIRECTORY [DESC]
 # Check that the given DIRECTORY exists, else die with an "hard error".
 must_be_directory() {

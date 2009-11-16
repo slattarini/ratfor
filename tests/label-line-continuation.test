@@ -3,7 +3,7 @@
 # Check that ratfor do automatic line continuation after lables, until a
 # statement is found.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat > tst.r <<EOF
 100

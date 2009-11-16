@@ -2,7 +2,7 @@
 
 # Check simple usages of `define'.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 tr '_' "$TAB" >tst.r <<EOF
 define sym1 text1

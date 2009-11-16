@@ -2,7 +2,7 @@
 
 # Test line continuation by `_' (more complex usages).
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat > tst.r <<\EOF
 define TEN 10

@@ -2,7 +2,7 @@
 
 # Check that ratfor barfs if input file is a directory.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 mkdir tst.d
 

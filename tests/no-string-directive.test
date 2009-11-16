@@ -2,7 +2,7 @@
 
 # Check that the `string' directive is not recognized anymore by ratfor.
 
-. ./TestsAux/rat4-t.sh || exit 99
+. ../lib/rat4-t.sh || exit 99
 
 cat > tst.r <<\EOF
 string

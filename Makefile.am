@@ -5,7 +5,8 @@
 
 ACLOCAL_AMFLAGS = -I m4 --install
 
-SUBDIRS = tests
+# The order *is* significant here!
+SUBDIRS = lib tests
 
 # List of extra files to be put in the distributed tarball.
 EXTRA_DIST = \
