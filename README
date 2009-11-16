@@ -80,10 +80,11 @@ Ratfor preprocessor
   After that, the "Ratfor Testsuite" supbackage will be configured to use
   the ratfor preprocessor provided by the top-level package.
 
-  The strategy just described is exactly the one employed the "C Ratfor"
-  package; for clarity, an excerpt from its `configure.ac' file is presented
-  (note that the "C Ratfor" package keeps the "Ratfor Testsuite" subpackage
-  in the `blackbox-tests' subdirectory):
+  The strategy just described is exactly the one that was employed in
+  older versions of the "C Ratfor" package; for clarity, an excerpt from
+  and older version its `configure.ac' file is presented (note that the
+  "C Ratfor" package keeps the "Ratfor Testsuite" subpackage in the
+  `blackbox-tests' subdirectory):
 
     ...
     AC_INIT([C Ratfor], ...)
