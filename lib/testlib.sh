@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copied from SteLib at 2009-11-13 21:28:03 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2009-11-17 16:59:53 +0100.  DO NOT EDIT!
 #
 # Shell library to write test cases.  The only documentation are the
 # comments and the description of variables/functions embedded in the
@@ -347,10 +347,11 @@ testcase_DONE() {
 # Note that command must be an external command, not a shell function or
 # shell builtin.
 # If STATUS is numeric, the exit value of COMMAND must match it exactly.
-# If STATUS is "FAIL" or "FAILURE", then any exit value of COMMAND *but 0*
-# is acceptable.  If STATUS is "IGNORE" or "IGNORED", any exit value of
-# COMMAND is acceptable, and run_command returns with success regardless
-# of that value.  Default STATUS is `0'.
+# If STATUS is "RETURN", the exit value of COMMAND is returned by
+# run_command.  If STATUS is "FAIL" or "FAILURE", then any exit value of
+# COMMAND *but 0* is acceptable.  If STATUS is "IGNORE" or "IGNORED", any
+# exit value of COMMAND is acceptable, and run_command returns with
+# success regardless of that value.  Default STATUS is `0'.
 run_command() {
     set +x # xtrace verbosity temporarly disabled in this function
     run_exitcode_expected=0
@@ -397,6 +398,7 @@ run_command() {
     # Apparently, the `set +x' with redirected stderr is executed in
     # a subshell by Solaris Sh, so repeat it without redirection.
     { set +x; } 2>/dev/null; set +x
+    run_return_status=no
     case $run_exitcode_expected in
         IGNORE|ignore|IGNORED|ignored|$run_exitcode_got)
             run_rc=0
@@ -408,12 +410,20 @@ run_command() {
                 run_rc=1
             fi
             ;;
+        return|RETURN)
+            run_rc=$run_exitcode_got
+            run_return_status=yes
+            ;;
         *)
             run_rc=1
             ;;
     esac
-    echo "run_command: exit status $run_exitcode_got (expecting" \
-         "$run_exitcode_expected)"
+    if test x"$run_return_status" = x"yes"; then
+        echo "run_command: returning exit status $run_exitcode_got"
+    else
+        echo "run_command: exit status $run_exitcode_got (expecting" \
+             "$run_exitcode_expected)"
+    fi
     set -x # restart xtrace verbosity
     return $run_rc
 }

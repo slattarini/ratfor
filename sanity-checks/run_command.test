@@ -95,6 +95,26 @@ test -f stdall && testcase_FAIL
 test x"`cat stdout`" = x"OUT9" || testcase_FAIL
 test x"`cat stderr`" = x"ERR9" || testcase_FAIL
 
+test_cleanup
+run_command -e RETURN -m test_script 10 0 || testcase_FAIL
+test -f stdout && testcase_FAIL
+test -f stderr && testcase_FAIL
+test -f stdall || testcase_FAIL
+test x"`tr '\012' '@' <stdall`" = x"OUT10@ERR10@" || testcase_FAIL
+
+test_cleanup
+if run_command -e RETURN test_script 11 27; then
+    testcase_FAIL
+else
+    estatus=$?
+    test $estatus -eq 27 || testcase_FAIL
+fi
+unset estatus
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT11" || testcase_FAIL
+test x"`cat stderr`" = x"ERR11" || testcase_FAIL
 
 test_cleanup
 testcase_PASS
