@@ -60,7 +60,8 @@ AX_INCLUDE_MAINT_CONFIG_SITE
 # Automake's initializations.
 #
 
-AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror no-installinfo no-texinfo.tex])
+AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
+                       no-installinfo no-texinfo.tex])
 AM_SILENT_RULES([no]) dnl. make `silent-rules' disabled by default
 
 #
@@ -83,12 +84,6 @@ AC_COMPILE_IFELSE(
     [rat4_c_compiler_is_cplusplus_compiler=no],
     [rat4_c_compiler_is_cplusplus_compiler=yes])
 AC_MSG_RESULT([$rat4_c_compiler_is_cplusplus_compiler])
-
-#
-# Checks for programs.
-#
-
-: # none needed yet
 
 #
 # Checks for headers.
@@ -127,6 +122,13 @@ for func in getopt strerror vfprintf strdup; do
         [AC_MSG_ERROR([No proper `$func' subroutine found])])
 done
 AS_UNSET([func])
+
+#
+# Checks for programs used by the testsuite.
+#
+
+# Look for a diff command that can produce better human-readable output.
+AX_PROG_DIFF_U
 
 #
 #  Enable maintainer-specific make rules, on user request.

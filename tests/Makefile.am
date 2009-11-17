@@ -6,6 +6,8 @@
 
 EXTRA_DIST = README
 
-SUBDIRS = graybox blackbox
+# Please leave `blackbox' first, as some tests in `graybox' might
+# require files build there.
+SUBDIRS = blackbox graybox
 
 ## vim: ft=automake noet sw=4 ts=4

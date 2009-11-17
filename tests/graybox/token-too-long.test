@@ -1,0 +1,54 @@
+#!/bin/sh
+
+# Check that "C Ratfor" complain and die gracefully when founding token
+# too long in inout, rather than crashing.
+
+. ../blackbox/lib/rat4-t.sh || exit 99
+
+: 'define do_test()'
+set +x
+do_test() {
+    sed -e 's/xxxxxxxxx.*/xxxxxxxx.../g' "tst-$1.r"
+    run_RATFOR -e 1 "tst-$1.r" \
+      || testcase_REGISTER_FAILURE
+    sed -e '20q' stdout >"stdout-$1"
+    mv stderr "stderr-$1"
+    $FGREP "tst-$1.r:1: alphanumeric token too long" "stderr-$1" \
+      || testcase_REGISTER_FAILURE
+}
+set -x
+
+# Assume that 2**16 = 65536 characters make up a token too long
+long_token=x
+i=1
+while test $i -le 16; do
+    i=`expr $i + 1`
+    set +x
+    long_token="$long_token$long_token"
+    set -x
+done
+
+set +x
+len_long_token=`echo $long_token | wc -c`
+len_long_token=`expr $len_long_token - 1` # account for extra newline
+test $len_long_token = 65536 \
+  || testcase_HARDERROR "len(\$long_token) = $len_long_token != 65536"
+set -x
+
+set +x
+echo "$long_token" >tst-tokn.r
+echo "function $long_token" >tst-func.r
+echo "subroutine $long_token" >tst-subr.r
+echo "str = '$long_token'" >tst-str1.r
+echo "str = \"$long_token\"" >tst-str2.r
+set -x
+
+do_test tokn
+do_test func
+do_test subr
+do_test str1
+do_test str2
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
