@@ -19,11 +19,16 @@ EXTRA_DIST =
 
 EXTRA_DIST += $(ALL_TESTS)
 
+# This fails, probably for a bug in cascode() or swend() in codegen.c
+XFAIL_TESTS = switch-segfault.test
+
 # We need this auxiliary variable to keep the list of *all* test scripts
 # so that the user can override the $(TESTS) variable without clashing
 # with consistency checks done by  the `check-list-of-tests' target defined
 # in `CheckTestList.am'.
-ALL_TESTS = token-too-long.test
+ALL_TESTS = \
+  switch-segfault.test \
+  token-too-long.test
 
 # Run all tests by default.
 TESTS = $(ALL_TESTS)

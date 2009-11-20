@@ -1,0 +1,72 @@
+#!/bin/sh
+
+# Check that an empty `case' with missing label as last statement in
+# a switch construct does not cause C Ratfor to crash.
+
+. ../blackbox/lib/rat4-t.sh || exit 99
+
+cat >tst1.r <<EOF
+switch(x) { case : }
+EOF
+
+cat >tst2.r <<EOF
+switch(x) { case :; }
+EOF
+
+
+cat >tst3.r <<EOF
+switch(x) {
+    case :
+}
+EOF
+
+cat >tst4.r <<EOF
+switch(x) {
+    case :;
+}
+EOF
+
+cat >tst5.r <<EOF
+switch(x) {
+    case :$TAB
+}
+EOF
+
+cat >tst6.r <<EOF
+switch(x) {
+    case :
+
+
+}
+EOF
+
+cat >tst7.r <<EOF
+switch(x) {
+    case : _
+}
+EOF
+
+
+for i in 1 2 3 4 5 6 7; do
+    cat tst$i.r
+    if run_RATFOR -e RETURN "tst$i.r"; then
+        rc=0
+    else
+        rc=$?
+    fi
+    set +x # temporarly stop verbosity
+    msg=''
+    case $rc in
+        0) msg="UNEXPECTED SUCCESS on tst$i.r";;
+        1) ;;
+      139) msg="SEGFAULT on tst$i.r";;
+        *) msg="UNEXPECTED EXIT STATUS \`$rc' on tst$i.r";;
+    esac
+    [ -z "$msg" ] || testcase_REGISTER_FAILURE "$msg"
+    msg=''
+    set -x # reset verbosity
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
