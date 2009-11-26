@@ -1,7 +1,7 @@
 ## -*- Makefile.am -*-
 ## Makefile fragment, included by Makefile.am
 
-# All the tests scripts should and with one of these extensions.
+# All the tests scripts should end with one of these extensions.
 TEST_EXTENSIONS = .test
 
 # Shell used to run the test scripts.  This is user-overridable.
