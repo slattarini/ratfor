@@ -25,98 +25,99 @@ EOF
 chmod a+x test_script
 
 test_cleanup
-run_command test_script 1 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT1" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR1" || testcase_FATAL_FAILURE
+run_command test_script 1 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT1" || testcase_FAIL
+test x"`cat stderr`" = x"ERR1" || testcase_FAIL
 
 test_cleanup
-run_command ./test_script 2 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT2" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR2" || testcase_FATAL_FAILURE
+run_command ./test_script 2 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT2" || testcase_FAIL
+test x"`cat stderr`" = x"ERR2" || testcase_FAIL
 
 test_cleanup
-run_command "$cwd"/test_script 3 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT3" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR3" || testcase_FATAL_FAILURE
+run_command "$cwd"/test_script 3 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT3" || testcase_FAIL
+test x"`cat stderr`" = x"ERR3" || testcase_FAIL
 
 test_cleanup
-run_command -e 0 test_script 4 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT4" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR4" || testcase_FATAL_FAILURE
+run_command -e 0 test_script 4 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT4" || testcase_FAIL
+test x"`cat stderr`" = x"ERR4" || testcase_FAIL
 
 test_cleanup
-run_command -m test_script 5 || testcase_FATAL_FAILURE
-test -f stdout && testcase_FATAL_FAILURE
-test -f stderr && testcase_FATAL_FAILURE
-test -f stdall || testcase_FATAL_FAILURE
-test x"`tr '\012' '@' <stdall`" = x"OUT5@ERR5@" || testcase_FATAL_FAILURE
+run_command -m test_script 5 || testcase_FAIL
+test -f stdout && testcase_FAIL
+test -f stderr && testcase_FAIL
+test -f stdall || testcase_FAIL
+test x"`tr '\012' '@' <stdall`" = x"OUT5@ERR5@" || testcase_FAIL
 
 test_cleanup
-run_command -e 15 test_script 6 15 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT6" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR6" || testcase_FATAL_FAILURE
+run_command -e 15 test_script 6 15 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT6" || testcase_FAIL
+test x"`cat stderr`" = x"ERR6" || testcase_FAIL
 
 test_cleanup
-run_command -e FAIL test_script 7 3 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT7" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR7" || testcase_FATAL_FAILURE
+run_command -e FAIL test_script 7 3 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT7" || testcase_FAIL
+test x"`cat stderr`" = x"ERR7" || testcase_FAIL
 
 test_cleanup
-run_command -e IGNORE test_script 8 0 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT8" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR8" || testcase_FATAL_FAILURE
+run_command -e IGNORE test_script 8 0 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT8" || testcase_FAIL
+test x"`cat stderr`" = x"ERR8" || testcase_FAIL
 
 test_cleanup
-run_command -e IGNORE test_script 9 1 || testcase_FATAL_FAILURE
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT9" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR9" || testcase_FATAL_FAILURE
+run_command -e IGNORE test_script 9 1 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT9" || testcase_FAIL
+test x"`cat stderr`" = x"ERR9" || testcase_FAIL
 
 test_cleanup
-run_command -e RETURN -m test_script 10 0 || testcase_FATAL_FAILURE
-test -f stdout && testcase_FATAL_FAILURE
-test -f stderr && testcase_FATAL_FAILURE
-test -f stdall || testcase_FATAL_FAILURE
-test x"`tr '\012' '@' <stdall`" = x"OUT10@ERR10@" || testcase_FATAL_FAILURE
+run_command -e RETURN -m test_script 10 0 || testcase_FAIL
+test -f stdout && testcase_FAIL
+test -f stderr && testcase_FAIL
+test -f stdall || testcase_FAIL
+test x"`tr '\012' '@' <stdall`" = x"OUT10@ERR10@" || testcase_FAIL
 
 test_cleanup
 if run_command -e RETURN test_script 11 27; then
-    testcase_FATAL_FAILURE
+    testcase_FAIL
 else
     estatus=$?
-    test $estatus -eq 27 || testcase_FATAL_FAILURE
+    test $estatus -eq 27 || testcase_FAIL
 fi
 unset estatus
-test -f stdout || testcase_FATAL_FAILURE
-test -f stderr || testcase_FATAL_FAILURE
-test -f stdall && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"OUT11" || testcase_FATAL_FAILURE
-test x"`cat stderr`" = x"ERR11" || testcase_FATAL_FAILURE
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT11" || testcase_FAIL
+test x"`cat stderr`" = x"ERR11" || testcase_FAIL
 
 test_cleanup
+
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
