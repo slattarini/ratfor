@@ -51,6 +51,6 @@ for i in 1 2 3 4 5 6 7 8; do
     $FGREP ': include: missing filename' stderr$i || testcase_FATAL_FAILURE
 done
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copied from SteLib at 2009-12-02 12:33:31 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2009-12-02 14:12:50 +0100.  DO NOT EDIT!
 #
 # Shell library to write test cases.  The only documentation are the
 # comments and the description of variables/functions embedded in the
@@ -251,13 +251,6 @@ _testcase_process_outcome() {
             ;;
     esac
     set -x # restart xtrace verbosity
-}
-
-# This function is here for backward-compatibility only.
-# DO NOT USE THIS FUNCTION IN NEW TESTS!
-testcase_PASS() {
-    { set +x; } 2>/dev/null
-    testcase_DONE
 }
 
 # Usage: testcase_RESET_SUCCESS [WHY]

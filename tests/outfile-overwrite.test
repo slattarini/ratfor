@@ -11,6 +11,6 @@ cat tst.out
 $FGREP 'CLOBBER ME' tst.out && testcase_FATAL_FAILURE
 $FGREP 'reborn' tst.out || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

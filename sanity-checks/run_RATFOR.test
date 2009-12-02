@@ -80,6 +80,6 @@ run_RATFOR -e 254 -- 7 && $FGREP 'timed out' stderr \
 
 # -*-*-
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

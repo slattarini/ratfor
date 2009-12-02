@@ -18,6 +18,6 @@ mv -f stdout-t stdout
 $GREP '^foo *= *1$' stdout || testcase_FATAL_FAILURE
 $GREP '^return$' stdout || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

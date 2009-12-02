@@ -65,6 +65,6 @@ $GREP "^ *return *$" stdout4 || testcase_FATAL_FAILURE
 $GREP "^ *subr.* *= *0 *$" stdout4 && testcase_FATAL_FAILURE
 $GREP "^ *func.* *= *0 *$" stdout4 && testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

@@ -15,6 +15,6 @@ EOF
 run_RATFOR -e 1 -- -l 100 tst.r || testcase_FATAL_FAILURE
 $FGREP ':4: possible label conflict' stderr || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

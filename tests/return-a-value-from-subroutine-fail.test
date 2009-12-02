@@ -45,6 +45,6 @@ err_at_line 14
 err_at_line 15
 err_at_line 17
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

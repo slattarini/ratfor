@@ -41,6 +41,6 @@ expected_answer=42
 got_answer=`cat stdout | ws_normalize`
 test x"$got_answer" = x"$expected_answer" || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

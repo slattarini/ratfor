@@ -16,6 +16,6 @@ run_RATFOR -e 1 -t 10 foo.r || testcase_FATAL_FAILURE
 test -s stderr || testcase_FATAL_FAILURE "ratfor did not print error any" \
                                          "message on recursive include"
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

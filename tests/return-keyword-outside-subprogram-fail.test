@@ -27,6 +27,6 @@ for input in \
     $GREP "$errmsg" $i-stderr || testcase_FATAL_FAILURE
 done
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

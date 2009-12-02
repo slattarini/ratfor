@@ -25,6 +25,6 @@ run_RATFOR -e 2 tst1.r tst2.r tst3.r tst4.r tst5.r || testcase_FATAL_FAILURE
 $GREP "^$ratfor_rx: too many arguments" stderr || testcase_FATAL_FAILURE
 $GREP "^Usage:" stderr || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

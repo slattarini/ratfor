@@ -40,6 +40,6 @@ $FGREP "&& c1 mu2" stdout || testcase_FATAL_FAILURE
 $FGREP "|| inc" stdout || testcase_FATAL_FAILURE
 $FGREP ".or. inc" stdout && testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

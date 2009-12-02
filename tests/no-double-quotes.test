@@ -10,6 +10,6 @@ echo 'x = "123"' > tst.r
 run_RATFOR tst.r || testcase_FATAL_FAILURE
 $FGREP '"' stdout && testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

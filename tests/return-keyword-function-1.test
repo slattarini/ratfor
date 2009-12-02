@@ -33,6 +33,6 @@ $GREP "^ *f2 *= *2-2 *$" stdout || testcase_FATAL_FAILURE
 $GREP "^ *f3 *= *(3 + 3) *$" stdout || testcase_FATAL_FAILURE
 $GREP "^ *f4 *= *(4 - 4) *$" stdout || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

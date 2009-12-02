@@ -85,6 +85,6 @@ check_func_return 08 "(1+(x//15+2)**2)"
 check_func_return 09 "'qwerty'"
 check_func_return 10 "1 x = 2 + 3 @ 4 'str ' ***/.$"
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

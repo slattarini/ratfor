@@ -117,6 +117,6 @@ test x"`cat stdout`" = x"OUT11" || testcase_FATAL_FAILURE
 test x"`cat stderr`" = x"ERR11" || testcase_FATAL_FAILURE
 
 test_cleanup
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

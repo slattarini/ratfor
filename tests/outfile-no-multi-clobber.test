@@ -19,6 +19,6 @@ $DIFF_U o1 safe || { (echo '~~~~~') 2>/dev/null; testcase_FATAL_FAILURE; }
 $DIFF_U o2 safe || { (echo '~~~~~') 2>/dev/null; testcase_FATAL_FAILURE; }
 $GREP clobbered o3 || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

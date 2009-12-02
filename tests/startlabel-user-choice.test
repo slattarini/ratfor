@@ -21,6 +21,6 @@ $GREP -v '^[cC]' stdout >stdout2
 $GREP '^60000 ' stdout2 || testcase_FATAL_FAILURE
 $EGREP -v '^( |6000[0-9])' stdout2 && testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

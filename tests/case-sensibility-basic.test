@@ -14,6 +14,6 @@ $FGREP 'FOO' stdout && testcase_FATAL_FAILURE
 $FGREP 'bar' stdout && testcase_FATAL_FAILURE
 $FGREP 'fooBAR' stdout || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

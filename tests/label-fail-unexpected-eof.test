@@ -15,6 +15,6 @@ cat tst.r
 run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
 $FGREP ':3: unexpected EOF.' stderr || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

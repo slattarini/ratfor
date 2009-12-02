@@ -9,6 +9,6 @@ run_RATFOR /dev/null || testcase_FATAL_FAILURE
 : ratfor must produce only comments on empty input
 $GREP -v '^[Cc]' stdout && testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

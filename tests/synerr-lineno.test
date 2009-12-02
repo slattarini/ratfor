@@ -33,6 +33,6 @@ mv stderr stderr3
 # unexpected EOF in input
 $FGREP 'tst3.r:3:' stderr3 || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

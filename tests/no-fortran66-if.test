@@ -27,6 +27,6 @@ $FGREP 'endif' stdout || testcase_FATAL_FAILURE
 test `$FGREP 'then' stdout | wc -l` -eq 2 || testcase_FATAL_FAILURE
 test `$FGREP 'endif' stdout | wc -l` -eq 2 || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

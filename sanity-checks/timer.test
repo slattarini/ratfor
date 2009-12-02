@@ -44,6 +44,6 @@ test ! -x noexec
 run_command -e 126 timer ./noexec || testcase_FATAL_FAILURE
 $GREP './noexec: [pP]ermission denied' stderr || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

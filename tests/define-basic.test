@@ -37,6 +37,6 @@ $FGREP 'x2:text2' stdout || testcase_FATAL_FAILURE
 $FGREP 'x3?"text3"' stdout || testcase_FATAL_FAILURE
 $FGREP 'x4,text4' stdout || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

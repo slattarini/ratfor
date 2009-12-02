@@ -21,6 +21,6 @@ for x in a b c d e; do
     $GREP "$x *= *1" xstdout || testcase_FATAL_FAILURE
 done
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

@@ -11,6 +11,6 @@ EOF
 
 run_RATFOR -C tst.r || testcase_FATAL_FAILURE
 $GREP "^[cC].*\"%c@mm3nt%'!" stdout || testcase_FATAL_FAILURE
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

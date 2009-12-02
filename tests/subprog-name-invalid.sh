@@ -111,7 +111,7 @@ check_default_subprog_missnames() {
 testcase_done() {
     : e=$e
     case $e in
-        0) testcase_PASS;;
+        0) testcase_DONE;;
         1) testcase_FATAL_FAILURE;;
         *) testcase_HARDERROR;;
     esac

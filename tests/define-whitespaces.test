@@ -19,6 +19,6 @@ $FGREP 'a: text1:a' stdout  || testcase_FATAL_FAILURE
 $FGREP 'b:text2 :b' stdout  || testcase_FATAL_FAILURE
 $FGREP 'c: text3 :c' stdout || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

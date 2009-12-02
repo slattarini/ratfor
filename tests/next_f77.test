@@ -157,6 +157,6 @@ cat got
 test -s stderr && testcase_FATAL_FAILURE
 $DIFF_U exp got || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

@@ -23,6 +23,6 @@ $FGREP '12abcdef' stdout || testcase_FATAL_FAILURE
 $FGREP '34ghijkl' stdout || testcase_FATAL_FAILURE
 $FGREP '56mnopqr' stdout || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

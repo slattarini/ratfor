@@ -48,6 +48,6 @@ cat exp3
 cat got3
 $DIFF_U exp3 got3 || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

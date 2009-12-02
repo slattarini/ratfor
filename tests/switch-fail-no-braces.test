@@ -22,6 +22,6 @@ $GREP '^tst.r:2: missing left brace in switch statement.$' stderr || e=$?
 $GREP '^tst.r:6: missing left brace in switch statement.$' stderr || e=$?
 test $e -eq 0 || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

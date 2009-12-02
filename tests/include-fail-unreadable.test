@@ -28,6 +28,6 @@ $GREP "^tst\\.r:6: $r" stderr || testcase_FATAL_FAILURE
 $GREP -i 'NOTINCLUDED' stdout && testcase_FATAL_FAILURE
 $GREP 'stillalive' stdout || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

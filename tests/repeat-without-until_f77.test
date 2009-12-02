@@ -32,6 +32,6 @@ run_command timer -t 10 ./tst.exe || testcase_FATAL_FAILURE
 test -s stderr && testcase_FATAL_FAILURE
 test x"`cat stdout`" = x"9" || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

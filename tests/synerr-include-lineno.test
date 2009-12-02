@@ -67,6 +67,6 @@ c7=`$FGREP 'in2.r:7:' stderr | wc -l` || testcase_HARDERROR
 test 2 -eq "$c2" || testcase_FATAL_FAILURE
 test 4 -eq "$c7" || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

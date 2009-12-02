@@ -11,6 +11,6 @@ run_RATFOR -e 1 -- -o tst.d tst.r || testcase_FATAL_FAILURE
 rx='tst\.d: cannot open for writing: [iI]s a directory'
 $GREP "$rx" stderr || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

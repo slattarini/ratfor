@@ -18,6 +18,6 @@ run_RATFOR -e 1 -- tst2.r || testcase_FATAL_FAILURE
 mv stderr stderr2
 test 3 -le "`wc -l <stderr2`"
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

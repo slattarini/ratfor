@@ -14,6 +14,6 @@ run_RATFOR -e 1 -- -o tst.d/tst.out tst.r || testcase_FATAL_FAILURE
 rx='tst\.d/tst\.out: cannot open for writing: [pP]ermission denied'
 $GREP "$rx" stderr || testcase_FATAL_FAILURE
 
-testcase_PASS
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
