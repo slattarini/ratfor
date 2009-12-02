@@ -37,8 +37,8 @@ RATFOR=`pwd`/src/c-ratfor
 export RATFOR
 AC_MSG_NOTICE([exported RATFOR='$RATFOR'])
 
-test -f "$srcdir/xfail-tests.txt"  && test -r "$srcdir/xfail-tests.txt" \
- || AC_MSG_ERROR([file `xfail-tests.txt' not found in srcdir `$srcdir'])
+test -f "$srcdir/xfail-tests.list" && test -r "$srcdir/xfail-tests.list" \
+ || AC_MSG_ERROR([file `xfail-tests.list' not found in srcdir `$srcdir'])
 
 m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
 
@@ -46,8 +46,8 @@ AC_MSG_NOTICE([reading list of test cases expected to fail])
 RAT4_TESTSUITE_XFAIL_TESTS=`
   while read line; do
     AS_CASE(["$line"], ['@%:@'*|''], [], [AS_ECHO_N(" $line")])
-  done <"$srcdir/xfail-tests.txt"` \
- || AC_MSG_ERROR([unexpected error reading file `$srcdir/xfail-tests.txt'])
+  done <"$srcdir/xfail-tests.list"` \
+ || AC_MSG_ERROR([unexpected error reading file `$srcdir/xfail-tests.list'])
 export RAT4_TESTSUITE_XFAIL_TESTS
 
 #

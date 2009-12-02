@@ -12,7 +12,7 @@ dist_doc_DATA = README BUGS NEWS
 
 # List of extra files to be put in the distributed tarball.
 EXTRA_DIST = \
-  xfail-tests.txt \
+  xfail-tests.list \
   HACKING \
   GNUmakefile \
   maint/maint.mk \
