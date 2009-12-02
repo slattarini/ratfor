@@ -21,10 +21,10 @@ for input in \
 ; do
     i=`expr $i + 1`
     echo "$input" >$i-tst.r
-    run_RATFOR -e 1 $i-tst.r || testcase_FAIL
+    run_RATFOR -e 1 $i-tst.r || testcase_FATAL_FAILURE
     mv stderr $i-stderr
     mv stdout $i-stdout
-    $GREP "$errmsg" $i-stderr || testcase_FAIL
+    $GREP "$errmsg" $i-stderr || testcase_FATAL_FAILURE
 done
 
 testcase_PASS

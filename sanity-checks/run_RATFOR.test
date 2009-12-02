@@ -58,23 +58,25 @@ run_RATFOR \
   && $GREP '^-k$' stdout \
   && $GREP '^-e$' stdout \
   && $GREP '^11$' stdout \
-|| testcase_FAIL
+|| testcase_FATAL_FAILURE
 
-run_RATFOR <tst.txt || testcase_FAIL
-$DIFF_U tst.txt stdout || testcase_FAIL
+run_RATFOR <tst.txt || testcase_FATAL_FAILURE
+$DIFF_U tst.txt stdout || testcase_FATAL_FAILURE
 
 exec <tst.txt
-run_RATFOR || testcase_FAIL
-$DIFF_U tst.txt stdout || testcase_FAIL
+run_RATFOR || testcase_FATAL_FAILURE
+$DIFF_U tst.txt stdout || testcase_FATAL_FAILURE
 exec </dev/null
 
 RATFOR=$cwd/xsleep.sh
 
-run_RATFOR || testcase_FAIL
-$DIFF_U xsleep.txt stdout || testcase_FAIL
+run_RATFOR || testcase_FATAL_FAILURE
+$DIFF_U xsleep.txt stdout || testcase_FATAL_FAILURE
 
-run_RATFOR -e 254 -t 1 && $FGREP 'timed out' stderr || testcase_FAIL
-run_RATFOR -e 254 -- 7 && $FGREP 'timed out' stderr || testcase_FAIL
+run_RATFOR -e 254 -t 1 && $FGREP 'timed out' stderr \
+  || testcase_FATAL_FAILURE
+run_RATFOR -e 254 -- 7 && $FGREP 'timed out' stderr \
+  || testcase_FATAL_FAILURE
 
 # -*-*-
 

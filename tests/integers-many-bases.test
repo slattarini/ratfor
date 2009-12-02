@@ -62,8 +62,8 @@ cat "$input" | (
 : TEST DATA READ
 
 cat tst.r
-run_RATFOR tst.r || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 $GREP -v '^[cC]' <stdout >got
 makeup got exp
 { echo " ==="; } 2>/dev/null
@@ -71,7 +71,7 @@ cat exp
 { echo " ==="; } 2>/dev/null
 cat got
 { echo " ==="; } 2>/dev/null
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 { echo " ==="; } 2>/dev/null
 
 testcase_PASS

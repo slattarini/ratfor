@@ -49,7 +49,7 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 $SED -e '/^[cC]/d' \
      -e "s/$ws1p/ /g" \
      -e "s/^$ws0p//" \
@@ -59,7 +59,7 @@ $SED -e '/^[cC]/d' \
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 
 testcase_PASS
 

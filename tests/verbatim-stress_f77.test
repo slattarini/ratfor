@@ -30,16 +30,16 @@ EOF
 cat tst.r
 
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 mv stdout tst.f
 
-run_F77 tst.f || testcase_FAIL
-run_command ./tst.exe || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_F77 tst.f || testcase_FATAL_FAILURE
+run_command ./tst.exe || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 
 expected_answer=42
 got_answer=`cat stdout | ws_normalize`
-test x"$got_answer" = x"$expected_answer" || testcase_FAIL
+test x"$got_answer" = x"$expected_answer" || testcase_FATAL_FAILURE
 
 testcase_PASS
 

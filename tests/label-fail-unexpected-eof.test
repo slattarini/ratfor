@@ -12,8 +12,8 @@ EOF
 
 cat tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
-$FGREP ':3: unexpected EOF.' stderr || testcase_FAIL
+run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+$FGREP ':3: unexpected EOF.' stderr || testcase_FATAL_FAILURE
 
 testcase_PASS
 

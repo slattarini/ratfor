@@ -12,8 +12,8 @@ while(true) {
 100 continue
 EOF
 
-run_RATFOR -e 1 -- -l 100 tst.r || testcase_FAIL
-$FGREP ':4: possible label conflict' stderr || testcase_FAIL
+run_RATFOR -e 1 -- -l 100 tst.r || testcase_FATAL_FAILURE
+$FGREP ':4: possible label conflict' stderr || testcase_FATAL_FAILURE
 
 testcase_PASS
 

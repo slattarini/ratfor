@@ -66,13 +66,13 @@ end
 EOF
 
 cat tst.r
-run_RATFOR tst.r || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 mv stdout tst.f
 
-run_F77 tst.f || testcase_FAIL
-run_command ./tst.exe || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_F77 tst.f || testcase_FATAL_FAILURE
+run_command ./tst.exe || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 ws_normalize <stdout >got
 
 { echo " ==="; } 2>/dev/null
@@ -80,7 +80,7 @@ cat exp
 { echo " ==="; } 2>/dev/null
 cat got
 { echo " ==="; } 2>/dev/null
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 { echo " ==="; } 2>/dev/null
 
 testcase_PASS

@@ -32,11 +32,11 @@ done
 
 $compiled || testcase_SKIP "couldn't compile simple C programs"
 
-run_command -e 254 timer -t 4 ./xsleep || testcase_FAIL
-$GREP 'timer: command.*xsleep.*timed out' stderr || testcase_FAIL
-test `wc -l <stdout` -eq 1 || testcase_FAIL
+run_command -e 254 timer -t 4 ./xsleep || testcase_FATAL_FAILURE
+$GREP 'timer: command.*xsleep.*timed out' stderr || testcase_FATAL_FAILURE
+test `wc -l <stdout` -eq 1 || testcase_FATAL_FAILURE
 pid=`cat stdout`
-kill -9 $pid && testcase_FAIL
+kill -9 $pid && testcase_FATAL_FAILURE
 
 #
 # Done.

@@ -7,9 +7,9 @@
 for i in 0 1 42; do
     (echo "#!/bin/sh"; echo "exit $i") > "exit$i"
     chmod a+x "exit$i"
-    run_command -e $i -- timer -t 10 "./exit$i" || testcase_FAIL
-    test ! -s stdout || testcase_FAIL
-    test ! -s stderr || testcase_FAIL
+    run_command -e $i -- timer -t 10 "./exit$i" || testcase_FATAL_FAILURE
+    test ! -s stdout || testcase_FATAL_FAILURE
+    test ! -s stderr || testcase_FATAL_FAILURE
 done
 
 # Check that timer ignore shell builtins.
@@ -18,30 +18,31 @@ mkdir tmp-bin
 chmod a+x tmp-bin/'echo'
 oPATH=$PATH
 PATH=`pwd`/tmp-bin:$oPATH; export PATH
-run_command -e 133 -- timer -t 10 'echo' NO || testcase_FAIL
-test -s stdout && testcase_FAIL
-$FGREP YES stderr || testcase_FAIL
+run_command -e 133 -- timer -t 10 'echo' NO || testcase_FATAL_FAILURE
+test -s stdout && testcase_FATAL_FAILURE
+$FGREP YES stderr || testcase_FATAL_FAILURE
 PATH=$oPATH; export PATH
 unset oPATH
 
-run_command -e 99 timer || testcase_FAIL
-$FGREP 'missing argument' stderr || testcase_FAIL
-run_command -e 99 timer -x || testcase_FAIL
-$FGREP 'invalid option' stderr || testcase_FAIL
-run_command -e 99 timer -t || testcase_FAIL
-$FGREP 'option requires an argument' stderr || testcase_FAIL
+run_command -e 99 timer || testcase_FATAL_FAILURE
+$FGREP 'missing argument' stderr || testcase_FATAL_FAILURE
+run_command -e 99 timer -x || testcase_FATAL_FAILURE
+$FGREP 'invalid option' stderr || testcase_FATAL_FAILURE
+run_command -e 99 timer -t || testcase_FATAL_FAILURE
+$FGREP 'option requires an argument' stderr || testcase_FATAL_FAILURE
 
 ls -l none || :
 test ! -f none
-run_command -e 127 timer ./none || testcase_FAIL
-$GREP './none: [nN]o such file or directory' stderr || testcase_FAIL
+run_command -e 127 timer ./none || testcase_FATAL_FAILURE
+$GREP './none: [nN]o such file or directory' stderr \
+  || testcase_FATAL_FAILURE
 
 : > noexec
 chmod a-x noexec
 ls -l noexec || :
 test ! -x noexec
-run_command -e 126 timer ./noexec || testcase_FAIL
-$GREP './noexec: [pP]ermission denied' stderr || testcase_FAIL
+run_command -e 126 timer ./noexec || testcase_FATAL_FAILURE
+$GREP './noexec: [pP]ermission denied' stderr || testcase_FATAL_FAILURE
 
 testcase_PASS
 

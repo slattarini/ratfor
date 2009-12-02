@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copied from SteLib at 2009-11-17 16:59:53 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2009-12-02 12:33:31 +0100.  DO NOT EDIT!
 #
 # Shell library to write test cases.  The only documentation are the
 # comments and the description of variables/functions embedded in the
@@ -158,6 +158,7 @@ _Exit() {
 # Our exit trap: should deal with normal termination, signals, untrapped
 # failures and internal errors.  This function is for INTERNAL USE ONLY.
 _cleanup_at_exit() {
+    # TODO: maybe pass this as an argument? that should be more portable...
     testcase_exit_status=$?
     # in case the script is not terminated by `_Exit()' (e.g. an uncatched
     # failure while `set -e' is on, or a terminating signal).
@@ -204,6 +205,8 @@ _cleanup_at_exit() {
 # Process the outcome of a single test (there can be many in a test script).
 # This function is FOR INTERNAL USE ONLY.
 _testcase_process_outcome() {
+    # TODO: check that xtrace verbosity is off
+    # TODO: maybe we could even inline this function...
     set +x # xtrace verbosity temporarly disabled in this function
     if test $# -eq 0; then
         _testcase_msg \
@@ -257,13 +260,6 @@ testcase_PASS() {
     testcase_DONE
 }
 
-# This function is here for backward-compatibility only.
-# DO NOT USE THIS FUNCTION IN NEW TESTS!
-testcase_FAIL() {
-    { set +x; } 2>/dev/null
-    testcase_FATAL_FAILURE ${1+"$@"}
-}
-
 # Usage: testcase_RESET_SUCCESS [WHY]
 # Reset the outcome of the testscase to be "success", overriding any
 # previously registered failure.
@@ -271,10 +267,10 @@ testcase_RESET_SUCCESS() {
     _testcase_process_outcome --reset-success ${1+"$@"}
 }
 
-# Usage: testcase_REGISTER_FAILURE [WHY]
+# Usage: testcase_FAIL [WHY]
 # Cause the current testcase to register "failure" as its outcome,
 # explaining the cause of failure if WHY argument is given.
-testcase_REGISTER_FAILURE() {
+testcase_FAIL() {
     _testcase_process_outcome --register-failure ${1+"$@"}
 }
 

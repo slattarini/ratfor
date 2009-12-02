@@ -18,13 +18,13 @@ $AWK '/# *ERR/{ print "tst.r:" NR ": illegal next." }' "$data" >exp
 
 cat tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
+run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
 mv stderr got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 
 testcase_PASS
 

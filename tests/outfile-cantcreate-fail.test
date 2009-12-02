@@ -10,9 +10,9 @@ chmod a-w tst.d
 
 echo 'junk' > tst.r
 
-run_RATFOR -e 1 -- -o tst.d/tst.out tst.r || testcase_FAIL
+run_RATFOR -e 1 -- -o tst.d/tst.out tst.r || testcase_FATAL_FAILURE
 rx='tst\.d/tst\.out: cannot open for writing: [pP]ermission denied'
-$GREP "$rx" stderr || testcase_FAIL
+$GREP "$rx" stderr || testcase_FATAL_FAILURE
 
 testcase_PASS
 

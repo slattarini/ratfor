@@ -4,10 +4,10 @@
 
 . ../lib/rat4-t.sh || exit 99
 
-run_RATFOR /dev/null || testcase_FAIL
+run_RATFOR /dev/null || testcase_FATAL_FAILURE
 
 : ratfor must produce only comments on empty input
-$GREP -v '^[Cc]' stdout && testcase_FAIL
+$GREP -v '^[Cc]' stdout && testcase_FATAL_FAILURE
 
 testcase_PASS
 

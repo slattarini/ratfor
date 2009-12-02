@@ -29,14 +29,14 @@ cat ctrl.r
 run_RATFOR ctrl.r && test ! -s stderr || testcase_HARDERROR
 mv stdout exp
 
-run_RATFOR tst.r || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 mv stdout got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 
 testcase_PASS
 

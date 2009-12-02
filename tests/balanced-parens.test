@@ -15,8 +15,8 @@ x=(y)
 a(b(c(d(e)f)g)h)
 EOF
 
-run_RATFOR tst.r || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 
 testcase_PASS
 

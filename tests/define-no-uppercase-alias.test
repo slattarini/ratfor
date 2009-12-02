@@ -13,14 +13,14 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 
-$FGREP 'DEFINE' stdout || testcase_FAIL
-$GREP 'x1 *sym1' stdout || testcase_FAIL
-$GREP 'x2 *sym2' stdout || testcase_FAIL
-$GREP 'x.*foo' stdout && testcase_FAIL
-$GREP 'x.*bar' stdout && testcase_FAIL
+$FGREP 'DEFINE' stdout || testcase_FATAL_FAILURE
+$GREP 'x1 *sym1' stdout || testcase_FATAL_FAILURE
+$GREP 'x2 *sym2' stdout || testcase_FATAL_FAILURE
+$GREP 'x.*foo' stdout && testcase_FATAL_FAILURE
+$GREP 'x.*bar' stdout && testcase_FATAL_FAILURE
 
 testcase_PASS
 

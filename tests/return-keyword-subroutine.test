@@ -42,12 +42,12 @@ EOF
 
 for i in 1 2 3 4 5 6 7 8; do
     cat tst$i.r
-    run_RATFOR tst$i.r || testcase_FAIL
-    test ! -s stderr || testcase_FAIL
+    run_RATFOR tst$i.r || testcase_FATAL_FAILURE
+    test ! -s stderr || testcase_FATAL_FAILURE
     rm -f stderr
     mv stdout stdout$i
-    grep "^ *return *$" stdout$i || testcase_FAIL
-    grep "^ *subr *=" stdout$i && testcase_FAIL
+    grep "^ *return *$" stdout$i || testcase_FATAL_FAILURE
+    grep "^ *subr *=" stdout$i && testcase_FATAL_FAILURE
 done
 
 testcase_PASS

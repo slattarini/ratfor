@@ -30,21 +30,25 @@ cat tst2.r
 cat tst3.r
 cat tst4.r
 
-run_RATFOR -e 1 tst1.r || testcase_FAIL
+run_RATFOR -e 1 tst1.r || testcase_FATAL_FAILURE
 mv stderr stderr1
-$FGREP 'function defined into function body' stderr1 || testcase_FAIL
+$FGREP 'function defined into function body' stderr1 \
+  || testcase_FATAL_FAILURE
 
-run_RATFOR -e 1 tst2.r || testcase_FAIL
+run_RATFOR -e 1 tst2.r || testcase_FATAL_FAILURE
 mv stderr stderr2
-$FGREP 'subroutine defined into function body' stderr2 || testcase_FAIL
+$FGREP 'subroutine defined into function body' stderr2 \
+  || testcase_FATAL_FAILURE
 
-run_RATFOR -e 1 tst3.r || testcase_FAIL
+run_RATFOR -e 1 tst3.r || testcase_FATAL_FAILURE
 mv stderr stderr3
-$FGREP 'function defined into subroutine body' stderr3 || testcase_FAIL
+$FGREP 'function defined into subroutine body' stderr3 \
+  || testcase_FATAL_FAILURE
 
-run_RATFOR -e 1 tst4.r || testcase_FAIL
+run_RATFOR -e 1 tst4.r || testcase_FATAL_FAILURE
 mv stderr stderr4
-$FGREP 'subroutine defined into subroutine body' stderr4 || testcase_FAIL
+$FGREP 'subroutine defined into subroutine body' stderr4 \
+  || testcase_FATAL_FAILURE
 
 testcase_PASS
 

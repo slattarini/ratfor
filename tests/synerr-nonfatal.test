@@ -10,9 +10,9 @@ foo
 bar
 ALIVE
 EOF
-run_RATFOR -e 1 tst.r || testcase_FAIL
-$FGREP 'illegal right brace' stderr || testcase_FAIL
-$FGREP -i ALIVE stdout || testcase_FAIL
+run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+$FGREP 'illegal right brace' stderr || testcase_FATAL_FAILURE
+$FGREP -i ALIVE stdout || testcase_FATAL_FAILURE
 
 testcase_PASS
 

@@ -24,13 +24,13 @@ EOF
 
 $SED 's/^ *\([^ ]*\)  *\([^ ]*\) *$/  .\2. \2/' <map >exp
 
-run_RATFOR map || testcase_FAIL
+run_RATFOR map || testcase_FATAL_FAILURE
 $GREP -v '^[cC]' stdout | ws_normalize | $SED 's/^/  /' > got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 
 testcase_PASS
 

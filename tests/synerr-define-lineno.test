@@ -33,18 +33,18 @@ EOF
 
 $AWK '{print NR ":" $0}' tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
+run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
 
-$FGREP 'tst.r:2: illegal right brace' stderr || testcase_FAIL
-$FGREP 'tst.r:10: illegal case' stderr || testcase_FAIL
-$FGREP 'tst.r:15: illegal next' stderr || testcase_FAIL
-$FGREP 'tst.r:21: illegal break' stderr || testcase_FAIL
-$FGREP 'tst.r:23: illegal else' stderr || testcase_FAIL
-$FGREP 'tst.r:12:' stderr && testcase_FAIL
-$FGREP 'tst.r:16:' stderr && testcase_FAIL
-$FGREP 'tst.r:17:' stderr && testcase_FAIL
-$FGREP 'tst.r:18:' stderr && testcase_FAIL
-$FGREP 'tst.r:19:' stderr && testcase_FAIL
+$FGREP 'tst.r:2: illegal right brace' stderr || testcase_FATAL_FAILURE
+$FGREP 'tst.r:10: illegal case' stderr || testcase_FATAL_FAILURE
+$FGREP 'tst.r:15: illegal next' stderr || testcase_FATAL_FAILURE
+$FGREP 'tst.r:21: illegal break' stderr || testcase_FATAL_FAILURE
+$FGREP 'tst.r:23: illegal else' stderr || testcase_FATAL_FAILURE
+$FGREP 'tst.r:12:' stderr && testcase_FATAL_FAILURE
+$FGREP 'tst.r:16:' stderr && testcase_FATAL_FAILURE
+$FGREP 'tst.r:17:' stderr && testcase_FATAL_FAILURE
+$FGREP 'tst.r:18:' stderr && testcase_FATAL_FAILURE
+$FGREP 'tst.r:19:' stderr && testcase_FATAL_FAILURE
 
 testcase_PASS
 

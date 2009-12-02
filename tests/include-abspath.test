@@ -14,10 +14,10 @@ echo "include $abs_tmp_dir/inc.r" > tst.r
 
 run_RATFOR tst.r || {
     rm -rf "$abs_tmp_dir"
-    testcase_FAIL
+    testcase_FATAL_FAILURE
 }
 rm -rf "$abs_tmp_dir"
-$FGREP 'foobar' stdout || testcase_FAIL
+$FGREP 'foobar' stdout || testcase_FATAL_FAILURE
 
 testcase_PASS
 

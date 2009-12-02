@@ -23,15 +23,15 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FAIL
-$GREP "^ *return *$" stdout || testcase_FAIL
-test `$GREP "^ *return *$" stdout | wc -l` -eq 4 || testcase_FAIL
-$GREP "[^ ].*return" stdout && testcase_FAIL
-$GREP "return.*[^ ]" stdout && testcase_FAIL
-$GREP "^ *f1 *= *1+1 *$" stdout || testcase_FAIL
-$GREP "^ *f2 *= *2-2 *$" stdout || testcase_FAIL
-$GREP "^ *f3 *= *(3 + 3) *$" stdout || testcase_FAIL
-$GREP "^ *f4 *= *(4 - 4) *$" stdout || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+$GREP "^ *return *$" stdout || testcase_FATAL_FAILURE
+test `$GREP "^ *return *$" stdout | wc -l` -eq 4 || testcase_FATAL_FAILURE
+$GREP "[^ ].*return" stdout && testcase_FATAL_FAILURE
+$GREP "return.*[^ ]" stdout && testcase_FATAL_FAILURE
+$GREP "^ *f1 *= *1+1 *$" stdout || testcase_FATAL_FAILURE
+$GREP "^ *f2 *= *2-2 *$" stdout || testcase_FATAL_FAILURE
+$GREP "^ *f3 *= *(3 + 3) *$" stdout || testcase_FATAL_FAILURE
+$GREP "^ *f4 *= *(4 - 4) *$" stdout || testcase_FATAL_FAILURE
 
 testcase_PASS
 

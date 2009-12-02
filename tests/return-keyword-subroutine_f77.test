@@ -37,17 +37,17 @@ OK
 end
 EOF
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 mv stdout tst.f
-run_F77 tst.f || testcase_FAIL
-run_command ./tst.exe || testcase_FAIL
-test -s stderr && testcase_FAIL
+run_F77 tst.f || testcase_FATAL_FAILURE
+run_command ./tst.exe || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 mv stdout got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 
 testcase_PASS
 

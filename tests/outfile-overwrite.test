@@ -6,10 +6,10 @@
 
 echo 'CLOBBER ME' >tst.out
 echo 'reborn' > tst.r
-run_RATFOR -o tst.out tst.r || testcase_FAIL
+run_RATFOR -o tst.out tst.r || testcase_FATAL_FAILURE
 cat tst.out
-$FGREP 'CLOBBER ME' tst.out && testcase_FAIL
-$FGREP 'reborn' tst.out || testcase_FAIL
+$FGREP 'CLOBBER ME' tst.out && testcase_FATAL_FAILURE
+$FGREP 'reborn' tst.out || testcase_FATAL_FAILURE
 
 testcase_PASS
 

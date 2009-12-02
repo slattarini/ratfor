@@ -20,11 +20,10 @@ EOF
 
 for i in 1 2; do
   cat tst$i.r
-  run_RATFOR -e 1 tst$i.r || testcase_REGISTER_FAILURE
+  run_RATFOR -e 1 tst$i.r || testcase_FAIL
   mv stdout stdout$i
   mv stderr stderr$i
-  $EGREP "^tst$i\.r:3: duplicate(d)? case label" stderr$i \
-    || testcase_REGISTER_FAILURE
+  $EGREP "^tst$i\.r:3: duplicate(d)? case label" stderr$i || testcase_FAIL
 done
 
 testcase_DONE

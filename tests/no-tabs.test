@@ -39,13 +39,13 @@ BAZ@
 @BAZ@
 EOF
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 mv stdout stdout1
-$FGREP "$TAB" stdout1 && testcase_FAIL
+$FGREP "$TAB" stdout1 && testcase_FATAL_FAILURE
 
-run_RATFOR -C tst.r || testcase_FAIL
+run_RATFOR -C tst.r || testcase_FATAL_FAILURE
 mv stdout stdout2
-$FGREP "$TAB" stdout2 && testcase_FAIL
+$FGREP "$TAB" stdout2 && testcase_FATAL_FAILURE
 
 testcase_PASS
 

@@ -16,11 +16,11 @@ include dir.d
 stillalive
 EOF
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
+run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
 r='include: dir\.d: cannot open for reading: [iI]s a directory'
-$GREP "^tst\\.r:1: $r" stderr || testcase_FAIL
-$GREP "^tst\\.r:3: $r" stderr || testcase_FAIL
-$GREP 'stillalive' stdout || testcase_FAIL
+$GREP "^tst\\.r:1: $r" stderr || testcase_FATAL_FAILURE
+$GREP "^tst\\.r:3: $r" stderr || testcase_FATAL_FAILURE
+$GREP 'stillalive' stdout || testcase_FATAL_FAILURE
 
 testcase_PASS
 

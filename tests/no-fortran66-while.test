@@ -11,22 +11,22 @@ while (false)
 EOF
 cat tst.r
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 grep -v '^[cC]' stdout >stdout-t
 mv stdout-t stdout
 
 $FGREP 'goto' stdout  \
  && $FGREP 'then' stdout \
  && $FGREP 'endif' stdout \
- || testcase_FAIL
+ || testcase_FATAL_FAILURE
 
 test `$FGREP 'then' stdout | wc -l` -eq 1 \
  && test `$FGREP 'endif' stdout | wc -l` -eq 1 \
  && test `$FGREP 'goto' stdout | wc -l` -eq 1 \
- || testcase_FAIL
+ || testcase_FATAL_FAILURE
 
 test `$GREP '^ *[0-9]' stdout | $GREP -v '^ *2300[01] ' | wc -l` -eq 0 \
-  || testcase_FAIL 'Too many labels in generated fortran code'
+  || testcase_FATAL_FAILURE 'Too many labels in generated fortran code'
 
 testcase_PASS
 

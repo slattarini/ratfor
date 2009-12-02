@@ -17,9 +17,9 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FAIL
-$GREP '100.*foo' stdout || testcase_FAIL
-$GREP '200.*bar' stdout || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+$GREP '100.*foo' stdout || testcase_FATAL_FAILURE
+$GREP '200.*bar' stdout || testcase_FATAL_FAILURE
 
 testcase_PASS
 

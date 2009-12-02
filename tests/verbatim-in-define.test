@@ -19,7 +19,7 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 $GREP -v '^[cC]' stdout >got
 
 cat exp
@@ -27,7 +27,7 @@ cat got
 
 $DIFF_U exp got || {
     (echo ===) 2>/dev/null
-    testcase_FAIL
+    testcase_FATAL_FAILURE
 }
 
 testcase_PASS

@@ -17,11 +17,11 @@ done
 i=1
 while test $i -le $n; do
   cat tst$i.r
-  run_RATFOR -e 1 tst$i.r || testcase_REGISTER_FAILURE
+  run_RATFOR -e 1 tst$i.r || testcase_FAIL
   mv stdout stdout$i
   mv stderr stderr$i
   $EGREP "^tst$i\.r:2: (invalid case label|illegal case syntax)" stderr$i \
-    || testcase_REGISTER_FAILURE
+    || testcase_FAIL
   i=`expr $i + 1`
 done
 

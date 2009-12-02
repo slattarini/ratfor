@@ -13,11 +13,11 @@ cp safe o1
 cp safe o2
 cp safe o3
 
-run_RATFOR -o o1 -o o2 -o o3 tst.r || testcase_FAIL
-test -s stderr && testcase_FAIL
-$DIFF_U o1 safe || { (echo '~~~~~') 2>/dev/null; testcase_FAIL; }
-$DIFF_U o2 safe || { (echo '~~~~~') 2>/dev/null; testcase_FAIL; }
-$GREP clobbered o3 || testcase_FAIL
+run_RATFOR -o o1 -o o2 -o o3 tst.r || testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
+$DIFF_U o1 safe || { (echo '~~~~~') 2>/dev/null; testcase_FATAL_FAILURE; }
+$DIFF_U o2 safe || { (echo '~~~~~') 2>/dev/null; testcase_FATAL_FAILURE; }
+$GREP clobbered o3 || testcase_FATAL_FAILURE
 
 testcase_PASS
 

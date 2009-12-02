@@ -112,7 +112,7 @@ testcase_done() {
     : e=$e
     case $e in
         0) testcase_PASS;;
-        1) testcase_FAIL;;
+        1) testcase_FATAL_FAILURE;;
         *) testcase_HARDERROR;;
     esac
 }

@@ -12,9 +12,9 @@ cat > bar.r <<EOF
 include foo.r
 EOF
 
-run_RATFOR -e 1 -t 10 foo.r || testcase_FAIL
-test -s stderr || testcase_FAIL "ratfor did not print error any message" \
-                                "on recursive include"
+run_RATFOR -e 1 -t 10 foo.r || testcase_FATAL_FAILURE
+test -s stderr || testcase_FATAL_FAILURE "ratfor did not print error any" \
+                                         "message on recursive include"
 
 testcase_PASS
 

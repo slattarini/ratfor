@@ -6,10 +6,10 @@
 
 test ! -f none.r
 
-run_RATFOR -e 1 none.r || testcase_FAIL
+run_RATFOR -e 1 none.r || testcase_FATAL_FAILURE
 rx='none\.r: cannot open for reading: [nN]o such file or directory'
-$GREP "$rx" stderr || testcase_FAIL
-test -s stdout && testcase_FAIL
+$GREP "$rx" stderr || testcase_FATAL_FAILURE
+test -s stdout && testcase_FATAL_FAILURE
 
 testcase_PASS
 

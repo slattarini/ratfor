@@ -17,14 +17,14 @@ cat >exp1 <<EOF
 :L3:
 EOF
 
-run_RATFOR tst1.r || testcase_FAIL
+run_RATFOR tst1.r || testcase_FATAL_FAILURE
 $GREP -v '^[cC]' stdout | ws_normalize > got1
 rm -f stdout
 
 cat exp1
 cat got1
 
-$DIFF_U exp1 got1 || testcase_FAIL
+$DIFF_U exp1 got1 || testcase_FATAL_FAILURE
 
 # the same test as above, with deeper nesting
 
@@ -54,14 +54,14 @@ cat >exp2 <<EOF
 :quux:
 EOF
 
-run_RATFOR tst2.r || testcase_FAIL
+run_RATFOR tst2.r || testcase_FATAL_FAILURE
 $GREP -v '^[cC]' stdout | ws_normalize > got2
 rm -f stdout
 
 cat exp2
 cat got2
 
-$DIFF_U exp2 got2 || testcase_FAIL
+$DIFF_U exp2 got2 || testcase_FATAL_FAILURE
 
 testcase_PASS
 

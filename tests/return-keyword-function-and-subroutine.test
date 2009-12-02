@@ -41,29 +41,29 @@ cat tst4.r
 
 xrun_RATFOR() {
     n=$1
-    run_RATFOR tst$n.r || testcase_FAIL
-    test ! -s stderr || testcase_FAIL
+    run_RATFOR tst$n.r || testcase_FATAL_FAILURE
+    test ! -s stderr || testcase_FATAL_FAILURE
     mv stdout stdout$n || testcase_HARDERROR
 }
 
 xrun_RATFOR 1
-$GREP "^ *return *$" stdout1 || testcase_FAIL
-$GREP "^ *func1 *.*=.* 0 *$" stdout1 && testcase_FAIL
-$GREP "^ *func2 *= *0 *$" stdout1 || testcase_FAIL
+$GREP "^ *return *$" stdout1 || testcase_FATAL_FAILURE
+$GREP "^ *func1 *.*=.* 0 *$" stdout1 && testcase_FATAL_FAILURE
+$GREP "^ *func2 *= *0 *$" stdout1 || testcase_FATAL_FAILURE
 
 xrun_RATFOR 2
-$GREP "^ *return *$" stdout2 || testcase_FAIL
-$GREP "^ *subr.* *= *0 *$" stdout2 && testcase_FAIL
+$GREP "^ *return *$" stdout2 || testcase_FATAL_FAILURE
+$GREP "^ *subr.* *= *0 *$" stdout2 && testcase_FATAL_FAILURE
 
 xrun_RATFOR 3
-$GREP "^ *return *$" stdout3 || testcase_FAIL
-$GREP "^ *subr.* *= *0 *$" stdout3 && testcase_FAIL
-$GREP "^ *func2 *= *0 *$" stdout3 || testcase_FAIL
+$GREP "^ *return *$" stdout3 || testcase_FATAL_FAILURE
+$GREP "^ *subr.* *= *0 *$" stdout3 && testcase_FATAL_FAILURE
+$GREP "^ *func2 *= *0 *$" stdout3 || testcase_FATAL_FAILURE
 
 xrun_RATFOR 4
-$GREP "^ *return *$" stdout4 || testcase_FAIL
-$GREP "^ *subr.* *= *0 *$" stdout4 && testcase_FAIL
-$GREP "^ *func.* *= *0 *$" stdout4 && testcase_FAIL
+$GREP "^ *return *$" stdout4 || testcase_FATAL_FAILURE
+$GREP "^ *subr.* *= *0 *$" stdout4 && testcase_FATAL_FAILURE
+$GREP "^ *func.* *= *0 *$" stdout4 && testcase_FATAL_FAILURE
 
 testcase_PASS
 

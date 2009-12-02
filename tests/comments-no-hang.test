@@ -10,9 +10,9 @@ echo 'abc # comment after another token, as the last line of file' > tst.r
 e=0
 run_command timer -t 5 "$RATFOR" -C tst.r || e=$?
 case $e in
-    255) testcase_FAIL "ratfor hanged!";;
+    255) testcase_FATAL_FAILURE "ratfor hanged!";;
     0) testcase_PASS;;
-    *) testcase_FAIL "ratfor failed with status $e";;
+    *) testcase_FATAL_FAILURE "ratfor failed with status $e";;
 esac
 
 # vim: ft=sh ts=4 sw=4 et

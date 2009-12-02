@@ -12,8 +12,9 @@ EOF
 
 cat tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FAIL
-$FGREP ':2: label followed by empty statement.' stderr || testcase_FAIL
+run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+$FGREP ':2: label followed by empty statement.' stderr \
+  || testcase_FATAL_FAILURE
 
 testcase_PASS
 

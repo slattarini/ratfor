@@ -40,17 +40,17 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 mv stdout tst.f
-run_F77 tst.f || testcase_FAIL
-run_command timer -t 10 ./tst.exe || testcase_FAIL
+run_F77 tst.f || testcase_FATAL_FAILURE
+run_command timer -t 10 ./tst.exe || testcase_FATAL_FAILURE
 mv stdout got
 
 cat exp
 cat got
 
-test -s stderr && testcase_FAIL
-$DIFF_U exp got || testcase_FAIL
+test -s stderr && testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FATAL_FAILURE
 
 testcase_PASS
 

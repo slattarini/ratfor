@@ -5,8 +5,8 @@
 . ../lib/rat4-t.sh || exit 99
 
 echo 'repeat nothing' >tst.r
-run_RATFOR tst.r || testcase_FAIL
-test ! -s stderr || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+test ! -s stderr || testcase_FATAL_FAILURE
 testcase_PASS
 
 # vim: ft=sh ts=4 sw=4 et

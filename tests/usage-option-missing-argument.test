@@ -6,10 +6,10 @@
 . ../lib/rat4-t.sh || exit 99
 
 for opt in o l; do
-    run_RATFOR -e 2 -- "-$opt" </dev/null || testcase_FAIL
+    run_RATFOR -e 2 -- "-$opt" </dev/null || testcase_FATAL_FAILURE
     $GREP "^$ratfor_rx: \`-$opt': option requires an argument" stderr || \
-      testcase_FAIL
-    $GREP "^Usage:" stderr || testcase_FAIL
+      testcase_FATAL_FAILURE
+    $GREP "^Usage:" stderr || testcase_FATAL_FAILURE
 done
 
 testcase_PASS

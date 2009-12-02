@@ -16,15 +16,15 @@ EOF
 
 cat true.f
 
-run_F77 true.f || testcase_FAIL
+run_F77 true.f || testcase_FATAL_FAILURE
 test -f true.exe && test -x true.exe || {
     ls -l true.exe || :
-    testcase_FAIL
+    testcase_FATAL_FAILURE
 }
 
 run_command ./true.exe
-test -s stdout && testcase_FAIL
-test -s stderr && testcase_FAIL
+test -s stdout && testcase_FATAL_FAILURE
+test -s stderr && testcase_FATAL_FAILURE
 
 # -*-*-
 
@@ -47,14 +47,14 @@ EOF
 cat main.f
 cat hello.f
 
-run_F77 -o hw.exe hello.f main.f || testcase_FAIL
+run_F77 -o hw.exe hello.f main.f || testcase_FATAL_FAILURE
 test -f hw.exe && test -x hw.exe || {
     ls -l hw.exe || :
-    testcase_FAIL
+    testcase_FATAL_FAILURE
 }
 
 run_command ./hw.exe
-test -s stderr && testcase_FAIL
+test -s stderr && testcase_FATAL_FAILURE
 mv stdout got
 
 echo 'Hello, World!' >exp
@@ -62,7 +62,7 @@ echo 'Hello, World!' >exp
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FAIL
+$DIFF_U exp got || testcase_FATAL_FAILURE
 
 # -*-*-
 

@@ -45,10 +45,10 @@ include BLANK
 EOF
 
 for i in 1 2 3 4 5 6 7 8; do
-    run_RATFOR -e 1 tst$i.r || testcase_FAIL
+    run_RATFOR -e 1 tst$i.r || testcase_FATAL_FAILURE
     mv stdout stdout$i
     mv stderr stderr$i
-    $FGREP ': include: missing filename' stderr$i || testcase_FAIL
+    $FGREP ': include: missing filename' stderr$i || testcase_FATAL_FAILURE
 done
 
 testcase_PASS

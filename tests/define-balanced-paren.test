@@ -11,14 +11,14 @@ sym1
 sym2
 EOF
 
-run_RATFOR tst.r || testcase_FAIL
+run_RATFOR tst.r || testcase_FATAL_FAILURE
 
-$FGREP 'define' stdout  && testcase_FAIL
-$GREP 'sym[12]' stdout  && testcase_FAIL
-$FGREP 'bar' stdout     || testcase_FAIL
-$FGREP 'func(1)' stdout || testcase_FAIL
-$FGREP 'func(2)' stdout || testcase_FAIL
-$FGREP 'error()' stdout || testcase_FAIL
+$FGREP 'define' stdout  && testcase_FATAL_FAILURE
+$GREP 'sym[12]' stdout  && testcase_FATAL_FAILURE
+$FGREP 'bar' stdout     || testcase_FATAL_FAILURE
+$FGREP 'func(1)' stdout || testcase_FATAL_FAILURE
+$FGREP 'func(2)' stdout || testcase_FATAL_FAILURE
+$FGREP 'error()' stdout || testcase_FATAL_FAILURE
 
 testcase_PASS
 
