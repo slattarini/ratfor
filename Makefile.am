@@ -66,7 +66,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 distcheck-hook:
 
 # Rule(s) to clean temporary files left around by configure/config.status.
-include MostlyCleanConfigureTmp.am
+include lib/MostlyCleanConfigureTmp.am
 mostlyclean-local: mostlyclean-configure-tmp
 
 ## vim: ft=automake noet sw=4 ts=4
