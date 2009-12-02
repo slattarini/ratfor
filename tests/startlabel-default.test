@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Check that ratfor uses 23000 as default internal starting label
+# Check that ratfor uses 23000 as default internal starting label.
 
 . ../lib/rat4-t.sh || exit 99
 
@@ -10,10 +10,12 @@ while(true) {
 }
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout >stdout1
-$GREP '^23000 ' stdout1 || testcase_FATAL_FAILURE
-$EGREP -v '^( |2300[0-9]) ' stdout1 && testcase_FATAL_FAILURE
+$GREP '^23000 ' stdout1 || testcase_FAIL
+$EGREP -v '^( |2300[0-9]) ' stdout1 && testcase_FAIL
 
 testcase_DONE
 

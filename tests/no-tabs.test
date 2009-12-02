@@ -39,13 +39,17 @@ BAZ@
 @BAZ@
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-mv stdout stdout1
-$FGREP "$TAB" stdout1 && testcase_FATAL_FAILURE
+$SED -e "s/$TAB/^I/g" -e 's/^/^/' -e 's/$/$/' tst.r
 
-run_RATFOR -C tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+mv stdout stdout1
+mv stderr stderr1
+$FGREP "$TAB" stdout1 && testcase_FAIL
+
+run_RATFOR -C tst.r || testcase_FAIL
 mv stdout stdout2
-$FGREP "$TAB" stdout2 && testcase_FATAL_FAILURE
+mv stderr stderr2
+$FGREP "$TAB" stdout2 && testcase_FAIL
 
 testcase_DONE
 

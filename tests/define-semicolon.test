@@ -12,13 +12,13 @@ sym2
 alive
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 ws_normalize <stdout >xstdout
 
-$FGREP sym xstdout && testcase_FATAL_FAILURE
-$FGREP alive xstdout || testcase_FATAL_FAILURE
+$FGREP sym xstdout && testcase_FAIL
+$FGREP alive xstdout || testcase_FAIL
 for x in a b c d e; do
-    $GREP "$x *= *1" xstdout || testcase_FATAL_FAILURE
+    $GREP "$x *= *1" xstdout || testcase_FAIL
 done
 
 testcase_DONE

@@ -23,14 +23,14 @@ done >exp
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 $GREP -v '^[cC]' stdout | ws_normalize \
   | $SED -e "/'/!s/ *\\([a-z]\\) */\\1/g" -e "s/^'\\(.*\\)'$/\\1/" >got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

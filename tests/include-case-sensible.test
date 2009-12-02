@@ -17,7 +17,7 @@ echo upper > CASE3
 
 echo 'include case3; include CASE3' >tst-3.r
 
-cat > exp3 <<\EOF
+cat > exp3 <<EOF
 lower
 upper
 EOF
@@ -26,27 +26,27 @@ my_run_rat4() {
     n=$1
     shift
     cat tst-$n.r
-    run_RATFOR $* -- tst-$n.r || testcase_FATAL_FAILURE
+    run_RATFOR $* -- tst-$n.r || testcase_FAIL
     $SED -e '/^[cC]/d' stdout >stdout.$n
     rm -f stdout
     mv stderr stderr.$n
 }
 
-my_run_rat4 1-1 -e 0 || testcase_FATAL_FAILURE
-$FGREP lower stdout.1-1 || testcase_FATAL_FAILURE
-my_run_rat4 1-2 -e 1 || testcase_FATAL_FAILURE
-$FGREP lower stdout.1-2 && testcase_FATAL_FAILURE
+my_run_rat4 1-1 -e 0
+$FGREP lower stdout.1-1 || testcase_FAIL
+my_run_rat4 1-2 -e 1
+$FGREP lower stdout.1-2 && testcase_FAIL
 
-my_run_rat4 2-1 -e 1 || testcase_FATAL_FAILURE
-$FGREP upper stdout.2-1 && testcase_FATAL_FAILURE
-my_run_rat4 2-2 -e 0 || testcase_FATAL_FAILURE
-$FGREP upper stdout.2-2 || testcase_FATAL_FAILURE
+my_run_rat4 2-1 -e 1
+$FGREP upper stdout.2-1 && testcase_FAIL
+my_run_rat4 2-2 -e 0
+$FGREP upper stdout.2-2 || testcase_FAIL
 
-my_run_rat4 3 -e 0 || testcase_FATAL_FAILURE
+my_run_rat4 3 -e 0
 ws_normalize <stdout.3 | grep '.' >got3
 cat exp3
 cat got3
-$DIFF_U exp3 got3 || testcase_FATAL_FAILURE
+$DIFF_U exp3 got3 || testcase_FAIL
 
 testcase_DONE
 

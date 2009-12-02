@@ -31,17 +31,19 @@ cat > exp <<EOF
 4
 EOF
 
-run_RATFOR -C tst.r || testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR -C tst.r || testcase_FAIL
 mv stdout tst.f
-run_F77 tst.f || testcase_FATAL_FAILURE
-run_command ./tst.exe || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 ws_normalize <stdout >got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

@@ -17,7 +17,7 @@ include $inc
 main2
 EOF
 
-cat > exp <<\EOF
+cat > exp <<EOF
 main1
 inc1
 inc2
@@ -27,13 +27,13 @@ EOF
 cat tst.r
 cat "$inc"
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

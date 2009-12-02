@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Stress test for ratfor (by compiling and running generated fortran code)
+# Stress test for ratfor (by compiling and running generated fortran code).
 
 . ../lib/rat4-t.sh || exit 99
 
@@ -29,17 +29,15 @@ EOF
 
 cat tst.r
 
-
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
-
-run_F77 tst.f || testcase_FATAL_FAILURE
-run_command ./tst.exe || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 
 expected_answer=42
 got_answer=`cat stdout | ws_normalize`
-test x"$got_answer" = x"$expected_answer" || testcase_FATAL_FAILURE
+test x"$got_answer" = x"$expected_answer" || testcase_FAIL
 
 testcase_DONE
 

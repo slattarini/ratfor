@@ -4,12 +4,9 @@
 
 . ../lib/rat4-t.sh || exit 99
 
-
 echo '%123' >tst.r
-
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-$GREP "^[ $TAB]*$" stdout && testcase_FATAL_FAILURE
-
+run_RATFOR tst.r || testcase_FAIL
+$GREP "^[ $TAB]*$" stdout && testcase_FAIL
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

@@ -7,7 +7,7 @@
 
 require_fortran_compiler
 
-cat >tst.r <<\EOF
+cat >tst.r <<EOF
     real function rfunc1()
         return 2.0
     end
@@ -40,13 +40,19 @@ cat > exp <<EOF
 bar ok
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
-run_F77 tst.f || testcase_FATAL_FAILURE
-run_command ./tst.exe || testcase_FATAL_FAILURE
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 mv stdout got
-test -s stderr && testcase_FATAL_FAILURE
-$DIFF_U exp got || testcase_FATAL_FAILURE
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

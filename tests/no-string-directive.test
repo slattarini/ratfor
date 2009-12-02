@@ -14,14 +14,14 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 $GREP -v '^[cC]' <stdout >stdout-t
 mv -f stdout-t stdout
-$FGREP 'string' stdout || testcase_FATAL_FAILURE
-test `$FGREP 'string' stdout | wc -l` -eq 5 || testcase_FATAL_FAILURE
-$FGREP '12abcdef' stdout || testcase_FATAL_FAILURE
-$FGREP '34ghijkl' stdout || testcase_FATAL_FAILURE
-$FGREP '56mnopqr' stdout || testcase_FATAL_FAILURE
+$FGREP 'string' stdout || testcase_FAIL
+test `$FGREP 'string' stdout | wc -l` -eq 5 || testcase_FAIL
+$FGREP '12abcdef' stdout || testcase_FAIL
+$FGREP '34ghijkl' stdout || testcase_FAIL
+$FGREP '56mnopqr' stdout || testcase_FAIL
 
 testcase_DONE
 

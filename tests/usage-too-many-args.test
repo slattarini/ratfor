@@ -10,20 +10,20 @@ echo 'junk3' > tst3.r
 echo 'junk4' > tst4.r
 echo 'junk5' > tst5.r
 
-run_RATFOR -e 2 tst1.r tst2.r || testcase_FATAL_FAILURE
-$GREP "^$ratfor_rx: too many arguments" stderr || testcase_FATAL_FAILURE
-$GREP "^Usage:" stderr || testcase_FATAL_FAILURE
+run_RATFOR -e 2 tst1.r tst2.r || testcase_FAIL
+$GREP "^$ratfor_rx: too many arguments" stderr || testcase_FAIL
+$GREP "^Usage:" stderr || testcase_FAIL
 
-test ! -f none
+test ! -f none || testcase_HARDERROR
 
-run_RATFOR -e 2 -- -o none tst1.r tst2.r || testcase_FATAL_FAILURE
-$GREP "^$ratfor_rx: too many arguments" stderr || testcase_FATAL_FAILURE
-$GREP "^Usage:" stderr || testcase_FATAL_FAILURE
-test ! -f none || testcase_FATAL_FAILURE
+run_RATFOR -e 2 -- -o none tst1.r tst2.r || testcase_FAIL
+$GREP "^$ratfor_rx: too many arguments" stderr || testcase_FAIL
+$GREP "^Usage:" stderr || testcase_FAIL
+test ! -f none || testcase_FAIL
 
-run_RATFOR -e 2 tst1.r tst2.r tst3.r tst4.r tst5.r || testcase_FATAL_FAILURE
-$GREP "^$ratfor_rx: too many arguments" stderr || testcase_FATAL_FAILURE
-$GREP "^Usage:" stderr || testcase_FATAL_FAILURE
+run_RATFOR -e 2 tst1.r tst2.r tst3.r tst4.r tst5.r || testcase_FAIL
+$GREP "^$ratfor_rx: too many arguments" stderr || testcase_FAIL
+$GREP "^Usage:" stderr || testcase_FAIL
 
 testcase_DONE
 

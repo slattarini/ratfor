@@ -4,17 +4,15 @@
 
 . ../lib/rat4-t.sh || exit 99
 
-cat > foo.r <<EOF
-include bar.r
-EOF
+echo 'include bar.r' >foo.r
+echo 'include foo.r' >bar.r
 
-cat > bar.r <<EOF
-include foo.r
-EOF
+cat foo.r
+cat bar.r
 
-run_RATFOR -e 1 -t 10 foo.r || testcase_FATAL_FAILURE
-test -s stderr || testcase_FATAL_FAILURE "ratfor did not print error any" \
-                                         "message on recursive include"
+run_RATFOR -e 1 -t 10 foo.r || testcase_FAIL
+test -s stderr || testcase_FAIL "ratfor did not print error any message" \
+                                "on recursive include"
 
 testcase_DONE
 

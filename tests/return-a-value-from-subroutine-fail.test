@@ -30,10 +30,10 @@ $AWK '{ printf("%2d:  %s\n", NR, $0) }' tst.r
 
 errmsg="return statement with argument inside a subroutine"
 err_at_line() {
-    $GREP "^tst\\.r:$1: $errmsg" stderr || testcase_FATAL_FAILURE
+    $GREP "^tst\\.r:$1: $errmsg" stderr || testcase_FAIL
 }
 
-run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst.r || testcase_FAIL
 
 err_at_line 1
 err_at_line 2

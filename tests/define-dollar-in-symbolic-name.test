@@ -56,15 +56,17 @@ dollar
 doubledollar
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

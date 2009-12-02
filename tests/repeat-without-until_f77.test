@@ -24,13 +24,13 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
-run_F77 tst.f || testcase_FATAL_FAILURE
-run_command timer -t 10 ./tst.exe || testcase_FATAL_FAILURE
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 10 ./tst.exe || testcase_FAIL
 
-test -s stderr && testcase_FATAL_FAILURE
-test x"`cat stdout`" = x"9" || testcase_FATAL_FAILURE
+test -s stderr && testcase_FAIL
+test x"`cat stdout`" = x"9" || testcase_FAIL
 
 testcase_DONE
 

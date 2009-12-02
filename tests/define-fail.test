@@ -4,28 +4,16 @@
 
 . ../lib/rat4-t.sh || exit 99
 
-tcnt=0
-e=0
 baddef() {
-    tcnt=`expr $tcnt + 1` || testcase_HARDERROR
+    tcnt=`expr ${tcnt-"0"} + 1` || testcase_HARDERROR
     echo "$1" > tst$tcnt.r
     cat tst$tcnt.r
-    run_RATFOR -e 1 tst$tcnt.r || {
-        { set +x; } 2>/dev/null
-        echo " **!!! ERROR !!!**" >&2
-        echo " *** Unexpected success on input \`$1'" >&2
-        set -x
-        e=1
-    }
+    run_RATFOR -e 1 tst$tcnt.r \
+      || testcase_FAIL "Unexpected success on input \`$1'"
     mv stdout stdout$tcnt
     mv stderr stderr$tcnt
-    $FGREP "$2" stderr$tcnt || {
-        { set +x; } 2>/dev/null
-        echo " **!!! ERROR !!!**" >&2
-        echo " *** Not found expected error message on input \`$1'" >&2
-        set -x
-        e=1
-    }
+    $FGREP "$2" stderr$tcnt \
+      || testcase_FAIL "Not found expected error message on input \`$1'"
 }
 
 baddef  'define 11 eleven'  'non-alphanumeric name'
@@ -39,10 +27,6 @@ baddef  'define; x y'       'empty name'
 baddef  'define(, xxx)'     'empty name'
 baddef  'define( , xxx)'    'empty name'
 
-case $e in
-    0) testcase_DONE;;
-    1) testcase_FATAL_FAILURE;;
-    *) testcase_HARDERROR "unexpected e=$e";;
-esac
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

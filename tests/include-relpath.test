@@ -9,14 +9,20 @@ echo 'include ./inc.r' > tstdot.r
 echo 'include ../inc.r' > subdir/tstdotdot.r
 echo 'foo' > inc.r
 
-run_RATFOR tstdot.r || testcase_FATAL_FAILURE
-$FGREP 'include' stdout && testcase_FATAL_FAILURE
-$FGREP 'foo' stdout || testcase_FATAL_FAILURE
+ls -l subdir
+cat inc.r
+cat tstdot.r
+cat subdir/tstdotdot.r
+
+run_RATFOR tstdot.r || testcase_FAIL
+$FGREP 'include' stdout && testcase_FAIL
+$FGREP 'foo' stdout || testcase_FAIL
 
 cd subdir
-run_RATFOR tstdotdot.r || testcase_FATAL_FAILURE
-$FGREP 'include' stdout && testcase_FATAL_FAILURE
-$FGREP 'foo' stdout || testcase_FATAL_FAILURE
+run_RATFOR tstdotdot.r || testcase_FAIL
+$FGREP 'include' stdout && testcase_FAIL
+$FGREP 'foo' stdout || testcase_FAIL
+cd ..
 
 testcase_DONE
 

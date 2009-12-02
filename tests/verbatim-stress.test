@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Stress test for ratfor (interactions between `%' and `define'/`include')
+# Stress test for ratfor (interactions between `%' and `define'/`include').
 
 . ../lib/rat4-t.sh || exit 99
 
@@ -28,17 +28,17 @@ EOF
 cat tst.r
 cat inc.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
 for x in a b c; do
   for i in 1 2; do
-    $FGREP "&& $x$i" stdout || testcase_FATAL_FAILURE
-    $FGREP ".and. $x$i" stdout && testcase_FATAL_FAILURE
+    $FGREP "&& $x$i"    stdout || testcase_FAIL
+    $FGREP ".and. $x$i" stdout && testcase_FAIL
   done
 done
-$FGREP "&& c1 mu2" stdout || testcase_FATAL_FAILURE
-$FGREP "|| inc" stdout || testcase_FATAL_FAILURE
-$FGREP ".or. inc" stdout && testcase_FATAL_FAILURE
+$FGREP "&& c1 mu2" stdout || testcase_FAIL
+$FGREP "|| inc"    stdout || testcase_FAIL
+$FGREP ".or. inc"  stdout && testcase_FAIL
 
 testcase_DONE
 

@@ -66,12 +66,12 @@ cat tst10.r
 check_func_return() {
     n=$1
     r=`escape_for_grep "$2"`
-    run_RATFOR tst$n.r || testcase_FATAL_FAILURE
-    test ! -s stderr || testcase_FATAL_FAILURE
-    rm -f stderr
+    run_RATFOR tst$n.r || testcase_FAIL
+    mv stderr stderr$n || testcase_HARDERROR
     mv stdout stdout$n || testcase_HARDERROR
-    grep "^ *return *$" stdout$n || testcase_FATAL_FAILURE
-    grep "^ *func *= *$r *$" stdout$n || testcase_FATAL_FAILURE
+    test -s stderr$n && testcase_FAIL
+    grep "^ *return *$" stdout$n || testcase_FAIL
+    grep "^ *func *= *$r *$" stdout$n || testcase_FAIL
 }
 
 check_func_return 01 "1"

@@ -7,10 +7,13 @@
 echo 'FAILURE' >notincluded.r
 echo 'INCLUDE notincluded.r' >tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
-$FGREP INCLUDE stdout || testcase_FATAL_FAILURE
-$FGREP -i failure stdout && testcase_FATAL_FAILURE
+cat notincluded.r
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+$FGREP INCLUDE stdout || testcase_FAIL
+$FGREP -i failure stdout && testcase_FAIL
 
 testcase_DONE
 

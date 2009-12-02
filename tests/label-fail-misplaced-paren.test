@@ -7,8 +7,10 @@
 
 echo '(10) foo' >tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
-$FGREP "label following left parenthesis" stderr || testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+$FGREP "label following left parenthesis" stderr || testcase_FAIL
 
 testcase_DONE
 

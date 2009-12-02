@@ -6,10 +6,10 @@
 
 mkdir tst.d
 
-run_RATFOR -e 1 tst.d || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst.d || testcase_FAIL
 rx='tst\.d: cannot open for reading: [iI]s a directory'
-$GREP "$rx" stderr || testcase_FATAL_FAILURE
-test -s stdout && testcase_FATAL_FAILURE
+$GREP "$rx" stderr || testcase_FAIL
+test -s stdout && testcase_FAIL
 
 testcase_DONE
 

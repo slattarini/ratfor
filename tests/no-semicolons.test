@@ -4,12 +4,14 @@
 
 . ../lib/rat4-t.sh || exit 99
 
-cat > tst.r <<\EOF
+cat > tst.r <<EOF
 ;
 i = 1;
 a = 496; b = 8128;
 theAnswer = 42;
 if (false) die; else live;
+
+foo; ;  $TAB; @;$TAB; ;
 
 foo();
 { foo(); };
@@ -28,8 +30,10 @@ DoNothing
 StillDoNothing
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-$FGREP ';' stdout && testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$FGREP ';' stdout && testcase_FAIL
 
 testcase_DONE
 

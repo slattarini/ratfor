@@ -20,22 +20,24 @@ sym 4
 sym5
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+cat tst.r
 
-$FGREP -i 'define' stdout && testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
 
-$GREP 'sym[1234]' stdout && testcase_FATAL_FAILURE
-$FGREP 'sym5' stdout || testcase_FATAL_FAILURE
+$FGREP -i 'define' stdout && testcase_FAIL
+
+$GREP 'sym[1234]' stdout && testcase_FAIL
+$FGREP 'sym5' stdout || testcase_FAIL
 
 for i in 1 2 3 4; do
-    $GREP "sym  *$i" stdout || testcase_FATAL_FAILURE
+    $GREP "sym  *$i" stdout || testcase_FAIL
 done
 
-$FGREP 'x1 text1' stdout || testcase_FATAL_FAILURE
-$FGREP 'x2:text2' stdout || testcase_FATAL_FAILURE
-$FGREP 'x3?"text3"' stdout || testcase_FATAL_FAILURE
-$FGREP 'x4,text4' stdout || testcase_FATAL_FAILURE
+$FGREP 'x1 text1'   stdout || testcase_FAIL
+$FGREP 'x2:text2'   stdout || testcase_FAIL
+$FGREP 'x3?"text3"' stdout || testcase_FAIL
+$FGREP 'x4,text4'   stdout || testcase_FAIL
 
 testcase_DONE
 

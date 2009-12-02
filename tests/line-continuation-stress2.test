@@ -47,13 +47,13 @@ cat tst_.r
 
 run_RATFOR tst.r || testcase_HARDERROR
 mv stdout exp
-run_RATFOR tst_.r || testcase_FATAL_FAILURE
+run_RATFOR tst_.r || testcase_FAIL
 mv stdout got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

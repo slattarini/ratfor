@@ -6,12 +6,12 @@
 
 echo 'junk123' > tst.r
 
-run_RATFOR -o tst.f tst.r || testcase_FATAL_FAILURE
-test -f tst.f || testcase_FATAL_FAILURE
+run_RATFOR -o tst.f tst.r || testcase_FAIL
+test -f tst.f || testcase_FAIL
 cat tst.f
-test -s stdout && testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
-$GREP 'junk123' tst.f || testcase_FATAL_FAILURE
+test -s stdout && testcase_FAIL
+test -s stderr && testcase_FAIL
+$GREP 'junk123' tst.f || testcase_FAIL
 
 testcase_DONE
 

@@ -13,11 +13,13 @@ b:sym2:b
 c:sym3:c
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+cat tst.r
 
-$FGREP 'a: text1:a' stdout  || testcase_FATAL_FAILURE
-$FGREP 'b:text2 :b' stdout  || testcase_FATAL_FAILURE
-$FGREP 'c: text3 :c' stdout || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+
+$FGREP 'a: text1:a'  stdout || testcase_FAIL
+$FGREP 'b:text2 :b'  stdout || testcase_FAIL
+$FGREP 'c: text3 :c' stdout || testcase_FAIL
 
 testcase_DONE
 

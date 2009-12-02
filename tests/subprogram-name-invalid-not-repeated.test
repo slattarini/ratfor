@@ -8,7 +8,6 @@
 ls -l "$srcdir"/subprog-name-invalid.sh
 . "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
 
-e=0
 i=0
 for badname in \
     '1' '12' '123' '1a' '123a' '1abc' '123abc' \
@@ -30,19 +29,14 @@ for badname in \
         mv stderr "$stderr"
         mv stdout "$stdout"
         errcount=`$FGREP "invalid $subprogtype name" "$stderr" | wc -l`
+        set +x
         if test $errcount -gt 1; then
-            : "*** FAILURE ABOVE ***"
-            : Too many error messages: $errcount
-            e=1
+            testcase_FAIL "$stderr: too many error messages: $errcount"
         fi
+        set -x
     done
 done
 
-: e=$e
-case $e in
-    0) testcase_DONE;;
-    1) testcase_FATAL_FAILURE;;
-    *) testcase_HARDERROR;;
-esac
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

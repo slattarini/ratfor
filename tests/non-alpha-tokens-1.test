@@ -23,8 +23,8 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
 $GREP -v '^[cC]' <stdout | ws_normalize >out
 cat out
 
@@ -43,7 +43,7 @@ for rx in           \
     '^12 u.*v *$'   \
     '^13 u.*v *$'   \
 ; do
-    $GREP "$rx" out || testcase_FATAL_FAILURE
+    $GREP "$rx" out || testcase_FAIL
 done
 
 testcase_DONE

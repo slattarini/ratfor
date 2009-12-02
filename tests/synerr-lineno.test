@@ -1,13 +1,14 @@
 #!/bin/sh
 
-# Check that line numbers in error messages are ok
+# Check that line numbers in error messages are ok.
 
 . ../lib/rat4-t.sh || exit 99
 
 echo '}' > tst1.r
-run_RATFOR -e 1 tst1.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst1.r || testcase_FAIL
+mv stdout stdout3
 mv stderr stderr1
-$FGREP 'tst1.r:1:' stderr1 || testcase_FATAL_FAILURE
+$FGREP 'tst1.r:1:' stderr1 || testcase_FAIL
 
 cat > tst2.r <<EOF
 #1
@@ -17,10 +18,11 @@ cat > tst2.r <<EOF
 } #5
 #6
 EOF
-run_RATFOR -e 1 tst2.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst2.r || testcase_FAIL
+mv stdout stdout2
 mv stderr stderr2
-$FGREP 'tst2.r:2:' stderr2 || testcase_FATAL_FAILURE
-$FGREP 'tst2.r:5:' stderr2 || testcase_FATAL_FAILURE
+$FGREP 'tst2.r:2:' stderr2 || testcase_FAIL
+$FGREP 'tst2.r:5:' stderr2 || testcase_FAIL
 
 cat > tst3.r <<EOF
 { #1
@@ -28,10 +30,11 @@ cat > tst3.r <<EOF
 #3
 EOF
 
-run_RATFOR -e 1 tst3.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst3.r || testcase_FAIL
+mv stdout stdout3
 mv stderr stderr3
 # unexpected EOF in input
-$FGREP 'tst3.r:3:' stderr3 || testcase_FATAL_FAILURE
+$FGREP 'tst3.r:3:' stderr3 || testcase_FAIL
 
 testcase_DONE
 

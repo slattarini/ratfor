@@ -1,7 +1,7 @@
 #!/bin/sh
 
-# Check that double quotes (`"') are not improperly passed down in
-# ratfor output.
+# Check that the while clause d not generate improper code
+# (Fortran 66 style).
 
 . ../lib/rat4-t.sh || exit 99
 
@@ -11,22 +11,20 @@ while (false)
 EOF
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 grep -v '^[cC]' stdout >stdout-t
 mv stdout-t stdout
 
-$FGREP 'goto' stdout  \
- && $FGREP 'then' stdout \
- && $FGREP 'endif' stdout \
- || testcase_FATAL_FAILURE
+$FGREP 'goto'  stdout || testcase_FAIL
+$FGREP 'then'  stdout || testcase_FAIL
+$FGREP 'endif' stdout || testcase_FAIL
 
-test `$FGREP 'then' stdout | wc -l` -eq 1 \
- && test `$FGREP 'endif' stdout | wc -l` -eq 1 \
- && test `$FGREP 'goto' stdout | wc -l` -eq 1 \
- || testcase_FATAL_FAILURE
+test `$FGREP 'then'  stdout | wc -l` -eq 1 || testcase_FAIL
+test `$FGREP 'endif' stdout | wc -l` -eq 1 || testcase_FAIL
+test `$FGREP 'goto'  stdout | wc -l` -eq 1 || testcase_FAIL
 
 test `$GREP '^ *[0-9]' stdout | $GREP -v '^ *2300[01] ' | wc -l` -eq 0 \
-  || testcase_FATAL_FAILURE 'Too many labels in generated fortran code'
+  || testcase_FAIL 'Too many labels in generated fortran code'
 
 testcase_DONE
 

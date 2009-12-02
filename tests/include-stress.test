@@ -9,10 +9,10 @@
 echo 'ONE' > inc1.r
 echo 'TWO; include inc2b.r' > inc2.r
 echo 'TWObis' > inc2b.r
-(echo 'THREE'; echo 'include inc3b.r') > inc3.r
-(echo 'THREEbis'; echo 'include inc3bb.r') > inc3b.r
+{ echo 'THREE'; echo 'include inc3b.r'; } > inc3.r
+{ echo 'THREEbis'; echo 'include inc3bb.r'; } > inc3b.r
 echo 'THREEbisbis' > inc3bb.r
-echo 'FOUR' | $SED 's/\(.\)/\1@/g' | tr @ "$NEWLINE" > inc4.r
+echo 'FOUR' | $SED -e 's/\(.\)/\1@/g' | tr @ "$NEWLINE" > inc4.r
 
 tr '_' ' ' > tst.r <<EOF
 @MARK1@
@@ -26,7 +26,7 @@ ${TAB}  include inc4.r ${TAB}
 @MARK5@
 EOF
 
-cat > exp <<\EOF
+cat > exp <<EOF
 @MARK1@
 ONE
 @MARK2@
@@ -44,10 +44,6 @@ R
 @MARK5@
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-
-$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
-
 # to have more information on test failure
 cat inc1.r
 cat inc2.r
@@ -56,7 +52,12 @@ cat inc3.r
 cat inc3b.r
 cat inc3bb.r
 cat inc4.r
-cat tst.r
+$SED -e 's/^/^/' -e 's/$/$/' tst.r
+
+run_RATFOR tst.r || testcase_FATAL_FAILURE
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
 cat exp
 cat got
 

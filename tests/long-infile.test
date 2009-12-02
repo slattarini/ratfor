@@ -23,10 +23,11 @@ sed '22q' tst.r
 # Ratfor might require quite a long time to process such a large file,
 # so be sure to leave it some times (say 3 minutes) before considering
 # it timed out (default with run_RATFOR would be 5 or 10 seconds).
-run_RATFOR -t 180 -- -l $startlab tst.r || testcase_FATAL_FAILURE
+run_RATFOR -t 180 -- -l $startlab tst.r || testcase_FAIL
 grep -v '^[cC]' <stdout | ws_normalize >got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+# Avoid to `cat' again exp and got, as they might be huge.
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

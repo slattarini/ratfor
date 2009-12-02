@@ -6,17 +6,17 @@
 
 echo "define .foo bar" > tstB1.r
 cat tstB1.r
-run_RATFOR -e 1 tstB1.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tstB1.r || testcase_FAIL
 mv stdout stdoutB1
 mv stderr stderrB1
-$FGREP "non-alphanumeric name" stderrB1 || testcase_FATAL_FAILURE
+$FGREP "non-alphanumeric name" stderrB1 || testcase_FAIL
 
 echo "define . bar" > tstB2.r
 cat tstB2.r
-run_RATFOR -e 1 tstB2.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tstB2.r || testcase_FAIL
 mv stdout stdoutB2
 mv stderr stderrB2
-$FGREP "non-alphanumeric name" stderrB2 || testcase_FATAL_FAILURE
+$FGREP "non-alphanumeric name" stderrB2 || testcase_FAIL
 
 cat > tstG.r <<EOF
 define x.y z
@@ -28,17 +28,17 @@ cat >exp <<'EOF'
 .y z.y
 EOF
 
-run_RATFOR -e 0 tstG.r || testcase_FATAL_FAILURE
+run_RATFOR -e 0 tstG.r || testcase_FAIL
 mv stdout stdoutG
 mv stderr stderrG
-test -s stderrG && testcase_FATAL_FAILURE
+test -s stderrG && testcase_FAIL
 
 $SED -e '/^[cC]/d' -e '/^$/d' stdoutG | ws_normalize >got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

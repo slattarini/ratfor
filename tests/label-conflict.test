@@ -5,15 +5,31 @@
 
 . ../lib/rat4-t.sh || exit 99
 
-cat >tst.r <<EOF
+cat >tst1.r <<EOF
 while(true) {
     do_nothing()
 }
+23000 continue
+EOF
+
+cat tst1.r
+
+run_RATFOR -e 1 tst1.r || testcase_FAIL
+mv stdout stdout1
+mv stderr stderr1
+$FGREP ':4: possible label conflict' stderr1 || testcase_FAIL
+
+cat >tst2.r <<EOF
+10  continue
 100 continue
 EOF
 
-run_RATFOR -e 1 -- -l 100 tst.r || testcase_FATAL_FAILURE
-$FGREP ':4: possible label conflict' stderr || testcase_FATAL_FAILURE
+cat tst2.r
+
+run_RATFOR -e 1 -- -l 100 tst2.r || testcase_FAIL
+mv stdout stdout2
+mv stderr stderr2
+$FGREP ':2: possible label conflict' stderr2 || testcase_FAIL
 
 testcase_DONE
 

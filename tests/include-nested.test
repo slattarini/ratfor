@@ -24,7 +24,7 @@ Body
 NestedIncludeEnd
 EOF
 
-cat > exp <<\EOF
+cat > exp <<EOF
 TopStart
 IncludeStart
 NestedIncludeStart
@@ -34,9 +34,16 @@ IncludeEnd
 TopEnd
 EOF
 
+cat top.r
+cat incl.r
+cat nest.r
+
 run_RATFOR top.r || testcase_FATAL_FAILURE
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
+cat got
 
 $DIFF_U exp got || testcase_FATAL_FAILURE
 

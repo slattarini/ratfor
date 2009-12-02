@@ -42,19 +42,20 @@ $AWK </dev/null >>exp-t "BEGIN {
 # Ratfor might require quite a long time to process such a large file,
 # so be sure to leave it some times (say 3 minutes) before considering
 # it timed out (default with run_RATFOR would be 5 or 10 seconds).
-run_RATFOR -t 180 -- -l $startlab tst.r || testcase_FATAL_FAILURE
+run_RATFOR -t 180 -- -l $startlab tst.r || testcase_FAIL
 mv stdout tst.f
 
-run_F77 tst.f || testcase_FATAL_FAILURE
+run_F77 tst.f || testcase_FAIL
 
-run_command ./tst.exe || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 
 edit="\$SED -e 's/ *: *//g' -e 's/ *| */ | /g'"
 ws_normalize <stdout | eval "$edit" >got
 ws_normalize <exp-t | eval "$edit" >exp
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+# Avoid to `cat' again exp and got, as they might be huge.
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Test the `next' statement (by compiling and running the generated
-# fortran code)
+# fortran code).
 
 . ../lib/rat4-t.sh || exit 99
 
@@ -145,17 +145,17 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
-run_F77 tst.f || testcase_FATAL_FAILURE
-run_command timer -t 15 ./tst.exe || testcase_FATAL_FAILURE
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 15 ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 (echo "$xline" && ws_normalize <stdout && echo "$xline") >got
 
 cat exp
 cat got
 
-test -s stderr && testcase_FATAL_FAILURE
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

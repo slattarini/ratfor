@@ -7,10 +7,10 @@
 : > unread.r
 chmod a-r unread.r
 
-run_RATFOR -e 1 unread.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 unread.r || testcase_FAIL
 rx='unread\.r: cannot open for reading: [pP]ermission denied'
-$GREP "$rx" stderr || testcase_FATAL_FAILURE
-test -s stdout && testcase_FATAL_FAILURE
+$GREP "$rx" stderr || testcase_FAIL
+test -s stdout && testcase_FAIL
 
 testcase_DONE
 

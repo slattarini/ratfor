@@ -33,18 +33,21 @@ EOF
 
 $AWK '{print NR ":" $0}' tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst.r || testcase_FAIL
 
-$FGREP 'tst.r:2: illegal right brace' stderr || testcase_FATAL_FAILURE
-$FGREP 'tst.r:10: illegal case' stderr || testcase_FATAL_FAILURE
-$FGREP 'tst.r:15: illegal next' stderr || testcase_FATAL_FAILURE
-$FGREP 'tst.r:21: illegal break' stderr || testcase_FATAL_FAILURE
-$FGREP 'tst.r:23: illegal else' stderr || testcase_FATAL_FAILURE
-$FGREP 'tst.r:12:' stderr && testcase_FATAL_FAILURE
-$FGREP 'tst.r:16:' stderr && testcase_FATAL_FAILURE
-$FGREP 'tst.r:17:' stderr && testcase_FATAL_FAILURE
-$FGREP 'tst.r:18:' stderr && testcase_FATAL_FAILURE
-$FGREP 'tst.r:19:' stderr && testcase_FATAL_FAILURE
+for msg in \
+  '2: illegal right brace' \
+  '10: illegal case' \
+  '15: illegal next' \
+  '21: illegal break' \
+  '23: illegal else' \
+; do
+    $FGREP "tst.r:$msg" stderr || testcase_FAIL
+done
+
+for n in 12 16 17 18 19; do
+    $GREP "tst\.r: *$n:" stderr && testcase_FAIL
+done
 
 testcase_DONE
 

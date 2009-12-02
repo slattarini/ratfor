@@ -7,12 +7,12 @@
 
 echo fooBAR > tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
 
-$FGREP 'FOO' stdout && testcase_FATAL_FAILURE
-$FGREP 'bar' stdout && testcase_FATAL_FAILURE
-$FGREP 'fooBAR' stdout || testcase_FATAL_FAILURE
+$FGREP 'FOO' stdout && testcase_FAIL
+$FGREP 'bar' stdout && testcase_FAIL
+$FGREP 'fooBAR' stdout || testcase_FAIL
 
 testcase_DONE
 

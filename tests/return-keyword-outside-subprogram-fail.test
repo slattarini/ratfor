@@ -20,11 +20,11 @@ for input in \
     'subroutine bar; pass; end; return' \
 ; do
     i=`expr $i + 1`
-    echo "$input" >$i-tst.r
-    run_RATFOR -e 1 $i-tst.r || testcase_FATAL_FAILURE
-    mv stderr $i-stderr
-    mv stdout $i-stdout
-    $GREP "$errmsg" $i-stderr || testcase_FATAL_FAILURE
+    echo "$input" >tst$i.r
+    run_RATFOR -e 1 tst$i.r || testcase_FAIL
+    mv stderr stderr$i
+    mv stdout stdout$i
+    $GREP "$errmsg" stderr$i || testcase_FAIL
 done
 
 testcase_DONE

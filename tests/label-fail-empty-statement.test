@@ -1,6 +1,6 @@
 #!/bin/sh
 
-# Check that ratfor complains if a label is not followed by a statement
+# Check that ratfor complains if a label is not followed by a statement.
 
 . ../lib/rat4-t.sh || exit 99
 
@@ -12,9 +12,8 @@ EOF
 
 cat tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
-$FGREP ':2: label followed by empty statement.' stderr \
-  || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst.r || testcase_FAIL
+$FGREP ':2: label followed by empty statement.' stderr || testcase_FAIL
 
 testcase_DONE
 

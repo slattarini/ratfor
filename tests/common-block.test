@@ -1,7 +1,8 @@
 #!/bin/sh
 
-# Check that common block declarations in input are not involved
-# in improper automatic line continuation.
+# Check that common block declarations in input are not involved in
+# improper automatic line continuation. This bug already showed up
+# in practice.
 
 . ../lib/rat4-t.sh || exit 99
 
@@ -12,8 +13,8 @@ EOF
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-$GREP -i "common.*alone" stdout && testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+$GREP -i "common.*alone" stdout && testcase_FAIL
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

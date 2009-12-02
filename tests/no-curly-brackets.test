@@ -49,8 +49,8 @@ echo "$l z = 3 $r" >>tst.t
 
 cat tst.r
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-$GREP "[{}]" stdout && testcase_FATAL_FAILURE
+run_RATFOR tst.r || testcase_FAIL
+$GREP "[{}]" stdout && testcase_FAIL
 
 testcase_DONE
 

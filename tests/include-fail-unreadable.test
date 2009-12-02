@@ -21,12 +21,14 @@ include unread.r
 stillalive
 EOF
 
-run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
 r='include: unread\.r: cannot open for reading: [pP]ermission denied'
-$GREP "^tst\\.r:1: $r" stderr || testcase_FATAL_FAILURE
-$GREP "^tst\\.r:6: $r" stderr || testcase_FATAL_FAILURE
-$GREP -i 'NOTINCLUDED' stdout && testcase_FATAL_FAILURE
-$GREP 'stillalive' stdout || testcase_FATAL_FAILURE
+$GREP "^tst\\.r:1: $r" stderr || testcase_FAIL
+$GREP "^tst\\.r:6: $r" stderr || testcase_FAIL
+$GREP -i 'NOTINCLUDED' stdout && testcase_FAIL
+$GREP 'stillalive' stdout || testcase_FAIL
 
 testcase_DONE
 

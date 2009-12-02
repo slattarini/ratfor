@@ -16,11 +16,13 @@ include none.r
 stillalive
 EOF
 
-run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
 r='include: none\.r: cannot open for reading: [nN]o such file or directory'
-$GREP "^tst\\.r:1: $r" stderr || testcase_FATAL_FAILURE
-$GREP "^tst\\.r:4: $r" stderr || testcase_FATAL_FAILURE
-$GREP 'stillalive' stdout || testcase_FATAL_FAILURE
+$GREP "^tst\\.r:1: $r" stderr || testcase_FAIL
+$GREP "^tst\\.r:4: $r" stderr || testcase_FAIL
+$GREP 'stillalive' stdout || testcase_FAIL
 
 testcase_DONE
 

@@ -66,25 +66,26 @@ end
 EOF
 
 cat tst.r
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
 mv stdout tst.f
 
-run_F77 tst.f || testcase_FATAL_FAILURE
-run_command ./tst.exe || testcase_FATAL_FAILURE
-test -s stderr && testcase_FATAL_FAILURE
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 ws_normalize <stdout >got
 
-{ echo " ==="; } 2>/dev/null
-cat exp
-{ echo " ==="; } 2>/dev/null
-cat got
-{ echo " ==="; } 2>/dev/null
-$DIFF_U exp got || testcase_FATAL_FAILURE
-{ echo " ==="; } 2>/dev/null
+set +x
+echo " ==="
+(set -x; cat exp)
+echo " ==="
+(set -x; cat got)
+echo " ==="
+(set -x; $DIFF_U exp got) || testcase_FAIL
+echo " ==="
 
-testcase_DONE
-
+set -x
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

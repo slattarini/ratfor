@@ -9,9 +9,11 @@ cat > tst.r <<EOF
 "# keep me"
 EOF
 
-run_RATFOR tst.r || testcase_FATAL_FAILURE
-$GREP -i 'throw me away' stdout && testcase_FATAL_FAILURE
-$GREP 'keep me' stdout || testcase_FATAL_FAILURE
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP -i 'throw me away' stdout && testcase_FAIL
+$GREP 'keep me' stdout || testcase_FAIL
 
 testcase_DONE
 
