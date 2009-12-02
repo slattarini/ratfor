@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copied from SteLib at 2009-12-02 14:12:50 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2009-12-02 15:50:57 +0100.  DO NOT EDIT!
 #
 # Shell library to write test cases.  The only documentation are the
 # comments and the description of variables/functions embedded in the
@@ -158,8 +158,7 @@ _Exit() {
 # Our exit trap: should deal with normal termination, signals, untrapped
 # failures and internal errors.  This function is for INTERNAL USE ONLY.
 _cleanup_at_exit() {
-    # TODO: maybe pass this as an argument? that should be more portable...
-    testcase_exit_status=$?
+    testcase_exit_status=$1
     # in case the script is not terminated by `_Exit()' (e.g. an uncatched
     # failure while `set -e' is on, or a terminating signal).
     set +x
@@ -190,7 +189,7 @@ _cleanup_at_exit() {
     else
         _testcase_msg -p "CLEANUP" "remove temporary files"
         set -x # temporarly re-enable traces (disabled in _Exit)
-        rm_rf ${testSubDir-}
+        rm_rf ${testSubDir+"$testSubDir"}
         # Apparently, the `set +x' with redirected stderr is executed in
         # a subshell by Solaris Sh, so repeat it without redirection.
         { set +x; } 2>/dev/null; set +x
@@ -469,9 +468,10 @@ escape_for_egrep() {
 }
 
 # Setup cleanup traps.
-trap '_cleanup_at_exit' 0
+trap '_cleanup_at_exit $?' 0
 trap 'testcase_exit_signal=SIGHUP;  _Exit $E_HARD' 1
 trap 'testcase_exit_signal=SIGINT;  _Exit $E_HARD' 2
+trap 'testcase_exit_signal=SIGQUIT; _Exit $E_HARD' 3
 trap 'testcase_exit_signal=SIGPIPE; _Exit $E_HARD' 13
 trap 'testcase_exit_signal=SIGTERM; _Exit $E_HARD' 15
 
