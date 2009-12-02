@@ -10,6 +10,6 @@ ls -l "$srcdir"/subprog-name-invalid.sh
 
 check_problematic_subprog_badnames 'subroutine'
 
-testcase_done
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

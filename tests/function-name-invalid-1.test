@@ -9,6 +9,6 @@ ls -l "$srcdir"/subprog-name-invalid.sh
 
 check_default_subprog_badnames 'function'
 
-testcase_done
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

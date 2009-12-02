@@ -26,6 +26,6 @@ write_testfile() {
 }
 check_default_subprog_missnames 'function'
 
-testcase_done
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

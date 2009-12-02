@@ -5,7 +5,6 @@
 # alphanumeric token.  This is expected to be sourced by test scripts after
 # the file `rat4-t.sh' has already been sourced.
 
-e=0
 t_count=0
 
 do_define() {
@@ -37,7 +36,7 @@ run_failing_ratfor() {
     file=tst-$t_count.r
     "$@" >"$file"
     cat "$file"
-    run_RATFOR -e 1 "$file" || { : "*** FAILURE ABOVE ***"; e=1; }
+    run_RATFOR -e 1 "$file" || testcase_FAIL
     stderr=stderr$t_count
     test ! -f "$stderr"
     test ! -r "$stderr"
@@ -56,10 +55,10 @@ check_subprog_bad_name() {
         nonalpha=`echo "$name" | $SED 's/[a-zA-Z_$]*$//'`
         $FGREP "invalid $subprog_type name \`$name'" "$stderr" \
           || $FGREP "invalid $subprog_type name \`$nonalpha'" "$stderr" \
-            || { : "*** FAILURE ABOVE ***"; e=1; }
+            || testcase_FAIL
     else
         $FGREP "invalid $subprog_type name \`$name'" "$stderr" \
-          || { : "*** FAILURE ABOVE ***"; e=1; }
+          || testcase_FAIL
     fi
 }
 
@@ -69,10 +68,7 @@ check_subprog_missing_name() {
     prefix=${3-}
     run_failing_ratfor write_testfile "$subprog_type" "$stmt_terminator" \
                                       "$prefix"
-    $FGREP "missing $subprog_type name" "$stderr" || {
-        : "*** FAILURE ABOVE ***"
-        e=1
-    }
+    $FGREP "missing $subprog_type name" "$stderr" || testcase_FAIL
 }
 
 check_default_subprog_badnames() {
@@ -106,15 +102,6 @@ check_default_subprog_missnames() {
             check_subprog_missing_name "$1" "$term" "$prfx"
         done
     done
-}
-
-testcase_done() {
-    : e=$e
-    case $e in
-        0) testcase_DONE;;
-        1) testcase_FATAL_FAILURE;;
-        *) testcase_HARDERROR;;
-    esac
 }
 
 # vim: ft=sh ts=4 sw=4 et
