@@ -1,5 +1,14 @@
 List of user-visible changes of C Ratfor.
 
+New in XXX
+-----------
+ * Improved detection of, and error messages for, invalid case/default.
+   In particular, now case/default keywords can be used used only in the
+   block after a `switch' statement, and not also within blocks nested
+   within that block.
+ * Testsuite has been extended and improved, espacially to provide better
+   coverage, better feedback, and an increased portability.
+
 New in 1.0n
 -----------
  * The name of the package has been changed to "C Ratfor" (previously was
