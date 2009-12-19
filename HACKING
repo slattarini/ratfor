@@ -45,7 +45,8 @@ Introduction and general infomration
   * Format the git commit message following the GNU Coding Standards for
     ChangeLog entries:
       http://www.gnu.org/prep/standards/html_node/Change-Logs.html
-  * We do not use a ChangeLog file.  If needed, it can be genrated from
+  * We do not mantain a ChangeLog file.  It is automatically generated from
+   `git log' output (look the `Changelog target in top-level Makefile.am).
     `git log' output.
   * Changes other than minor bug fixes must be mentioned in NEWS.
   * Important bug fixings must be mentioned in NEWS, too.

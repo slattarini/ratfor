@@ -10,3 +10,5 @@ Makefile.in
 
 /ratfor-testsuite-[0-9]*.tar.gz
 /ratfor-testsuite-[0-9]*/
+
+/ChangeLog
