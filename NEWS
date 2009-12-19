@@ -1,6 +1,6 @@
 List of user-visible changes of C Ratfor.
 
-New in XXX
+New in 1.0o
 -----------
  * Improved detection of, and error messages for, invalid case/default.
    In particular, now case/default keywords can be used used only in the
