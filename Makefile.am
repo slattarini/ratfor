@@ -14,6 +14,9 @@ dist_doc_DATA = README BUGS NEWS
 EXTRA_DIST = \
   xfail-tests.list \
   HACKING \
+  ChangeLog \
+  ChangeLog-old \
+  build-aux/gitlog-to-changelog \
   GNUmakefile \
   maint/maint.mk \
   maint/strict-distcheck.mk \
@@ -27,7 +30,7 @@ no_dist_files = maint/config.site maint/local-cfg.mk maint/personal/*
 # Check that we do not erreonously include in the tarball any file which
 # is not meant for distribution.
 dist-hook: dist-hook-check-no-dist-files
-.PHONY: dist-hook-check-no-dist-files
+PHONYS =  dist-hook-check-no-dist-files
 dist-hook-check-no-dist-files:
 	@list='$(no_dist_files)'; for f in $$list; do \
 	  if test -r $(distdir)/$$f; then \
@@ -46,16 +49,9 @@ dist-hook-check-no-dist-files:
 
 # Version string management for distributed tarballs.
 dist-hook: dist-hook-create-tarball-version
-.PHONY: dist-hook-create-tarball-version
+PHONYS += dist-hook-create-tarball-version
 dist-hook-create-tarball-version:
 	echo '$(VERSION)' > $(distdir)/.tarball-version
-
-# $(ENABLE_MAINTAINER_MAKE_RULES): variable used by maint.mk
-if ENABLE_MAINTAINER_MAKE_RULES
-  ENABLE_MAINTAINER_MAKE_RULES = yes
-else
-  ENABLE_MAINTAINER_MAKE_RULES = no
-endif
 
 # This is defined here so that it can be extended in maint/*.mk, if needed.
 distcheck-hook:
@@ -63,5 +59,35 @@ distcheck-hook:
 # Rule(s) to clean temporary files left around by configure/config.status.
 include MostlyCleanConfigureTmp.am
 mostlyclean-local: mostlyclean-configure-tmp
+
+
+if ENABLE_MAINTAINER_MAKE_RULES
+
+# used by maint.mk
+ENABLE_MAINTAINER_MAKE_RULES = yes
+
+gen_start_date = 2009-11-14
+
+# Generate ChangeLog file from git log messages.
+PHONYS += ChangeLog
+ChangeLog: $(top_srcdir)/build-aux/gitlog-to-changelog
+	$(AM_V_at)rm -f $@.tmp
+	$(AM_V_GEN)$(top_srcdir)/build-aux/gitlog-to-changelog \
+	              --since=$(gen_start_date) --author-date \
+				  > $@.tmp;
+	$(AM_V_at)mv -f $@.tmp $@
+
+MOSTLYCLEANFILES = ChangeLog.tmp
+MAINTAINERCLEANFILES = ChangeLog
+
+else # ! ENABLE_MAINTAINER_MAKE_RULES
+
+# used by maint.mk
+ENABLE_MAINTAINER_MAKE_RULES = no
+
+endif # ENABLE_MAINTAINER_MAKE_RULES
+
+
+.PHONY: $(PHONYS)
 
 ## vim: ft=automake noet sw=4 ts=4
