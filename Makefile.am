@@ -17,6 +17,7 @@ EXTRA_DIST = \
   ChangeLog \
   ChangeLog-old \
   build-aux/gitlog-to-changelog \
+  build-aux/git-version-gen \
   GNUmakefile \
   maint/maint.mk \
   maint/strict-distcheck.mk \
