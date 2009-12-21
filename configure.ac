@@ -15,21 +15,14 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 #
 
 AC_PREREQ([2.62])
+
 AC_INIT([Ratfor Testsuite],
         m4_esyscmd([build-aux/git-version-gen .tarball-version]),
         [stefano.lattarini@gmail.com])
 
 AC_CONFIG_SRCDIR([tests/ifelse-ambiguity_f77.test])
 AC_CONFIG_MACRO_DIR([m4])
-
-# Directory of auxiliary files used by the build system.
 AC_CONFIG_AUX_DIR([build-aux])
-# NOTE: these two should be used only in makefiles, so it's OK to
-# single-quote them here.
-build_aux='${top_srcdir}/build-aux'
-abs_build_aux='${abs_top_srcdir}/build-aux'
-AC_SUBST([build_aux])
-AC_SUBST([abs_build_aux])
 
 #
 # Maintainer-specific initializations and defaults.
