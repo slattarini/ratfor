@@ -46,8 +46,7 @@ Introduction and general infomration
     ChangeLog entries:
       http://www.gnu.org/prep/standards/html_node/Change-Logs.html
   * We do not mantain a ChangeLog file.  It is automatically generated from
-   `git log' output (look the `Changelog target in top-level Makefile.am).
-    `git log' output.
+   `git log' output (look the `ChangeLog' target in top-level Makefile.am).
   * Changes other than minor bug fixes must be mentioned in NEWS.
   * Important bug fixings must be mentioned in NEWS, too.
   * If you do a change that add some obscure code for a good reason,
