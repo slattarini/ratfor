@@ -76,6 +76,11 @@ $(srcdir)/ChangeLog: $(top_srcdir)/build-aux/gitlog-to-changelog
 				  > ChangeLog.tmp
 	$(AM_V_at)mv -f ChangeLog.tmp $@
 
+# Force re-generation of ChangeLog.
+$(srcdir)/ChangeLog: force-changelog-gen
+.PHONY: force-changelog-gen
+force-changelog-gen:
+
 MOSTLYCLEANFILES = ChangeLog.tmp
 MAINTAINERCLEANFILES = $(srcdir)/ChangeLog
 
