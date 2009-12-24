@@ -84,6 +84,21 @@ force-changelog-gen:
 MOSTLYCLEANFILES = ChangeLog.tmp
 MAINTAINERCLEANFILES = $(srcdir)/ChangeLog
 
+# Maintainer-specific checks.
+.PHONY: maintainer-check
+maintainer-check: maintainer-check-list-of-tests
+
+# Check that the list of tests given in the Makefile is equal to the
+# list of all test scripts in the Automake testsuite.
+.PHONY: maintainer-check-list-of-tests
+maintainer-check-list-of-tests:
+	@target='$@'; fail=''; \
+	 for subdir in tests sanity-checks; do \
+	   echo "Making $$target in $$subdir"; \
+	   (cd ./$$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
+	 done; \
+	 test -z "$$fail"
+
 # $(ENABLE_MAINTAINER_MAKE_RULES): variable used by maint.mk
 if ENABLE_MAINTAINER_MAKE_RULES
   ENABLE_MAINTAINER_MAKE_RULES = yes

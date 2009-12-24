@@ -4,7 +4,6 @@
 # Makefile to run sanity checks (or "self-tests") on the Ratfor
 # Testsuite.
 
-
 ## --------------- ##
 ##  MISCELLANEOUS  ##
 ## --------------- ##
@@ -14,26 +13,18 @@
 MOSTLYCLEANFILES =
 EXTRA_DIST =
 
-
 ## --------------- ##
 ##  LIST OF TESTS  ##
 ## --------------- ##
 
-EXTRA_DIST += $(ALL_TESTS)
+EXTRA_DIST += $(TESTS)
 
-# We need this auxiliary variable to keep the list of *all* test scripts
-# so that the user can override the $(TESTS) variable without clashing
-# with consistency checks done by  the `check-list-of-tests' target defined
-# in `CheckTestList.am'.
-ALL_TESTS = \
+TESTS = \
   run_F77.test \
   run_RATFOR.test \
   run_command.test \
   timer-cc.test \
   timer.test
-
-# Run all tests by default.
-TESTS = $(ALL_TESTS)
 
 ## --------------------------------- ##
 ##  TESTSUITE ENVIRONMENT AND SETUP  ##
@@ -52,6 +43,5 @@ include ../lib/LocalCleanup.am
 ## ----------------------------------------- ##
 
 include ../lib/CheckTestsList.am
-check-local: check-list-of-tests
 
 ## vim: ft=automake noet sw=4 ts=4

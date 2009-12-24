@@ -16,16 +16,12 @@ EXTRA_DIST =
 ##  LIST OF TESTS  ##
 ## --------------- ##
 
-EXTRA_DIST += $(ALL_TESTS)
+EXTRA_DIST += $(TESTS)
 
 # Defined at configure time.
 XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 
-# We need this auxiliary variable to keep the list of *all* test scripts
-# so that the user can override the $(TESTS) variable without clashing
-# with consistency checks done by  the `check-list-of-tests' target defined
-# in `CheckTestList.am'.
-ALL_TESTS = \
+TESTS = \
   balanced-parens.test \
   break-fail.test \
   break_f77.test \
@@ -191,9 +187,6 @@ ALL_TESTS = \
   verbatim_f77.test \
   while_f77.test
 
-# Run all tests by default.
-TESTS = $(ALL_TESTS)
-
 ## ---------------------------------------- ##
 ##  REQUIREMENTS AND DEPENDENCIES OF TESTS  ##
 ## ---------------------------------------- ##
@@ -235,6 +228,5 @@ include ../lib/LocalCleanup.am
 ## ----------------------------------------- ##
 
 include ../lib/CheckTestsList.am
-check-local: check-list-of-tests
 
 ## vim: ft=automake noet sw=4 ts=4

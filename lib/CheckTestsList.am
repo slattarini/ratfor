@@ -1,44 +1,50 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2009-10-31 18:53:34 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2009-12-24 17:29:38 +0100.  DO NOT EDIT!
 ## Usually included by tests/Makefile.am
 
-# temporary files used in the `check-list-of-tests' target
+## temporary files used in the `check-list-of-tests' target
 tmk = tests-in-makefile-list.tmp
 tfs = tests-on-filesystem-list.tmp
-tdiffs = diff-in-tests-lists.tmp
+tdf = diff-in-tests-lists.tmp
 
-# Check that the list of tests as given by $(ALL_TESTS) is equal to the
-# list of all *.test scripts in the current directory.
-check-list-of-tests:
-	@set -e; \
-	 LANG=C; export LANG; \
-	 LANGUAGE=C; export LANGUAGE; \
-	 LC_ALL=C; export LC_ALL; \
-	 echo '****--------------------------------------------------------'; \
-	 echo '** Checking consistency of list of tests in directory'; \
-	 echo '**  $(abs_srcdir) ...'; \
-	 for t in $(ALL_TESTS); do \
+MOSTLYCLEANFILES += $(tmk) $(tfs) $(tdf)
+
+# Check that the list of tests given in the Makefile is equal to the
+# list of all test scripts in the package testsuite.
+maintainer-check-list-of-tests:
+	@:; \
+	  ## prefer unified diffs over plain diffs, for readability
+	  if test -n '$(DIFF_U)'; then \
+	    diff='$(DIFF_U)'; \
+	  elif diff -u /dev/null /dev/null >/dev/null 2>&1; then \
+	    diff='diff -u'; \
+	  else \
+	    diff='diff'; \
+	  fi; \
+	  ## list of tests in Makefile
+	  for t in $(TESTS); do \
 	    echo "$$t"; \
-	 done > $(tmk); \
-	 (cd $(srcdir) && for t in *.test; do \
+	  done >$(tmk); \
+	  ## list of tests on filesystem
+	  glob="$(srcdir)/*.test"; \
+	  if test x"$(srcdir)" != x"$(builddir)"; then \
+	    glob="$$glob $(builddir)/*.test"; \
+	  fi; \
+	  for t in $$glob; do \
 	    echo "$$t"; \
-	 done) > $(tfs); \
-	 if $(DIFF_U) $(tmk) $(tfs) > $(tdiffs); then \
-	    echo "** OK"; : No diffs; \
-	    e=0; \
-	 else \
-	    echo "*** ERROR ***" >&2; \
-	    echo " List of tests in Makefile an on filesystem differ" >&2; \
-	    echo " + $(DIFF_U) in-makefile on-filesystem" >&2; \
-	    cat $(tdiffs) >&2; \
-	    e=1; \
-	 fi; \
-	 echo '****--------------------------------------------------------'; \
-	 rm -f $(tmk) $(tfs) $(tdiffs); \
-	 exit $$e;
+	  done | sed 's,^.*/,,' | sort >$(tfs); \
+	  ## compare the two lists
+	  if $$diff $(tmk) $(tfs) >$(tdf); then \
+	     e=0; \
+	  else \
+	     echo '$@: list of tests in Makefile an on filesystem differ' >&2; \
+	     echo "+ $$diff in-makefile on-filesystem" >&2; \
+	     cat $(tdf) >&2; \
+	     e=1; \
+	fi; \
+	rm -f $(tmk) $(tfs) $(tdf); \
+	exit $$e;
 
-MOSTLYCLEANFILES += $(tmk) $(tfs) $(tdiffs)
-
-.PHONY: check-list-of-tests
+.PHONY: maintainer-check-list-of-tests
 
 ## vim: ft=automake noet sw=4 ts=4
