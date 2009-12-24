@@ -60,8 +60,7 @@ AX_INCLUDE_MAINT_CONFIG_SITE
 # Automake's initializations.
 #
 
-AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
-                       no-installinfo no-texinfo.tex])
+AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror no-installinfo no-texinfo.tex])
 AM_SILENT_RULES([no]) dnl. make `silent-rules' disabled by default
 
 #
@@ -212,6 +211,7 @@ AC_CONFIG_FILES([
     tests/Makefile
     tests/graybox/Makefile
 ])
+
 # Make GNUmakefile available also in VPATH builds.
 AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
 
