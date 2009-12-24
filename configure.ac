@@ -14,7 +14,7 @@ m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
 # Autoconf's initializations.
 #
 
-AC_PREREQ([2.62])
+AC_PREREQ([2.64])
 AC_INIT([C Ratfor],
         m4_esyscmd([build-aux/git-version-gen .tarball-version]),
         [stefano.lattarini@gmail.com])
