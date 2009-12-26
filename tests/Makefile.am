@@ -3,18 +3,14 @@
 ##
 # Makefile for the tests in the Ratfor Testsuite.
 
-## --------------- ##
-##  MISCELLANEOUS  ##
-## --------------- ##
-
-# Might be updated later (also in included files).  Do not remove these
-# definitions.
+## Some *.am files include later might require these special variables
+## to be initialized, even if only with an empty value. 
 MOSTLYCLEANFILES =
 EXTRA_DIST =
 
-## --------------- ##
-##  LIST OF TESTS  ##
-## --------------- ##
+##
+## List of tests.
+##
 
 EXTRA_DIST += $(TESTS)
 
@@ -187,9 +183,8 @@ TESTS = \
   verbatim_f77.test \
   while_f77.test
 
-## ---------------------------------------- ##
-##  REQUIREMENTS AND DEPENDENCIES OF TESTS  ##
-## ---------------------------------------- ##
+
+## Requirements and dependencies of tests.
 
 EXTRA_DIST += integers-many-bases.data
 integers-many-bases.log: integers-many-bases.data
@@ -211,22 +206,15 @@ function-name-invalid-1.log: subprog-name-invalid.sh
 function-name-invalid-2.log: subprog-name-invalid.sh
 function-name-invalid-3.log: subprog-name-invalid.sh
 
-## --------------------------------- ##
-##  TESTSUITE ENVIRONMENT AND SETUP  ##
-## --------------------------------- ##
 
+## Testsuite environment and setup.
 include ../lib/TestsEnvironment.am
 
-## ------------------- ##
-##  TESTSUITE CLEANUP  ##
-## ------------------- ##
-
+## Testsuite cleanup.
 include ../lib/LocalCleanup.am
 
-## ----------------------------------------- ##
-##  CONSISTENCY CHECKS ON THE LIST OF TESTS  ##
-## ----------------------------------------- ##
-
+## Consistency checks on the list of tests.
 include ../lib/CheckTestsList.am
+
 
 ## vim: ft=automake noet sw=4 ts=4
