@@ -69,6 +69,7 @@ $(srcdir)/ChangeLog: $(top_srcdir)/build-aux/gitlog-to-changelog
 	$(AM_V_GEN)$(top_srcdir)/build-aux/gitlog-to-changelog \
 	              --since=$(gen_start_date) --author-date \
 				  > ChangeLog.tmp
+	$(AM_V_at)chmod a-w ChangeLog.tmp
 	$(AM_V_at)mv -f ChangeLog.tmp $@
 
 # Force re-generation of ChangeLog.
