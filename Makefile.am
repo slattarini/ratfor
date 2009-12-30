@@ -61,6 +61,25 @@ distcheck-hook:
 include MostlyCleanConfigureTmp.am
 mostlyclean-local: mostlyclean-configure-tmp
 
+# Maintainer-specific checks.
+.PHONY: maintainer-check
+maintainer-check: maintainer-check-list-of-tests
+
+# XXX: will soon be extended also to `tests/blackbox'
+TEST_SUBDIRS = tests/graybox
+
+# Check that the list of tests given in the Makefile is equal to the
+# list of all test scripts in the Automake testsuite.
+.PHONY: maintainer-check-list-of-tests
+maintainer-check-list-of-tests:
+	@target='$@'; fail=''; \
+	 CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
+	 for subdir in $(TEST_SUBDIRS); do \
+	   echo "Making $$target in $$subdir"; \
+	   (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
+	 done; \
+	 test -z "$$fail"
+
 # $(ENABLE_MAINTAINER_MAKE_RULES): variable used by maint.mk
 if ENABLE_MAINTAINER_MAKE_RULES
   ENABLE_MAINTAINER_MAKE_RULES = yes
