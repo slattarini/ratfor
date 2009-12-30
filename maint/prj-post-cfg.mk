@@ -3,6 +3,15 @@
 # maintainer-specific targets
 
 #
+# Automatic ChangeLog generation, from Git commit messages.
+#
+
+# Commits before this date shouldn't be put in the ChangeLog
+changelog-start-date = 2009-11-15
+
+include $(maintdir)/git-generate-changelog.mk
+
+#
 # Testcases to be skipped, even when doing a strict-distcheck (presently
 # these are exactly the same the use passed to the configure script).
 #
