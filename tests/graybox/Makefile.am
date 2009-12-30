@@ -4,24 +4,14 @@
 # C Ratfor: a ratfor preprocessor written in C.
 # Makefile for the tests/graybox subdirectory.
 
-## ------------------------ ##
-##  LOCAL AUTOMAKE OPTIONS  ##
-## ------------------------ ##
-
 AUTOMAKE_OPTIONS = color-tests parallel-tests
 
-## --------------- ##
-##  MISCELLANEOUS  ##
-## --------------- ##
-
-# Might be updated later (also in included files).  Do not remove these
-# definitions.
+## Some *.am files include later might require these special variables
+## to be initialized, even if only with an empty value.
 MOSTLYCLEANFILES =
 EXTRA_DIST =
 
-## --------------- ##
-##  LIST OF TESTS  ##
-## --------------- ##
+## List of tests.
 
 EXTRA_DIST += $(TESTS)
 
@@ -32,22 +22,13 @@ TESTS = \
   switch-segfault.test \
   token-too-long.test
 
-## --------------------------------- ##
-##  TESTSUITE ENVIRONMENT AND SETUP  ##
-## --------------------------------- ##
-
+## Testsuite environment and setup.
 include ../blackbox/lib/TestsEnvironment.am
 
-## ------------------- ##
-##  TESTSUITE CLEANUP  ##
-## ------------------- ##
-
+## Testsuite cleanup.
 include ../blackbox/lib/LocalCleanup.am
 
-## ----------------------------------------- ##
-##  CONSISTENCY CHECKS ON THE LIST OF TESTS  ##
-## ----------------------------------------- ##
-
+## Consistency checks on the list of tests.
 include ../CheckListOfTests.am
 
 ## vim: ft=automake noet sw=4 ts=4
