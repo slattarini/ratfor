@@ -65,6 +65,8 @@ mostlyclean-local: mostlyclean-configure-tmp
 .PHONY: maintainer-check
 maintainer-check: maintainer-check-list-of-tests
 
+# List of directories where to recurse for testing and related
+# maintainer-checks.
 # XXX: will soon be extended also to `tests/blackbox'
 TEST_SUBDIRS = tests/graybox
 
