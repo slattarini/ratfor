@@ -202,6 +202,8 @@ Testsuite
   is imported into the C Ratfor tree as a git submodule.  For more details
   about that package, you can refer to the files `tests/blackbox/README'
   and `tests/blackbox/HACKING'.
+  For more information about the graybox tests, you can refer to the (still
+  skimpy) file `tests/graybox/HACKING'.
 
 
 Fixing bugs
