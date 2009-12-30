@@ -4,7 +4,7 @@
 # Makefile for the tests in the Ratfor Testsuite.
 
 ## Some *.am files include later might require these special variables
-## to be initialized, even if only with an empty value. 
+## to be initialized, even if only with an empty value.
 MOSTLYCLEANFILES =
 EXTRA_DIST =
 
@@ -214,7 +214,7 @@ include ../lib/TestsEnvironment.am
 include ../lib/LocalCleanup.am
 
 ## Consistency checks on the list of tests.
-include ../lib/CheckTestsList.am
+include ../lib/CheckListOfTests.am
 
 
 ## vim: ft=automake noet sw=4 ts=4

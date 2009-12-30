@@ -27,6 +27,6 @@ include ../lib/TestsEnvironment.am
 include ../lib/LocalCleanup.am
 
 ## Consistency checks on the list of tests.
-include ../lib/CheckTestsList.am
+include ../lib/CheckListOfTests.am
 
 ## vim: ft=automake noet sw=4 ts=4
