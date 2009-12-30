@@ -61,25 +61,6 @@ distcheck-hook:
 include MostlyCleanConfigureTmp.am
 mostlyclean-local: mostlyclean-configure-tmp
 
-# Generate ChangeLog file from git log messages.
-gen_start_date = 2009-11-14
-.PHONY: $(srcdir)/ChangeLog
-$(srcdir)/ChangeLog: $(top_srcdir)/build-aux/gitlog-to-changelog
-	$(AM_V_at)rm -f ChangeLog.tmp
-	$(AM_V_GEN)$(top_srcdir)/build-aux/gitlog-to-changelog \
-	              --since=$(gen_start_date) --author-date \
-				  > ChangeLog.tmp
-	$(AM_V_at)chmod a-w ChangeLog.tmp
-	$(AM_V_at)mv -f ChangeLog.tmp $@
-
-# Force re-generation of ChangeLog.
-$(srcdir)/ChangeLog: force-changelog-gen
-.PHONY: force-changelog-gen
-force-changelog-gen:
-
-MOSTLYCLEANFILES = ChangeLog.tmp
-MAINTAINERCLEANFILES = $(srcdir)/ChangeLog
-
 # $(ENABLE_MAINTAINER_MAKE_RULES): variable used by maint.mk
 if ENABLE_MAINTAINER_MAKE_RULES
   ENABLE_MAINTAINER_MAKE_RULES = yes
