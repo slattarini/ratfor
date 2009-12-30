@@ -48,13 +48,8 @@ fi
 . "$testaux_srcdir"/testlib.sh || exit 99
 . "$testaux_srcdir"/rat4-testlib.sh || exit 99
 
-echo "=== Running test $argv0"
-echo "# srcdir: $srcdir"
-echo "# builddir: $builddir"
-echo "# PWD: `pwd`"
-echo "# PATH: $PATH"
-echo "# F77: $F77"
-echo "# RATFOR: $RATFOR"
+# Print details on the current run of the testcase. Useful for debugging.
+print_testrun_info
 
 # Turn on shell traces.
 set -x

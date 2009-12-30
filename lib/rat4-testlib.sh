@@ -1,6 +1,7 @@
 #!/bin/sh
 #
 # Shell functions and setting for the Ratfor Testsuite test scripts.
+# This file must be included after testlib.sh.
 #
 
 # Usage: must_be_directory DIRECTORY [DESC]
@@ -23,7 +24,7 @@ require_fortran_compiler() {
 # limits, else cause the testcase to be SKIP'd.
 require_strong_fortran_compiler() {
     require_fortran_compiler
-    #XXX: move this checks at configure times?
+    #XXX: move this checks at configure time?
     f77check_opwd=`pwd`
     f77check_ok=no
     mkdir f77check.d \
@@ -118,6 +119,18 @@ run_RATFOR() {
     set -x # xtrace verbosity restart here
     run_command $run4_opts -- "$run4_timer" -t "$run4_timeout" -- \
                 "$RATFOR" ${1+"$@"}
+}
+
+# Print details on the current run of the testcase.
+print_testrun_info() {
+    echo "=== Running test $argv0"
+    echo "# srcdir: $srcdir"
+    echo "# builddir: $builddir"
+    echo "# DATE: `date`"
+    echo "# PWD: `pwd`"
+    echo "# PATH: $PATH"
+    echo "# F77: $F77"
+    echo "# RATFOR: $RATFOR"
 }
 
 # Useful when grepping the path of the ratfor executable in error messages
