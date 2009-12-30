@@ -75,11 +75,12 @@ maintainer-check: maintainer-check-list-of-tests
 .PHONY: maintainer-check-list-of-tests
 maintainer-check-list-of-tests:
 	@target='$@'; fail=''; \
-	 for subdir in tests sanity-checks; do \
-	   echo "Making $$target in $$subdir"; \
-	   (cd ./$$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
-	 done; \
-	 test -z "$$fail"
+	 CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
+     for subdir in $(TEST_SUBDIRS); do \
+       echo "Making $$target in $$subdir"; \
+       (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
+     done; \
+     test -z "$$fail"
 
 # $(ENABLE_MAINTAINER_MAKE_RULES): variable used by maint.mk
 if ENABLE_MAINTAINER_MAKE_RULES
