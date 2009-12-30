@@ -16,7 +16,6 @@ EXTRA_DIST = \
   ChangeLog-old \
   build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
-  build-aux/move-if-change \
   maint/maint.mk \
   maint/strict-distcheck.mk \
   maint/release.mk \
@@ -76,7 +75,7 @@ $(srcdir)/ChangeLog: $(top_srcdir)/build-aux/gitlog-to-changelog
 	              --since=$(gen_start_date) --author-date \
 				  > ChangeLog.tmp
 	$(AM_V_at)chmod a-w ChangeLog.tmp
-	$(AM_V_at)$(top_srcdir)/build-aux/move-if-change ChangeLog.tmp $@
+	$(AM_V_at)mv -f ChangeLog.tmp $@
 
 # Force re-generation of ChangeLog.
 $(srcdir)/ChangeLog: force-changelog-gen
