@@ -3,7 +3,7 @@
 # Test automatic line continuation on operators (test is done by grepping
 # ratfor output).
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 tr '._' " ${TAB}" >tst.r <<EOF
 a1,

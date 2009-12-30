@@ -2,7 +2,7 @@
 
 # Check basic usage of `include' statement.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > included.r <<EOF
 foo1

@@ -3,7 +3,7 @@
 # Check that ratfor give proper error messages if `return' is given an
 # argument inside a subroutine.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 $SED 's/^ *[0-9][0-9]*: *//' >tst.r <<EOF
 01: subroutine sub1 { return 1 } end

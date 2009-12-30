@@ -3,7 +3,7 @@
 # Check that ratfor complains if the keyword `function' is not followed
 # by a function name (even when empty macros are involved).
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 ls -l "$srcdir"/subprog-name-invalid.sh
 . "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
 

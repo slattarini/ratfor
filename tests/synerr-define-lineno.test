@@ -3,7 +3,7 @@
 # Check that line numbers in error messages are ok, even when expansion
 # of multiline macros is involved.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 $SED 's/#.*$//' > tst.r <<EOF
 l1; l1; l1; #1

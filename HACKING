@@ -108,15 +108,17 @@ Writing test cases
 
   Explain what each test does, at least briefly.
 
-  Include `../lib/rat4-t.sh', aborting the test (with exit status `99')
-  if the inclusion fails.  You'd better read and understand that file well
-  before trying to write a test case.
+  Include `../lib/rat4-testsuite-init.sh', aborting the test (with exit
+  status `99') if the inclusion fails.  You'd better read and understand
+  that file (and those included by it) well before trying to write a test
+  case.
 
-  Keep in mind that `rat4-t.sh' calls `set -e', so that failures you might
-  not have thought of are still catched (and result in an "hard error").
-  If this is not what you want, you'll have to explicitly call `set +e'
-  in your test script (this is generally a bad idea, unless you need to
-  *temporarly* disable the exit-on-error flag for some good reason).
+  Keep in mind that `rat4-testsuite-init.sh' (or othe files included by
+  it) calls `set -e', so that failures you might not have thought of are
+  still catched (and result in an "hard error").  If this is not what you
+  want, you'll have to explicitly call `set +e' in your test script (this
+  is generally a bad idea, unless you need to *temporarly* disable the
+  exit-on-error flag for some good reason).
 
   Use the subroutine `run_command' if you need to run a program to later
   analyze its standard output and/or standard error.
@@ -174,8 +176,9 @@ Writing test cases
   test will end in an "hard error", and will be considered FAIL'd.
 
   Use $GREP, $FGREP, $EGREP, $SED, $AWK, instead of the corresponding
-  commands.  Also prefer $DIFF_U on plain `diff'.  This list of tools might
-  be incomplete: look in the file `lib/rat4-t.in' for a complete list.
+  commands.  Also prefer $DIFF_U on plain `diff'.  This list of tools
+  might be incomplete: look in the file `lib/rat4-testsuite-defs.in' for
+  a complete list.
 
   When calculating diffs on expected output and obtained output, put
   file containing expected output first, as in `$DIFF_U exp.txt got.txt'.
@@ -200,9 +203,10 @@ Writing test cases
   more data files, use `data/foo.data1', `data/foo.data2' etc. instead).
   This is done so that, even when a Fortran 77 compiler is not available,
   the tests about the feature "foo" will not be completely skipped (only
-  "half-skipped").  Finally, in `scripts/foo_f77.test', place a call to
-  `require_fortran_compiler' just after the inclusion of `rat4-t.sh', so
-  that the test will be skipped if no Fortran 77 compiler is available.
+  "half-skipped").  Finally, in `scripts/foo_f77.test', place a call
+  to `require_fortran_compiler' just after the inclusion of the file
+  `rat4-testsuite-init.sh', so that the test will be skipped if no proper
+  Fortran 77 compiler is available.
 
   Keep the shell code as portable as possible.  This can be trickier that
   you think; for more information, you can refer to the Autoconf manual,

@@ -3,7 +3,7 @@
 # Check that ratfor complains if a label is placed just after a left
 # parenthesis, rather than bogusly complaning about `missin parenthesis'
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 echo '(10) foo' >tst.r
 

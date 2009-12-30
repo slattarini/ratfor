@@ -168,9 +168,14 @@ AC_CONFIG_FILES([
 # Be sure to make the generated files readonly, to avoid that absent-minded
 # developers modify them instead of the files they are generated from.
 # It has already happened too many times.
-AC_CONFIG_FILES([lib/rat4-t.sh:lib/rat4-t.in], [chmod a-w lib/rat4-t.sh])
-AC_CONFIG_FILES([lib/halt.f:lib/halt.in], [chmod a-w lib/halt.f])
-AC_CONFIG_FILES([lib/timer:lib/timer.in], [chmod a-w,a+x lib/timer])
+AC_CONFIG_FILES([lib/rat4-testsuite-defs.sh:lib/rat4-testsuite-defs.in],
+                [chmod a-w lib/rat4-testsuite-defs.sh])
+AC_CONFIG_FILES([lib/rat4-testsuite-init.sh:lib/rat4-testsuite-init.in],
+                [chmod a-w lib/rat4-testsuite-init.sh])
+AC_CONFIG_FILES([lib/halt.f:lib/halt.in],
+                [chmod a-w lib/halt.f])
+AC_CONFIG_FILES([lib/timer:lib/timer.in],
+                [chmod a-w,a+x lib/timer])
 
 AC_OUTPUT
 

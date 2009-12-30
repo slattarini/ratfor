@@ -3,7 +3,7 @@
 # Check that ratfor diagnose possible conflicts between internally-used
 # labels and used-provided labels.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst1.r <<EOF
 while(true) {

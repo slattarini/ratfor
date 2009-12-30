@@ -3,7 +3,7 @@
 # Check the ratfor support for integers in bases != 10 (format: b%ddd...)
 # The checks are done compiling and runing the ratfor output.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 require_fortran_compiler
 

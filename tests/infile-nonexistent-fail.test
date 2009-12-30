@@ -2,7 +2,7 @@
 
 # Check that ratfor barfs if input file is unreadable.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 test ! -f none.r
 

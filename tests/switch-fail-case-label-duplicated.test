@@ -2,7 +2,7 @@
 
 # Check that duplicated `case' labels are correctly diagnosed.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst1.r <<EOF
 switch(1) {

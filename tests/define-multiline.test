@@ -2,7 +2,7 @@
 
 # Check that `define(SYM, VALUE)' works on multi-line VALUE.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst.r <<EOF
 define(sym,

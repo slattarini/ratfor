@@ -3,7 +3,7 @@
 # Check that ratfor does not unnecessarily overwrite files when multiple
 # `-o' options are given
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 mkdir out.d
 

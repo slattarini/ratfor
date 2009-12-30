@@ -1,6 +1,4 @@
 #!/bin/sh
-# @configure_input@
-
 #
 # Common definitions, environments settings and shell functions for the
 # test scripts of the Ratfor Testsuite.
@@ -8,18 +6,6 @@
 
 (set -u) >/dev/null 2>&1 && set -u
 
-PACKAGE_VERSION='@PACKAGE_VERSION@'
-PACKAGE_NAME='@PACKAGE_NAME@'
-EXEEXT='@EXEEXT@'
-GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
-EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
-FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
-SED=${RAT4_TESTSUITE_SED-'@SED@'}
-AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
-SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
-DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
-F77=${RAT4_TESTSUITE_F77-'@F77@'}
-RATFOR=${RAT4_TESTSUITE_RATFOR-'@RATFOR@'}
 top_srcdir='@abs_top_srcdir@'
 top_builddir='@abs_top_builddir@'
 testaux_srcdir=$top_srcdir/lib
@@ -34,19 +20,20 @@ case $top_builddir in /*);; *)
   echo "FATAL: \$top_builddir \`$top_builddir': not an absolute path" >&2
   exit 99;;
 esac
-if test ! -f "$testaux_srcdir/rat4-t.in"; then
+if test ! -f "$testaux_srcdir/rat4-testsuite-init.in"; then
   echo "FATAL: \$testaux_srcdir \`$testaux_srcdir': no file" \
-              "\`rat4-t.in' found there" >&2
+              "\`rat4-testsuite-init.in' found there" >&2
   exit 99
 fi
-if test ! -f "$testaux_builddir/rat4-t.sh"; then
+if test ! -f "$testaux_builddir/rat4-testsuite-init.sh"; then
   echo "FATAL: \$testaux_builddir \`$testaux_builddir': no file" \
-              "\`rat4-t.sh' found there" >&2
+              "\`rat4-testsuite.sh' found there" >&2
   exit 99
 fi
 
+. "$testaux_builddir"/rat4-testsuite-defs.sh || exit 99
 . "$testaux_srcdir"/testlib.sh || exit 99
-. "$testaux_srcdir"/rat4-testlib.sh || exit 99
+. "$testaux_srcdir"/rat4-testlib.sh || testcase_HARDERROR
 
 # Print details on the current run of the testcase. Useful for debugging.
 print_testrun_info

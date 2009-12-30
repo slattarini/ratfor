@@ -5,7 +5,7 @@
 
 # WARNING: ratfor must not abort on failed include. Check for this, too.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst1.r <<EOF
 include

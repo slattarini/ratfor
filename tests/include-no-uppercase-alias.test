@@ -2,7 +2,7 @@
 
 # Check the `INCLUDE' is not an alias for `include'.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 echo 'FAILURE' >notincluded.r
 echo 'INCLUDE notincluded.r' >tst.r

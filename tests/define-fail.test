@@ -2,7 +2,7 @@
 
 # Check that `define' fails with proper error messages if usen improperly.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 baddef() {
     tcnt=`expr ${tcnt-"0"} + 1` || testcase_HARDERROR

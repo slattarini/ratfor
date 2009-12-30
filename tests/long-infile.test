@@ -2,7 +2,7 @@
 
 # Check that ratfor works on very long input files.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 startlab=60000
 

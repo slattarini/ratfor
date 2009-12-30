@@ -5,7 +5,14 @@
 # Testsuite.
 
 nodist_check_SCRIPTS = timer
-dist_check_DATA = testlib.sh rat4-testlib.sh
-nodist_check_DATA = rat4-t.sh halt.f
+
+dist_check_DATA = \
+  testlib.sh \
+  rat4-testlib.sh
+
+nodist_check_DATA = \
+  rat4-testsuite-defs.sh \
+  rat4-testsuite-init.sh \
+  halt.f
 
 ## vim: ft=automake noet sw=4 ts=4

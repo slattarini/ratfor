@@ -3,7 +3,7 @@
 # Test that `%' to output lines verbatim is recognized only if placed
 # at the beginning of a line
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst.r <<EOF
 a = 1 %&&

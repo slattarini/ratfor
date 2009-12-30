@@ -1,0 +1,21 @@
+#!/bin/sh
+# @configure_input@
+#
+# Common definitions and environments settings for the test scripts
+# of the Ratfor Testsuite.
+#
+
+PACKAGE_VERSION='@PACKAGE_VERSION@'
+PACKAGE_NAME='@PACKAGE_NAME@'
+EXEEXT='@EXEEXT@'
+GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
+EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
+FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
+SED=${RAT4_TESTSUITE_SED-'@SED@'}
+AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
+SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
+DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
+F77=${RAT4_TESTSUITE_F77-'@F77@'}
+RATFOR=${RAT4_TESTSUITE_RATFOR-'@RATFOR@'}
+
+# vim: ft=sh ts=4 sw=4 et

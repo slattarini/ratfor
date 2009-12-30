@@ -2,7 +2,7 @@
 
 # Check tha no extra newline is printed before an `%'-escaped line.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 echo '%123' >tst.r
 run_RATFOR tst.r || testcase_FAIL

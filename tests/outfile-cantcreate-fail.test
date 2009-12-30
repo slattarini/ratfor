@@ -3,7 +3,7 @@
 # Check that ratfor barfs when trying to create output file in an
 # unwritable directory.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 mkdir tst.d
 chmod a-w tst.d

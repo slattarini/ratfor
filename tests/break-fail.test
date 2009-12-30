@@ -3,7 +3,7 @@
 # Check that incorrect (and only incorrect) usages of the `break'
 # statement are caught.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 data="$srcdir/break-next-fail.data"
 

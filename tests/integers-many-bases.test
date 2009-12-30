@@ -3,7 +3,7 @@
 # Check the ratfor support for integers in bases != 10 (format: b%ddd...)
 # The checks are done by "grepping" the ratfor output.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 # make output of our tests more pleasant for humans
 makeup() {

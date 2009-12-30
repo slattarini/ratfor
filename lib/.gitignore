@@ -1,3 +1,4 @@
-rat4-t.sh
+rat4-testsuite-defs.sh
+rat4-testsuite-init.sh
 halt.f
 timer

@@ -2,7 +2,7 @@
 
 # Check that ratfor continue its execution on non-fatal syntax errors.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 require_fortran_compiler
 

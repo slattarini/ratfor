@@ -2,7 +2,7 @@
 
 # Stress test for ratfor (interactions between `%' and `define'/`include').
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
 define PERCENT1 %

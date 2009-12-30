@@ -2,7 +2,7 @@
 
 # Check that invalid/missing `case' labels are correctly diagnosed.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 n=0
 for case_ in 'case:' 'case x:' 'case;' 'case (1):' 'case /:'; do

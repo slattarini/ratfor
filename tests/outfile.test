@@ -2,7 +2,7 @@
 
 # Basic checks on the `-o' option of ratfor.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 echo 'junk123' > tst.r
 

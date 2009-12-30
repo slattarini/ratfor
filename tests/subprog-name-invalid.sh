@@ -3,7 +3,7 @@
 # Define shell functions which can be used to check that ratfor complains
 # if the keywords `function' or `subprograms' are not not followed by an
 # alphanumeric token.  This is expected to be sourced by test scripts after
-# the file `rat4-t.sh' has already been sourced.
+# the file `rat4-testsuite-init.sh' has already been sourced.
 
 t_count=0
 

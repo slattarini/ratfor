@@ -2,7 +2,7 @@
 
 # Check that we can't `define' macros containing dots.
 
-. ../lib/rat4-t.sh || exit 99
+. ../lib/rat4-testsuite-init.sh || exit 99
 
 echo "define .foo bar" > tstB1.r
 cat tstB1.r
