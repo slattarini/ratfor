@@ -10,6 +10,7 @@ Makefile.in
 /config.log
 /config.status
 /configure
+/configure.lineno
 
 /stamp-h1
 
