@@ -215,8 +215,8 @@ Fixing bugs
   and check everything in.
 
 
-Make a release
---------------
+Making a release
+----------------
 
   NOTE: In what follows, `$VERSION' will denote the version of the package
   you are releasing.  $VERSION should be something like 0.9, 2.0, 1.11.1 or
