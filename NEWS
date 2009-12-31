@@ -1,11 +1,11 @@
 List of user-visible changes of Ratfor Testsuite.
 
-New in XXX
+New in 0.9g
 -----------
  * The testsuite has been improved and strenghtened.  Especially notable
    is the fact that now different testcases in a same test script are
    (mostly) decoupled.  In particular, a test script does not stop at the
-   first failed testcase, but run all the testcase and repoort all those
+   first failed testcase, but run all the testcases and report all those
    which failed.
  * Now a ChangeLog file is distributed, being automatically generated
    from Git commit messages.
