@@ -143,7 +143,7 @@ rat4t_print_testrun_info() {
 }
 
 # Useful when grepping the path of the ratfor executable in error messages
-# produced by rator.
+# produced by ratfor.
 rat4t_ratfor_rx=`escape_for_grep "$RATFOR"`
 
 # Testsuite utilities have always precedence over system ones.
