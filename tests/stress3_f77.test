@@ -4,7 +4,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-require_fortran_compiler
+rat4t_require_fortran_compiler
 
 tr '%@' "${NEWLINE}${TAB}" > tst.r <<EOF
 subroutine ok(n){{integer n;write(*,100)n; 100%@@@@@ format(%'ok',%%I1 @@)}

@@ -11,37 +11,39 @@
 
 (set -u) >/dev/null 2>&1 && set -u
 
-top_srcdir='@abs_top_srcdir@'
-top_builddir='@abs_top_builddir@'
-testaux_srcdir=$top_srcdir/lib
-testaux_builddir=$top_builddir/lib
+rat4t_top_srcdir='@abs_top_srcdir@'
+rat4t_top_builddir='@abs_top_builddir@'
+rat4t_testaux_srcdir=$rat4t_top_srcdir/lib
+rat4t_testaux_builddir=$rat4t_top_builddir/lib
 
 # Sanity checks.
-case $top_srcdir in /*);; *)
-  echo "FATAL: \$top_srcdir \`$top_srcdir': not an absolute path" >&2
+case $rat4t_top_srcdir in /*);; *)
+  echo "FATAL: \$rat4t_top_srcdir \`$rat4t_top_srcdir':" \
+       "not an absolute path" >&2
   exit 99;;
 esac
-case $top_builddir in /*);; *)
-  echo "FATAL: \$top_builddir \`$top_builddir': not an absolute path" >&2
+case $rat4t_top_builddir in /*);; *)
+  echo "FATAL: \$rat4t_top_builddir \`$rat4t_top_builddir':" \
+       "not an absolute path" >&2
   exit 99;;
 esac
-if test ! -f "$testaux_srcdir/rat4-testsuite-init.in"; then
-  echo "FATAL: \$testaux_srcdir \`$testaux_srcdir': no file" \
-              "\`rat4-testsuite-init.in' found there" >&2
+if test ! -f "$rat4t_testaux_srcdir/rat4-testsuite-init.in"; then
+  echo "FATAL: \$rat4t_testaux_srcdir \`$rat4t_testaux_srcdir':" \
+              "no file \`rat4-testsuite-init.in' found there" >&2
   exit 99
 fi
-if test ! -f "$testaux_builddir/rat4-testsuite-init.sh"; then
-  echo "FATAL: \$testaux_builddir \`$testaux_builddir': no file" \
-              "\`rat4-testsuite.sh' found there" >&2
+if test ! -f "$rat4t_testaux_builddir/rat4-testsuite-init.sh"; then
+  echo "FATAL: \$rat4t_testaux_builddir \`$rat4t_testaux_builddir':" \
+              "no file \`rat4-testsuite.sh' found there" >&2
   exit 99
 fi
 
-. "$testaux_builddir"/rat4-testsuite-defs.sh || exit 99
-. "$testaux_srcdir"/testlib.sh || exit 99
-. "$testaux_srcdir"/rat4-testlib.sh || testcase_HARDERROR
+. "$rat4t_testaux_builddir"/rat4-testsuite-defs.sh || exit 99
+. "$rat4t_testaux_srcdir"/testlib.sh || exit 99
+. "$rat4t_testaux_srcdir"/rat4-testlib.sh || testcase_HARDERROR
 
 # Print details on the current run of the testcase. Useful for debugging.
-print_testrun_info
+rat4t_print_testrun_info
 
 # Turn on shell traces.
 set -x

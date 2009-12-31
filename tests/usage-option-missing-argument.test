@@ -7,8 +7,8 @@
 
 for opt in o l; do
     run_RATFOR -e 2 -- "-$opt" </dev/null || testcase_FAIL
-    $GREP "^$ratfor_rx: \`-$opt': option requires an argument" stderr || \
-      testcase_FAIL
+    $GREP "^$rat4t_ratfor_rx: \`-$opt': option requires an argument" \
+      stderr || testcase_FAIL
     $GREP "^Usage:" stderr || testcase_FAIL
 done
 

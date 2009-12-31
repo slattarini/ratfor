@@ -204,7 +204,7 @@ Writing test cases
   This is done so that, even when a Fortran 77 compiler is not available,
   the tests about the feature "foo" will not be completely skipped (only
   "half-skipped").  Finally, in `scripts/foo_f77.test', place a call
-  to `require_fortran_compiler' just after the inclusion of the file
+  to `rat4t_require_fortran_compiler' just after the inclusion of the file
   `rat4-testsuite-init.sh', so that the test will be skipped if no proper
   Fortran 77 compiler is available.
 

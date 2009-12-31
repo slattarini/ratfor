@@ -6,19 +6,21 @@
 #
 # NAMESPACE CLEANLINESS:  We should try to keep ourselves confined to
 # the namespaces `rat4t_*' and `_ra4t_*' as much as possible, for both
-# variables and functions. For environment variables, the namespace
-# `RAT4_TESTSUITE_*' should be used instead.
+# variables and functions.  For environment variables, the namespace
+# `RAT4_TESTSUITE_*' should be used instead.  Note that, however, we
+# sometimes do some exceptions for the sake of simplicity (e.g. the
+# functions `run_F77' and `run_RATFOR').
 #
 
-# Usage: must_be_directory DIRECTORY [DESC]
+# Usage: rat4t_must_be_directory DIRECTORY [DESC]
 # Check that the given DIRECTORY exists, else die with an "hard error".
-must_be_directory() {
+rat4t_must_be_directory() {
     test -d "$1" || testcase_HARDERROR "${2-directory}" "\`$1' not found"
 }
 
 # Check that we have a valid fortran 77 compiler available, else
 # cause the testcase to be SKIP'd.
-require_fortran_compiler() {
+rat4t_require_fortran_compiler() {
     case "$F77" in
         "") testcase_HARDERROR "variable \`\$F77' is empty";;
       NONE) testcase_SKIP "Fotran 77 compiler should not be used" \
@@ -28,8 +30,8 @@ require_fortran_compiler() {
 
 # Check that we have available a valid fortran 77 compiler without silly
 # limits, else cause the testcase to be SKIP'd.
-require_strong_fortran_compiler() {
-    require_fortran_compiler
+rat4t_require_strong_fortran_compiler() {
+    rat4t_require_fortran_compiler
     #XXX: move this checks at configure time?
     f77check_opwd=`pwd`
     f77check_ok=no
@@ -75,7 +77,7 @@ run_F77() {
         shift
     done
     # file providing the custom `halt' procedure
-    run77_haltf=$testaux_builddir/halt.f
+    run77_haltf=$rat4t_testaux_builddir/halt.f
     if test ! -f "$run77_haltf"; then
         testcase_HARDERROR "auxiliary source file \`$run77_haltf'" \
                            "not found"
@@ -116,7 +118,7 @@ run_RATFOR() {
         esac
         shift
     done
-    run4_timer=$testaux_builddir/timer  # the timer script
+    run4_timer=$rat4t_testaux_builddir/timer  # the timer script
     if test ! -f "$run4_timer"; then
         testcase_HARDERROR "\`timer' script not found"
     elif test ! -x "$run4_timer"; then
@@ -128,10 +130,10 @@ run_RATFOR() {
 }
 
 # Print details on the current run of the testcase.
-print_testrun_info() {
-    echo "=== Running test $argv0"
-    echo "# srcdir: $srcdir"
-    echo "# builddir: $builddir"
+rat4t_print_testrun_info() {
+    echo "=== Running test $argv0"  # from testlib.sh
+    echo "# srcdir: $srcdir"        # from testlib.sh
+    echo "# builddir: $builddir"    # from testlib.sh
     echo "# DATE: `date`"
     echo "# PWD: `pwd`"
     echo "# PATH: $PATH"
@@ -141,14 +143,14 @@ print_testrun_info() {
 
 # Useful when grepping the path of the ratfor executable in error messages
 # produced by rator.
-ratfor_rx=`escape_for_grep "$RATFOR"`
+rat4t_ratfor_rx=`escape_for_grep "$RATFOR"`
 
 # Testsuite utilities have always precedence over system ones.
-must_be_directory "$testaux_srcdir"
-PATH=${testaux_srcdir}${PATH+":$PATH"}
-if test x"$testaux_srcdir" != x"$testaux_builddir"; then
-    must_be_directory "$testaux_builddir"
-    PATH=${testaux_builddir}${PATH+":$PATH"}
+rat4t_must_be_directory "$rat4t_testaux_srcdir"
+PATH=${rat4t_testaux_srcdir}${PATH+":$PATH"}
+if test x"$rat4t_testaux_srcdir" != x"$rat4t_testaux_builddir"; then
+    rat4t_must_be_directory "$rat4t_testaux_builddir"
+    PATH=${rat4t_testaux_builddir}${PATH+":$PATH"}
 fi
 export PATH
 

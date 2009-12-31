@@ -4,7 +4,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-require_strong_fortran_compiler
+rat4t_require_strong_fortran_compiler
 
 # a bigger number will slow down too much the fortran compiler
 startlab=6000

@@ -5,7 +5,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-require_fortran_compiler
+rat4t_require_fortran_compiler
 
 cat >tst.r <<EOF
 program testexpoent
