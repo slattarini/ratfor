@@ -1,7 +1,8 @@
 #!/bin/sh
 #
 # Shell functions and setting for the Ratfor Testsuite test scripts.
-# This file must be included after testlib.sh.
+# This file must be included only by `rat4-testsuite-init.sh', and only
+# after the inclusion of `rat4-testsuite-defs.sh' and `testlib.sh'.
 #
 
 # Usage: must_be_directory DIRECTORY [DESC]
