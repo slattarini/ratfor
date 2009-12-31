@@ -3,18 +3,18 @@
 # Check that "C Ratfor" complain and die gracefully when founding token
 # too long in inout, rather than crashing.
 
-. ../blackbox/lib/rat4-t.sh || exit 99
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
 
 : 'define do_test()'
 set +x
 do_test() {
     sed -e 's/xxxxxxxxx.*/xxxxxxxx.../g' "tst-$1.r"
     run_RATFOR -e 1 "tst-$1.r" \
-      || testcase_REGISTER_FAILURE
+      || testcase_FAIL
     sed -e '20q' stdout >"stdout-$1"
     mv stderr "stderr-$1"
     $FGREP "tst-$1.r:1: alphanumeric token too long" "stderr-$1" \
-      || testcase_REGISTER_FAILURE
+      || testcase_FAIL
 }
 set -x
 

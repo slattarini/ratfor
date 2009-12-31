@@ -29,6 +29,6 @@ include ../blackbox/lib/TestsEnvironment.am
 include ../blackbox/lib/LocalCleanup.am
 
 ## Consistency checks on the list of tests.
-include ../CheckListOfTests.am
+include ../blackbox/lib/CheckListOfTests.am
 
 ## vim: ft=automake noet sw=4 ts=4

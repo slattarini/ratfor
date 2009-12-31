@@ -3,7 +3,7 @@
 # Check that an empty `case' with missing label as last statement in
 # a switch construct does not cause C Ratfor to crash.
 
-. ../blackbox/lib/rat4-t.sh || exit 99
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst1.r <<EOF
 switch(x) { case : }
@@ -62,7 +62,7 @@ for i in 1 2 3 4 5 6 7; do
       139) msg="SEGFAULT on tst$i.r";;
         *) msg="UNEXPECTED EXIT STATUS \`$rc' on tst$i.r";;
     esac
-    [ -z "$msg" ] || testcase_REGISTER_FAILURE "$msg"
+    [ -z "$msg" ] || testcase_FAIL "$msg"
     msg=''
     set -x # reset verbosity
 done
