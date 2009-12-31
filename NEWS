@@ -1,5 +1,15 @@
 List of user-visible changes of C Ratfor.
 
+New in XXX
+-----------
+ * The testsuite has been improved and strenghtened.  Especially notable
+   is the fact that now different testcases in a same test script are
+   (mostly) decoupled.  In particular, a test script does not stop at the
+   first failed testcase, but run all the testcase and repoort all those
+   which failed.
+ * Now a ChangeLog file is distributed, being automatically generated
+   from Git commit messages.
+
 New in 1.0o
 -----------
  * Improved detection of, and error messages for, invalid case/default.
