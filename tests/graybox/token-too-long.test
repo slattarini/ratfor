@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Check that "C Ratfor" complain and die gracefully when founding token
-# too long in inout, rather than crashing.
+# too long in input, rather than crashing.
 
 . ../blackbox/lib/rat4-testsuite-init.sh || exit 99
 
