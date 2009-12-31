@@ -4,6 +4,14 @@
 # Common definitions and environments settings for the test scripts
 # of the Ratfor Testsuite.
 #
+# NAMESPACE CLEANLINESS: for environment variables, we should try to keep
+# ourselves confined to the namespace `RAT4_TESTSUITE_*'.
+# Also, we should use only the namespaces `rat4t_*' and `_ra4t_*' for both
+# variables and functions, but here we can do an exception for the sake of
+# simplicity (in the case of e.g. PACKAGE_VERSION, RATFOR or F77) and of
+# interoperability with testlib.sh (in the case e.g. of GREP, SED, SHELL
+# and DIFF_U).
+#
 
 PACKAGE_VERSION='@PACKAGE_VERSION@'
 PACKAGE_NAME='@PACKAGE_NAME@'

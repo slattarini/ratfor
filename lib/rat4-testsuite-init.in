@@ -3,6 +3,11 @@
 # Common definitions, environments settings and shell functions for the
 # test scripts of the Ratfor Testsuite.
 #
+# NAMESPACE CLEANLINESS:  We should try to keep ourselves confined to
+# the namespaces `rat4t_*' and `_ra4t_*' as much as possible, for both
+# variables and functions. For environment variables, the namespace
+# `RAT4_TESTSUITE_*' should be used instead.
+#
 
 (set -u) >/dev/null 2>&1 && set -u
 

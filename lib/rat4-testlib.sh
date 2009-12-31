@@ -4,6 +4,11 @@
 # This file must be included only by `rat4-testsuite-init.sh', and only
 # after the inclusion of `rat4-testsuite-defs.sh' and `testlib.sh'.
 #
+# NAMESPACE CLEANLINESS:  We should try to keep ourselves confined to
+# the namespaces `rat4t_*' and `_ra4t_*' as much as possible, for both
+# variables and functions. For environment variables, the namespace
+# `RAT4_TESTSUITE_*' should be used instead.
+#
 
 # Usage: must_be_directory DIRECTORY [DESC]
 # Check that the given DIRECTORY exists, else die with an "hard error".
