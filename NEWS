@@ -1,5 +1,11 @@
 List of user-visible changes of Ratfor Testsuite.
 
+New in XXX
+-----------
+ * The shell libraries used by the test scripts has been made more
+   namespace-clean. This can enhance their usefulness and solidity
+   for usage by client packages.
+
 New in 0.9g
 -----------
  * The testsuite has been improved and strenghtened.  Especially notable
