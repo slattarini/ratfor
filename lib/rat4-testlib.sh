@@ -33,8 +33,8 @@ rat4t_require_fortran_compiler() {
 rat4t_require_strong_fortran_compiler() {
     rat4t_require_fortran_compiler
     #XXX: move this checks at configure time?
-    f77check_opwd=`pwd`
-    f77check_ok=no
+    rat4t_f77check_opwd=`pwd`
+    rat4t_f77check_ok=no
     mkdir f77check.d \
       && cd f77check.d \
       && $AWK 'BEGIN {
@@ -45,10 +45,10 @@ rat4t_require_strong_fortran_compiler() {
             print "      end"
         }'> f77check.f </dev/null \
       && "$F77" -o f77check.exe f77check.f \
-      && f77check_ok=yes
-    cd "$f77check_opwd"
+      && rat4t_f77check_ok=yes
+    cd "$rat4t_f77check_opwd"
     rm_rf f77check.d
-    if test x"$f77check_ok" = x"no"; then
+    if test x"$rat4t_f77check_ok" = x"no"; then
         testcase_SKIP "Fotran 77 compiler \`$F77' is too limited"
     fi
 }
@@ -58,15 +58,15 @@ rat4t_require_strong_fortran_compiler() {
 # Wrapper around `run_command $F77', to facilitate any present or future
 # workaround for bugs/limitations in Fortran compilers.
 run_F77() {
-    # NOTE: all internal variables used here starts with the `run77'
-    # prefix, to minimize possibility of name clashes with global
-    # variables defined in user code.
+    # NOTE: all internal variables used here starts with the `rat4t_runf77'
+    # prefix, to minimize possibility of name clashes with global variables
+    # defined in user code.
     set +x # xtrace verbosity stops here
-    run77_opts='' # options to be passed to run_command
+    rat4t_runf77_opts='' # options to be passed to run_command
     while test $# -gt 0; do
         case "$1" in
-            -e) run77_opts="$run77_opts $1 $2"; shift;;
-            -m) run77_opts="$run77_opts $1";;
+            -e) rat4t_runf77_opts="$rat4t_runf77_opts $1 $2"; shift;;
+            -m) rat4t_runf77_opts="$rat4t_runf77_opts $1";;
             --) shift; break;;
             # Be more liberal about unrecognized options: stop parsing
             # and pass the rest of arguments and options verbatim to
@@ -77,17 +77,18 @@ run_F77() {
         shift
     done
     # file providing the custom `halt' procedure
-    run77_haltf=$rat4t_testaux_builddir/halt.f
-    if test ! -f "$run77_haltf"; then
-        testcase_HARDERROR "auxiliary source file \`$run77_haltf'" \
+    rat4t_runf77_haltf=$rat4t_testaux_builddir/halt.f
+    if test ! -f "$rat4t_runf77_haltf"; then
+        testcase_HARDERROR "auxiliary source file \`$rat4t_runf77_haltf'" \
                            "not found"
     fi
     if test $# -eq 1; then
-        run77_aout=`echo "$1" | $SED -e 's/\.f\(77\)\?$//'`.exe
-        set x "$1" -o "$run77_aout"; shift;
+        rat4t_runf77_aout=`echo "$1" | $SED -e 's/\.f\(77\)\?$//'`.exe
+        set x "$1" -o "$rat4t_runf77_aout"; shift;
     fi
     set -x # xtrace verbosity restart here
-    run_command $run77_opts -- "$F77" "$run77_haltf" ${1+"$@"}
+    run_command $rat4t_runf77_opts -- "$F77" "$rat4t_runf77_haltf" \
+                ${1+"$@"}
 }
 
 # run_RATFOR [-e STATUS] [-m] [-t TIMEOUT] [--] [ARGUMENTS..]
@@ -98,17 +99,17 @@ run_F77() {
 # won't cause the whole testsuite to hang (this happened too many times
 # already).
 run_RATFOR() {
-    # NOTE: all internal variables used here starts with the `run4'
-    # prefix, to minimize possibility of name clashes with global
-    # variables defined in user code.
+    # NOTE: all internal variables used here starts with the `rat4t_run4'
+    # prefix, to minimize possibility of name clashes with global variables
+    # defined in user code.
     set +x  # xtrace verbosity stops here
-    run4_opts=''  # options to be passed to run_command
-    run4_timeout=5  # the timeout given to ratfor
+    rat4t_runratfor_opts=''  # options to be passed to run_command
+    rat4t_runratfor_timeout=5  # the timeout given to ratfor
     while test $# -gt 0; do
         case "$1" in
-            -e) run4_opts="$run4_opts $1 $2"; shift;;
-            -m) run4_opts="$run4_opts $1";;
-            -t) run4_timeout=$2; shift;;
+            -e) rat4t_runratfor_opts="$rat4t_runratfor_opts $1 $2"; shift;;
+            -m) rat4t_runratfor_opts="$rat4t_runratfor_opts $1";;
+            -t) rat4t_runratfor_timeout=$2; shift;;
             --) shift; break;;
             # Be more liberal about unrecognized options: stop parsing
             # and pass the rest of arguments and options verbatim to
@@ -118,15 +119,15 @@ run_RATFOR() {
         esac
         shift
     done
-    run4_timer=$rat4t_testaux_builddir/timer  # the timer script
-    if test ! -f "$run4_timer"; then
+    rat4t_runratfor_timer=$rat4t_testaux_builddir/timer # the timer script
+    if test ! -f "$rat4t_runratfor_timer"; then
         testcase_HARDERROR "\`timer' script not found"
-    elif test ! -x "$run4_timer"; then
+    elif test ! -x "$rat4t_runratfor_timer"; then
         testcase_HARDERROR "\`timer' script not executable"
     fi
     set -x # xtrace verbosity restart here
-    run_command $run4_opts -- "$run4_timer" -t "$run4_timeout" -- \
-                "$RATFOR" ${1+"$@"}
+    run_command $rat4t_runratfor_opts -- "$rat4t_runratfor_timer" \
+                -t "$rat4t_runratfor_timeout" -- "$RATFOR" ${1+"$@"}
 }
 
 # Print details on the current run of the testcase.
