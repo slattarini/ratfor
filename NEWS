@@ -1,6 +1,6 @@
 List of user-visible changes of C Ratfor.
 
-New in XXX
+New in 1.0p
 -----------
  * The testsuite has been improved and strenghtened.  Especially notable
    is the fact that now different testcases in a same test script are
