@@ -3,15 +3,6 @@
 # maintainer-specific targets
 
 #
-# Automatic ChangeLog generation, from Git commit messages.
-#
-
-# Commits before this date shouldn't be put in the ChangeLog
-changelog-start-date = 2009-11-14
-
-include $(maintdir)/git-generate-changelog.mk
-
-#
 # C compilers to be used to build ratfor, when doing a strict-distcheck.
 #
 
