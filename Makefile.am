@@ -12,7 +12,6 @@ SUBDIRS = lib sanity-checks tests
 EXTRA_DIST = \
   HACKING \
   GNUmakefile \
-  ChangeLog \
   ChangeLog-old \
   build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
@@ -27,6 +26,17 @@ no_dist_files = \
   maint/config.site \
   maint/local-cfg.mk \
   maint/personal/*
+
+# Enabling of maintainer rules.
+if ENABLE_MAINTAINER_MAKE_RULES
+  FORCE_CHANGELOG_GENERATION = yes
+  # variable used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = yes
+else
+  FORCE_CHANGELOG_GENERATION = no
+  # variable used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = no
+endif
 
 # Check that we do not erreonously include in the tarball any file which
 # is not meant for distribution.
@@ -48,11 +58,74 @@ dist-hook-check-no-dist-files:
 	fi; \
 	exit 0
 
+# ---
+
 # Version string management for distributed tarballs.
+
+
 dist-hook: dist-hook-create-tarball-version
 .PHONY: dist-hook-create-tarball-version
 dist-hook-create-tarball-version:
 	echo '$(VERSION)' > $(distdir)/.tarball-version
+
+# ---
+
+# ChangeLog generation, from Git commit messages.
+
+# Commits before this date shouldn't be put in the ChangeLog
+changelog_start_date = 2009-11-15
+
+# Use the commit dates of authors, not of commiters.
+gitlog_to_changelog_extra_options = --author-date
+
+dist-hook: dist-hook-generate-changelog
+.PHONY: dist-hook-generate-changelog
+dist-hook-generate-changelog:
+	$(AM_V_GEN)(set -u) >/dev/null 2>&1 && set -u; \
+	case '$(FORCE_CHANGELOG_GENERATION)' in \
+	  y|Y|yes|YES|true|1) force_chlog_gen=yes;; \
+	                   *) force_chlog_gen=no;; \
+	esac; \
+	if test ! -d '$(top_srcdir)/.git'; then \
+## problably the srcdir is from an extracted tarball
+	  if test x"$$force_chlog_gen" = x"yes"; then \
+## we must (re)generate the ChangeLog from git history, but no
+## git repository is available: give up
+	    echo "No .git directory found in top_srcdir \`$(top_srcdir)'" >&2; \
+	    echo "Cannot generate ChangeLog." >&2; \
+	    exit 1; \
+	  elif test ! -f '$(top_srcdir)/ChangeLog'; then \
+## no way to generate a new ChangeLog, nor to reuse the old one or an
+## hand-written one: give up
+	    echo "No .git directory and no ChangeLog file found in" >&2; \
+	    echo "top_srcdir \`$(top_srcdir)'" >&2; \
+	    echo "Cannot distribute ChangeLog." >&2; \
+	    exit 1; \
+	  else \
+## assume either the existing ChangeLog is up-to-date, or the user
+## properly updated it by hand
+	    cp -f '$(top_srcdir)/ChangeLog' $(distdir)/cl.tmp || exit 1; \
+	  fi; \
+	else \
+## the srcdir is from a (maybe cloned) git repository, so we should be
+## able to generate the ChangeLog file from git history
+	  if test -n '$(gitlog_to_changelog_command)'; then \
+	    gitlog2chlog='$(gitlog_to_changelog_command)'; \
+	  else \
+	    gitlog2chlog='$(top_srcdir)/build-aux/gitlog-to-changelog'; \
+	  fi; \
+	  GIT_DIR='$(abs_top_srcdir)/.git'; \
+	  GIT_WORK_TREE='$(abs_top_builddir)'; \
+	  export GIT_DIR GIT_WORK_TREE; \
+	  $$gitlog2chlog \
+	    --since='$(changelog_start_date)' \
+	    $(gitlog_to_changelog_extra_options) >$(distdir)/cl.tmp \
+	  || exit 1; \
+	fi; \
+## if all went well, move the temporary ChangeLog to its final location
+	mv -f $(distdir)/cl.tmp $(distdir)/ChangeLog
+
+# ---
 
 # Configure settings that should be preserved also in `make distcheck'
 DISTCHECK_CONFIGURE_FLAGS = \
@@ -81,12 +154,5 @@ maintainer-check-list-of-tests:
        (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
      done; \
      test -z "$$fail"
-
-# $(ENABLE_MAINTAINER_MAKE_RULES): variable used by maint.mk
-if ENABLE_MAINTAINER_MAKE_RULES
-  ENABLE_MAINTAINER_MAKE_RULES = yes
-else
-  ENABLE_MAINTAINER_MAKE_RULES = no
-endif
 
 ## vim: ft=automake noet sw=4 ts=4
