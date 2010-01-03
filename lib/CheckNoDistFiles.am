@@ -1,0 +1,32 @@
+# -*- Makefile -*-
+# Copied from SteLib at 2010-01-02 21:39:27 +0100.  DO NOT EDIT!
+# Contains a dist-hook target checking that the user does not erreonously
+# include in the tarball any file which is not meant for distribution.
+# The list of files whose distribution is forbidden should be put in the
+# `$(no_dist_files)' variable.
+
+# Check that we do not erreonously include in the tarball any file which
+# is not meant for distribution.
+dist-hook: dist-hook-check-no-dist-files
+.PHONY: dist-hook-check-no-dist-files
+dist-hook-check-no-dist-files:
+	$(AM_V_at)\
+	bad_dist_files=''; \
+## make the following `for' loop working even if $(no_dist_files) is empty
+	no_dist_files='$(no_dist_files)'; \
+	for f in $$no_dist_files; do \
+	  if test -r $(distdir)/$$f; then \
+	    bad_dist_files="$$bad_dist_files $$f"; \
+	  fi; \
+	done; \
+	if test -n "$$bad_dist_files"; then \
+	  echo "$@: ERROR: the following files have erroneously been put" \
+	       "in the distributed tarball:" >&2; \
+	  for f in $$bad_dist_files; do \
+	    echo "  - $$f" >&2; \
+	  done; \
+	  exit 1; \
+	fi; \
+	exit 0
+
+## vim: ft=make ts=4 sw=4 noet
