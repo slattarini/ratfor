@@ -15,6 +15,7 @@ EXTRA_DIST = \
   xfail-tests.list \
   HACKING \
   ChangeLog-old \
+  ChangeLog-2009 \
   build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
   GNUmakefile \
@@ -49,7 +50,7 @@ dist-hook-create-tarball-version:
 # ChangeLog generation, from Git commit messages.
 
 # Commits before this date shouldn't be put in the ChangeLog.
-changelog_start_date = 2009-11-14
+changelog_start_date = 2010-01-01
 # Use the commit dates of authors, not of commiters.
 gitlog_to_changelog_extra_options = --author-date
 # Include the proper dist-hook to generate te ChangeLog.

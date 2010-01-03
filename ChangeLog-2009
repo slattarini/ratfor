@@ -1,0 +1,314 @@
+2009-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Updated blackbox-tests subpackage
+	* tests/blackbox: Updated from commit `5e5a514ed96ef028a87...',
+	a.k.a. `v0.9g', to commit `a2c099e6a4892f97561...'.  This new
+	version of "The Ratfor Testsuite" provides testing-oriented
+	shell libraries with a much cleaner namespace, which could make
+	their re-use by our graybox tests easier.
+
+	Typofix in comment
+	* tests/graybox/token-too-long.test: Typofix in comment: s/inout/input/
+
+	NEWS: version bumped to 1.0p
+
+	HACKING: grammaro fix
+	* HACKING (Make a release): Section renamed ...
+	(Making a release): ... to this.
+
+	updated NEWS
+	* NEWS: Updated. Tell about the improvements in the testsuite, the
+	decoupling of test cases, and the automatic generation of the ChangeLog
+	file.
+
+	Updated blackbox tests, and related changes
+	* tests/blackbox: Updated from commit `997307fa18768bd8a7d7...' to
+	commit `5e5a514ed96ef028a87...' a.k.a. `v0.9g'.
+	Salient changes between these versions:
+	  - An updated version of testlib.sh (from SteLib), with various
+	    improvements and bug fixings.
+	  - Different testcases in a same test script are more decoupled.
+	    In particular, a test script does not stop at the first failed
+	    testcase, but run all the testcases and report all those which
+	    failed.
+	  - Testsuite's shell libraries made more modular and extensible.
+	  - Added automatic generation of ChangeLog file.
+	  - A new target `maintainer-check' (similar to the one recently
+	    implemented in the C Ratfor package).
+	* tests/graybox/Makefile.am: Include the updated file
+	`../blackbox/lib/CheckListOfTests.am' rather than the file
+	`../CheckListOfTests.am'.
+	* tests/CheckListOfTests.am: Removed, no more needed.
+	* tests/graybox/token-too-long.test: Include updated file
+	`../blackbox/lib/rat4-testsuite-init.sh' rather than old file
+	`../blackbox/lib/rat4-t.sh'. Also, use `testcase_FAIL' rather
+	than `testcase_REGISTER_FAILURE', to adapt to changes in shell
+	library `testlib.sh'.
+	* tests/graybox/switch-segfault.test: Likewise.
+
+2009-12-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Typofix in HACKING
+	* HACKING ("C++ Compatibility"): Typofix:
+	   - s/must always cast/must always be cast/
+
+	Added a stub HACKING file for graybox tests.
+	* tests/graybox/HACKING: New file, basically just a stub, but better
+	than nothing.
+	* HACKING ("Testsuite"): Add a pointer to it.
+
+	Fix in HACKING: tell bout graybox tests
+	* HACKING ("Testsuite"): Don't tell (erronously) that the testsuite
+	comprises only blackbox-tests script, as it also contains graybox
+	tests now.  Don't speak anymore about the directory `blackbox-tests'
+	(which has been moved to `tests/blackbox').  Tell about the file
+	`tests/blackbox/HACKING'.  Other related rewording and improvements.
+
+	Makefile.am: Added explicative comment about a variable
+	* Makefile.am (TEST_SUBDIRS): Add a short comment explaining the role
+	of this variable.
+
+	Cosmetic changes in a Makefile.am (comments)
+	* tests/graybox/Makefile.am: Make some comments less lurid, while
+	leaving them still eye-catching enough. Make some other comments
+	clearer.
+
+	.gitignore: added configure.lineno
+	* .gitignore: Added `configure.lineno'.
+
+	new target maintainer-check (check list of tests moved there)
+	* tests/CheckListOfTests.am: New file, from SteLib.
+	* tests/graybox/Makefile.am: Include it, rather then including
+	`tests/blackbox/lib/CheckTestsList.am'.
+	(check-local): Removed.
+	(ALL_TESTS): Deleted, no more needed.  Use $(TESTS) directly.
+	(TESTS): Directly define to the list of test scripts.
+	(check-list-of-tests): Target deleted, renamed to ...
+	(maintainer-check-list-of-tests): ... this.
+	* Makefile.am (maintainer-check-list-of-tests): New target,
+	delegating to the equally-named target in makefile
+	`tests/graybox/Makefile.am'.
+	(maintainer-check): New target.  Depends from the just-described
+	new target `maintainer-check-list-of-tests'.
+	(TEST_SUBDIRS): New variable, used by target `maintainer-check'.
+
+	ChangeLog generation moved to maint-only (SteLib helped here)
+	* maint/git-generate-changelog.mk: New file from SteLib, defining
+	rules/targets to generate ChangeLog file from Git commit messages.
+	* maint/prj-post-cfg.mk: Include it.
+	(changelog-start-date): New variable. Commits before the date defined
+	here are not put in the ChangeLog.
+	* Makefile.am: Remove ChangeLog generation. Details follow...
+	(gen_start_date): Variable removed.
+	($(srcdir)/ChangeLog): Target removed.
+	(force-changelog-gen): Likewise.
+	(MOSTLYCLEANFILES): Don't extend with `ChangeLog.tmp'.
+	(MAINTAINERCLEANFILES): Don't extend with `$(srcdir)/ChangeLog'.
+
+	Revert "Generating ChangeLog don't break distcheck anymore"
+	This reverts commit 819edd77008ff1e1822a60269a3b58ad8e3be1db.
+	The modified changelog generation worked only in subdirs of the
+	directory containing the `.git' administrative directory, so
+	it worked for "make distcheck", but was broken in distributed
+	tarballs. Sigh. Thus we are going to require a deeper change.
+
+	* build-aux/move-if-change: Deleted.
+	* Makefile.am ($(srcdir)/ChangeLog): Use `mv -f', not
+	`build-aux/move-if-change'.
+	(EXTRA_DIST): Removed `build-aux/move-if-change'.
+
+	Generating ChangeLog don't break distcheck anymore
+	* build-aux/move-if-change: New script from Gnulib.
+	* Makefile.am ($(srcdir)/ChangeLog): Update the file only if it
+	changed from the last version, by using the new `move-if-change'
+	auxiliary script.
+	(EXTRA_DIST): Add `build-aux/move-if-change'.
+
+2009-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Make generated ChangeLog readonly
+	* Makefile.am ($(srcdir)/ChangeLog): Make generated Changelog readonly.
+
+2009-12-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Require autoconf 2.64
+	* configure.ac (AC_PREREQ): Require autoconf version 2.64, instead
+	of just version 2.62.
+
+	Localize automake options color-tests and parallel-tests
+	* configure.ac (AM_INIT_AUTOMAKE): Remove global options `color-tests'
+	and `parallel-tests'
+	* tests/graybox/Makefile.am (AUTOMAKE_OPTIONS): Add options
+	`color-tests' and `parallel-tests'.
+
+2009-12-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Force unconditional regeneration of ChangeLog
+	* Makefile.am (forche-changelog-gen): New phony empty target.
+	($(srcdir)/ChangeLog): Depend on it.
+
+	Typofix in HACKING
+	* HACKING (Recording changes): Fixed typo(s):
+	    s/`Changelog target/`ChangeLog' target/
+
+	Bugfix in tests/README
+	* tests/README: Correctly cite the existing subdirectory `blackbox',
+	rather than the bogus subdirectory `ratfor-sustesuite-subpackage' --
+	seriously, where did THAT came from ?!?
+	Also, added forgotten full stop at the end of file.
+
+2009-12-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Generate ChangeLog in $(srcdir), not in $(builddir)
+	* Makefile.am (ChangeLog): Generate ChangeLog file in $(srcdir),
+	not in $(builddir). This also fixes a failure in `make distcheck'.
+	(MAINTAINERCLEANFILES): List `$(srcdir)/ChangeLog', not simply
+	`ChangeLog'.
+
+	Generation of ChangeLog do not require maint-rules
+	* Makefile.am (ChangeLog): This rule is now inconditional (previosuly
+	it was considered only when the `ENABLE_MAINTAINER_MAKE_RULES' Automake
+	conditional was true).
+	from git log messages.
+	(MAINTAINERCLEANFILES): Likewise, addition of `ChangeLog' is now
+	unconditional.
+	(MOSTLYCLEANFILES): Likewise, addition of `ChangeLog.tmp' is now
+	unconditional.
+
+2009-12-19  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Bugfix: distribute aux script `git-version-gen'
+	* Makefile.am (EXTRA_DIST): Add `build-aux/git-version-gen'.
+
+	Added automatic generation of ChangeLog file
+	* build-aux/gitlog-to-changelog: New file, from gnulib (with minor
+	modifications).  It's meant to generate a ChangeLog file from git
+	log messages.
+	* Changelog-old: New file.  Contains older changelog entries.
+	* Makefile.am (ChangeLog): New rule: generate a ChangeLog file
+	from git log messages.
+	(EXTRA_DIST): Added `build-aux/gitlog-to-changelog', `ChangeLog'
+	and `Changelog-old'.
+	(MAINTAINERCLEANFILES): Added `ChangeLog'.
+	* .gitignore: Added ChangeLog.
+	* HACKING: Tell that the ChangeLog is automatically generated.
+
+	Version bumped: 1.0n => 1.0o
+	* NEWS: Cite new version `1.0o'.
+
+	Updated NEWS
+	* NEWS: updated with changes from version `1.0n'.
+
+2009-12-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	File renamed: xfail-tests.txt => xfail-tests.list
+	* xfail-tests.txt: Removed, renamed to...
+	* xfail-tests.list: ... this (has a slighty better name).
+	* configure.ac: Updated accordingly.
+	* Makefile.am (EXTRA_DIST): Likewise.
+
+2009-11-20  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Modularizing .gitignore files
+	* .gitignore: stuff pertaining `maint/' and `build-aux/' subdirectories
+	moved in the respective new .gitignore files.
+	* maint/.gitignore: New file.
+	* build-aux/.gitignore: New file.
+
+	New graybox test `switch-segfault.test'
+	* tests/blackbox-tests: Updated to commit `997307fa18768bd...', which
+	udpated `testlib.sh' from Stelib so that the function `run_command'
+	has a new argument `RETURN' for `-e' switch -- this is required by
+	our new graybox test `switch-segfault.test'.
+	* tests/graybox/switch-segfault.test: New test. Check that an empty
+	`case' with missing label as last statement in a switch construct
+	does not cause C Ratfor to crash (this test still fails due to a bug
+	in ratfor).
+	* tests/graybox/Makefile.am (ALL_TESTS, XFAIL_TESTS): Extended
+	accordingly.
+
+2009-11-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Added first graybox tests, and related changes
+	* tests/graybox/token-too-long.test: New test.
+	* tests/Makefile.am (SUBDIRS): Put `blackbox' before `graybox',
+	as some tests in `graybox' might require files build there.
+	* tests/graybox/Makefile.am: Include some `*.am' files (from `lib/'
+	directory of "The Ratfor Testsuite" subpackage).
+	(TESTS, ALL_TESTS): Added defintion.
+	* configure.ac (AM_INIT_AUTOMAKE): Add `parallel-tests' and
+	`color-tests' to options, as they might be needed by tests in
+	`tests/graybox/'.
+	(AX_PROG_DIFF_U): Use this new macro to check for a diff(1) command
+	supporting the `-u' option. This is required to have the target
+	`check-list-of-tests' in `CheckTestsList.am' working even when that
+	file is included by e.g. `tests/graybox/Makefile.am'.
+	* m4/ax_prog_diff_u.m4: New file (from SteLib). Contains definition
+	of macro `AX_PROG_DIFF_U'.
+	* tests/graybox/.gitignore: New file. Tell git to ignore `*.log' and
+	`*.log-t' files, and `*.dir' directories.
+
+2009-11-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Reorganize testsuite: add graybox-tests scaffolding, related refactoring
+	* blackbox-tests: Removed, moved to...
+	* tests/blackbox: ... this.
+	* .gitmodules: "The Ratfor Testsuite" submodule moved, and updated
+	from commit `0d6f596015db888f8b266c356367990b52f1fb67' to commit
+	`1b13e2a7e672a3aae9f5df12beb5f12096f2dfe2'.  Here are some of the
+	more important changes introduced:
+	  - new shell functions used to perform tests, which do not abort
+	    the test script at the first failure (this gives better feedback
+	    in case of expected failures);
+	  - the old `defs.in' has been heavily refactored, and splitted in
+	    `testlib.sh' (which has then been moved to SteLib, being general
+	    enough), `rat4-testsuite.sh' and `rat4-t.in';
+	  - workarounds for bugs/incompatibilities in the way Zsh deal with
+	    `$0' in sourced scripts;
+	  - version of subpackage depends on SHA1 of its git commit, and is
+	    calculated automatically;
+	  - and other refactoring, reorganizations and improvements.
+	* xfail-tests.txt: Updated accordingly to the new version of "The
+	Ratfor Testsuite": removed `switch-fail.test' and added
+	`switch-fail-case-label-invalid.test'.
+	* tests/README: New file.
+	* tests/Makefile.am: Likewise.
+	* tests/graybox/Makefile.am: Likewise.
+	* configure.ac (AC_CONFIG_SUBDIRS, AC_CONFIG_FILES): Updated
+	accordingly.
+
+2009-11-14  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Improved detection of invalid case/default
+	* src/parser.c (parse): now only let case/default keywords to be used
+	in the block after a `switch' statement, and not also within blocks
+	nested into that block
+
+	Improved error message for invalid case/default
+	* src/parser.c (parse): in error messages: distinguish illegal
+	`case' from illegal `default'.
+
+	Lexer and tokenizer better integrated (less duplication)
+	* src/lex-symbols.h: Removed, no more needed (contents merged into
+	`src/tok-types.h')
+	* src/lexer.h: Removed, no more needed (contents merged into
+	`src/tokenizer.h')
+	* src/mklexer.sh: Removed, no more needed.
+	* src/tok-types.h: Moved in defs of `LEX*' constants, except for the
+	`LEXOTHER' constant (which is no more used).
+	* src/tokenizer.h (lex): Moved in prototype of function `lex()',
+	with minor changes.
+	* src/tokenizer.c (lex): Moved in definition of function `lex()',
+	with minorchanges
+	* src/parser.c (detected_unusual_error, parse): Updated accordingly.
+	* src/codegen.c: Do not #include "lex-symbols.h" anymore.
+	* src/.gitignore: Removed `lexer.c' and `lexer.c-t'.
+	* src/Makefile.am (EXTRA_DIST, MOSTLYCLEANFILES, c_ratfor_SOURCES):
+	Updated accordingly.
+	(lexer.c): Target removed, no more needed.
+	(nodist_c_ratfor_SOURCES): Variable removed, no more needed.
+
+	Git commit messages follow GNU Coding Standards
+	* HACKING (Recording changes): Tell the git commit messages should
+	follow the GNU Coding Standards for ChangeLog entries.  Minor related
+	reordering of items.
