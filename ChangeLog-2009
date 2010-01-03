@@ -1,0 +1,1137 @@
+2009-12-31  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Typofix in comment
+	* lib/rat4-testlib.sh: Typofix in a comment: s/rator/ratfor/
+
+	Improve namespace cleanliness (NEWS file)
+	* NEWS: updated w.r.t. improvings in namespace cleanliness
+
+	Improve namespace cleanliness (code internals)
+	* lib/rat4-testlib.sh (rat4t_require_strong_fortran_compiler):
+	Internal variables moved in the `rat4t_*' namespace.
+	(run_F77): Likewise.
+	(run_RATFOR): Likewise.
+
+	Improve namespace cleanliness (public funcs/vars)
+	* lib/rat4-testlib.sh: Updated accordingly to the renamings in
+	`lib/rat4-testsuite-init.in'.
+	Improved/extended heading comments about namespace cleanliness.
+	(must_be_directory): Renamed ...
+	(rat4t_must_be_directory): ... to this.
+	(print_testrun_info): Renamed ...
+	(rat4t_print_testrun_info): ... to this.
+	(require_fortran_compiler): Renamed ...
+	(rat4t_require_strong_fortran_compiler): ... to this.
+	(require_strong_fortran_compiler): Renamed ...
+	(rat4t_require_strong_fortran_compiler): ... to this.
+	(ratfor_rx): Renamed...
+	(rat4t_ratfor_rx): ... to this.
+	* lib/rat4-testsuite-init.in: Updated accordingly to the renamings
+	in `lib/rat4-testlib.sh'.
+	(top_srcdir): Renamed ...
+	(rat4t_top_srcdir): ... to this.
+	(top_buildddir): Renamed ...
+	(rat4t_top_builddir): ... to this.
+	(testaux_srcdir): Renamed ...
+	(testaux_srcdir): ... to this.
+	(testaux_builddir): Renamed ...
+	(testaux_builddir): ... to this.
+	* HACKING: Updated accordingly to the renamings.
+	* sanity-checks/run_F77.test: Likewise.
+	* tests/break_f77.test: Likewise.
+	* tests/comments-keep_f77.test: Likewise.
+	* tests/common-block_f77.test: Likewise.
+	* tests/data-statement_f77.test: Likewise.
+	* tests/define-balanced-paren_f77.test: Likewise.
+	* tests/define-basic_f77.test: Likewise.
+	* tests/define-multiline_f77.test: Likewise.
+	* tests/define-nested_f77.test: Likewise.
+	* tests/define-semicolon_f77.test: Likewise.
+	* tests/define-stress_f77.test: Likewise.
+	* tests/exponentiation-operator_f77.test: Likewise.
+	* tests/for-with-empty-clauses_f77.test: Likewise.
+	* tests/for_f77.test: Likewise.
+	* tests/forever1_f77.test: Likewise.
+	* tests/forever2_f77.test: Likewise.
+	* tests/function-return_f77.test: Likewise.
+	* tests/goto_f77.test: Likewise.
+	* tests/if_f77.test: Likewise.
+	* tests/ifelse-ambiguity_f77.test: Likewise.
+	* tests/integers-many-bases_f77.test: Likewise.
+	* tests/label-line-continuation_f77.test: Likewise.
+	* tests/line-continuation_f77.test: Likewise.
+	* tests/long-infile_f77.test: Likewise.
+	* tests/nested-loops_f77.test: Likewise.
+	* tests/next_f77.test: Likewise.
+	* tests/repeat-until_f77.test: Likewise.
+	* tests/repeat-without-until_f77.test: Likewise.
+	* tests/return-keyword-function_f77.test: Likewise.
+	* tests/return-keyword-stress_f77.test: Likewise.
+	* tests/return-keyword-subroutine_f77.test: Likewise.
+	* tests/stmt-stack-stress_f77.test: Likewise.
+	* tests/stress1_f77.test: Likewise.
+	* tests/stress2_f77.test: Likewise.
+	* tests/stress3_f77.test: Likewise.
+	* tests/string-concatenation_f77.test: Likewise.
+	* tests/switch-non-positive-values_f77.test: Likewise.
+	* tests/switch_f77.test: Likewise.
+	* tests/synerr-nonfatal_f77.test: Likewise.
+	* tests/usage-option-missing-argument.test: Likewise.
+	* tests/usage-option-unknown.test: Likewise.
+	* tests/usage-too-many-args.test: Likewise.
+	* tests/verbatim-stress_f77.test: Likewise.
+	* tests/verbatim_f77.test: Likewise.
+	* tests/while_f77.test: Likewise.
+
+	Improve namespace cleanliness (suggestions in docs and comments)
+	* lib/rat4-testlib.sh: Tell in comments that we should strive to
+	use the namespaces `rat4t_*' and `_rat4t_*' for variables and
+	functions, and the `RAT4_TESTSUITE_*' for environment variables.
+	* lib/rat4-testsuite-init.in: Likewise.
+	* rat4-testsuite-defs.in: Likewise.
+
+	Added useful comment in testsuite's shell libraries
+	* lib/rat4-testlib.sh: Added a heading comment, telling that this file
+	must be included only by `rat4-testsuite-init.sh', and only after the
+	inclusion of `rat4-testsuite-defs.sh' and `testlib.sh'.
+
+	NEWS: version bumped to 0.9g, plus typo fixings
+	* NEWS: version bumped to 0.9g, and fixed a couple of typos
+
+2009-12-30  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	updated NEWS
+	* NEWS: Updated. Tell about the improvements in the testsuite, the
+	decoupling of test cases, and the automatic generation of the ChangeLog
+	file.
+
+	Improvements to maintainer-check target(s) (mostly cosmetic)
+	* Makefile.am (TEST_SUBDIRS): New variable, list of directories
+	where to recurse for testing and related maintainer-checks.
+	(maintainer-check-list-of-tests): Use it.  Related portability
+	fixings to the shell code of target's rules.
+
+	.gitignore: added configure.lineno
+	* .gitignore: Added `configure.lineno'.
+
+	Refactoring/extensions in testsuite's shell libraries
+	We do some rafactorings and modifications to the testsuite's shell
+	libraries, to make their reuse by part of client packages easier.
+
+	* lib/rat4-t.in: Removed, it's content has been splitted into...
+	* lib/rat4-testsuite-defs.in: ... this new file ...
+	* lib/rat4-testsuite-init.in: ... and this new file.
+	* configure.ac (AC_CONFIG_FILES): Removed `lib/rat4-t.in', added
+	`lib/rat4-testsuite-defs.in' and `lib/rat4-testsuite-init.in'.
+	* lib/Makefile.am (nodist_check_DATA): Removed `rat4-t.sh', added
+	`rat4-testsuite-defs.sh' and `rat4-tesuite-init.sh'.
+	* lib/.gitinore: Likewise.
+	* HACKING (Section "Writing Test Cases", subsection "Do"): Tell to
+	include `../lib/rat4-testsuite-init.sh' in the	test files, eather
+	than `../lib/rat4-t.sh'.
+	Minor related rewordings.
+	Tell that the $GREP, $SED etc. variables are defined in file
+	`lib/rat4-testsuite-defs.in', not in file `lib/rat4-t.in'.
+	* tests/subprog-name-invalid.sh (Heading Comments): Don't cite
+	`../lib/rat4-t.sh', cite `../lib/rat4-testsuite-init.sh' instead.
+	* sanity-checks/run_F77.test: Don't include `../lib/rat4-t.sh'
+	anymore, include `../lib/rat4-testsuite-init.sh' instead.
+	* sanity-checks/run_RATFOR.test: Likewise.
+	* sanity-checks/run_command.test: Likewise.
+	* sanity-checks/timer-cc.test: Likewise.
+	* sanity-checks/timer.test: Likewise.
+	* tests/balanced-parens.test: Likewise.
+	* tests/break-fail.test: Likewise.
+	* tests/break_f77.test: Likewise.
+	* tests/case-sensibility-basic.test: Likewise.
+	* tests/comments-basic.test: Likewise.
+	* tests/comments-keep.test: Likewise.
+	* tests/comments-keep_f77.test: Likewise.
+	* tests/comments-no-hang.test: Likewise.
+	* tests/common-block.test: Likewise.
+	* tests/common-block_f77.test: Likewise.
+	* tests/data-statement.test: Likewise.
+	* tests/data-statement_f77.test: Likewise.
+	* tests/define-balanced-paren.test: Likewise.
+	* tests/define-balanced-paren_f77.test: Likewise.
+	* tests/define-basic.test: Likewise.
+	* tests/define-basic_f77.test: Likewise.
+	* tests/define-case-sensibility.test: Likewise.
+	* tests/define-dollar-in-symbolic-name.test: Likewise.
+	* tests/define-fail.test: Likewise.
+	* tests/define-long-definition.test: Likewise.
+	* tests/define-long-name.test: Likewise.
+	* tests/define-multiline-with-comment.test: Likewise.
+	* tests/define-multiline.test: Likewise.
+	* tests/define-multiline_f77.test: Likewise.
+	* tests/define-nested.test: Likewise.
+	* tests/define-nested_f77.test: Likewise.
+	* tests/define-no-dot-in-symbolic-name.test: Likewise.
+	* tests/define-no-uppercase-alias.test: Likewise.
+	* tests/define-redefine.test: Likewise.
+	* tests/define-semicolon.test: Likewise.
+	* tests/define-semicolon_f77.test: Likewise.
+	* tests/define-stress_f77.test: Likewise.
+	* tests/define-underscore-in-symbolic-name.test: Likewise.
+	* tests/define-whitespaces.test: Likewise.
+	* tests/devnull-input.test: Likewise.
+	* tests/empty-input.test: Likewise.
+	* tests/exponentiation-operator_f77.test: Likewise.
+	* tests/for-with-empty-clauses_f77.test: Likewise.
+	* tests/for_f77.test: Likewise.
+	* tests/forever1_f77.test: Likewise.
+	* tests/forever2_f77.test: Likewise.
+	* tests/function-name-invalid-1.test: Likewise.
+	* tests/function-name-invalid-2.test: Likewise.
+	* tests/function-name-invalid-3.test: Likewise.
+	* tests/function-name-missing-1.test: Likewise.
+	* tests/function-name-missing-2.test: Likewise.
+	* tests/function-return.test: Likewise.
+	* tests/function-return_f77.test: Likewise.
+	* tests/goto_f77.test: Likewise.
+	* tests/if_f77.test: Likewise.
+	* tests/ifelse-ambiguity_f77.test: Likewise.
+	* tests/illegal-case-default.test: Likewise.
+	* tests/include-abspath.test: Likewise.
+	* tests/include-basic.test: Likewise.
+	* tests/include-case-sensible.test: Likewise.
+	* tests/include-cornercase.test: Likewise.
+	* tests/include-defined.test: Likewise.
+	* tests/include-fail-directory.test: Likewise.
+	* tests/include-fail-nonexistent.test: Likewise.
+	* tests/include-fail-unreadable.test: Likewise.
+	* tests/include-missing-filename.test: Likewise.
+	* tests/include-nested-deep.test: Likewise.
+	* tests/include-nested.test: Likewise.
+	* tests/include-no-uppercase-alias.test: Likewise.
+	* tests/include-nonalpha.test: Likewise.
+	* tests/include-recursive.test: Likewise.
+	* tests/include-relpath.test: Likewise.
+	* tests/include-stress.test: Likewise.
+	* tests/infile-directory-fail.test: Likewise.
+	* tests/infile-nonexistent-fail.test: Likewise.
+	* tests/infile-unreadable-fail.test: Likewise.
+	* tests/integers-many-bases.test: Likewise.
+	* tests/integers-many-bases_f77.test: Likewise.
+	* tests/label-conflict.test: Likewise.
+	* tests/label-fail-empty-statement.test: Likewise.
+	* tests/label-fail-misplaced-paren.test: Likewise.
+	* tests/label-fail-unexpected-eof.test: Likewise.
+	* tests/label-line-continuation.test: Likewise.
+	* tests/label-line-continuation_f77.test: Likewise.
+	* tests/line-continuation-automatic-operators.test: Likewise.
+	* tests/line-continuation-automatic-others.test: Likewise.
+	* tests/line-continuation-automatic-relationals-raw.test: Likewise.
+	* tests/line-continuation-automatic-relationals.test: Likewise.
+	* tests/line-continuation-basic.test: Likewise.
+	* tests/line-continuation-in-string.test: Likewise.
+	* tests/line-continuation-multiple.test: Likewise.
+	* tests/line-continuation-stress1.test: Likewise.
+	* tests/line-continuation-stress2.test: Likewise.
+	* tests/line-continuation_f77.test: Likewise.
+	* tests/long-infile.test: Likewise.
+	* tests/long-infile_f77.test: Likewise.
+	* tests/nested-loops_f77.test: Likewise.
+	* tests/nested-subprogram-fail.test: Likewise.
+	* tests/next-fail.test: Likewise.
+	* tests/next_f77.test: Likewise.
+	* tests/no-curly-brackets.test: Likewise.
+	* tests/no-double-quotes.test: Likewise.
+	* tests/no-fortran66-if.test: Likewise.
+	* tests/no-fortran66-while.test: Likewise.
+	* tests/no-semicolons.test: Likewise.
+	* tests/no-string-directive.test: Likewise.
+	* tests/no-tabs.test: Likewise.
+	* tests/non-alpha-tokens-1.test: Likewise.
+	* tests/non-alpha-tokens-2.test: Likewise.
+	* tests/outfile-cantcreate-fail.test: Likewise.
+	* tests/outfile-dash-is-stdout.test: Likewise.
+	* tests/outfile-devnull.test: Likewise.
+	* tests/outfile-directory-fail.test: Likewise.
+	* tests/outfile-no-multi-clobber.test: Likewise.
+	* tests/outfile-no-useless-overwrite.test: Likewise.
+	* tests/outfile-overwrite.test: Likewise.
+	* tests/outfile-unwritable-fail.test: Likewise.
+	* tests/outfile.test: Likewise.
+	* tests/repeat-until_f77.test: Likewise.
+	* tests/repeat-without-until.test: Likewise.
+	* tests/repeat-without-until_f77.test: Likewise.
+	* tests/return-a-value-from-subroutine-fail.test: Likewise.
+	* tests/return-keyword-function-1.test: Likewise.
+	* tests/return-keyword-function-2.test: Likewise.
+	* tests/return-keyword-function-and-subroutine.test: Likewise.
+	* tests/return-keyword-function_f77.test: Likewise.
+	* tests/return-keyword-outside-subprogram-fail.test: Likewise.
+	* tests/return-keyword-stress_f77.test: Likewise.
+	* tests/return-keyword-subroutine.test: Likewise.
+	* tests/return-keyword-subroutine_f77.test: Likewise.
+	* tests/simple-assignement.test: Likewise.
+	* tests/startlabel-default.test: Likewise.
+	* tests/startlabel-user-choice.test: Likewise.
+	* tests/stmt-stack-stress_f77.test: Likewise.
+	* tests/stress1_f77.test: Likewise.
+	* tests/stress2_f77.test: Likewise.
+	* tests/stress3_f77.test: Likewise.
+	* tests/string-concatenation_f77.test: Likewise.
+	* tests/subprogram-name-invalid-not-repeated.test: Likewise.
+	* tests/subroutine-name-invalid-1.test: Likewise.
+	* tests/subroutine-name-invalid-2.test: Likewise.
+	* tests/subroutine-name-invalid-3.test: Likewise.
+	* tests/subroutine-name-missing-1.test: Likewise.
+	* tests/subroutine-name-missing-2.test: Likewise.
+	* tests/switch-fail-case-label-duplicated.test: Likewise.
+	* tests/switch-fail-case-label-invalid.test: Likewise.
+	* tests/switch-fail-no-braces.test: Likewise.
+	* tests/switch-non-positive-values_f77.test: Likewise.
+	* tests/switch_f77.test: Likewise.
+	* tests/synerr-basic.test: Likewise.
+	* tests/synerr-define-lineno.test: Likewise.
+	* tests/synerr-include-lineno.test: Likewise.
+	* tests/synerr-lineno.test: Likewise.
+	* tests/synerr-nonfatal.test: Likewise.
+	* tests/synerr-nonfatal_f77.test: Likewise.
+	* tests/synerr-stdin.test: Likewise.
+	* tests/translate-relationals.test: Likewise.
+	* tests/usage-option-missing-argument.test: Likewise.
+	* tests/usage-option-unknown.test: Likewise.
+	* tests/usage-too-many-args.test: Likewise.
+	* tests/verbatim-in-define.test: Likewise.
+	* tests/verbatim-long-line.test: Likewise.
+	* tests/verbatim-no-extra-new-line.test: Likewise.
+	* tests/verbatim-only-line-begin.test: Likewise.
+	* tests/verbatim-stress.test: Likewise.
+	* tests/verbatim-stress_f77.test: Likewise.
+	* tests/verbatim.test: Likewise.
+	* tests/verbatim_f77.test: Likewise.
+	* tests/while_f77.test: Likewise.
+
+	Tiny refactoring in testsuite's shell libraries
+	We do some rafactorings and modifications to the testsuite's shell
+	libraries, to make their reuse by part of client packages easier.
+
+	* lib/rat4-testlib.sh: Minor typofix in comment.
+	Added a heading comment telling that this file must be included
+	after testlib.sh.
+	(print_testrun_info): New subroutine.
+	* lib/rat4-t.in: Use it.
+
+	ChangeLog generation moved to maint-only (SteLib helped here)
+	* maint/git-generate-changelog.mk: New file from SteLib, defining
+	rules/targets to generate ChangeLog file from Git commit messages.
+	* maint/prj-post-cfg.mk: Include it.
+	(changelog-start-date): New variable. Commits before the date defined
+	here are not put in the ChangeLog.
+	* Makefile.am: Remove ChangeLog generation. Details follow...
+	(gen_start_date): Variable removed.
+	($(srcdir)/ChangeLog): Target removed.
+	(force-changelog-gen): Likewise.
+	(MOSTLYCLEANFILES): Don't extend with `ChangeLog.tmp'.
+	(MAINTAINERCLEANFILES): Don't extend with `$(srcdir)/ChangeLog'.
+
+	Revert "Generating ChangeLog don't break distcheck anymore"
+	This reverts commit 69c713e646ebe679468cccf33bd0f168ccd3ed03.
+	The modified changelog generation worked only in subdirs of the
+	directory containing the `.git' administrative directory, so
+	it worked for "make distcheck", but was broken in distributed
+	tarballs. Sigh. Thus we are going to require a deeper change.
+
+	* build-aux/move-if-change: Deleted.
+	* Makefile.am ($(srcdir)/ChangeLog): Use `mv -f', not
+	`build-aux/move-if-change'.
+	(EXTRA_DIST): Removed `build-aux/move-if-change'.
+
+	Generating ChangeLog don't break distcheck anymore
+	* build-aux/move-if-change: New script from Gnulib.
+	* Makefile.am ($(srcdir)/ChangeLog): Update the file only if it
+	changed from the last version, by using the new `move-if-change'
+	auxiliary script.
+	(EXTRA_DIST): Add `build-aux/move-if-change'.
+
+	renaming: CheckTestsList.am => CheckListOfTests.am
+	* lib/CheckTestsList.am: Deleted, renamed to ...
+	* lib/CheckListOfTests.am: ... this new file.
+	* sanity-checks/Makefile.am: Adjusted accordingly.
+	* tests/Makefile.am: Likewise.
+
+2009-12-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	cosmetic changes in Makefiles.am (comments)
+	* sanity-checks/Makefile.am: Make some comments less lurid, while
+	leaving them still eye-catching enough. Make some other comments
+	clearer.
+	* tests/Makefile.am: Likewise.
+
+	Make generated ChangeLog readonly
+	* Makefile.am ($(srcdir)/ChangeLog): Make generated Changelog readonly.
+
+2009-12-24  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	new target maintainer-check (check list of tests moved there)
+	* Makefile.am (maintainer-check-list-of-tests): New target,
+	delegating to the equally-named target in `tests/Makefile.am'.
+	(maintainer-check): New target.  Depends from the just-described
+	new target `maintainer-check-list-of-tests'.
+	* tests/Makefile.am (check-local): It doesn't depend anymore on
+	`check-list-of-tests'. Thus removed, as it's not useful anymore.
+	(ALL_TESTS): Deleted, no more needed.  Use $(TESTS) directly.
+	(TESTS): Directly define to the list of test scripts.
+	* sanity-check/Makefile.am: Likewise.
+	* lib/CheckTestsList.am: Updated from SteLib.
+	(check-list-of-tests): Target deleted, renamed to ...
+	(maintainer-check-list-of-tests): ... this.
+	It now checks the contents of the `$(TESTS)' variable, not of the
+	`$(ALL_TESTS)' variable.
+	It consider also the test scripts in `$(builddir)', not only
+	those in `$(srcdir)' (this can account for generated test scripts).
+	It does not require anymore the definition of the $(DIFF_U)
+	variable.
+	Finally, the verbosity of the target has been decreased.
+
+	Require autoconf 2.64
+	* configure.ac (AC_PREREQ): Require autoconf version 2.64, instead
+	of just version 2.62.
+
+2009-12-23  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Force unconditional regeneration of ChangeLog
+	* Makefile.am (forche-changelog-gen): New phony empty target.
+	($(srcdir)/ChangeLog): Depend on it.
+
+	Typofix in HACKING
+	* HACKING (Recording changes): Fixed typo(s):
+	    s/`Changelog target/`ChangeLog' target/
+
+2009-12-22  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Generate ChangeLog in $(srcdir), not in $(builddir)
+	* Makefile.am (ChangeLog): Generate ChangeLog file in $(srcdir),
+	not in $(builddir). This also fixes a failure in `make distcheck'.
+	(MAINTAINERCLEANFILES): List `$(srcdir)/ChangeLog', not simply
+	`ChangeLog'.
+
+	Generation of ChangeLog do not require maint-rules
+	* Makefile.am (ChangeLog): This rule is now inconditional (previosuly
+	it was considered only when the `ENABLE_MAINTAINER_MAKE_RULES' Automake
+	conditional was true).
+	(MAINTAINERCLEANFILES): Likewise, addition of `ChangeLog' is now
+	unconditional.
+	(MOSTLYCLEANFILES): Likewise, addition of `ChangeLog.tmp' is now
+	unconditional.
+
+2009-12-21  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Remove AC_SUBST vars $build_aux and $abs_build_aux
+	configure.ac: Remove AC_SUBST'd variables `$build_aux' and
+	`$abs_build_aux': they were redundant, and in fact never used.
+
+2009-12-19  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Bugfix: distribute aux script `git-version-gen'
+	* Makefile.am (EXTRA_DIST): Add `build-aux/git-version-gen'.
+
+	Added automatic generation of ChangeLog file.
+	* build-aux/gitlog-to-changelog: New file, from gnulib (with minor
+	modifications).  It's meant to generate a ChangeLog file from git
+	log messages.
+	* Changelog-old: New file.  Contains older changelog entries.
+	* Makefile.am (ChangeLog): New rule: generate a ChangeLog file
+	from git log messages.
+	(EXTRA_DIST): Added `build-aux/gitlog-to-changelog', `ChangeLog'
+	and `Changelog-old'.
+	(MAINTAINERCLEANFILES): Added `ChangeLog'.
+	* .gitignore: Added ChangeLog.
+	* HACKING: Tell that the ChangeLog is automatically generated.
+
+2009-12-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Refactoring: testcases made more decoupled (plus some minor fixings)
+	* tests/*.test: Use `testcase_FAIL', not `testcase_FATAL_FAILURE', so
+	that a failed testcase does not abort the whole test script.  Minor
+	changes related to this one.  Minor various improvements & fixings to
+	some test scripts (esp, improved verbose messages, or sometimes
+	comments/descriptions).  A couple of bug fixings (e.g. grep of the
+	wrong file, forgotten `|| testcase_FAIL' after a tested command, and
+	other similar absent-minded mistakes).
+
+2009-12-03  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Bugfix in test `startlabel-default.test'
+	* tests/startlabel-default.test (call to `$EGREP -v'): Bugfix: we
+	forgot to put the file to grep on the command line:
+	  (-) old command:  $EGREP -v '...' && TESTCASE-FAILURE
+	  (+) new command:  $EGREP -v '...' FILE && TESTCASE-FAILURE
+	It's important to note that the old call to egrep always failed, since
+	we close standard input of test scripts in `testlib.sh'; thus we could
+	have a false negative in this test script (BAD!)
+
+2009-12-02  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Refactor (sanity checks): testcases more decoupled
+	* sanity-checks/run_F77.test: use `testcase_FAIL', not
+	`testcase_FATAL_FAILURE', so that a failed testcase does
+	not abort the whole test script.
+	* sanity-checks/run_RATFOR.test: Likewise.
+	* sanity-checks/run_command.test: Likewise.
+	* sanity-checks/timer-cc.test: Likewise.
+	* sanity-checks/timer.test: Likewise.
+
+	Updated testlib.sh from Stelib (fixes in exit trap)
+	* lib/stelib.sh: Updated with a new version from SteLib: minor bug
+	fixes and improvements in handling of exit trap and exit cleanup.
+
+	`MostlyCleanConfigureTmp.am' moved in `lib/' (mostly for consistency)
+	* MostlyCleanConfigureTmp.am: Removed (mostly for consistency/cosmetic
+	reasons, as tho other *.am fragments are in all in `lib/' directory);
+	moved to this ...
+	* lib/MostlyCleanConfigureTmp.am: ... new file.
+	* Makefile.am: include directive regarding `MostlyCleanConfigureTmp.am'
+	updated accordingly.
+
+	Refactor testsuite: make testcases more decoupled
+	* tests/subprog-name-invalid.sh: Use `testcase_FAIL' instead of
+	ad-hoc code to signal failures.
+	(testcase_done): Function removed, it's no more needed.
+	* tests/function-name-invalid-1.test: Use function `testcase_DONE'
+	defined in `testlib.sh', not ad-hoc function `testcase_done' defined
+	in `subprog-name-invalid.sh'.
+	* tests/function-name-invalid-2.test: Likewise.
+	* tests/function-name-invalid-3.test: Likewise.
+	* tests/function-name-missing-1.test: Likewise.
+	* tests/function-name-missing-2.test: Likewise.
+	* tests/subroutine-name-invalid-1.test: Likewise.
+	* tests/subroutine-name-invalid-2.test: Likewise.
+	* tests/subroutine-name-invalid-3.test: Likewise.
+	* tests/subroutine-name-missing-1.test: Likewise.
+	* tests/subroutine-name-missing-2.test: Likewise.
+
+	Updated testlib.sh from Stelib, & related changes
+	* lib/stelib.sh: Updated with a new version from SteLib.
+	(testcase_PASS): Removed (was kept for backward-compatibility only).
+	* tests/subprog-name-invalid.sh: Updated accordingly: use
+	`testcase_DONE()', not `testcase_PASS()'.
+	* sanity-checks/run_F77.test: Likewise.
+	* sanity-checks/run_RATFOR.test: Likewise.
+	* sanity-checks/run_command.test: Likewise.
+	* sanity-checks/timer-cc.test: Likewise.
+	* sanity-checks/timer.test: Likewise.
+	* tests/balanced-parens.test: Likewise.
+	* tests/break-fail.test: Likewise.
+	* tests/break_f77.test: Likewise.
+	* tests/case-sensibility-basic.test: Likewise.
+	* tests/comments-basic.test: Likewise.
+	* tests/comments-keep.test: Likewise.
+	* tests/comments-keep_f77.test: Likewise.
+	* tests/comments-no-hang.test: Likewise.
+	* tests/common-block.test: Likewise.
+	* tests/common-block_f77.test: Likewise.
+	* tests/data-statement.test: Likewise.
+	* tests/data-statement_f77.test: Likewise.
+	* tests/define-balanced-paren.test: Likewise.
+	* tests/define-balanced-paren_f77.test: Likewise.
+	* tests/define-basic.test: Likewise.
+	* tests/define-basic_f77.test: Likewise.
+	* tests/define-case-sensibility.test: Likewise.
+	* tests/define-dollar-in-symbolic-name.test: Likewise.
+	* tests/define-fail.test: Likewise.
+	* tests/define-long-definition.test: Likewise.
+	* tests/define-long-name.test: Likewise.
+	* tests/define-multiline-with-comment.test: Likewise.
+	* tests/define-multiline.test: Likewise.
+	* tests/define-multiline_f77.test: Likewise.
+	* tests/define-nested.test: Likewise.
+	* tests/define-nested_f77.test: Likewise.
+	* tests/define-no-dot-in-symbolic-name.test: Likewise.
+	* tests/define-no-uppercase-alias.test: Likewise.
+	* tests/define-redefine.test: Likewise.
+	* tests/define-semicolon.test: Likewise.
+	* tests/define-semicolon_f77.test: Likewise.
+	* tests/define-stress_f77.test: Likewise.
+	* tests/define-underscore-in-symbolic-name.test: Likewise.
+	* tests/define-whitespaces.test: Likewise.
+	* tests/devnull-input.test: Likewise.
+	* tests/empty-input.test: Likewise.
+	* tests/exponentiation-operator_f77.test: Likewise.
+	* tests/for-with-empty-clauses_f77.test: Likewise.
+	* tests/for_f77.test: Likewise.
+	* tests/forever1_f77.test: Likewise.
+	* tests/forever2_f77.test: Likewise.
+	* tests/function-return.test: Likewise.
+	* tests/function-return_f77.test: Likewise.
+	* tests/goto_f77.test: Likewise.
+	* tests/if_f77.test: Likewise.
+	* tests/ifelse-ambiguity_f77.test: Likewise.
+	* tests/include-abspath.test: Likewise.
+	* tests/include-basic.test: Likewise.
+	* tests/include-case-sensible.test: Likewise.
+	* tests/include-cornercase.test: Likewise.
+	* tests/include-defined.test: Likewise.
+	* tests/include-fail-directory.test: Likewise.
+	* tests/include-fail-nonexistent.test: Likewise.
+	* tests/include-fail-unreadable.test: Likewise.
+	* tests/include-missing-filename.test: Likewise.
+	* tests/include-nested-deep.test: Likewise.
+	* tests/include-nested.test: Likewise.
+	* tests/include-no-uppercase-alias.test: Likewise.
+	* tests/include-nonalpha.test: Likewise.
+	* tests/include-recursive.test: Likewise.
+	* tests/include-relpath.test: Likewise.
+	* tests/include-stress.test: Likewise.
+	* tests/infile-directory-fail.test: Likewise.
+	* tests/infile-nonexistent-fail.test: Likewise.
+	* tests/infile-unreadable-fail.test: Likewise.
+	* tests/integers-many-bases.test: Likewise.
+	* tests/integers-many-bases_f77.test: Likewise.
+	* tests/label-conflict.test: Likewise.
+	* tests/label-fail-empty-statement.test: Likewise.
+	* tests/label-fail-misplaced-paren.test: Likewise.
+	* tests/label-fail-unexpected-eof.test: Likewise.
+	* tests/label-line-continuation.test: Likewise.
+	* tests/label-line-continuation_f77.test: Likewise.
+	* tests/line-continuation-automatic-operators.test: Likewise.
+	* tests/line-continuation-automatic-others.test: Likewise.
+	* tests/line-continuation-automatic-relationals-raw.test: Likewise.
+	* tests/line-continuation-automatic-relationals.test: Likewise.
+	* tests/line-continuation-basic.test: Likewise.
+	* tests/line-continuation-in-string.test: Likewise.
+	* tests/line-continuation-multiple.test: Likewise.
+	* tests/line-continuation-stress1.test: Likewise.
+	* tests/line-continuation-stress2.test: Likewise.
+	* tests/line-continuation_f77.test: Likewise.
+	* tests/long-infile.test: Likewise.
+	* tests/long-infile_f77.test: Likewise.
+	* tests/nested-loops_f77.test: Likewise.
+	* tests/nested-subprogram-fail.test: Likewise.
+	* tests/next-fail.test: Likewise.
+	* tests/next_f77.test: Likewise.
+	* tests/no-curly-brackets.test: Likewise.
+	* tests/no-double-quotes.test: Likewise.
+	* tests/no-fortran66-if.test: Likewise.
+	* tests/no-fortran66-while.test: Likewise.
+	* tests/no-semicolons.test: Likewise.
+	* tests/no-string-directive.test: Likewise.
+	* tests/no-tabs.test: Likewise.
+	* tests/non-alpha-tokens-1.test: Likewise.
+	* tests/non-alpha-tokens-2.test: Likewise.
+	* tests/outfile-cantcreate-fail.test: Likewise.
+	* tests/outfile-dash-is-stdout.test: Likewise.
+	* tests/outfile-devnull.test: Likewise.
+	* tests/outfile-directory-fail.test: Likewise.
+	* tests/outfile-no-multi-clobber.test: Likewise.
+	* tests/outfile-no-useless-overwrite.test: Likewise.
+	* tests/outfile-overwrite.test: Likewise.
+	* tests/outfile-unwritable-fail.test: Likewise.
+	* tests/outfile.test: Likewise.
+	* tests/repeat-until_f77.test: Likewise.
+	* tests/repeat-without-until.test: Likewise.
+	* tests/repeat-without-until_f77.test: Likewise.
+	* tests/return-a-value-from-subroutine-fail.test: Likewise.
+	* tests/return-keyword-function-1.test: Likewise.
+	* tests/return-keyword-function-2.test: Likewise.
+	* tests/return-keyword-function-and-subroutine.test: Likewise.
+	* tests/return-keyword-function_f77.test: Likewise.
+	* tests/return-keyword-outside-subprogram-fail.test: Likewise.
+	* tests/return-keyword-stress_f77.test: Likewise.
+	* tests/return-keyword-subroutine.test: Likewise.
+	* tests/return-keyword-subroutine_f77.test: Likewise.
+	* tests/simple-assignement.test: Likewise.
+	* tests/startlabel-default.test: Likewise.
+	* tests/startlabel-user-choice.test: Likewise.
+	* tests/stmt-stack-stress_f77.test: Likewise.
+	* tests/stress1_f77.test: Likewise.
+	* tests/stress2_f77.test: Likewise.
+	* tests/stress3_f77.test: Likewise.
+	* tests/string-concatenation_f77.test: Likewise.
+	* tests/subprogram-name-invalid-not-repeated.test: Likewise.
+	* tests/switch-fail-no-braces.test: Likewise.
+	* tests/switch-non-positive-values_f77.test: Likewise.
+	* tests/switch_f77.test: Likewise.
+	* tests/synerr-basic.test: Likewise.
+	* tests/synerr-define-lineno.test: Likewise.
+	* tests/synerr-include-lineno.test: Likewise.
+	* tests/synerr-lineno.test: Likewise.
+	* tests/synerr-nonfatal.test: Likewise.
+	* tests/synerr-nonfatal_f77.test: Likewise.
+	* tests/synerr-stdin.test: Likewise.
+	* tests/translate-relationals.test: Likewise.
+	* tests/usage-option-missing-argument.test: Likewise.
+	* tests/usage-option-unknown.test: Likewise.
+	* tests/usage-too-many-args.test: Likewise.
+	* tests/verbatim-in-define.test: Likewise.
+	* tests/verbatim-long-line.test: Likewise.
+	* tests/verbatim-no-extra-new-line.test: Likewise.
+	* tests/verbatim-only-line-begin.test: Likewise.
+	* tests/verbatim-stress.test: Likewise.
+	* tests/verbatim-stress_f77.test: Likewise.
+	* tests/verbatim.test: Likewise.
+	* tests/verbatim_f77.test: Likewise.
+	* tests/while_f77.test: Likewise.
+
+	Updated testlib.sh from Stelib, & related changes
+	* lib/stelib.sh: Updated with a new version from SteLib.
+	(testcase_REGISTER_FAILURE): Renamed as ...
+	(testcase_FAIL): ... this, which changes its previous semantic;
+	if the old semanting is needed, use this ...
+	(testcase_FATAL_FAILURE): ... new function.
+	* tests/subprog-name-invalid.sh: Updated accordingly: use
+	`testcase_FATAL_FAILURE' instead of old `testcase_FAIL', and use the
+	new `testcase_FAIL' instead of `testcase_REGISTER_FAILURE'.
+	* sanity-checks/run_F77.test: Likewise.
+	* sanity-checks/run_RATFOR.test: Likewise.
+	* sanity-checks/run_command.test: Likewise.
+	* sanity-checks/timer-cc.test: Likewise.
+	* sanity-checks/timer.test: Likewise.
+	* tests/balanced-parens.test: Likewise.
+	* tests/break-fail.test: Likewise.
+	* tests/break_f77.test: Likewise.
+	* tests/case-sensibility-basic.test: Likewise.
+	* tests/comments-basic.test: Likewise.
+	* tests/comments-keep.test: Likewise.
+	* tests/comments-keep_f77.test: Likewise.
+	* tests/comments-no-hang.test: Likewise.
+	* tests/common-block.test: Likewise.
+	* tests/common-block_f77.test: Likewise.
+	* tests/data-statement.test: Likewise.
+	* tests/data-statement_f77.test: Likewise.
+	* tests/define-balanced-paren.test: Likewise.
+	* tests/define-balanced-paren_f77.test: Likewise.
+	* tests/define-basic.test: Likewise.
+	* tests/define-basic_f77.test: Likewise.
+	* tests/define-case-sensibility.test: Likewise.
+	* tests/define-dollar-in-symbolic-name.test: Likewise.
+	* tests/define-fail.test: Likewise.
+	* tests/define-long-definition.test: Likewise.
+	* tests/define-long-name.test: Likewise.
+	* tests/define-multiline-with-comment.test: Likewise.
+	* tests/define-multiline.test: Likewise.
+	* tests/define-multiline_f77.test: Likewise.
+	* tests/define-nested.test: Likewise.
+	* tests/define-nested_f77.test: Likewise.
+	* tests/define-no-dot-in-symbolic-name.test: Likewise.
+	* tests/define-no-uppercase-alias.test: Likewise.
+	* tests/define-redefine.test: Likewise.
+	* tests/define-semicolon.test: Likewise.
+	* tests/define-semicolon_f77.test: Likewise.
+	* tests/define-stress_f77.test: Likewise.
+	* tests/define-underscore-in-symbolic-name.test: Likewise.
+	* tests/define-whitespaces.test: Likewise.
+	* tests/devnull-input.test: Likewise.
+	* tests/empty-input.test: Likewise.
+	* tests/exponentiation-operator_f77.test: Likewise.
+	* tests/for-with-empty-clauses_f77.test: Likewise.
+	* tests/for_f77.test: Likewise.
+	* tests/forever1_f77.test: Likewise.
+	* tests/forever2_f77.test: Likewise.
+	* tests/function-return.test: Likewise.
+	* tests/function-return_f77.test: Likewise.
+	* tests/goto_f77.test: Likewise.
+	* tests/if_f77.test: Likewise.
+	* tests/ifelse-ambiguity_f77.test: Likewise.
+	* tests/illegal-case-default.test: Likewise.
+	* tests/include-abspath.test: Likewise.
+	* tests/include-basic.test: Likewise.
+	* tests/include-case-sensible.test: Likewise.
+	* tests/include-cornercase.test: Likewise.
+	* tests/include-defined.test: Likewise.
+	* tests/include-fail-directory.test: Likewise.
+	* tests/include-fail-nonexistent.test: Likewise.
+	* tests/include-fail-unreadable.test: Likewise.
+	* tests/include-missing-filename.test: Likewise.
+	* tests/include-nested-deep.test: Likewise.
+	* tests/include-nested.test: Likewise.
+	* tests/include-no-uppercase-alias.test: Likewise.
+	* tests/include-nonalpha.test: Likewise.
+	* tests/include-recursive.test: Likewise.
+	* tests/include-relpath.test: Likewise.
+	* tests/include-stress.test: Likewise.
+	* tests/infile-directory-fail.test: Likewise.
+	* tests/infile-nonexistent-fail.test: Likewise.
+	* tests/infile-unreadable-fail.test: Likewise.
+	* tests/integers-many-bases.test: Likewise.
+	* tests/integers-many-bases_f77.test: Likewise.
+	* tests/label-conflict.test: Likewise.
+	* tests/label-fail-empty-statement.test: Likewise.
+	* tests/label-fail-misplaced-paren.test: Likewise.
+	* tests/label-fail-unexpected-eof.test: Likewise.
+	* tests/label-line-continuation.test: Likewise.
+	* tests/label-line-continuation_f77.test: Likewise.
+	* tests/line-continuation-automatic-operators.test: Likewise.
+	* tests/line-continuation-automatic-others.test: Likewise.
+	* tests/line-continuation-automatic-relationals-raw.test: Likewise.
+	* tests/line-continuation-automatic-relationals.test: Likewise.
+	* tests/line-continuation-basic.test: Likewise.
+	* tests/line-continuation-in-string.test: Likewise.
+	* tests/line-continuation-multiple.test: Likewise.
+	* tests/line-continuation-stress1.test: Likewise.
+	* tests/line-continuation-stress2.test: Likewise.
+	* tests/line-continuation_f77.test: Likewise.
+	* tests/long-infile.test: Likewise.
+	* tests/long-infile_f77.test: Likewise.
+	* tests/nested-loops_f77.test: Likewise.
+	* tests/nested-subprogram-fail.test: Likewise.
+	* tests/next-fail.test: Likewise.
+	* tests/next_f77.test: Likewise.
+	* tests/no-curly-brackets.test: Likewise.
+	* tests/no-double-quotes.test: Likewise.
+	* tests/no-fortran66-if.test: Likewise.
+	* tests/no-fortran66-while.test: Likewise.
+	* tests/no-semicolons.test: Likewise.
+	* tests/no-string-directive.test: Likewise.
+	* tests/no-tabs.test: Likewise.
+	* tests/non-alpha-tokens-1.test: Likewise.
+	* tests/non-alpha-tokens-2.test: Likewise.
+	* tests/outfile-cantcreate-fail.test: Likewise.
+	* tests/outfile-dash-is-stdout.test: Likewise.
+	* tests/outfile-devnull.test: Likewise.
+	* tests/outfile-directory-fail.test: Likewise.
+	* tests/outfile-no-multi-clobber.test: Likewise.
+	* tests/outfile-no-useless-overwrite.test: Likewise.
+	* tests/outfile-overwrite.test: Likewise.
+	* tests/outfile-unwritable-fail.test: Likewise.
+	* tests/outfile.test: Likewise.
+	* tests/repeat-until_f77.test: Likewise.
+	* tests/repeat-without-until.test: Likewise.
+	* tests/repeat-without-until_f77.test: Likewise.
+	* tests/return-a-value-from-subroutine-fail.test: Likewise.
+	* tests/return-keyword-function-1.test: Likewise.
+	* tests/return-keyword-function-2.test: Likewise.
+	* tests/return-keyword-function-and-subroutine.test: Likewise.
+	* tests/return-keyword-function_f77.test: Likewise.
+	* tests/return-keyword-outside-subprogram-fail.test: Likewise.
+	* tests/return-keyword-stress_f77.test: Likewise.
+	* tests/return-keyword-subroutine.test: Likewise.
+	* tests/return-keyword-subroutine_f77.test: Likewise.
+	* tests/simple-assignement.test: Likewise.
+	* tests/startlabel-default.test: Likewise.
+	* tests/startlabel-user-choice.test: Likewise.
+	* tests/stmt-stack-stress_f77.test: Likewise.
+	* tests/stress1_f77.test: Likewise.
+	* tests/stress2_f77.test: Likewise.
+	* tests/stress3_f77.test: Likewise.
+	* tests/string-concatenation_f77.test: Likewise.
+	* tests/subprogram-name-invalid-not-repeated.test: Likewise.
+	* tests/switch-fail-case-label-duplicated.test: Likewise.
+	* tests/switch-fail-case-label-invalid.test: Likewise.
+	* tests/switch-fail-no-braces.test: Likewise.
+	* tests/switch-non-positive-values_f77.test: Likewise.
+	* tests/switch_f77.test: Likewise.
+	* tests/synerr-basic.test: Likewise.
+	* tests/synerr-define-lineno.test: Likewise.
+	* tests/synerr-include-lineno.test: Likewise.
+	* tests/synerr-lineno.test: Likewise.
+	* tests/synerr-nonfatal.test: Likewise.
+	* tests/synerr-nonfatal_f77.test: Likewise.
+	* tests/synerr-stdin.test: Likewise.
+	* tests/translate-relationals.test: Likewise.
+	* tests/usage-option-missing-argument.test: Likewise.
+	* tests/usage-option-unknown.test: Likewise.
+	* tests/usage-too-many-args.test: Likewise.
+	* tests/verbatim-in-define.test: Likewise.
+	* tests/verbatim-long-line.test: Likewise.
+	* tests/verbatim-no-extra-new-line.test: Likewise.
+	* tests/verbatim-only-line-begin.test: Likewise.
+	* tests/verbatim-stress.test: Likewise.
+	* tests/verbatim-stress_f77.test: Likewise.
+	* tests/verbatim.test: Likewise.
+	* tests/verbatim_f77.test: Likewise.
+	* tests/while_f77.test: Likewise.
+
+2009-11-26  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Typofix in `lib/TestsEnvironment.am'
+	* lib/TestsEnvironment.am: Typofix in comment.
+
+2009-11-20  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Modularizing .gitignore files
+	* .gitignore: Stuff pertaining `maint/' and `build-aux/' subdirectories
+	moved in the respective new .gitignore files.
+	* maint/.gitignore: New file.
+	* build-aux/.gitignore: Likewise.
+
+2009-11-17  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	testlib.sh: run_command: new arg `RETURN' for `-e' switch
+	* lib/testlib.sh: Updated from SteLib.
+	(run_command): New valid argument `RETURN' for the `-e' switch.
+	* sanity-checks/run_command.test: Extended accordingly.
+
+2009-11-16  Stefano Lattarini  <stefano.lattarini@gmail.com>
+
+	Typofix in README
+	* README: Typofix: s/fo/of/.
+
+	README: update refs/samples w.r.t. "C Ratfor" package
+	* README: Since the `C Ratfor' package recently changed its way to
+	use and import the `Ratfor Testsuite' supackage (by departing from
+	the simple recommended way described in this `README'), we updated
+	references and examples referring to `C Ratfor' by explicitly
+	telling that they are indeed referred to and "older version" of
+	`C Ratfor'.
+
+	Reorganizing (new dir sanity-checks/)
+	The new directory `sanity-checks', containing test scripts doing
+	sanity check on the testsuite itself (previosly these where in
+	`tests/SanityChecks/').
+
+	* Makefile.am (SUBDIRS): Added `sanity-checks/'.
+	* tests/Makefile.am (SUBDIRS): Removed `SanityChecks/'.
+	* configure.ac (AC_CONFIG_FILES): added `sanity-checks/Makefile',
+	removed `tests/SanityChecks/Makefile'.
+	* tests/SanityChecks/Makefile.am: Removed, moved to ...
+	* sanity-checks/Makefile.am: ... this. Also, fixed relative
+	includes of `lib/*.am' files.
+	* tests/SanityChecks/timer.test: Removed, moved to...
+	* sanity-checks/timer.test: ... this. Also, fixed sourcing of
+	`lib/rat4-t.sh' file.
+	* tests/SanityChecks/timer-cc.test: Removed, moved to...
+	* sanity-checks/timer-cc.test: ... this. Also, fixed sourcing of
+	`lib/rat4-t.sh' file.
+	* tests/SanityChecks/run_command.test: Removed, moved to...
+	* sanity-checks/run_command.test: ... this. Also, fixed sourcing of
+	`lib/rat4-t.sh' file.
+	* tests/SanityChecks/run_RATFOR.test: Removed, moved to...
+	* sanity-checks/run_RATFOR.test: ... this. Also, fixed sourcing of
+	`lib/rat4-t.sh' file.
+	* tests/SanityChecks/run_F77.test: Removed, moved to...
+	* sanity-checks/run_F77.test: ... this. Also, fixed sourcing of
+	`lib/rat4-t.sh' file.
+
+	Reorganizing (new dir lib/): move makefile fragments
+	The new directory `lib' will contain all auxiliary files used by
+	the testsuite.  In this commit, we move there shell scripts
+	fragments (which are included by test scripts), shared data files
+	and auxiliary/wrapper scripts.
+
+	* tests/TestsAux/rat4-t.in: Removed, moved to...
+	* lib/rat4-t.in: ... this.
+	($testaux_srcdir): Definition updated.
+	($testaux_builddir): Likewise
+	* tests/TestsAux/rat4-testlib.sh: Removed, moved to...
+	* lib/rat4-testlib.sh: ... this.
+	($testaux_srcdir): Removed redundant definition.
+	($testaux_builddir): Likewise.
+	* tests/TestsAux/rat4-t.in: Removed, moved to...
+	* lib/rat4-t.in: ... this.
+	* tests/TestsAux/.gitignore: Removed, moved to...
+	* lib/.gitignore: ... this.
+	* lib/Makefile.am: New file. It help us to add contents of
+	lib/ to $(EXTRA_DIST) and/or properly extended $(check_DATA),
+	$(check_SCRIPTS), etc.
+	* Makefile.am (SUBDIRS): Added `lib'.
+	* tests/Makefile.am (SUBDIRS): Removed `TestsAux'.
+	* configure.ac (AC_CONFIG_FILES): Updated accordingly to the
+	various movings/renamings.
+	* HACKING (Section "Writing Test Cases", subsection "Do"):
+	Bugfix: tell to  include `../lib/rat4-t.sh', not `./TestsAux/defs.sh',
+	in every test script. Also, other references to `TestsAux/defs.{in,sh}'
+	modified to refer to `lib/rat4-t.{in,sh}' instead.
+	(Section "Writing Test Cases", subsection "Do Not"): Bugfix:
+	tell that `run_command' is defined in `lib/testlib.sh', not
+	that it's defined in `tests/TestsAux/defs.in'.
+	* tests/subprog-name-invalid.sh: Cite `rat4-t.sh', not
+	`TestsAux/defs.sh'.
+	* tests/SanityChecks/run_F77.test: Line with code sourcing
+	`rat4-t.sh' has been modified to account for the relocation
+	of `rat4-t.in'.
+	* tests/SanityChecks/run_RATFOR.test: Likewise.
+	* tests/SanityChecks/run_command.test: Likewise.
+	* tests/SanityChecks/timer-cc.test: Likewise.
+	* tests/SanityChecks/timer.test: Likewise.
+	* tests/balanced-parens.test: Likewise.
+	* tests/break-fail.test: Likewise.
+	* tests/break_f77.test: Likewise.
+	* tests/case-sensibility-basic.test: Likewise.
+	* tests/comments-basic.test: Likewise.
+	* tests/comments-keep.test: Likewise.
+	* tests/comments-keep_f77.test: Likewise.
+	* tests/comments-no-hang.test: Likewise.
+	* tests/common-block.test: Likewise.
+	* tests/common-block_f77.test: Likewise.
+	* tests/data-statement.test: Likewise.
+	* tests/data-statement_f77.test: Likewise.
+	* tests/define-balanced-paren.test: Likewise.
+	* tests/define-balanced-paren_f77.test: Likewise.
+	* tests/define-basic.test: Likewise.
+	* tests/define-basic_f77.test: Likewise.
+	* tests/define-case-sensibility.test: Likewise.
+	* tests/define-dollar-in-symbolic-name.test: Likewise.
+	* tests/define-fail.test: Likewise.
+	* tests/define-long-definition.test: Likewise.
+	* tests/define-long-name.test: Likewise.
+	* tests/define-multiline-with-comment.test: Likewise.
+	* tests/define-multiline.test: Likewise.
+	* tests/define-multiline_f77.test: Likewise.
+	* tests/define-nested.test: Likewise.
+	* tests/define-nested_f77.test: Likewise.
+	* tests/define-no-dot-in-symbolic-name.test: Likewise.
+	* tests/define-no-uppercase-alias.test: Likewise.
+	* tests/define-redefine.test: Likewise.
+	* tests/define-semicolon.test: Likewise.
+	* tests/define-semicolon_f77.test: Likewise.
+	* tests/define-stress_f77.test: Likewise.
+	* tests/define-underscore-in-symbolic-name.test: Likewise.
+	* tests/define-whitespaces.test: Likewise.
+	* tests/devnull-input.test: Likewise.
+	* tests/empty-input.test: Likewise.
+	* tests/exponentiation-operator_f77.test: Likewise.
+	* tests/for-with-empty-clauses_f77.test: Likewise.
+	* tests/for_f77.test: Likewise.
+	* tests/forever1_f77.test: Likewise.
+	* tests/forever2_f77.test: Likewise.
+	* tests/function-name-invalid-1.test: Likewise.
+	* tests/function-name-invalid-2.test: Likewise.
+	* tests/function-name-invalid-3.test: Likewise.
+	* tests/function-name-missing-1.test: Likewise.
+	* tests/function-name-missing-2.test: Likewise.
+	* tests/function-return.test: Likewise.
+	* tests/function-return_f77.test: Likewise.
+	* tests/goto_f77.test: Likewise.
+	* tests/if_f77.test: Likewise.
+	* tests/ifelse-ambiguity_f77.test: Likewise.
+	* tests/illegal-case-default.test: Likewise.
+	* tests/include-abspath.test: Likewise.
+	* tests/include-basic.test: Likewise.
+	* tests/include-case-sensible.test: Likewise.
+	* tests/include-cornercase.test: Likewise.
+	* tests/include-defined.test: Likewise.
+	* tests/include-fail-directory.test: Likewise.
+	* tests/include-fail-nonexistent.test: Likewise.
+	* tests/include-fail-unreadable.test: Likewise.
+	* tests/include-missing-filename.test: Likewise.
+	* tests/include-nested-deep.test: Likewise.
+	* tests/include-nested.test: Likewise.
+	* tests/include-no-uppercase-alias.test: Likewise.
+	* tests/include-nonalpha.test: Likewise.
+	* tests/include-recursive.test: Likewise.
+	* tests/include-relpath.test: Likewise.
+	* tests/include-stress.test: Likewise.
+	* tests/infile-directory-fail.test: Likewise.
+	* tests/infile-nonexistent-fail.test: Likewise.
+	* tests/infile-unreadable-fail.test: Likewise.
+	* tests/integers-many-bases.test: Likewise.
+	* tests/integers-many-bases_f77.test: Likewise.
+	* tests/label-conflict.test: Likewise.
+	* tests/label-fail-empty-statement.test: Likewise.
+	* tests/label-fail-misplaced-paren.test: Likewise.
+	* tests/label-fail-unexpected-eof.test: Likewise.
+	* tests/label-line-continuation.test: Likewise.
+	* tests/label-line-continuation_f77.test: Likewise.
+	* tests/line-continuation-automatic-operators.test: Likewise.
+	* tests/line-continuation-automatic-others.test: Likewise.
+	* tests/line-continuation-automatic-relationals-raw.test:
+	Likewise.
+	* tests/line-continuation-automatic-relationals.test: Likewise.
+	* tests/line-continuation-basic.test: Likewise.
+	* tests/line-continuation-in-string.test: Likewise.
+	* tests/line-continuation-multiple.test: Likewise.
+	* tests/line-continuation-stress1.test: Likewise.
+	* tests/line-continuation-stress2.test: Likewise.
+	* tests/line-continuation_f77.test: Likewise.
+	* tests/long-infile.test: Likewise.
+	* tests/long-infile_f77.test: Likewise.
+	* tests/nested-loops_f77.test: Likewise.
+	* tests/nested-subprogram-fail.test: Likewise.
+	* tests/next-fail.test: Likewise.
+	* tests/next_f77.test: Likewise.
+	* tests/no-curly-brackets.test: Likewise.
+	* tests/no-double-quotes.test: Likewise.
+	* tests/no-fortran66-if.test: Likewise.
+	* tests/no-fortran66-while.test: Likewise.
+	* tests/no-semicolons.test: Likewise.
+	* tests/no-string-directive.test: Likewise.
+	* tests/no-tabs.test: Likewise.
+	* tests/non-alpha-tokens-1.test: Likewise.
+	* tests/non-alpha-tokens-2.test: Likewise.
+	* tests/outfile-cantcreate-fail.test: Likewise.
+	* tests/outfile-dash-is-stdout.test: Likewise.
+	* tests/outfile-devnull.test: Likewise.
+	* tests/outfile-directory-fail.test: Likewise.
+	* tests/outfile-no-multi-clobber.test: Likewise.
+	* tests/outfile-no-useless-overwrite.test: Likewise.
+	* tests/outfile-overwrite.test: Likewise.
+	* tests/outfile-unwritable-fail.test: Likewise.
+	* tests/outfile.test: Likewise.
+	* tests/repeat-until_f77.test: Likewise.
+	* tests/repeat-without-until.test: Likewise.
+	* tests/repeat-without-until_f77.test: Likewise.
+	* tests/return-a-value-from-subroutine-fail.test: Likewise.
+	* tests/return-keyword-function-1.test: Likewise.
+	* tests/return-keyword-function-2.test: Likewise.
+	* tests/return-keyword-function-and-subroutine.test: Likewise.
+	* tests/return-keyword-function_f77.test: Likewise.
+	* tests/return-keyword-outside-subprogram-fail.test: Likewise.
+	* tests/return-keyword-stress_f77.test: Likewise.
+	* tests/return-keyword-subroutine.test: Likewise.
+	* tests/return-keyword-subroutine_f77.test: Likewise.
+	* tests/simple-assignement.test: Likewise.
+	* tests/startlabel-default.test: Likewise.
+	* tests/startlabel-user-choice.test: Likewise.
+	* tests/stmt-stack-stress_f77.test: Likewise.
+	* tests/stress1_f77.test: Likewise.
+	* tests/stress2_f77.test: Likewise.
+	* tests/stress3_f77.test: Likewise.
+	* tests/string-concatenation_f77.test: Likewise.
+	* tests/subprogram-name-invalid-not-repeated.test: Likewise.
+	* tests/subroutine-name-invalid-1.test: Likewise.
+	* tests/subroutine-name-invalid-2.test: Likewise.
+	* tests/subroutine-name-invalid-3.test: Likewise.
+	* tests/subroutine-name-missing-1.test: Likewise.
+	* tests/subroutine-name-missing-2.test: Likewise.
+	* tests/switch-fail-case-label-duplicated.test: Likewise.
+	* tests/switch-fail-case-label-invalid.test: Likewise.
+	* tests/switch-fail-no-braces.test: Likewise.
+	* tests/switch-non-positive-values_f77.test: Likewise.
+	* tests/switch_f77.test: Likewise.
+	* tests/synerr-basic.test: Likewise.
+	* tests/synerr-define-lineno.test: Likewise.
+	* tests/synerr-include-lineno.test: Likewise.
+	* tests/synerr-lineno.test: Likewise.
+	* tests/synerr-nonfatal.test: Likewise.
+	* tests/synerr-nonfatal_f77.test: Likewise.
+	* tests/synerr-stdin.test: Likewise.
+	* tests/translate-relationals.test: Likewise.
+	* tests/usage-option-missing-argument.test: Likewise.
+	* tests/usage-option-unknown.test: Likewise.
+	* tests/usage-too-many-args.test: Likewise.
+	* tests/verbatim-in-define.test: Likewise.
+	* tests/verbatim-long-line.test: Likewise.
+	* tests/verbatim-no-extra-new-line.test: Likewise.
+	* tests/verbatim-only-line-begin.test: Likewise.
+	* tests/verbatim-stress.test: Likewise.
+	* tests/verbatim-stress_f77.test: Likewise.
+	* tests/verbatim.test: Likewise.
+	* tests/verbatim_f77.test: Likewise.
+	* tests/while_f77.test: Likewise.
+
+	Reorganizing (new dir lib/): move makefile fragments
+	The new directory `lib', will contain all auxiliary files used by
+	the testsuite.  In this commit, we move there Makefile fragments.
+
+	* tests/CheckTestsList.am: Removed, moved to ...
+	* lib/CheckTestsList.am: ... this.
+	* tests/LocalCleanup.am: Removed, moved to...
+	* lib/LocalCleanup.am: ... this.
+	* tests/TestsEnvironment.am: Removed, moved to...
+	* lib/TestsEnvironment.am: ... this.
+	* tests/Makefile.am (include): Updated accordingly.
+	* tests/SanityChecks/Makefile.am (include): Likewise.
+
+	Bugfix in tests/SanityChecks/Makefile.am
+	* tests/SanityChecks/Makefile.am: Removed the definition
+	`$(XFAIL_TESTS) = $(RAT4_TESTSUITE_XFAIL_TESTS)'.  It was just
+	cruft left when we did cut&paste from `tests/Makefile.am'.
+
+	Separated test `switch-fail.test' in two test scripts
+	* tests/switch-fail.test: Removed, separated into two new scripts...
+	* tests/switch-fail-case-label-duplicated.test: ... this new script ...
+	* tests/switch-fail-case-label-invalid.test: ... and this new script.
+	* tests/Makefile.am (ALL_TESTS): Updated accordingly.
+
+	Fixed/relaxed test `switch-fail.test'
+	* tests/switch-fail.test: Removed part of the test, as that is now
+	covered by the newly-added test `illegal-case-default.test'
+
+	Git commit messages follow GNU Coding Standards
+	* HACKING (Recording changes): Tell the git commit messages should
+	follow the GNU Coding Standards for ChangeLog entries.  Minor related
+	reordering of items.
