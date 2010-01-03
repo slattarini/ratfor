@@ -61,7 +61,6 @@ distcheck-hook:
 
 # Rule(s) to clean temporary files left around by configure/config.status.
 include MostlyCleanConfigureTmp.am
-mostlyclean-local: mostlyclean-configure-tmp
 
 # Maintainer-specific checks.
 .PHONY: maintainer-check

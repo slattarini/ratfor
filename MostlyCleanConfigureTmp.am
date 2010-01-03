@@ -1,11 +1,12 @@
 ## -*- Automake -*-
-## Copied from SteLib at 2009-11-07 20:02:49 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-01-03 03:45:46 +0100.  DO NOT EDIT!
 ## Usually included by Makefile.am
 
 # If config.status or configure are run by Zsh 3.x, they can erroneously
 # leave behind some temporary files, and this causes "make distcheck" to
 # fail.  So, to be safe, we clean up those temporary files.
 .PHONY: mostlyclean-configure-tmp
+mostlyclean-local: mostlyclean-configure-tmp
 mostlyclean-configure-tmp:
 	@set +e; \
 ## we don't want to force the user to set $(FGREP) in configure.ac or
