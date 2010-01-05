@@ -1,13 +1,22 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2010-01-02 21:26:08 +0100.  DO NOT EDIT!
-# Contains a dist-hook target to generate the ChangeLog file to be put in
-# distributed tarballs.  The file is generated from the Git log messages.
-# This makefile fragment should be portable also to non-GNU makes.
+# Copied from SteLib at 2010-01-05 22:31:59 +0100.  DO NOT EDIT!
+# Contains a target to generate the ChangeLog file from the Git log
+# messages.  It tries to do the right thing in case the source tree is
+# not a git repository.  This makefile fragment should be portable also
+# to non-GNU makes.
 
-dist-hook: dist-hook-generate-changelog
-.PHONY: dist-hook-generate-changelog
-dist-hook-generate-changelog:
-	$(AM_V_GEN)(set -u) >/dev/null 2>&1 && set -u; set -e; \
+# We use this indirection since we don't want the ChangeLog target itself
+# to be declared PHONY.  Also, we create the ChangeLog in $(top_srcdir) so
+# that `make distcleancheck' won't fail (and also because $(top_srcdir) is
+# the place CHangeLog really belongs to).
+$(top_srcdir)/ChangeLog: git-changelog-gen
+
+.PHONY: git-changelog-gen
+git-changelog-gen:
+	$(AM_V_GEN)(set -u) >/dev/null 2>&1 && set -u; \
+	set -e; \
+	tmp='$(builddir)/ChangeLog.tmp'; \
+	dst='$(top_srcdir)/ChangeLog'; \
 	case '$(FORCE_CHANGELOG_GENERATION)' in \
 	  y|Y|yes|YES|true|1) force_chlog_gen=yes;; \
 	                   *) force_chlog_gen=no;; \
@@ -25,12 +34,12 @@ dist-hook-generate-changelog:
 ## hand-written one: give up
 	    echo "No .git directory and no ChangeLog file found in" >&2; \
 	    echo "top_srcdir \`$(top_srcdir)'" >&2; \
-	    echo "Cannot distribute ChangeLog." >&2; \
+	    echo "Cannot copy nor generate ChangeLog." >&2; \
 	    exit 1; \
 	  else \
 ## assume that either the existing ChangeLog is up-to-date, or that the
 ## user properly updated it by hand
-	    cp -f '$(top_srcdir)/ChangeLog' $(distdir)/cl.tmp; \
+	    cp -f '$(top_srcdir)/ChangeLog' "$$tmp"; \
 	  fi; \
 	else \
 ## the srcdir is from a (maybe cloned) git repository, so we should be
@@ -45,14 +54,27 @@ dist-hook-generate-changelog:
 	  else \
 	    changelog_start_date='1970-01-01 UTC'; \
 	  fi; \
-	  GIT_DIR='$(abs_top_srcdir)/.git'; \
-	  GIT_WORK_TREE='$(abs_top_builddir)'; \
-	  export GIT_DIR GIT_WORK_TREE; \
-	  $$gitlog2chlog \
+	  GIT_DIR='$(top_srcdir)/.git' $$gitlog2chlog \
 	    --since="$$changelog_start_date" \
-	    $(gitlog_to_changelog_extra_options) >$(distdir)/cl.tmp; \
+	    $(gitlog_to_changelog_extra_options) >"$$tmp"; \
 	fi; \
-## if all went well, move the temporary ChangeLog to its final location
-	mv -f $(distdir)/cl.tmp $(distdir)/ChangeLog
+## if all went well, make the temporary ChangeLog readonly and move
+## it to its final location
+	chmod a-w "$$tmp"; \
+	if test -f "$$dst" && cmp -s "$$dst" "$$tmp"; then \
+	  rm -f "$$tmp"; \
+	else \
+	  mv -f "$$tmp" "$$dst"; \
+	fi
+
+.PHONY: git-changelog-gen-mostlyclean
+mostlyclean-local: git-changelog-gen-mostlyclean
+git-changelog-gen-mostlyclean:
+	rm -f ChangeLog.tmp
+
+.PHONY: git-changelog-gen-maintainerclean
+maintainer-clean-local: git-changelog-gen-maintainerclean
+git-changelog-gen-maintainerclean:
+	rm -f $(top_srcdir)/ChangeLog
 
 ## vim: ft=make ts=4 sw=4 noet

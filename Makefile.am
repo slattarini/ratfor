@@ -14,8 +14,6 @@ dist_doc_DATA = README BUGS NEWS
 EXTRA_DIST = \
   xfail-tests.list \
   HACKING \
-  ChangeLog-old \
-  ChangeLog-2009 \
   build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
   GNUmakefile \
@@ -23,7 +21,12 @@ EXTRA_DIST = \
   maint/strict-distcheck.mk \
   maint/release.mk \
   maint/developer.mk \
-  maint/prj-post-cfg.mk
+  maint/prj-post-cfg.mk \
+  ChangeLog-old \
+  ChangeLog-2009 \
+  $(top_srcdir)/ChangeLog
+## the use of $(top_srcdir) above is required to have non-GNU make
+## implementations (e.g. FreeBSD make and Solaris make) working
 
 # List of files which must not be put in the distributed tarball.
 no_dist_files = maint/config.site maint/local-cfg.mk maint/personal/*
