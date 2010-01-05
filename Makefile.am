@@ -12,15 +12,18 @@ SUBDIRS = lib sanity-checks tests
 EXTRA_DIST = \
   HACKING \
   GNUmakefile \
-  ChangeLog-old \
-  ChangeLog-2009 \
   build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
   maint/maint.mk \
   maint/strict-distcheck.mk \
   maint/release.mk \
   maint/developer.mk \
-  maint/prj-post-cfg.mk
+  maint/prj-post-cfg.mk \
+  ChangeLog-old \
+  ChangeLog-2009 \
+  $(top_srcdir)/ChangeLog
+## the use of $(top_srcdir) above is required to have non-GNU make
+## implementations (e.g. FreeBSD make and Solaris make) working
 
 # List of files which must not be put in the distributed tarball.
 no_dist_files = \
@@ -54,7 +57,7 @@ dist-hook-create-tarball-version:
 changelog_start_date = 2010-01-01
 # Use the commit dates of authors, not of commiters.
 gitlog_to_changelog_extra_options = --author-date
-# Include the proper dist-hook to generate te ChangeLog.
+# Include proper rule(s) to generate the ChangeLog.
 include lib/GitGenerateChangeLog.am
 
 # Configure settings that should be preserved also in `make distcheck'
