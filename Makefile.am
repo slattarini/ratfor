@@ -81,10 +81,10 @@ maintainer-check: maintainer-check-list-of-tests
 maintainer-check-list-of-tests:
 	@target='$@'; fail=''; \
 	 CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
-     for subdir in $(TEST_SUBDIRS); do \
-       echo "Making $$target in $$subdir"; \
-       (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
-     done; \
-     test -z "$$fail"
+	 for subdir in $(TEST_SUBDIRS); do \
+	   echo "Making $$target in $$subdir"; \
+	   (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
+	 done; \
+	 test -z "$$fail"
 
 ## vim: ft=automake noet sw=4 ts=4
