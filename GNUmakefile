@@ -1,7 +1,7 @@
-# -*-Makefile-*-
-## Copied from SteLib at 2009-10-18 19:58:17 +0200.  DO NOT EDIT!
-## Slighty modified version of the GNUmakefile from gnulib `gnumakefile'
-## module.
+# -*- Makefile -*-
+# Copied from SteLib at 2010-01-08 23:13:06 +0100.  DO NOT EDIT!
+# Slighty modified version of the GNUmakefile from gnulib `gnumakefile'
+# module.
 
 # Having a separate GNUmakefile lets me `include' the dynamically
 # generated rules created via maint.mk (generic maintainer rules).
@@ -10,7 +10,7 @@
 # only to the maintainer.
 
 # Copyright (C) 2001, 2003, 2006-2009  Free Software Foundation, Inc.
-# Copyright (C) 2009  Stefano Lattarini
+# Copyright (C) 2009, 2010  Stefano Lattarini
 
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by

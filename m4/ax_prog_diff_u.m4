@@ -1,6 +1,15 @@
 #-*- Autoconf -*-
-# Copied from SteLib at 2009-10-01 21:17:40 +0200.  DO NOT EDIT!
-# serial 2 ax_prog_diff_u.m4
+# Copied from SteLib at 2010-01-08 10:50:38 +0100.  DO NOT EDIT!
+# serial 3 ax_prog_diff_u.m4
+
+#
+# Copyright (C) 2009, 2010 Lattarini Stefano.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>.
+#
+# Copying and distribution of this file, with or without modification, are
+# permitted in any medium without royalty provided the copyright notice and
+# and this notice are preserved.
+#
 
 # AX_PROG_DIFF_U([DIFF-PROGS])
 # ----------------------------

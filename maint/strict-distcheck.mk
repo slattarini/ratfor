@@ -1,7 +1,25 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2009-10-04 21:06:21 +0200.  DO NOT EDIT!
-# Contains maintainer-specific rules to run target `strict-distcheck',
-# and "on-steroids" version of distcheck. Included by top-level maint.mk.
+# Copied from SteLib at 2010-01-08 23:12:51 +0100.  DO NOT EDIT!
+#
+#  Contains maintainer-specific rules to run target `strict-distcheck',
+#  and "on-steroids" version of distcheck.  Included by top-level maint.mk.
+#
+#  Copyright (C) 2009, 2010 Stefano Lattarini.
+#  Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+#
+#  This program is free software: you can redistribute it and/or modify
+#  it under the terms of the GNU General Public License as published by
+#  the Free Software Foundation; either version 3 of the License, or
+#  (at your option) any later version.
+#
+#  This program is distributed in the hope that it will be useful,
+#  but WITHOUT ANY WARRANTY; without even the implied warranty of
+#  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#  GNU General Public License for more details.
+#
+#  You should have received a copy of the GNU General Public License
+#  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
 
 # Public variables/macros follow the naming scheme `$(strict_distcheck_*)'
 # or $(StrictDistcheck*).

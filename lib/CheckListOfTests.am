@@ -1,16 +1,37 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2009-12-24 17:29:38 +0100.  DO NOT EDIT!
-## Usually included by tests/Makefile.am
+## Copied from SteLib at 2010-01-08 10:43:41 +0100.  DO NOT EDIT!
+## Provide a rule checking that the list of tests given in the Makefile
+## is equal to the list of all test scripts in the same directory.
+##
+## Copyright (C) 2009, 2010 Stefano Lattarini
+## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+##
+## This program is free software: you can redistribute it and/or modify it
+## under the terms of the GNU Lesser General Public License as published
+## by the Free Software Foundation; either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## Lesser General Public License for more details.
+##
+## You should have received a copy of the GNU Lesser General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
 
 ## temporary files used in the `check-list-of-tests' target
 tmk = tests-in-makefile-list.tmp
 tfs = tests-on-filesystem-list.tmp
 tdf = diff-in-tests-lists.tmp
 
+## this assumes MOSTLYCLEANFILES has already been defined, even if only
+## to an empty value
 MOSTLYCLEANFILES += $(tmk) $(tfs) $(tdf)
 
 # Check that the list of tests given in the Makefile is equal to the
-# list of all test scripts in the package testsuite.
+# list of all test scripts in the same directory.  Take into account
+# also generated tests, by looking for them in $(builddir).
 maintainer-check-list-of-tests:
 	@:; \
 	  ## prefer unified diffs over plain diffs, for readability
