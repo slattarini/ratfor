@@ -1,5 +1,5 @@
 ## -*- Makefile -*-
-## Copied from SteLib at 2010-01-08 10:43:41 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-01-09 03:22:31 +0100.  DO NOT EDIT!
 ## Usually included by top-level Makefile.am.  See below for more comments.
 ##
 ## Copyright (C) 2009, 2010 Stefano Lattarini
@@ -45,7 +45,7 @@ mostlyclean-configure-tmp:
 	    echo "***" >&2; \
 	    exit 1; \
 	  fi; \
-	  echo "$@: INFO: Using fgrep command \`$$fgrep'" \
+	  echo "$@: INFO: Using fgrep command \`$$fgrep'"; \
 	else \
 	  fgrep='$(FGREP)'; \
 	fi; \
