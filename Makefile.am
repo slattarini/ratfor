@@ -71,8 +71,7 @@ maintainer-check: maintainer-check-list-of-tests
 
 # List of directories where to recurse for testing and related
 # maintainer-checks.
-# XXX: will soon be extended also to `tests/blackbox'
-TEST_SUBDIRS = tests/graybox
+TEST_SUBDIRS = tests/graybox tests/blackbox
 
 # Check that the list of tests given in the Makefile is equal to the
 # list of all test scripts in the Automake testsuite.
