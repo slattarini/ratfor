@@ -140,7 +140,7 @@ Expected failures
 
     export RAT4_TESTUITE_XFAIL_TESTS='foo bar'; ./configure
 
-  This might not be particularly useful to individual usesr, but is *very*
+  This might not be particularly useful to individual users, but is *very*
   useful for a package providing a ratfor implementation and using the
   present "Ratfor Testsuite" package as a subpackage implementing a
   black-box testsuite.  Considerations similar to those given in the
