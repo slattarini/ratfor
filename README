@@ -93,7 +93,7 @@ Ratfor preprocessor
     AC_CONFIG_SUBDIRS([blackbox-tests])
     # Since `RATFOR' is declared in `blackbox-tests/configure.ac' as a
     # precious variable, this will pass the proper value of $RATFOR to
-    # the recusrively invoked script `blackbox-tests/configure'.
+    # the recursively invoked script `blackbox-tests/configure'.
     # NOTE: when the configure script is running, the current working
     # directory (returned by `pwd') is the build directory.
     RATFOR=`pwd`/src/ratfor; export RATFOR
