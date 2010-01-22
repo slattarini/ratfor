@@ -247,3 +247,23 @@ Reporting failures
   operating system, which make utility and version, which shell, etc.).
   Also report any other information which you think might be useful.
 
+
+More Information about the Ratfor language
+------------------------------------------
+
+ The article by B.W. Kernighan, "RATFOR -- A Preprocessor for a Rational
+ Fortran", is a good starting point, and is by far the best available
+ brief description of the language.  A digital copy of the article can
+ be downloaded from the URL:
+   % http://www.mit.edu:8001/afs/athena.mit.edu/astaff/project/docsourc/doc/unix.manual.progsupp2/08.ratfor/ratfor.PS
+
+ The classical book "Software Tools", by B.W. Kernighan and P. Plauger
+ (Addison-Wesley, 1976) contains a lot of well-explained programs written
+ in Ratfor.  The source code of these programs can be downloaded from
+ the Kernighan' s web site:
+  % http://cm.bell-labs.com/cm/cs/who/bwk/toolsbook/index.html
+
+ An older public-domain C implementation of Ratfor is available at:
+  % http://sepwww.stanford.edu/doku.php?id=sep:software:ratfor
+ and a slighty-updated version derived from this one can be found at:
+  % http://www.dgate.org/ratfor/
