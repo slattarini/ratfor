@@ -1,5 +1,7 @@
 ## -*- Makefile.am -*-
-## Makefile fragment, included by Makefile.am
+## Copyright (C) 2009, 2010 Stefano Lattarini.
+## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+## This file is part of the Ratfor Testsuite.
 
 # Remove any directory left behind the the test scripts (this is needed
 # especially if the shell used in test des not properly support the `-e'

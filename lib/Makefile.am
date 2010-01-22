@@ -1,4 +1,7 @@
 ## -*- Makefile.am -*-
+## Copyright (C) 2009, 2010 Stefano Lattarini.
+## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+## This file is part of the Ratfor Testsuite.
 ## Process this file with automake to produce Makefile.in
 ##
 # Makefile for the auxiliary files used in tests cases of the Ratfor

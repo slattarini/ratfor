@@ -1,5 +1,10 @@
-C -*- Fortran -*-
-C @configure_input@
+C! -*- Fortran -*-
+C! @configure_input@
+C!
+C! Copyright (C) 2009, 2010 Stefano Lattarini.
+C! Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+C! This file is part of the Ratfor Testsuite.
+C!
 C! Custom function `halt', used to work around to bugs in the
 C! `stop' Fortran builtin as provided by some compilers (e.g.
 C! gfortran 4.0, whose `stop' always produce a message on stderr,

@@ -1,6 +1,9 @@
 #!/bin/sh
 # @configure_input@
 #
+# Copyright (C) 2009, 2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+#
 # Common definitions and environments settings for the test scripts
 # of the Ratfor Testsuite.
 #

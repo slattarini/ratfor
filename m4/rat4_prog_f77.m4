@@ -1,9 +1,21 @@
-# serial 1 rat4_prog_f77.m4
-
+#-*- Autoconf -*-
+# serial 2 rat4_prog_f77.m4
+#
+#--------------------------------------------------------------------------
+#
+# Copyright (C) 2009, 2010 Lattarini Stefano.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>.
+#
+# Copying and distribution of this file, with or without modification, are
+# permitted in any medium without royalty provided the copyright notice and
+# and this notice are preserved.
+#
+#--------------------------------------------------------------------------
+#
 # Find a Fortran 77 compiler, to be used by the ratfor testsuite.
-# First look for a user-provided compiler (expected to be found in variable
-# `F77'), else search the system for a valid and working Fortran 77 compiler,
-# using the `AC_PROG_F77' macro.
+# First look for a user-provided compiler (expected to be found in
+# variable `F77'), else search the system for a valid and working
+# Fortran 77 compiler, using the `AC_PROG_F77' macro.
 #
 AC_DEFUN([RAT4_PROG_F77],
   [AC_ARG_VAR([F77],

@@ -1,11 +1,13 @@
 #!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>
 #
 # Common definitions, environments settings and shell functions for the
 # test scripts of the Ratfor Testsuite.
 #
-# NAMESPACE CLEANLINESS:  We should try to keep ourselves confined to
-# the namespaces `rat4t_*' and `_ra4t_*' as much as possible, for both
-# variables and functions. For environment variables, the namespace
+# NOTE ON NAMESPACE CLEANLINESS:  We should try to keep ourselves confined
+# to the namespaces `rat4t_*' and `_ra4t_*' as much as possible, for both
+# variables and functions.  For environment variables, the namespace
 # `RAT4_TESTSUITE_*' should be used instead.
 #
 

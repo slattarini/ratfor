@@ -1,4 +1,14 @@
-# serial 1 rat4_fortran_stop_and_exit.m4
+#-*- Autoconf -*-
+# serial 2 rat4_fortran_stop_and_exit.m4
+
+#
+# Copyright (C) 2009, 2010 Lattarini Stefano.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>.
+#
+# Copying and distribution of this file, with or without modification, are
+# permitted in any medium without royalty provided the copyright notice and
+# and this notice are preserved.
+#
 
 # -----------------------------------------------------------------------
 # Internal subroutine; usage:

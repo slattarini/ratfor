@@ -1,9 +1,31 @@
 #!/bin/sh
-# Copied from SteLib at 2009-12-02 15:50:57 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-01-22 15:15:30 +0100.  DO NOT EDIT!
 #
-# Shell library to write test cases.  The only documentation are the
-# comments and the description of variables/functions embedded in the
+# -------------------------------------------------------------------------
+#
+# Shell library to write test cases.  The only available documentation are
+# the comments and the description of variables/functions embedded in the
 # code below.
+#
+# -------------------------------------------------------------------------
+#
+# Copyright (C) 2009, 2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+#
+# -------------------------------------------------------------------------
 #
 
 # Be more Bourne compatible.
