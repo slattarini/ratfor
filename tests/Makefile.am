@@ -208,15 +208,15 @@ function-name-invalid-3.log: subprog-name-invalid.sh
 
 
 ## Testsuite environment and setup.
-include ../lib/TestsEnvironment.am
+include ../am/TestsEnvironment.am
 
 ## Testsuite cleanup.
-include ../lib/LocalCleanup.am
+include ../am/LocalCleanup.am
 
 ## Consistency checks on the list of tests.
-include ../lib/CheckListOfTests.am
+include ../am/CheckListOfTests.am
 
 ## Work around a bug of FreeBSD make w.r.t. parallel tests.
-include ../lib/WorkaroundParallelTests.am
+include ../am/WorkaroundParallelTests.am
 
 ## vim: ft=automake noet sw=4 ts=4

@@ -21,12 +21,12 @@ TESTS = \
   timer.test
 
 ## Testsuite environment and setup.
-include ../lib/TestsEnvironment.am
+include ../am/TestsEnvironment.am
 
 ## Testsuite cleanup.
-include ../lib/LocalCleanup.am
+include ../am/LocalCleanup.am
 
 ## Consistency checks on the list of tests.
-include ../lib/CheckListOfTests.am
+include ../am/CheckListOfTests.am
 
 ## vim: ft=automake noet sw=4 ts=4

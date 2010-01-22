@@ -42,7 +42,7 @@ endif
 
 # Check that we do not erreonously include in the tarball any file which
 # is not meant for distribution.
-include lib/CheckNoDistFiles.am
+include am/CheckNoDistFiles.am
 
 # Version string management for distributed tarballs.
 
@@ -58,7 +58,7 @@ changelog_start_date = 2010-01-01
 # Use the commit dates of authors, not of commiters.
 gitlog_to_changelog_extra_options = --author-date
 # Include proper rule(s) to generate the ChangeLog.
-include lib/GitGenerateChangeLog.am
+include am/GitGenerateChangeLog.am
 
 # Configure settings that should be preserved also in `make distcheck'
 DISTCHECK_CONFIGURE_FLAGS = \
@@ -69,7 +69,7 @@ DISTCHECK_CONFIGURE_FLAGS = \
 distcheck-hook:
 
 # Rule(s) to clean temporary files left around by configure/config.status.
-include lib/MostlyCleanConfigureTmp.am
+include am/MostlyCleanConfigureTmp.am
 
 # Maintainer-specific checks.
 .PHONY: maintainer-check
