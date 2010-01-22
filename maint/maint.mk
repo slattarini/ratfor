@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2010-01-08 23:12:51 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-01-22 19:43:12 +0100.  DO NOT EDIT!
 #
 #  Contains maintainer-specific rules. Included by top-level GNUmakefile.
 #
@@ -86,7 +86,6 @@ endef
 # and modularity.
 #
 include $(maintdir)/developer.mk
-include $(maintdir)/strict-distcheck.mk
 include $(maintdir)/release.mk
 
 #

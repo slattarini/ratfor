@@ -33,10 +33,8 @@ EXTRA_DIST = \
   build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
   maint/maint.mk \
-  maint/strict-distcheck.mk \
   maint/release.mk \
   maint/developer.mk \
-  maint/prj-post-cfg.mk \
   ChangeLog-old \
   ChangeLog-2009 \
   $(top_srcdir)/ChangeLog
