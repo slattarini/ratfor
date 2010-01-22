@@ -42,7 +42,7 @@ endif
 
 # Check that we do not erreonously include in the tarball any file which
 # is not meant for distribution.
-include CheckNoDistFiles.am
+include am/CheckNoDistFiles.am
 
 # Version string management for distributed tarballs.
 dist-hook: dist-hook-create-tarball-version
@@ -57,13 +57,13 @@ changelog_start_date = 2010-01-01
 # Use the commit dates of authors, not of commiters.
 gitlog_to_changelog_extra_options = --author-date
 # Include the proper dist-hook to generate te ChangeLog.
-include GitGenerateChangeLog.am
+include am/GitGenerateChangeLog.am
 
 # This is defined here so that it can be extended in maint/*.mk, if needed.
 distcheck-hook:
 
 # Rule(s) to clean temporary files left around by configure/config.status.
-include MostlyCleanConfigureTmp.am
+include am/MostlyCleanConfigureTmp.am
 
 # Maintainer-specific checks.
 .PHONY: maintainer-check

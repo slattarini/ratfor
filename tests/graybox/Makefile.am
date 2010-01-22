@@ -23,15 +23,15 @@ TESTS = \
   token-too-long.test
 
 ## Testsuite environment and setup.
-include ../blackbox/lib/TestsEnvironment.am
+include ../blackbox/am/TestsEnvironment.am
 
 ## Testsuite cleanup.
-include ../blackbox/lib/LocalCleanup.am
+include ../blackbox/am/LocalCleanup.am
 
 ## Consistency checks on the list of tests.
-include ../blackbox/lib/CheckListOfTests.am
+include ../blackbox/am/CheckListOfTests.am
 
 ## Work around a bug of FreeBSD make w.r.t. parallel tests.
-include ../blackbox/lib/WorkaroundParallelTests.am
+include ../blackbox/am/WorkaroundParallelTests.am
 
 ## vim: ft=automake noet sw=4 ts=4
