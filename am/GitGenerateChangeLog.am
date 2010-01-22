@@ -1,5 +1,5 @@
 ## -*- Makefile -*-
-## Copied from SteLib at 2010-01-08 10:43:41 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-01-22 16:34:09 +0100.  DO NOT EDIT!
 ##
 ## Contains a target to generate the ChangeLog file from the Git log
 ## messages.  It tries to do the right thing in case the source tree is

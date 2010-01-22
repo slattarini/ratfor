@@ -1,6 +1,7 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2010-01-21 18:10:22 +0100.  DO NOT EDIT!
-## Provide a worjarounf fro a bug in FreeBSD make regarding parallel tests.
+## Copied from SteLib at 2010-01-22 16:34:09 +0100.  DO NOT EDIT!
+##
+## Provide a workaround for a bug in FreeBSD make regarding parallel tests.
 ##
 ## Copyright (C) 2010 Stefano Lattarini
 ## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
