@@ -27,8 +27,6 @@ SUBDIRS = lib sanity-checks tests
 # List of extra files to be put in the distributed tarball.
 EXTRA_DIST = \
   HACKING \
-  LGPLv3 \
-  GPLv3 \
   GNUmakefile \
   build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
