@@ -226,15 +226,23 @@ Making a release
 
   Commit any pending change to Git.  Re-bootstrap and re-configure the
   package.  Be sure you have enabled the import of maintainer make rules.
-  Run the extended testsuite of the package, with `make strict-distcheck'.
+  Run the testsuite of the package, with `make check && make distcheck'.
   If this fail, fix the errors, commit to Git and repeat the procedure,
-  until `make strict-distcheck' succeed.
+  until the previous command succeed.
 
-  Cite the new $VERSION in the `NEWS' file, and commit that change (with
-  a message like "NEWS: version bumped to $VERSION").  Create an annotated
-  git tag named *exactly* `v$VERSION' (e.g. `v1.0' or `v2.1e'), and with a
-  comment that is *exactly* `$RELEASE_TYPE release $VERSION' (e.g. `stable
-  release 1.0' or `beta release 2.1e').
+  Repeat the previous steps for some different configurations, e.g. by
+  changing the C compiler (CC), the Fortran compiler (F77), and/or the
+  shell used by configure and by the makefiles (CONFIG_SHELL).  Also,
+  try to use a C++ compiler as the C compiler.  Finally, if possible,
+  also try different make(1) programs, and run the testsuite in parallel
+  mode (e.g. by using `make -jN check && make -jN distcheck' for N > 1).
+
+  When all the above steps are finally sucessfull, edit the `NEWS' file
+  to cite the new $VERSION, and commit that change (with a message like
+  "NEWS: version bumped to $VERSION").  Create an annotated git tag named
+  *exactly* `v$VERSION' (e.g. `v1.0' or `v2.1e'), and with a comment that
+  is *exactly* `$RELEASE_TYPE release $VERSION' (e.g. `stable release 1.0'
+  or `beta release 2.1e').
 
   Then simply issue a `make alpha' (if releasing an alpha version), `make
   beta' (if releasing a beta version), or `make stable' (if releasing a

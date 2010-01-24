@@ -34,10 +34,8 @@ EXTRA_DIST = \
   build-aux/git-version-gen \
   GNUmakefile \
   maint/maint.mk \
-  maint/strict-distcheck.mk \
   maint/release.mk \
   maint/developer.mk \
-  maint/prj-post-cfg.mk \
   ChangeLog-old \
   ChangeLog-2009 \
   $(top_srcdir)/ChangeLog
