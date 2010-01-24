@@ -1,5 +1,10 @@
 List of user-visible changes of C Ratfor.
 
+New in XXX
+-----------
+ * C Ratfor is not released anymore as public domain software, but is
+   covered by GNU General Public License, version 3 or later.
+
 New in 1.0p
 -----------
  * The testsuite has been improved and strenghtened.  Especially notable

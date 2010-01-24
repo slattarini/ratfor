@@ -94,7 +94,8 @@ The last word of name is initialized to the symbolic parameter EOS, and
 indicates the end of string.
 
 .SH LICENSE
-This rafor preprocessor is released in the \fBpublic domain\fR.
+C Ratfor is released under the GNU General Public License, version 3
+or later. For more info, see <http://www.gnu.org/licenses/>.
 
 .SH KEYWORDS
 ratfor fortran preprocessor fortran77 ratfor77 spp
