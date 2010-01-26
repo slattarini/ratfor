@@ -15,3 +15,5 @@ This is the TODO file for C Ratfor.
    only if they appear at the beginning of a statement.  This is probably
    best done by changing the parser so that it recognizes the `#' as a
    special kind of statement.
+
+ * Re-add support for `string' ratfor statement.
