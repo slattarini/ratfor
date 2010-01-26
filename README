@@ -1,17 +1,42 @@
-README file for C Raftor.
+README file for the C Raftor distribution.
 
-    This is a C version of ratfor, derived from a UofA ratfor
-    in ratfor. It was originally released to the net sometime
-    ago, and it is re-released for the benefit of those sites
-    who only get mod->comp.sources.
 
-    It now includes minor changes to produce F77 code as well.
+What is C Ratfor
+----------------
 
-    This code *is* released in the public domain. See the file
-    COPYING for more information.
+ C Ratfor is a ratfor preprocessor written in C.  It translates programs
+ written in the ratfor language into Fortran 77 programs.
 
-    For more information about the ratfor testsuite, please read
-    the file `tests/README'.
+ C Ratfor is derived from Public Domain Ratfor, which in turn derived from
+ a ratfor proprocessor written at the University of Arizona's (which, by
+ the way, was implemented in ratfor itself).  For those interested, the
+ latest released version of Public Domain Ratfor can be downloaded from:
+   <http://sepwww.stanford.edu/doku.php?id=sep:software:ratfor>
 
-    I would, as usual, appreciate hearing about bug fixes and
-    improvements.
+ For further information about the Ratfor language, its documentation, and
+ other existing implementations of Ratfor preprocessors, refer to the C
+ Ratfor man page in the `doc/' subdirectory.
+
+
+Building and Installing C Ratfor
+---------------------------------
+
+ C Ratfor provides a Autotools-based build system, so it should support
+ "out of the box" almost all the GNU standards for build systems.  For
+ more detailed information, read the `INSTALL' file.
+
+
+Testing C Ratfor
+----------------
+
+ The C Ratfor testsuite is described in the file `tests/README'.  Refer
+ to that file for more information about how to run or extend the C Ratfor
+ testsuite.
+
+
+Author and bug reporting
+------------------------
+
+ C Ratfor is maintained by Stefano Lattarini.
+ Bugs can be reported at <stefano.lattarini@gmail.com>.
+
