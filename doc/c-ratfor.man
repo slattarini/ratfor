@@ -1,11 +1,11 @@
-.TH RATFOR 1 "Unknown Date" "C Ratfor" ""
+.TH C-RATFOR 1 "Unknown Date" "C Ratfor" ""
 .\"
 .SH NAME
-.B ratfor
-\- ratfor preprocessor for fortran77
+.B c-ratfor
+\- ratfor preprocessor for Fortran77
 
 .SH SYNOPSIS
-\fBratfor\fR [\fB-l\fR \fISTART-LABEL\fR] [\fB-C\fR]
+\fBc-ratfor\fR [\fB-l\fR \fISTART-LABEL\fR] [\fB-C\fR]
 [\fB-o\fR \fIOUTFILE\fR] [\fIINFILE\fR]
 
 .SH PARAMETERS
@@ -99,7 +99,7 @@ or later. For more info, see <http://www.gnu.org/licenses/>.
 
 .SH "SEE ALSO"
 .PP
-The most accessible reference for ratfor is the celebrated book
+The most accessible reference for Ratfor is the celebrated book
 "\fBSoftware Tools\fR" by Brian Kernighan and P.J. Plauger
 (Addison-Wesley, 1976, ISBN 0-201-03669-X).
 .PP
