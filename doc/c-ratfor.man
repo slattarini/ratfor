@@ -18,7 +18,7 @@ user sets strating label \fISTART-LABEL\fR
 .I OUTFILE
 specify output file (default is standard output)
 .TP
-.B -C 
+.B -C
 keep comments in (useful for compiler directives)
 
 .SH DESCRIPTION
