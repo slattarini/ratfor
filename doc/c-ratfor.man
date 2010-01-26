@@ -134,6 +134,6 @@ tested, used and maintained for more than 20 years, so it should be
 very reliable.
 
 .SH KEYWORDS
-ratfor fortran preprocessor fortran77 ratfor77 spp
+ratfor fortran preprocessor fortran77 ratfor77
 
 .\" vim: ft=nroff et sw=2 ts=2
