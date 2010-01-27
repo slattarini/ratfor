@@ -1,0 +1,40 @@
+#!/bin/sh
+
+# Check that the `%' directive for verbatim text is recognized
+# *only* at the beginning of a statement.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+s='&&;|!=#{o}'
+
+cat >tst.r <<EOF
+/ a % b / $s /
+/ c%d / $s /
+/ e.%$TAB:f / $s /
+/ ,,,  %${TAB}@ / $s /
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r \
+  || testcase_FAIL "unexpected ratfor failure"
+test ! -s stderr \
+  || testcase_FAIL "stderr not empty"
+
+$SED -e "s/^${ws0p}//" \
+     -e "s/${ws0p}$//" \
+     -e "s/${ws0p}\\([/%.:,]\\)${ws0p}/\\1/g" \
+   <stdout >pp-out
+
+cat pp-out
+
+for x in 'a%b' 'c%d' 'e.%:f' ',,,%@'; do
+    $FGREP "/$x/" pp-out \
+      || testcase_FAIL "string /$x/ not found in post-processed output"
+done
+
+$FGREP "/$s/" && testcase_FAIL "string /$s/ found in post-processed output"
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

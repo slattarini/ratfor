@@ -1,0 +1,30 @@
+#!/bin/sh
+
+# Check that the `%' directive for verbatim text is recognized
+# at the beginning of a statement.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+s="x & (y * ${TAB}y) || (z1 ==z2);$TAB; 1   FOO; #zap"
+
+cat >tst.r <<EOF
+%first / $s
+$SPACE%second / $s
+$TAB%third / $s
+foo;%fourth / $s
+{%fifth / $s
+}
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+test ! -s stderr || testcase_FAIL "unexpected message(s) on stderr"
+for x in first second third fourth fifth; do
+    $FGREP "$x / $s" stdout \
+      || "\`%' unrecognized at the beginning of statement ($x line)"
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

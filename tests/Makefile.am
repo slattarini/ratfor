@@ -173,11 +173,14 @@ TESTS = \
   usage-option-missing-argument.test \
   usage-option-unknown.test \
   usage-too-many-args.test \
+  verbatim-at-stmt-beginning-at-least.test \
+  verbatim-at-stmt-beginning-only.test \
+  verbatim-curly-brackets.test \
+  verbatim-define-stress-interaction.test \
   verbatim-in-define.test \
+  verbatim-include-interaction.test \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
-  verbatim-only-line-begin.test \
-  verbatim-stress.test \
   verbatim-stress_f77.test \
   verbatim.test \
   verbatim_f77.test \

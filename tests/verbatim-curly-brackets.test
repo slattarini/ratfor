@@ -1,0 +1,91 @@
+#!/bin/sh
+
+# Testing the interaction of the `%' construct and curly brackets.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+vs='if (0 > 1 && 2 == 2 || 5 != 5) pass'
+
+set +x # temporarly disable traces
+
+do_test() {
+    case ${1-} in
+        s*) e=0;; # expect success
+        f*) e=1;; # expect failure
+        *) testcase_HADERROR "bad argument \`$1' to do_tests()";;
+    esac
+    t=$1
+    rx="^ $vs$2$"
+    cat "tst-$t.r"
+    run_RATFOR -e $e "tst-$t.r" \
+      || testcase_FAIL "unexpected ratfor failure on tst-$t"
+    out=stdout-$t
+    err=stderr-$t
+    mv stdout "$out"
+    mv stderr "$err"
+    if test $e -eq 0 && test -s "$err"; then
+        testcase_FAIL "unexpected ratfor stderr output on tst-$t"
+    elif test $e -ne 0 && test ! -s "$err"; then
+        testcase_FAIL "missing expected ratfor stderr output on tst-$t"
+    fi
+    $GREP "$rx" "$out" || testcase_FAIL "broken verbatim line for tst-$t"
+    unset e t rx out err
+}
+
+set -x # re-enable traces
+
+cat >tst-s1.r <<EOF
+{ % $vs
+}
+EOF
+
+cat >tst-s2.r <<EOF
+{ % $vs }
+}
+EOF
+
+cat >tst-s3.r <<EOF
+{ % $vs$TAB}
+}
+EOF
+
+cat >tst-s4.r <<EOF
+{ % $vs{
+}
+
+EOF
+cat >tst-s5.r <<EOF
+{ % $vs {
+}
+EOF
+
+cat >tst-s6.r <<EOF
+{ % $vs {{{ }
+}
+EOF
+
+cat >tst-f1.r <<EOF
+{ % $vs }
+EOF
+
+cat >tst-f2.r <<EOF
+{ % $vs}
+EOF
+
+cat >tst-f3.r <<EOF
+{ % $vs {}}
+EOF
+
+do_test s1 ""
+do_test s2 " }"
+do_test s3 "$TAB}"
+do_test s4 "{"
+do_test s5 " {"
+do_test s6 " {{{ }"
+do_test f1 " }"
+do_test f2 "}"
+do_test f3 " {}}"
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

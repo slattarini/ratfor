@@ -15,21 +15,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Test that `%' to output lines verbatim is recognized only if placed
-# at the beginning of a line
+# Check the support of `%' construct in included files.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-cat >tst.r <<EOF
-a = 1 %&&
-b = 1; %&&
- %&&
-EOF
+n=0
 
-cat tst.r
+xfail() {
+   testcase_FAIL "(test n.$n): $*"
+}
 
-run_RATFOR tst.r || testcase_FAIL
-$FGREP "&&" stdout && testcase_FAIL
+xtest() {
+    n=`expr $n + 1`
+    s=$1
+    test ! -f tst$n.r # sanity check
+    test ! -f inc$n.r # sanity check
+    echo  "include inc$n.r; zap$n" > tst$n.r
+    echo  "%$s" > inc$n.r
+    run_RATFOR tst$n.r \
+      || xfail "unexpected ratfor failure on tst$n.r"
+    mv stdout stdout-$n
+    mv stderr stderr-$n
+    test ! -s stderr-$n \
+      || xfail "ratfor standard error not empty"
+    $FGREP "$s" stdout-$n \
+      || xfail "verbatim string not found in ratfor output"
+    $GREP "^${ws0p}zap$n${ws0p}$" stdout-$n || \
+      xfail "\"zap\" not an a line of its own in ratfor output"
+}
+
+xtest "|| ; && == %${TAB}& 1 > 2"
+xtest "if(a) {pass}"
+xtest "$TAB ) {"
 
 testcase_DONE
 
