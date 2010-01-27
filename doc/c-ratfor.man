@@ -129,9 +129,15 @@ Michael J. Harrison has written (or at least has maintained) a Ratfor
 preprocesor, written in Ratfor itself.
 .br
 This preprocessor supports some extensions, addional features and
-bells-and-whitles over standard Ratfor. Also, it seems to have been
+bells-and-whitles over standard Ratfor.  Also, it seems to have been
 tested, used and maintained for more than 20 years, so it should be
 very reliable.
+.br
+On the other hand, this version of Ratfor has only a partial support (or
+no support at all) for some others standard rafor features; for example,
+it doesn't recognize the `%' escaping, neither does it recognize `&&'
+and `||' as aliases for `.and.' and `.or.' (altought it does recognize
+`&' and `|' as such aliases).
 
 .SH KEYWORDS
 ratfor fortran preprocessor fortran77 ratfor77
