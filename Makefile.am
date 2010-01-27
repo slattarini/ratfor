@@ -83,7 +83,7 @@ include am/MostlyCleanConfigureTmp.am
 .PHONY: maintainer-check
 maintainer-check: maintainer-check-list-of-tests
 
-# List of directories where to recurse for testing and related
+# List of directories where to recurse into for testing and related
 # maintainer-checks.
 TEST_SUBDIRS = tests/graybox tests/blackbox
 
