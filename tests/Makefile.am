@@ -144,6 +144,8 @@ TESTS = \
   return-keyword-subroutine.test \
   return-keyword-subroutine_f77.test \
   simple-assignement.test \
+  start-a-statement-curly-bracket.test \
+  start-a-statement-semicolon.test \
   startlabel-default.test \
   startlabel-user-choice.test \
   stmt-stack-stress_f77.test \
@@ -209,6 +211,9 @@ function-name-invalid-1.log: subprog-name-invalid.sh
 function-name-invalid-2.log: subprog-name-invalid.sh
 function-name-invalid-3.log: subprog-name-invalid.sh
 
+EXTRA_DIST += start-a-statement-sanitycheck.sh
+start-a-statement-curly-bracket.log: start-a-statement-sanitycheck.sh
+start-a-statement-semicolon.log: start-a-statement-sanitycheck.sh
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
