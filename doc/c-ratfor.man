@@ -99,17 +99,16 @@ or later. For more info, see <http://www.gnu.org/licenses/>.
 
 .SH "SEE ALSO"
 .PP
-The most accessible reference for Ratfor is the celebrated book
-"\fBSoftware Tools\fR" by Brian Kernighan and P.J. Plauger
-(Addison-Wesley, 1976, ISBN 0-201-03669-X).
-.PP
-The best introduction to Ratfor is probably the paper "\fBRATFOR - a
-preprocessor for rational Fortran\fR", by Brian Kernighan, appeared
-in "Software - Practice and Experience" (October 1975).  An extended
-and updated copy of this article is available in PostScript format
-at the URL:
+The paper "\fBRATFOR - a preprocessor for rational Fortran\fR", by Brian
+Kernighan (appeared in "Software - Practice and Experience", October 1975)
+provides a very good introduction to Ratfor.  An extended and updated copy
+of this article is available in PostScript format at the URL:
 .br
  \fI<http://www.mit.edu:8001/afs/athena.mit.edu/astaff/project/docsourc/doc/unix.manual.progsupp2/08.ratfor/ratfor.PS>\fB
+.PP
+The most accessible and extensive reference for Ratfor is the celebrated
+book "\fBSoftware Tools\fR" by Brian Kernighan and P.J. Plauger
+(Addison-Wesley, 1976, ISBN 0-201-03669-X).
 .PP
 The folks at the Stanford Exploration Project (\fBSEP\fR) have a useful
 page about Ratfor on their Web site:
@@ -125,19 +124,17 @@ translates Ratfor code into Fortran90 code:
 .br
  \fI<http://sepwww.stanford.edu/doku.php?id=sep:software:ratfor90>\fR
 .PP
-Michael J. Harrison has written (or at least has maintained) a Ratfor
-preprocesor, written in Ratfor itself.
-.br
-This preprocessor supports some extensions, addional features and
-bells-and-whitles over standard Ratfor.  Also, it seems to have been
-tested, used and maintained for more than 20 years, so it should be
-very reliable.
-.br
-On the other hand, this version of Ratfor has only a partial support (or
-no support at all) for some others standard rafor features; for example,
-it doesn't recognize the `%' escaping, neither does it recognize `&&'
-and `||' as aliases for `.and.' and `.or.' (altought it does recognize
-`&' and `|' as such aliases).
+Finally, Michael J. Harrison has written (or at least has maintained) a
+Ratfor preprocesor written in Ratfor itself.  This preprocessor supports
+some extensions, additional features and bells-and-whitles over standard
+Ratfor.
+Also, it seems to have been tested, used and maintained for more than 20
+years, so it should be very reliable.
+On the other hand, it has only a partial support (or no support at all)
+for some others standard rafor features; for example, it doesn't recognize
+the `\fI%\fR' "verbatim escaping", neither does it recognize `\fI&&\fR' and
+`\fI||\fR' as aliases for `\fI.and.\fR' and `\fI.or.\fR' (altought it does
+recognize `\fI&\fR' and `\fI|\fR' as such aliases).
 
 .SH KEYWORDS
 ratfor fortran preprocessor fortran77 ratfor77
