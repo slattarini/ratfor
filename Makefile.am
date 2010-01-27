@@ -89,6 +89,10 @@ include am/MostlyCleanConfigureTmp.am
 .PHONY: maintainer-check
 maintainer-check: maintainer-check-list-of-tests
 
+# List of directories where to recurse into for testing and related
+# maintainer-checks.
+TEST_SUBDIRS = sanity-checks tests
+
 # Check that the list of tests given in the Makefile is equal to the
 # list of all test scripts in the Automake testsuite.
 .PHONY: maintainer-check-list-of-tests
