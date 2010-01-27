@@ -21,9 +21,9 @@ What is C Ratfor
 Building and Installing C Ratfor
 ---------------------------------
 
- C Ratfor provides a Autotools-based build system, so it should support
- "out of the box" almost all the GNU standards for build systems.  For
- more detailed information, read the `INSTALL' file.
+ The C Ratfor build system uses GNU Autotools, and thus it is mostly
+ compliant with GNU standards.  For a detailed description of C Ratfor's
+ configuration and installation process, read the `INSTALL' file.
 
 
 Testing C Ratfor
