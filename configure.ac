@@ -24,10 +24,6 @@ m4_pattern_forbid([^AX_])
 m4_pattern_forbid([^_RAT4_])
 m4_pattern_forbid([^RAT4_])
 
-# This apparently weird quote is needed to avoid that vim picks up
-# and intepretes the following line as a vim modeline for this file.
-m4_define([__vim_modeline__], [@%:@ v][im: ft=sh ts=8 sw=8 noet])
-
 #
 # Autoconf's initializations.
 #
@@ -205,6 +201,4 @@ AX_REPORT_IF_BETA
 
 AS_EXIT(0)
 
-__vim_modeline__
-dnl*
 dnl* vim: ft=config ts=4 sw=4 et
