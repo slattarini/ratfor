@@ -128,10 +128,6 @@ for func in getopt strerror vfprintf strdup; do
 done
 AS_UNSET([func])
 
-# XXX XXX XXX
-# Look for a diff command that can produce better human-readable output.
-AX_PROG_DIFF_U
-
 #
 # Enable maintainer-specific make rules, on user request.
 #
