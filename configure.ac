@@ -52,8 +52,8 @@ AX_INCLUDE_MAINT_CONFIG_SITE
 # Automake's initializations.
 #
 
-AM_INIT_AUTOMAKE([1.11 foreign -Wall -Werror color-tests parallel-tests
-                       no-installinfo no-texinfo.tex])
+AM_INIT_AUTOMAKE([1.11.1 foreign -Wall -Werror color-tests parallel-tests
+                         no-installinfo no-texinfo.tex])
 dnl: enable `silent-rules' support, but make silent rules disabled by
 dnl: default
 AM_SILENT_RULES([no])
