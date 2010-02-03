@@ -55,22 +55,12 @@ dnl: default
 AM_SILENT_RULES([no])
 
 #
-# Option `--enable-maintainer-make-rules' tells that maintaner-specific
-# rules should be imported in the GNUmakefile.
+# Enable maintainer-specific make rules, on user request.
 #
 
-AX_ARG_ENABLE(
-  [maintainer-make-rules],
-  [Import maintaner-specific rules in the GNUmakefile. Use it only if
-   you have GNU make, and you know what you are doing. Also, note that
-   this option has *NOTHING* to do with the infamous automake's
-   "maintainer-mode".],dnl '# font-lock
-  [rat4_enable_maintainer_make_rules=yes],
-  [rat4_enable_maintainer_make_rules=no])
-
-m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
-AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
-               [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
+# Option `--enable-maintainer-make-rules' tells that maintaner-specific
+# rules should be imported in the GNUmakefile.
+AX_ARG_ENABLE_MAINTAINER_MAKE_RULES
 
 #
 # Determine the list of tests to be skipped.
