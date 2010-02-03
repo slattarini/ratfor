@@ -89,19 +89,10 @@ AM_SILENT_RULES([no]) dnl. make `silent-rules' disabled by default
 AC_PROG_CC_STDC
 AM_PROG_CC_C_O
 
-#
 # See if $CC is a C++ compiler.
-#
-
-AC_MSG_CHECKING([wheter the C compiler is a C++ compiler])
-AC_COMPILE_IFELSE(
-    [AC_LANG_PROGRAM([[
-#ifdef __cplusplus
-  choke me
-#endif]])],
-    [rat4_c_compiler_is_cplusplus_compiler=no],
-    [rat4_c_compiler_is_cplusplus_compiler=yes])
-AC_MSG_RESULT([$rat4_c_compiler_is_cplusplus_compiler])
+AX_CACHE_CHECK_CC_IS_CXX
+# Help to support the use of C++ compilers as C compilers.
+AX_AH_C_DECLS_MACROS
 
 #
 # Checks for headers.
@@ -141,83 +132,28 @@ for func in getopt strerror vfprintf strdup; do
 done
 AS_UNSET([func])
 
-#
-# Checks for programs used by the testsuite.
-#
-
+# XXX XXX XXX
 # Look for a diff command that can produce better human-readable output.
 AX_PROG_DIFF_U
 
 #
-#  Enable maintainer-specific make rules, on user request.
+# Enable maintainer-specific make rules, on user request.
 #
 
 # Option `--enable-maintainer-make-rules' tells that maintaner-specific
 # rules should be imported in the GNUmakefile.
-AX_ARG_ENABLE(
-    [maintainer-make-rules],
-    [Import maintaner-specific rules in the GNUmakefile. Use it only if
-      you have GNU make, and you know what you are doing. Also, note that
-      this option has *NOTHING* to do with the infamous automake's
-      "maintainer-mode".],dnl '# font-lock
-    [rat4_enable_maintainer_make_rules=yes],
-    [rat4_enable_maintainer_make_rules=no])
-
-m4_pattern_allow([ENABLE_MAINTAINER_MAKE_RULES])
-AM_CONDITIONAL([ENABLE_MAINTAINER_MAKE_RULES],
-               [test x"$rat4_enable_maintainer_make_rules" = x"yes"])
+AX_ARG_ENABLE_MAINTAINER_MAKE_RULES
 
 #
-#  Enable compiler warnings.
+# Compiler warnings and strictness.
 #
 
-# Option `--enable-werror-cflag' tells whether or not the `-Werror' flag
-# should be added (when supported) to $CFLAGS.
-AX_ARG_ENABLE(
-    [werror-cflag],
-    [enable the `-Werror' C compiler flag, if supported],dnl '`# font-lock
-    [rat4_maybe_werror=-Werror],
-    [rat4_maybe_werror=''])
+# Enable as many compiler warnings as possible.
+AX_CC_ENABLE_ALL_COMPILER_WARNINGS
 
-# Enable as many compiler warnings as possible (this is tailered to gcc,
-# but should not cause failures of problems for other compilers).
-# This code *must* be set after any check on cc, c headers, c functions
-# or c libraries, as stricter handling of warnings can interfere with
-# autoconf checks.
-rat4_cc_warn_flags="
-    -Wall
-    -Wextra
-    -Wshadow
-    -Wmissing-declarations
-    -Wwrite-strings
-    -Wsign-conversion
-    -pedantic"
-if test x"$rat4_c_compiler_is_cplusplus_compiler" != x"yes"; then
-    rat4_cc_warn_flags="
-        $rat4_cc_warn_flags
-        -Wnested-externs
-        -Wc++-compat
-        -Wdeclaration-after-statement"
-fi
-for flag in $rat4_cc_warn_flags $rat4_maybe_werror; do
-    AX_CACHE_CHECK_CC_FLAG([$flag], [], [], [CFLAGS="$CFLAGS $flag"])
-done
-AS_UNSET([flag])
-
-#
-# Hack to support C++ compilers.
-#
-
-AH_TOP([/* Support for C++ compilers */
-#ifdef __cplusplus
-#  define C_DECL extern "C"
-#  define BEGIN_C_DECLS extern "C" {
-#  define END_C_DECLS }
-# else
-#  define C_DECL
-#  define BEGIN_C_DECLS
-#  define END_C_DECLS
-#endif])
+# Process configure option `--enable-werror-cflag', telling whether or
+# not the `-Werror' flag should be added (when supported) to $CFLAGS.
+AX_ARG_ENABLE_WERROR_CFLAG
 
 #
 # Do output.
