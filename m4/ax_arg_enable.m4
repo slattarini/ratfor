@@ -1,13 +1,21 @@
-# -*- Autoconf -*-
-# Copied from SteLib at 2009-10-04 20:49:22 +0200.  DO NOT EDIT!
-# serial 1 ax_arg_enable.m4
+#-*- Autoconf -*-
+# Copied from SteLib at 2010-02-03 18:07:04 +0100.  DO NOT EDIT!
+# serial 3 ax_arg_enable.m4
 
+#
+# Copyright (C) 2008-2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>.
+#
+# Copying and distribution of this file, with or without modification, are
+# permitted in any medium without royalty provided the copyright notice and
+# this notice are preserved.
+#
 
 # AX_ARG_ENABLE(ENABLE-FLAG, HELP-STRING, [ACTION-IF-GIVEN],
 #               [ACTION-IF-NOT-GIVEN],[DEFAULT-ACTION])
 # ------------------------------------------------------------
 #  Wrapper around `AC_ARG_ENABLE'. If DEFAULT-ACTION is not given, it
-# defauts to ACTION-IF-NOT-GIVEN.
+#  defauts to ACTION-IF-NOT-GIVEN.
 AC_DEFUN([AX_ARG_ENABLE],
     [AC_ARG_ENABLE(
         [$1],

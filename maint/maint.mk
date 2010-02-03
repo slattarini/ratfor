@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2010-01-24 16:41:54 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-02-03 18:08:13 +0100.  DO NOT EDIT!
 #
 #  Contains maintainer-specific rules. Included by top-level GNUmakefile.
 #

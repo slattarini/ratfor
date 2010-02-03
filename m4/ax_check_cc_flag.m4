@@ -1,17 +1,18 @@
-# -*- Autoconf -*-
-# Copied from SteLib at 2009-10-21 16:26:09 +0200.  DO NOT EDIT!
-# serial 1 ax_check_cc_flag.m4
+#-*- Autoconf -*-
+# Copied from SteLib at 2010-02-03 18:07:04 +0100.  DO NOT EDIT!
+# serial 3 ax_check_cc_flag.m4
 
 #
-# Copyright (C) 2009 Lattarini Stefano <stefano.lattarini@gmail.com>
+# Copyright (C) 2009, 2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>.
 #
 # Copying and distribution of this file, with or without modification, are
 # permitted in any medium without royalty provided the copyright notice and
 # this notice are preserved.
 #
 
-# _AX4_CHECK_CC_FLAG(FLAG-TO-CHECK,[PROLOGUE],[BODY],
-#                    [ACTION-IF-SUCCESS], [ACTION-IF-FAILURE])
+# _AX_CHECK_CC_FLAG(FLAG-TO-CHECK,[PROLOGUE],[BODY],
+#                   [ACTION-IF-SUCCESS], [ACTION-IF-FAILURE])
 # ------------------------------------------------------------
 # For internal usage only.
 AC_DEFUN([_AX_CHECK_CC_FLAG],

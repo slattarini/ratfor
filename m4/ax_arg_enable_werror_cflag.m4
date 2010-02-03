@@ -1,10 +1,10 @@
 # -*- Autoconf -*-
-# Copied from SteLib at 2010-02-03 16:07:07 +0100.  DO NOT EDIT!
-# serial 1 ax_arg_enable_werror_cflag.m4
+# Copied from SteLib at 2010-02-03 18:07:04 +0100.  DO NOT EDIT!
+# serial 2 ax_arg_enable_werror_cflag.m4
 
 #
-#
-# Copyright (C) 2010 Lattarini Stefano <stefano.lattarini@gmail.com>
+# Copyright (C) 2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>.
 #
 # Copying and distribution of this file, with or without modification, are
 # permitted in any medium without royalty provided the copyright notice and
