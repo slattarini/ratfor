@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2010-01-08 23:13:06 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-02-03 17:50:56 +0100.  DO NOT EDIT!
 # Slighty modified version of the GNUmakefile from gnulib `gnumakefile'
 # module.
 

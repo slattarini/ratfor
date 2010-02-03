@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2010-01-08 23:12:51 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-02-03 17:49:01 +0100.  DO NOT EDIT!
 #
 #  Contains maintainer-specific rules to create a beta or stable release.
 #  Included by top-level maint.mk.

@@ -1,5 +1,5 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2010-01-22 16:34:09 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-02-03 17:50:24 +0100.  DO NOT EDIT!
 ##
 ## Provide a workaround for a bug in FreeBSD make regarding parallel tests.
 ##

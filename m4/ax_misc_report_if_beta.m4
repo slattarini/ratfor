@@ -1,9 +1,9 @@
 #-*- Autoconf -*-
-# Copied from SteLib at 2010-01-08 10:50:38 +0100.  DO NOT EDIT!
-# serial 5 ax_misc_report_if_beta.m4
+# Copied from SteLib at 2010-02-03 18:00:45 +0100.  DO NOT EDIT!
+# serial 6 ax_misc_report_if_beta.m4
 
 #
-# Copyright (C) 2008-2010 Lattarini Stefano.
+# Copyright (C) 2008-2010 Stefano Lattarini.
 # Written by Stefano Lattarini <stefano.lattarini@gmail.com>.
 #
 # Copying and distribution of this file, with or without modification, are

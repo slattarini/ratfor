@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2010-01-08 23:12:51 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-02-03 17:49:09 +0100.  DO NOT EDIT!
 # Included by maint.mk
 #
 #  This file is meant to be used by maintainers only; it try to detect

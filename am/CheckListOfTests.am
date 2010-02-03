@@ -1,5 +1,5 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2010-01-22 16:34:09 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-02-03 17:50:24 +0100.  DO NOT EDIT!
 ##
 ## Provide a rule checking that the list of tests given in the Makefile
 ## is equal to the list of all test scripts in the same directory.
