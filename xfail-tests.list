@@ -7,11 +7,10 @@
 # should be outputted.
 no-double-quotes.test
 
-# Currently, `%'-escaping is recognized also after blank spaces, and this
-# behaviour (which should be fixed in a later release) break these tests.
+# Currently, `%'-escaping is badly implemented, and make some tests fail.
+verbatim-at-stmt-beginning-only.test
+verbatim-define-stress-interaction.test
 verbatim-in-define.test
-verbatim-only-line-begin.test
-verbatim-stress.test
 
 # Errors about switch/case are correctly recognized, but can sometimes still
 # produce bogus diagnostic messages.
