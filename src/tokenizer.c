@@ -60,7 +60,7 @@ integer_to_string(int n, char str[], int size)
     i = 0;
     do {
         str[i++] = n % 10 + DIG0;
-    } while ((n /= 10) > 0 && i < size-2);
+    } while ((n /= 10) > 0 && i < size - 2);
     if (sign < 0 && i < size - 1)
         str[i++] = '-';
     str[i] = EOS;
@@ -70,7 +70,7 @@ integer_to_string(int n, char str[], int size)
         str[j] = str[k];
         str[k] = c;
     }
-    return(i-1);
+    return(i - 1);
 }
 
 /* Look-up definition of name[] in user-defined macros. If it's not found,
@@ -208,11 +208,11 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[i] = ngetch(fp);
         if (!is_digit(lexstr[i]))
             break;
-        b = 10*b + (lexstr[i] - DIG0);
+        b = 10 * b + (lexstr[i] - DIG0);
     }
     if (lexstr[i] == RADIX && b >= 2 && b <= 36) {
         /* n%ddd... */
-        for (n = 0; ; n = b*n + c) {
+        for (n = 0; ; n = b * n + c) {
             c = c2 = ngetch(fp);
             if (is_lower(c))
                 c = c - 'a' + DIG9 + 1;
@@ -419,8 +419,8 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
                 nlpar--;
             EXTEND_DEFN_WITH_TOKEN_(ptoken);
         }
-        /* TODO: assert def[i-1] == ')' */
-        def[i-1] = EOS;
+        /* TODO: assert def[i - 1] == ')' */
+        def[i - 1] = EOS;
     }
     /* get rid of temporary internal macro */
 #   undef EXTEND_DEFN_WITH_TOKEN_
