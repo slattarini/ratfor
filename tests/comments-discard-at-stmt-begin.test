@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
 # This file is part of the Ratfor Testsuite.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -15,21 +15,30 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that ratfor comments (and only real ratfor comments) are discarded.
+# Check that ratfor comments are discarded by default when placed at
+# the beginning of a statement.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-cat > tst.r <<EOF
-# throw me away
-"# keep me"
-EOF
+t="throw me away"
+
+data="$srcdir/comments-at-stmt-begin.data"
+
+test -f "$data" || testcase_HARDERROR "data file \`$data' not found"
+test -r "$data" || testcase_HARDERROR "data file \`$data' not readable"
+
+# Do NOT use `<"$data"' in the sed command below, or a bug in the combo
+# "MirBSD Korn Shell" + "GNU C Library" might be triggered.
+$SED -e '/^!/d' \
+     -e "s/\\\\t/$TAB/g" \
+     -e "s/#~/# $t/" \
+   "$data" >tst.r
 
 cat tst.r
 
 run_RATFOR tst.r || testcase_FAIL
-$GREP -i 'throw me away' stdout && testcase_FAIL
-$GREP 'keep me' stdout || testcase_FAIL
-
+test -s stderr && testcase_FAIL
+$FGREP -i "$t" stdout && testcase_FAIL
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

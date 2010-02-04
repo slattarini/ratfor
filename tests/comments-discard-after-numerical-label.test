@@ -1,0 +1,55 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor comments are discarded by default when placed after
+# numerical label(s).
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+t="throw me away"
+
+cat > tst.r <<EOF
+1 x # $t
+2 a + b ${TAB} # $t
+3  # $t
+foo
+  4  # $t
+foo
+ ${TAB} 5${TAB}# $t
+foo
+zap; 6# $t
+pass
+{ 7 #$t
+pass
+}
+
+while(a)
+  if (b) {
+  8 pass # $t
+  9${TAB}# $t
+  pass
+}
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+$FGREP -i "$t" stdout && testcase_FAIL
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

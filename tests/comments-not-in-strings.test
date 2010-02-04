@@ -1,0 +1,59 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor #-comments are not erroneusly discarded from
+# strings.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+k="keep me"
+
+cat > tst1.r <<EOF
+"# $k 1"
+  "# $k 2"
+a b c "# $k 3"
+3 "# $k 4"
+foo = 1; "# $k 5"
+{ "# $k 6" }
+{ x "# $k 7" }
+foo("# $k 8")
+call bar("# $k 9")
+for(x="# $k 10"; true; pass;) pass
+while(1) {
+  "# $k 11"
+  if(2) "# $k 12"
+}
+repeat "# $k 13" until(3)
+repeat { s = "# $k 13" }
+EOF
+
+sed "s/\"/'/g" tst1.r >tst2.r
+
+for i in 1 2; do
+    cat tst$i.r
+    run_RATFOR tst$i.r || testcase_FAIL
+    mv stdout stdout$i
+    mv stderr stderr$i
+    test -s stderr$i && testcase_FAIL
+    for j in 1 2 3 4 5 6 7 8 9 10 11 12 13; do
+        $FGREP "$k $j" stdout$i || testcase_FAIL
+    done
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

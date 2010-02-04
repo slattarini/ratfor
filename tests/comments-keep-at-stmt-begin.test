@@ -15,50 +15,44 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that comments kept by the `-C' switch does not interfere with the
-# "real" ratfor output
+# Check that `-C' switch of ratfor preserves ratfor comments, at least
+# those which are placed at the beginning of a statement, and preserves
+# them in the correct order.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-rat4t_require_fortran_compiler
+s="this is / a  \"c@mM3nt'!; == {YES,&,IT,|,IS}"
+r="YES.*IT.*IS"
 
-$SED -e "s/\\\\t/${TAB}/g" >tst.r <<\EOF
-program testprog
-    # this is a "%c@mm3nt%'!
-# this too is a "%c@mm3nt%'!
-    integer x
-    x = 1 # and this too is another "%c@mm3nt%'!
-100 format(I1)
-    write(*,100) 1
-# end
-    x = 2
-    # x = 3
-    write(*,100) x
-    x = 4
-    write(*,100) x  # x = 3
-    write(*,100) x; # write(*,100) 5
-# write(*,100) 7
- # write(*,100) 8
-\t# write(*,100) 9
-    call halt
-end
-EOF
+data="$srcdir/comments-at-stmt-begin.data"
 
-cat > exp <<EOF
-1
-2
-4
-4
-EOF
+test -f "$data" || testcase_HARDERROR "data file \`$data' not found"
+test -r "$data" || testcase_HARDERROR "data file \`$data' not readable"
+
+shared_awk_code='
+    BEGIN {
+        i = 0;
+        # quote the string so that it can be used in sub()/gsub()
+        gsub("&", "\\\\&", s);
+    }
+    /^!/ { next; }
+    { gsub("\\\\t", "\t") } # expand tabs
+'
+
+$AWK -v s="$s" "$shared_awk_code"'
+    /#~/ { i = i + 1; sub("#~", "# " s " " i); }
+    { print; }
+' "$data" >tst.r
+
+$AWK -v s="$s" "$shared_awk_code"'
+    /#~/ { i = i + 1; sub(".*#~", "C " s " " i); print; }
+' "$data" >exp
 
 cat tst.r
 
 run_RATFOR -C tst.r || testcase_FAIL
-mv stdout tst.f
-run_F77 tst.f || testcase_FAIL
-run_command ./tst.exe || testcase_FAIL
 test -s stderr && testcase_FAIL
-ws_normalize <stdout >got
+$SED -n -e 's/^c/C/' -e "/^C.*$r/p" stdout > got
 
 cat exp
 cat got

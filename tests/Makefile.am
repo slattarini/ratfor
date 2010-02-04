@@ -22,10 +22,13 @@ TESTS = \
   break-fail.test \
   break_f77.test \
   case-sensibility-basic.test \
-  comments-basic.test \
-  comments-keep.test \
+  comments-discard-after-numerical-label.test \
+  comments-discard-at-stmt-begin.test \
+  comments-discard-in-stmt-middle.test \
+  comments-keep-at-stmt-begin.test \
   comments-keep_f77.test \
   comments-no-hang.test \
+  comments-not-in-strings.test \
   common-block.test \
   common-block_f77.test \
   data-statement.test \
@@ -214,6 +217,10 @@ function-name-invalid-3.log: subprog-name-invalid.sh
 EXTRA_DIST += start-a-statement-sanitycheck.sh
 start-a-statement-curly-bracket.log: start-a-statement-sanitycheck.sh
 start-a-statement-semicolon.log: start-a-statement-sanitycheck.sh
+
+EXTRA_DIST += comments-at-stmt-begin.data
+comments-discard-at-stmt-begin.log: comments-at-stmt-begin.data
+comments-keep-at-stmt-begin.log: comments-at-stmt-begin.data
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am

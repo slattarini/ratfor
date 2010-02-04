@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
 # This file is part of the Ratfor Testsuite.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -15,19 +15,55 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that `-C' switch of ratfor preserve comments in output.
+# Check that ratfor comments are discarded by default when placed in
+# the middle of a statement.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-cat >tst.r <<EOF
-# this is a "%c@mm3nt%'!
-blah blah blah
+t="throw me away"
+
+cat > tst.r <<EOF
+x # $t
+a + b $TAB # $t
+a + b()# $t
+; u = 1 # $t
+v = 2; w=3$TAB# $t
+{ fnord # $t
+}
+
+if (#$t
+true)
+    pass
+
+while (false${TAB}# $t
+)
+    pass
+
+repeat # $t
+  pass # $t
+until(false #$t
+) # $t
+
+for (i = 1 # $t
+     i < 10$TAB # $t 
+     i = i + 1;# $t
+) pass
+
+for(j=1;j<2;j=j+1)
+  if(x>1) {
+    while(y != 11)
+      repeat
+        pass # $t
+      until(z^=4) 
+    call foo() # $t
+  }
 EOF
 
 cat tst.r
 
-run_RATFOR -C tst.r || testcase_FAIL
-$GREP "^[cC].*\"%c@mm3nt%'!" stdout || testcase_FAIL
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+$FGREP -i "$t" stdout && testcase_FAIL
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
