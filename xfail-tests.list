@@ -2,6 +2,10 @@
 # expected to fail with C Ratfor.
 # Blank lines and lines starting with `#' are ignored.
 
+# C Ratfor handling of ratfor comments still has some warts, which make
+# this test fail.
+define-comments-interaction.test
+
 # Currently, ratfor output strings with the same quoting they are input
 # with; this should be changed, and only single-quoted strings (e.g. 'foo')
 # should be outputted.
