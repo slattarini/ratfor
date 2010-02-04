@@ -1,7 +1,7 @@
 !
 ! Data file used in tests:
-!  - integers-many-bases.test
-!  - integers-many-bases-f77.test
+!  - comments-discard-at-stmt-begin.test
+!  - comments-keep-at-stmt-begin.test
 ! which check behaviour(s) of ratfor w.r.t. comments placed at the
 ! of statements.
 !
