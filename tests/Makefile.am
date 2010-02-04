@@ -39,6 +39,7 @@ TESTS = \
   define-basic.test \
   define-basic_f77.test \
   define-case-sensibility.test \
+  define-comments-interaction.test \
   define-dollar-in-symbolic-name.test \
   define-fail.test \
   define-long-definition.test \
