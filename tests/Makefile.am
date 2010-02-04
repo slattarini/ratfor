@@ -27,6 +27,7 @@ TESTS = \
   comments-discard-in-stmt-middle.test \
   comments-keep-at-stmt-begin.test \
   comments-keep_f77.test \
+  comments-no-extra-white-spaces.test \
   comments-no-hang.test \
   comments-not-in-strings.test \
   comments-unobtrusiveness.test \
