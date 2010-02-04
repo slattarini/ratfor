@@ -15,21 +15,20 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check the use of `%' to output lines verbatim
+# Check the use of `%' to output lines verbatim.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 vtext="{|| bar VeRbAtIm $TAB &&}"
 vtext2="define foo bar; $vtext"
 
-echo "$vtext" >tst1.r
-echo "%$vtext" >tst2.r
-echo "foo; %$vtext" >tst3.r
-echo "define bar quux; %$vtext" >tst4.r
-(echo "%$vtext2"; echo "foo is safe") >tst5.r
+echo "%$vtext" >tst1.r
+echo "foo; %$vtext" >tst2.r
+echo "define bar quux; %$vtext" >tst3.r
+(echo "%$vtext2"; echo "foo is safe") >tst4.r
 
 run_RATFOR tst1.r || testcase_FAIL
-$GREP "$vtext" stdout && testcase_FAIL
+$GREP "^$vtext$" stdout || testcase_FAIL
 
 run_RATFOR tst2.r || testcase_FAIL
 $GREP "^$vtext$" stdout || testcase_FAIL
@@ -38,9 +37,6 @@ run_RATFOR tst3.r || testcase_FAIL
 $GREP "^$vtext$" stdout || testcase_FAIL
 
 run_RATFOR tst4.r || testcase_FAIL
-$GREP "^$vtext$" stdout || testcase_FAIL
-
-run_RATFOR tst5.r || testcase_FAIL
 $GREP "^$vtext2$" stdout || testcase_FAIL
 $GREP "foo is safe" stdout || testcase_FAIL
 
