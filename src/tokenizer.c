@@ -327,15 +327,10 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[0] = BLANK;
         while (is_blank(c)) /* compress many blanks to one */
             c = ngetch(fp);
-        if (c == PERCENT) {
-            outasis(fp); /* copy direct to output if % */
-            c = NEWLINE;
-        }
-        /* Sadly, this is required to avoid leaving extra white spaces
-           in the output. */
-        else if (c == SHARP) {
-            dispatch_comment(fp);
-            c = NEWLINE;
+        if (c == PERCENT || c == SHARP) {
+            /* Special handling of `#' and `%' to avoid leaving extra
+             * white spaces in output. */
+            goto non_blank; /* fallthrough */
         }
         if (!is_newline(c))
             put_back_char(c);
@@ -344,6 +339,7 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         lexstr[1] = EOS;
         return(lexstr[0]);
     }
+non_blank:
     put_back_char(c); /* so that we can read back the whole token */
     if (is_rat4_alpha(c)) {
         tok = get_alphanumeric_raw_token(lexstr, toksiz, fp);
