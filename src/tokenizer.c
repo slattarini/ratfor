@@ -331,6 +331,8 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
             outasis(fp); /* copy direct to output if % */
             c = NEWLINE;
         }
+        /* Sadly, this is required to avoid leaving extra white spaces
+           in the output. */
         else if (c == SHARP) {
             dispatch_comment(fp);
             c = NEWLINE;
