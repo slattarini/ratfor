@@ -46,7 +46,7 @@ for(j=1;j<2;j=j+1) #~
         pass
         #~
         x = 1; #~
-      until(z^=4) 
+      until(z^=4)
     call foo()
   }
 
