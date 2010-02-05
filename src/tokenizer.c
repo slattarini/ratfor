@@ -38,7 +38,9 @@
 
 static const char KEYWORD_INCLUDE[] = "include";
 static const char KEYWORD_DEFINE[]  = "define";
-
+/* Tell if a macro definition is being scanned in a  `define(NAME, ...)'
+ * construct.  Used to share state between `get_raw_token' and `getdef'. */
+static bool getting_macro_defn_with_paren = false;
 
 /*
  * PRIVATE FUNCTIONS.
@@ -273,23 +275,12 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
 static int
 get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
+    int i;
     int tok;
     /* TODO: assert toksiz >= 3 */
     lexstr[0] = ngetch(fp);
     put_back_char(lexstr[0]);
     switch (lexstr[0]) {
-        case PERCENT:
-        case SHARP:
-            /* comment or verbatim string */
-            (void) ngetch(fp); /* TODO: assert == lexstr[0] */
-            if (lexstr[0] == SHARP) {
-                dispatch_comment(fp);
-            } else {
-                outasis(fp); /* copy direct to output if % */
-            }
-            tok = lexstr[0] = NEWLINE;
-            lexstr[1] = EOS;
-            break;
         case GREATER:
         case LESS:
         case EQUALS:
@@ -300,6 +291,37 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
         case OR:
             /* maybe a ratfor relational shorthand */
             tok = convert_relational_shortand(lexstr, toksiz, fp);
+            break;
+        case PERCENT:
+            /* % verbatim string */
+            (void) ngetch(fp); /* TODO: assert == lexstr[0] */
+            outasis(fp); /* copy direct to output */
+            tok = lexstr[0] = NEWLINE;
+            lexstr[1] = EOS;
+            break;
+        case SHARP:
+            /* # ratfor comment */
+            if (!getting_macro_defn_with_paren) {
+                (void) ngetch(fp); /* TODO: assert == lexstr[0] */
+                dispatch_comment(fp);
+                tok = lexstr[0] = NEWLINE;
+                lexstr[1] = EOS;
+            } else {
+                tok = SHARP;
+                for (i = 0; i < toksiz - 1; i++) {
+                    lexstr[i] = ngetch(fp);
+                    if (!is_newline(lexstr[i]))
+                        continue;
+                    put_back_char(lexstr[i--]);
+                    break;
+                }
+                if (i >= toksiz - 1) {
+                    synerr("comment in define(...) too long.");
+                    lexstr[i] = EOS;
+                } else {
+                    lexstr[++i] = EOS;
+                }
+            }
             break;
         default:
             /* everything else */
@@ -377,6 +399,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         put_back_string(ptoken);
     } else {
         defn_with_paren = true; /* define(name,def) */
+        getting_macro_defn_with_paren = true;
     }
     skip_blanks(fp);
     t2 = get_raw_token(name, namesiz, fp); /* name */
@@ -417,6 +440,9 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         }
         /* TODO: assert def[i - 1] == ')' */
         def[i - 1] = EOS;
+        /* The macro definition has been completely read, so it's not
+         * true anymore that we are scanning it. */
+        getting_macro_defn_with_paren = false;
     }
     /* get rid of temporary internal macro */
 #   undef EXTEND_DEFN_WITH_TOKEN_
