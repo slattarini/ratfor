@@ -1,0 +1,65 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that `define' does not choke on spuriously unbalanced
+# parentheses in strings.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+# Expected to be proccessed successfully.
+cat >tst1.r <<EOF
+define(sym1, ')')
+define(sym2, ")")
+EOF
+cat >tst2.r <<EOF
+define(sym1, '(')
+define(sym2, "(")
+EOF
+
+# Expected to be proccessed unsuccessfully.
+# The comment are present to minimize the probabilty that ratfor fails
+# for the wrong reason (unterminated string rather than unbalanced
+# parentheses).
+cat >tst3.r <<EOF
+define(sym1,')' #'
+EOF
+cat >tst4.r <<EOF
+define(sym1,")" #"
+EOF
+
+for i in 1 2; do
+    cat tst$i.r
+    run_RATFOR tst$i.r || testcase_FAIL
+    mv stdout stdout$i
+    mv stderr stderr$i
+    test ! -s stderr$i || testcase_FAIL
+    $FGREP -i 'define' stdout$i && testcase_FAIL
+done
+
+for i in 3 4; do
+    cat tst$i.r
+    run_RATFOR -e 1 tst$i.r || testcase_FAIL
+    mv stdout stdout$i
+    mv stderr stderr$i
+    $EGREP -i "(unbalanced|missing).*paren" stderr$i  \
+      || $GREP -i "paren.*(unbalanced|missing)" stderr$i \
+      || testcase_FAIL
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
