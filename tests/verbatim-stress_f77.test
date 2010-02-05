@@ -15,7 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Stress test for ratfor (by compiling and running generated fortran code).
+# Stress test on the `%' verbatim escaping (done by compiling and
+# running generated fortran code).
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
@@ -48,10 +49,10 @@ run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
 run_command ./tst.exe || testcase_FAIL
-test -s stderr && testcase_FAIL
+test ! -s stderr || testcase_FAIL
 
 expected_answer=42
-got_answer=`cat stdout | ws_normalize`
+got_answer=`ws_normalize <stdout`
 test x"$got_answer" = x"$expected_answer" || testcase_FAIL
 
 testcase_DONE

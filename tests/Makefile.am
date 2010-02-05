@@ -187,6 +187,8 @@ TESTS = \
   usage-too-many-args.test \
   verbatim-at-stmt-beginning-at-least.test \
   verbatim-at-stmt-beginning-only.test \
+  verbatim-basic.test \
+  verbatim-basic_f77.test \
   verbatim-curly-brackets.test \
   verbatim-define-interaction-stress.test \
   verbatim-in-define.test \
@@ -194,8 +196,6 @@ TESTS = \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim-stress_f77.test \
-  verbatim.test \
-  verbatim_f77.test \
   while_f77.test
 
 
