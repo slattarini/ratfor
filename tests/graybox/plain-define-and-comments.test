@@ -1,0 +1,44 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of C Ratfor.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that `define NAME VALUE' do not preserve ratfor comments in
+# VALUE for later expansion even if `-C' ratfor switch is given (this
+# behaviour is documented in the manpage, and that's the main reason
+# for testing it).
+
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+define foo dummy # c@mment early
+baaar1
+baaar2
+foo
+EOF
+
+run_RATFOR -C tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+$FGREP c@mment stdout || testcase_FAIL "comment not kept in output"
+$AWK '
+    BEGIN { comment_seen = 0; }
+    /^[cC].*c@mment/ { comment_seen = 1; next; }
+    /baaar/ { if(!comment_seen) exit(1); }
+' stdout >&2 \
+  || testcase_FAIL "comment in \`define NAME VALUE' expanded too late"
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

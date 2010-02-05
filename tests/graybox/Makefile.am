@@ -19,6 +19,7 @@ EXTRA_DIST += $(TESTS)
 XFAIL_TESTS = switch-segfault.test
 
 TESTS = \
+  plain-define-and-comments.test \
   switch-segfault.test \
   token-too-long.test
 
