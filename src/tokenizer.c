@@ -75,8 +75,35 @@ integer_to_string(int n, char str[], int size)
     return(i - 1);
 }
 
+/* Read characters from input stream `fp' and save them in buf[] array,
+ * until a character satisying the `must_stop' boolean function is found.
+ * Die with the given error message if writing in buf[] leads to an
+ * overflow.
+ */
+static void
+read_until_char_match(char buf[], int bufsiz, FILE *fp,
+                      bool (*must_stop) (int),
+                      const char *error_message_for_overflow)
+{
+    int i;
+    for (i = 0; i < bufsiz - 1; i++) {
+        buf[i] = ngetch(fp);
+        if (must_stop(buf[i])) {
+            put_back_char(buf[i--]);
+            break;
+        }
+    }
+    /* the string must be properly terminated by a NUL character */
+    if (i >= bufsiz - 1) {
+        synerr(error_message_for_overflow);
+        buf[i] = EOS;
+    } else {
+        buf[++i] = EOS;
+    }
+}
+
 /* Look-up definition of name[] in user-defined macros. If it's not found,
-   return false, else and copy the definition in defn[] and return true. */
+ * return false, else and copy the definition in defn[] and return true. */
 static bool
 defn_lookup(const char name[], char defn[])
 {
@@ -177,30 +204,18 @@ convert_relational_shortand(char token[], int toksiz, FILE *fp)
     return(TOKT_RELATN);
 }
 
-/* read alphanumeric token from fp, save it in lexstr, return the lenght of
- * the token read */
+/* Read alphanumeric token from input stream fp, save it in lexstr, and
+ * return the type of the token read (always TOKT_ALPHA). */
 static int
 get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    int i;
-    for (i = 0; i < toksiz - 1; i++) {
-        lexstr[i] = ngetch(fp);
-        if (is_rat4_alnum(lexstr[i]))
-            continue;
-        put_back_char(lexstr[i--]);
-        break;
-    }
-    if (i >= toksiz - 1) {
-        synerr("alphanumeric token too long.");
-        lexstr[i] = EOS;
-    } else {
-        lexstr[++i] = EOS;
-    }
+    read_until_char_match(lexstr, toksiz, fp, is_not_rat4_alnum,
+                          "alphanumeric token too long.");
     return(TOKT_ALPHA);
 }
 
-/* read numerical token from fp, save it in lexstr, return the lenght of
- * the token read */
+/* Read numerical token from input stream fp, save it in lexstr, and
+ * return the type of the token read (always TOKT_DIGITS). */
 static int
 get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
@@ -275,7 +290,6 @@ get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
 static int
 get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
 {
-    int i;
     int tok;
     /* TODO: assert toksiz >= 3 */
     lexstr[0] = ngetch(fp);
@@ -308,19 +322,8 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
                 lexstr[1] = EOS;
             } else {
                 tok = SHARP;
-                for (i = 0; i < toksiz - 1; i++) {
-                    lexstr[i] = ngetch(fp);
-                    if (!is_newline(lexstr[i]))
-                        continue;
-                    put_back_char(lexstr[i--]);
-                    break;
-                }
-                if (i >= toksiz - 1) {
-                    synerr("comment in define(...) too long.");
-                    lexstr[i] = EOS;
-                } else {
-                    lexstr[++i] = EOS;
-                }
+                read_until_char_match(lexstr, toksiz, fp, is_newline,
+                                      "comment in define(...) too long.");
             }
             break;
         default:

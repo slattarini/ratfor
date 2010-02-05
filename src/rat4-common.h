@@ -163,6 +163,12 @@ is_rat4_alnum(int c)
 }
 
 static inline bool
+is_not_rat4_alnum(int c)
+{
+    return(is_rat4_alnum(c) ? false : true);
+}
+
+static inline bool
 is_blank(int c)
 {
     return((c == BLANK || c == TAB) ? true : false);
