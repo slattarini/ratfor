@@ -19,9 +19,9 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-echo '%123' >tst.r
+echo '%xyz' >tst.r
 run_RATFOR tst.r || testcase_FAIL
-$GREP "^[ $TAB]*$" stdout && testcase_FAIL
+$GREP "^$ws0p$" stdout && testcase_FAIL
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
