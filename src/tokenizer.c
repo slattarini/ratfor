@@ -38,9 +38,9 @@
 
 static const char KEYWORD_INCLUDE[] = "include";
 static const char KEYWORD_DEFINE[]  = "define";
-/* Tell if a macro definition is being scanned in a  `define(NAME, ...)'
- * construct.  Used to share state between `get_raw_token' and `getdef'. */
-static bool getting_macro_defn_with_paren = false;
+/* Tell if a macro definition is being scanned.  Used to share state between
+ * `getdef' and functions of the `get_raw_token' family. */
+static bool reading_parenthesized_macro_definition = false;
 
 /*
  * PRIVATE FUNCTIONS.
@@ -301,7 +301,7 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
             break;
         case SHARP:
             /* # ratfor comment */
-            if (!getting_macro_defn_with_paren) {
+            if (!reading_parenthesized_macro_definition) {
                 (void) ngetch(fp); /* TODO: assert == lexstr[0] */
                 dispatch_comment(fp);
                 tok = lexstr[0] = NEWLINE;
@@ -399,7 +399,7 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         put_back_string(ptoken);
     } else {
         defn_with_paren = true; /* define(name,def) */
-        getting_macro_defn_with_paren = true;
+        reading_parenthesized_macro_definition = true;
     }
     skip_blanks(fp);
     t2 = get_raw_token(name, namesiz, fp); /* name */
@@ -440,9 +440,9 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         }
         /* TODO: assert def[i - 1] == ')' */
         def[i - 1] = EOS;
-        /* The macro definition has been completely read, so it's not
+        /* The macro definition has been read completely, so it's not
          * true anymore that we are scanning it. */
-        getting_macro_defn_with_paren = false;
+        reading_parenthesized_macro_definition = false;
     }
     /* get rid of temporary internal macro */
 #   undef EXTEND_DEFN_WITH_TOKEN_
