@@ -1,5 +1,14 @@
 List of user-visible changes of C Ratfor.
 
+New in XXX
+-----------
+ * Macros defined with the `define(NAME, BODY)' construct now preserve
+   spacing and comments in BODY when the definition is read.  This way,
+   if the `-C' ratfor switch is used, comments in BODY are not outputted
+   at the point the `define' is scanned, but rather when NAME is expanded.
+   This new behaviour seems much more sensible and intuitive than the
+   previous one.
+
 New in 1.0q
 -----------
  * C Ratfor is not released anymore as public domain software, but is

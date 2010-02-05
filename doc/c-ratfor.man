@@ -74,14 +74,27 @@ consistent indentation.
 
 will include the named \fIfile\fR in the input.
 
-      define (name,value)     or
-      define name value
+      define NAME VALUE     or
+      define(NAME,BODY)    
 
-defines name as a symbolic parameter with the indicated value.
+defines NAME as a symbolic parameter with the indicated value.
+.br
 Names of symbolic parameters may contain letters, digits, and underline
 and dollar characters (e.g. B_FLAG, $LENGTH are valid names), but cannot
 begin with a digit (e.g. 3WAY is an invalid name).
-Upper case is not equivalent to lower case in parameter names.
+.br
+Upper case is \fBnot\fR equivalent to lower case in parameter names.
+.br
+If a macro \fINAME\fR is defined with the \fIdefine(NAME,BODY)\fR
+construct, then it can hold a multiline value (i.e. \fIBODY\fR can
+contain newline characters).  Moreover, ratfor comments in \fIBODY\fR
+are preserved.  This way, if the `-C' ratfor switch is being used,
+comments in \fIBODY\fR are not outputted at the point the `define'
+is scanned, but rather when \fINAME\fR is expanded.  Please note that
+this is \fBnot\fR true for macros defined with the \fIdefine NAME VALUE\fR
+construct.  Also, be aware that other ratfor implementations might behave
+differently, even if we think that the behaviour of C Ratfor in this
+matter is the most sensible and intuitive one.
 
 .B "WARNING: the following is currently unsupported"
 
