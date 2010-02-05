@@ -20,14 +20,17 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-cat >tst.r <<\EOF
+str1='|<|==|&&|==|>|'
+str2=',!=,^=,~=,'
+
+cat >tst.r <<EOF
 define(MACRO1,
 foo=1 # this macro contains one c@mment
 )
 define(MACRO2,
-# c@mment1 |<|==|&&|==|>|
+# c@mment1 $str1
 bar=1
-bar=2 # c@mment2  ,!=,^=,~=,
+bar=2 # c@mment2 $str2
 )
 tt
 MACRO1
@@ -39,20 +42,20 @@ tt
 MACRO2 if(u == v) pass
 EOF
 
-cat >ctrl.r <<\EOF
+cat >ctrl.r <<EOF
 tt
 foo=1 # this macro contains one c@mment
 tt
 foo=1 # this macro contains one c@mment
 x=y
 tt
-# c@mment1 |<|==|&&|==|>|
+# c@mment1 $str1
 bar=1
-bar=2 # c@mment2  ,!=,^=,~=,
+bar=2 # c@mment2 $str2
 tt
-# c@mment1 |<|==|&&|==|>|
+# c@mment1 $str1
 bar=1
-bar=2 # c@mment2  ,!=,^=,~=,
+bar=2 # c@mment2 $str2
 if (u == v) pass
 EOF
   
@@ -68,8 +71,8 @@ mv stdout ctrl-stdout
 mv stderr ctrl-stderr
 test ! -s ctrl-stderr || ctrlerr "complained on stderr"
 $FGREP "this macro contains one c@mment" ctrl-stdout \
-  && $FGREP "c@mment1 |<|==|&&|==|>|" ctrl-stdout \
-  && $FGREP "c@mment2  ,!=,^=,~=," ctrl-stdout \
+  && $FGREP "c@mment1 $str1" ctrl-stdout \
+  && $FGREP "c@mment2 $str2" ctrl-stdout \
   || ctrlerr "dind't kept comments"
 $SED "/^$ws0p$/d" ctrl-stdout > exp
 
@@ -81,7 +84,7 @@ $SED "/^$ws0p$/d" stdout > got
 cat exp
 cat got
 
-$DIFF_U exp got   || testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 
