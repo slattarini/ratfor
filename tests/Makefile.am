@@ -188,7 +188,7 @@ TESTS = \
   verbatim-at-stmt-beginning-at-least.test \
   verbatim-at-stmt-beginning-only.test \
   verbatim-curly-brackets.test \
-  verbatim-define-stress-interaction.test \
+  verbatim-define-interaction-stress.test \
   verbatim-in-define.test \
   verbatim-include-interaction.test \
   verbatim-long-line.test \
