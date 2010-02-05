@@ -48,6 +48,13 @@ static bool reading_parenthesized_macro_definition = false;
  * PRIVATE FUNCTIONS.
  */
 
+/* Like `!is_rat4_alnum(c)', but can be assigned to a function pointer. */
+static bool
+is_not_rat4_alnum(int c)
+{
+    return(is_rat4_alnum(c) ? false : true);
+}
+
 /* Convert integer n to a string, up to bufsiz - 1 characters, and save it
  * in buffer buf[].  Negative integers are supported.  Return the lenght
  * of the converted string.
