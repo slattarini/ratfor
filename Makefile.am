@@ -47,10 +47,10 @@ no_dist_files = maint/config.site maint/local-cfg.mk maint/personal/*
 
 # Enabling of maintainer rules.
 if ENABLE_MAINTAINER_MAKE_RULES
-  ENABLE_MAINTAINER_MAKE_RULES = yes ## used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = yes
   FORCE_CHANGELOG_GENERATION = yes
 else
-  ENABLE_MAINTAINER_MAKE_RULES = no ## used by maint.mk
+  ENABLE_MAINTAINER_MAKE_RULES = no
   FORCE_CHANGELOG_GENERATION = no
 endif
 
