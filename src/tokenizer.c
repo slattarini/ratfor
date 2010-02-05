@@ -32,6 +32,7 @@
 /* NOTE: due to implementation details, it is pointless to have MAXDEFLEN
          here greater than BUFSIZE in io.c */
 
+
 /*
  * PRIVATE VARIABLES.
  */
@@ -42,17 +43,17 @@ static const char KEYWORD_DEFINE[]  = "define";
  * `getdef' and functions of the `get_raw_token' family. */
 static bool reading_parenthesized_macro_definition = false;
 
+
 /*
  * PRIVATE FUNCTIONS.
  */
 
-/*
- * Convert integer n to a string, upd to size - 1 characters, and save it
- * in buffer str[].  Negative integers are supported.  Return the lenght
+/* Convert integer n to a string, up to bufsiz - 1 characters, and save it
+ * in buffer buf[].  Negative integers are supported.  Return the lenght
  * of the converted string.
  */
 static int
-integer_to_string(int n, char str[], int size)
+integer_to_string(int n, char buf[], int bufsiz)
 {
     int i, j, k, sign;
     char c;
@@ -61,16 +62,16 @@ integer_to_string(int n, char str[], int size)
     n *= sign; /* turn n into its absolute value */
     i = 0;
     do {
-        str[i++] = n % 10 + DIG0;
-    } while ((n /= 10) > 0 && i < size - 2);
-    if (sign < 0 && i < size - 1)
-        str[i++] = '-';
-    str[i] = EOS;
+        buf[i++] = n % 10 + DIG0;
+    } while ((n /= 10) > 0 && i < bufsiz - 2);
+    if (sign < 0 && i < bufsiz - 1)
+        buf[i++] = '-';
+    buf[i] = EOS;
     /* reverse the string and plug it back in */
-    for (j = 0, k = SSTRLEN(str) - 1; j < k; j++, k--) {
-        c = str[j];
-        str[j] = str[k];
-        str[k] = c;
+    for (j = 0, k = SSTRLEN(buf) - 1; j < k; j++, k--) {
+        c = buf[j];
+        buf[j] = buf[k];
+        buf[k] = c;
     }
     return(i - 1);
 }
@@ -135,99 +136,99 @@ skip_blanks(FILE *fp)
 }
 
 /* Convert relational shorthands (e.g. `&&' --> `.and.', '<' --> '.lt.'),
- * write the resulting string in token[] itslef.  Return the lenght of
+ * write the resulting string in buf[] itslef.  Return the lenght of
  * the resulting string. */
 static int
-convert_relational_shortand(char token[], int toksiz, FILE *fp)
+convert_relational_shortand(char buf[], int bufsiz, FILE *fp)
 {
 #ifdef NDEBUG
-    /* TODO: assert toksiz >= 6 */
+    /* TODO: assert bufsiz >= 6 */
 #else
     /* pacify compiler warnings */
-    (void) toksiz;
+    (void) bufsiz;
 #endif
-    token[0] = ngetch(fp);
-    if ((token[1] = ngetch(fp)) == EQUALS) {
-        token[2] = 'e';
+    buf[0] = ngetch(fp);
+    if ((buf[1] = ngetch(fp)) == EQUALS) {
+        buf[2] = 'e';
     } else {
-        put_back_char(token[1]);
-        token[2] = 't';
+        put_back_char(buf[1]);
+        buf[2] = 't';
     }
-    token[3] = PERIOD;
-    token[4] = EOS;
-    token[5] = EOS; /* for .not. and .and. */
+    buf[3] = PERIOD;
+    buf[4] = EOS;
+    buf[5] = EOS; /* for .not. and .and. */
 
-    switch(token[0]) {
+    switch(buf[0]) {
         case GREATER:
-            token[1] = 'g';
+            buf[1] = 'g';
             break;
         case LESS:
-            token[1] = 'l';
+            buf[1] = 'l';
             break;
         case NOT:
         case BANG:
         case CARET:
-            if (token[1] != EQUALS) {
-                token[2] = 'o';
-                token[3] = 't';
-                token[4] = PERIOD;
+            if (buf[1] != EQUALS) {
+                buf[2] = 'o';
+                buf[3] = 't';
+                buf[4] = PERIOD;
             }
-            token[1] = 'n';
+            buf[1] = 'n';
             break;
         case EQUALS:
-            if (token[1] != EQUALS) { /* variable assignement */
-                token[1] = EOS;
-                return(EQUALS); /* token `=' isn't a relational shortand */
+            if (buf[1] != EQUALS) { /* variable assignement */
+                buf[1] = EOS;
+                return(EQUALS); /* buf `=' isn't a relational shortand */
             }
-            token[1] = 'e';
-            token[2] = 'q';
+            buf[1] = 'e';
+            buf[2] = 'q';
             break;
         case AND:
-            if ((token[1] = ngetch(fp)) != AND) /* look for && or & */
-                put_back_char(token[1]);
-            token[1] = 'a';
-            token[2] = 'n';
-            token[3] = 'd';
-            token[4] = PERIOD;
+            if ((buf[1] = ngetch(fp)) != AND) /* look for && or & */
+                put_back_char(buf[1]);
+            buf[1] = 'a';
+            buf[2] = 'n';
+            buf[3] = 'd';
+            buf[4] = PERIOD;
             break;
         case OR:
-            if ((token[1] = ngetch(fp)) != OR) /* look for || or | */
-                put_back_char(token[1]);
-            token[1] = 'o';
-            token[2] = 'r';
+            if ((buf[1] = ngetch(fp)) != OR) /* look for || or | */
+                put_back_char(buf[1]);
+            buf[1] = 'o';
+            buf[2] = 'r';
             break;
         default: /* can't happen */
             abort();
             break;
-    }  /* switch(token[0]) */
-    token[0] = PERIOD;
+    }  /* switch(buf[0]) */
+    buf[0] = PERIOD;
     return(TOKT_RELATN);
 }
 
-/* Read alphanumeric token from input stream fp, save it in lexstr, and
+/* Read alphanumeric token from input stream fp, save it in buf[], and
  * return the type of the token read (always TOKT_ALPHA). */
 static int
-get_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
+get_alphanumeric_raw_token(char buf[], int bufsiz, FILE *fp)
 {
-    read_until_char_match(lexstr, toksiz, fp, is_not_rat4_alnum,
+    read_until_char_match(buf, bufsiz, fp, is_not_rat4_alnum,
                           "alphanumeric token too long.");
     return(TOKT_ALPHA);
 }
 
-/* Read numerical token from input stream fp, save it in lexstr, and
+/* Read numerical token from input stream fp, save it in buf[], and
  * return the type of the token read (always TOKT_DIGITS). */
 static int
-get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
+get_numerical_raw_token(char buf[], int bufsiz, FILE *fp)
 {
     int i, c, c2, b, n;
     b = 0; /* in case alternate base number */
-    for (i = 0; i < toksiz - 1; i++) {
-        lexstr[i] = ngetch(fp);
-        if (!is_digit(lexstr[i]))
+    for (i = 0; i < bufsiz - 1; i++) {
+        buf[i] = ngetch(fp);
+        if (!is_digit(buf[i]))
             break;
-        b = 10 * b + (lexstr[i] - DIG0);
+        b = 10 * b + (buf[i] - DIG0);
     }
-    if (lexstr[i] == RADIX && b >= 2 && b <= 36) {
+    if (buf[i] == RADIX && b >= 2 && b <= 36) {
         /* n%ddd... */
         for (n = 0; ; n = b * n + c) {
             c = c2 = ngetch(fp);
@@ -240,61 +241,61 @@ get_numerical_raw_token(char lexstr[], int toksiz, FILE *fp)
             c = c - DIG0;
         }
         put_back_char(c2);
-        i = integer_to_string(n, lexstr, toksiz);
+        i = integer_to_string(n, buf, bufsiz);
     } else {
-        put_back_char(lexstr[i--]);
+        put_back_char(buf[i--]);
     }
-    if (i >= toksiz - 1) {
+    if (i >= bufsiz - 1) {
         synerr("numeric constant too long.");
-        lexstr[i] = EOS;
+        buf[i] = EOS;
     } else {
-        lexstr[++i] = EOS;
+        buf[++i] = EOS;
     }
-    lexstr[i] = EOS;
+    buf[i] = EOS;
     return(TOKT_DIGITS);
 }
 
-/* read "quoted string" token from fp, save it in lexstr, return the
- * lenght of the token read */
+/* Read "quoted string" token from input stream fp, save it in buf[],
+ * return the type of the token read (always `TOKT_STRING'). */
 static int
-get_quoted_string_raw_token(char lexstr[], int toksiz, FILE *fp)
+get_quoted_string_raw_token(char buf[], int bufsiz, FILE *fp)
 {
     /* TODO: handle escaped quotes inside a string */
 
     int i, quote_char;
 
     /*TODO: assert quote_char == " || quote_char == ' ??? */
-    quote_char = lexstr[0] = ngetch(fp);
+    quote_char = buf[0] = ngetch(fp);
 
-    for (i = 1; (lexstr[i] = ngetch(fp)) != quote_char; i++) {
-        if (is_newline(lexstr[i])) {
+    for (i = 1; (buf[i] = ngetch(fp)) != quote_char; i++) {
+        if (is_newline(buf[i])) {
             synerr("missing quote.");
-        } else if (i >= toksiz - 2) {
+        } else if (i >= bufsiz - 2) {
             /* we might still have space for closing quote, but will
                surely lack space for string terminating character EOF */
             synerr("string too long.");
         } else {
             continue; /* no err, go to next iteration */
         }
-        put_back_char(lexstr[i]);
-        lexstr[i] = lexstr[0];
+        put_back_char(buf[i]);
+        buf[i] = buf[0];
         break;
     }
-    lexstr[++i] = EOS;
+    buf[++i] = EOS;
     return(TOKT_STRING);
 }
 
-/* read a non-alphanumeric token from fp (accounting for composed tokens),
- * save it in lexstr, save its type in *ptok, return the lenght of the
- * token read */
+/* Read a non-alphanumeric token from input stream fp (accounting for
+ * composed tokens), save it in buf[], and return the type of the token
+ * read. */
 static int
-get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
+get_non_alphanumeric_raw_token(char buf[], int bufsiz, FILE *fp)
 {
     int tok;
-    /* TODO: assert toksiz >= 3 */
-    lexstr[0] = ngetch(fp);
-    put_back_char(lexstr[0]);
-    switch (lexstr[0]) {
+    /* TODO: assert bufsiz >= 3 */
+    buf[0] = ngetch(fp);
+    put_back_char(buf[0]);
+    switch (buf[0]) {
         case GREATER:
         case LESS:
         case EQUALS:
@@ -304,52 +305,49 @@ get_non_alphanumeric_raw_token(char lexstr[], int toksiz, FILE *fp)
         case AND:
         case OR:
             /* maybe a ratfor relational shorthand */
-            tok = convert_relational_shortand(lexstr, toksiz, fp);
+            tok = convert_relational_shortand(buf, bufsiz, fp);
             break;
         case PERCENT:
             /* % verbatim string */
-            (void) ngetch(fp); /* TODO: assert == lexstr[0] */
+            (void) ngetch(fp); /* TODO: assert == buf[0] */
             outasis(fp); /* copy direct to output */
-            tok = lexstr[0] = NEWLINE;
-            lexstr[1] = EOS;
+            tok = buf[0] = NEWLINE;
+            buf[1] = EOS;
             break;
         case SHARP:
             /* # ratfor comment */
             if (!reading_parenthesized_macro_definition) {
-                (void) ngetch(fp); /* TODO: assert == lexstr[0] */
+                (void) ngetch(fp); /* TODO: assert == buf[0] */
                 dispatch_comment(fp);
-                tok = lexstr[0] = NEWLINE;
-                lexstr[1] = EOS;
+                tok = buf[0] = NEWLINE;
+                buf[1] = EOS;
             } else {
                 tok = SHARP;
-                read_until_char_match(lexstr, toksiz, fp, is_newline,
+                read_until_char_match(buf, bufsiz, fp, is_newline,
                                       "comment in define(...) too long.");
             }
             break;
         default:
             /* everything else */
-            (void) ngetch(fp); /* TODO: assert == lexstr[0] */
-            tok = lexstr[0];
-            lexstr[1] = EOS;
+            (void) ngetch(fp); /* TODO: assert == buf[0] */
+            tok = buf[0];
+            buf[1] = EOS;
             break;
     }
     return(tok);
 }
 
-/*
- * get_raw_token() - get raw ratfor token.
- * Also deal with comments (# COMMENT...) and verbatim lines
- * (% VERBATIME LINE...).
- * Return the type of the token read.
- */
+/* Get raw ratfor token from input stream fp, saving it in buf[].  Also
+ * deal with comments (# COMMENT...) and verbatim lines (% VERBATIM..).
+ * Return the type of the token read. */
 static int
-get_raw_token(char lexstr[], int toksiz, FILE *fp)
+get_raw_token(char buf[], int bufsiz, FILE *fp)
 {
     int tok;
     int c;
-    c = lexstr[0] = ngetch(fp);
+    c = buf[0] = ngetch(fp);
     if (is_blank(c)) {
-        lexstr[0] = BLANK;
+        buf[0] = BLANK;
         while (is_blank(c)) /* compress many blanks to one */
             c = ngetch(fp);
         if (c == PERCENT || c == SHARP) {
@@ -360,20 +358,20 @@ get_raw_token(char lexstr[], int toksiz, FILE *fp)
         if (!is_newline(c))
             put_back_char(c);
         else
-            lexstr[0] = c;
-        lexstr[1] = EOS;
-        return(lexstr[0]);
+            buf[0] = c;
+        buf[1] = EOS;
+        return(buf[0]);
     }
 non_blank:
     put_back_char(c); /* so that we can read back the whole token */
     if (is_rat4_alpha(c)) {
-        tok = get_alphanumeric_raw_token(lexstr, toksiz, fp);
+        tok = get_alphanumeric_raw_token(buf, bufsiz, fp);
     } else if (is_digit(c)) {
-        tok = get_numerical_raw_token(lexstr, toksiz, fp);
+        tok = get_numerical_raw_token(buf, bufsiz, fp);
     } else if (c == SQUOTE || c == DQUOTE) {
-        tok = get_quoted_string_raw_token(lexstr, toksiz, fp);
+        tok = get_quoted_string_raw_token(buf, bufsiz, fp);
     } else {
-        tok = get_non_alphanumeric_raw_token(lexstr, toksiz, fp);
+        tok = get_non_alphanumeric_raw_token(buf, bufsiz, fp);
     }
     return(tok);
 }
@@ -451,22 +449,23 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
 #   undef EXTEND_DEFN_WITH_TOKEN_
 }
 
-/* Get token, expanding macro calls and processing macro definitions. */
-/* XXX: clearer name? */
+/* Get token and save it in buf[], expanding macro calls and processing
+ * macro definitions. */
+/*** FIXME: a clearer name for thi function? ***/
 static int
-deftok(char token[], int toksiz, FILE *fp)
+deftok(char buf[], int bufsiz, FILE *fp)
 {
     char tkdefn[MAXDEFLEN];
     int t;
 
-    while ((t = get_raw_token(token, toksiz, fp)) != EOF) {
+    while ((t = get_raw_token(buf, bufsiz, fp)) != EOF) {
         if (t != TOKT_ALPHA) {
             break; /* non-alpha */
-        } else if (STREQ(token, KEYWORD_DEFINE)) {
+        } else if (STREQ(buf, KEYWORD_DEFINE)) {
             /* get definition for token, save it in tkdefn */
-            getdef(token, toksiz, tkdefn, MAXDEFLEN, fp);
-            hash_install(token, tkdefn);
-        } else if (!defn_lookup(token, tkdefn)) {
+            getdef(buf, bufsiz, tkdefn, MAXDEFLEN, fp);
+            hash_install(buf, tkdefn);
+        } else if (!defn_lookup(buf, tkdefn)) {
             break; /* undefined */
         } else {
             /* Push replacement onto input, with newlines properly
@@ -532,17 +531,17 @@ pop_file_stack(void)
 BEGIN_C_DECLS
 
 /* Get token (handling macro expansions, macro definitons and file
- * inclusion). */
+ * inclusion), and save it in buf[]. */
 int
-get_token(char token[], int toksiz)
+get_token(char buf[], int bufsiz)
 {
     int t, i;
     int tok;
     char path[MAXPATH];
 
     while (inclevel >= 0) {
-        while ((tok = deftok(token, toksiz, infile[inclevel])) != EOF) {
-            if (!STREQ(token, KEYWORD_INCLUDE))
+        while ((tok = deftok(buf, bufsiz, infile[inclevel])) != EOF) {
+            if (!STREQ(buf, KEYWORD_INCLUDE))
                 return(tok);
             /* deal with file inclusion */
             for (i = 0; ; i = SSTRLEN(path)) {
@@ -560,61 +559,61 @@ get_token(char token[], int toksiz)
     }
 
     /* in case called again after input ended */
-    token[0] = EOF;
-    token[1] = EOS;
+    buf[0] = EOF;
+    buf[1] = EOS;
     tok = EOF;
     return(tok);
 }
 
 /* Like `get_token()', but skip any leading blanks. */
 int
-get_nonblank_token(char token[], int toksiz)
+get_nonblank_token(char buf[], int bufsiz)
 {
     int tok;
     skip_blanks(infile[inclevel]);
-    tok = get_token(token, toksiz);
+    tok = get_token(buf, bufsiz);
     return(tok);
 }
 
-/* Save next input token in lexstr[], and return its lexical type (if it's
+/* Save next input token in buf[], and return its lexical type (if it's
  * a keyword) or its token type (otherwise). */
 int
-lex(char lexstr[], int toksiz)
+lex(char buf[], int bufsiz)
 {
     int tok;
 
-    /* skip empty lines, get next token, copy it in lexstr */
+    /* skip empty lines, get next token, copy it in buf[] */
     do {
-        tok = get_nonblank_token(lexstr, toksiz);
+        tok = get_nonblank_token(buf, bufsiz);
     } while (is_newline(tok));
 
-    /* if lexstr[] is a ratfor keyword, update its token type accordingly,
+    /* if buf[] is a ratfor keyword, update its token type accordingly,
      * else leave it unchanged */
-    if (STREQ(lexstr, "break"))
+    if (STREQ(buf, "break"))
         tok = LEXBREAK;
-    else if (STREQ(lexstr, "case"))
+    else if (STREQ(buf, "case"))
         tok = LEXCASE;
-    else if (STREQ(lexstr, "default"))
+    else if (STREQ(buf, "default"))
         tok = LEXDEFAULT;
-    else if (STREQ(lexstr, "do"))
+    else if (STREQ(buf, "do"))
         tok = LEXDO;
-    else if (STREQ(lexstr, "else"))
+    else if (STREQ(buf, "else"))
         tok = LEXELSE;
-    else if (STREQ(lexstr, "for"))
+    else if (STREQ(buf, "for"))
         tok = LEXFOR;
-    else if (STREQ(lexstr, "if"))
+    else if (STREQ(buf, "if"))
         tok = LEXIF;
-    else if (STREQ(lexstr, "next"))
+    else if (STREQ(buf, "next"))
         tok = LEXNEXT;
-    else if (STREQ(lexstr, "repeat"))
+    else if (STREQ(buf, "repeat"))
         tok = LEXREPEAT;
-    else if (STREQ(lexstr, "return"))
+    else if (STREQ(buf, "return"))
         tok = LEXRETURN;
-    else if (STREQ(lexstr, "switch"))
+    else if (STREQ(buf, "switch"))
         tok = LEXSWITCH;
-    else if (STREQ(lexstr, "until"))
+    else if (STREQ(buf, "until"))
         tok = LEXUNTIL;
-    else if (STREQ(lexstr, "while"))
+    else if (STREQ(buf, "while"))
         tok = LEXWHILE;
 
     return(tok);
