@@ -1,0 +1,39 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that the `define' builtin, when used in the form `define(x, ...)',
+# preserve comments.  This test carefully avoid to use relation shortands
+# (as `==', `<' or `&&') in comments, since some ratfor preprocessors out
+# there (e.g. older versions of C Ratfor) handle them in a clumsy way,
+# which would make the present test fail spuriously if they were used in
+# ratfor comments.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+helper_script=$srcdir/define-comments-interaction.sh
+
+test -f "$helper_script" \
+  || testcase_HARDERROR "helper_script \`$helper_script' not found"
+ls -l "$helper_script"
+
+str1='.a .b  .c   .d'
+str2=';%;%;%;'
+. "$helper_script" # real test done here
+
+testcase_HARDERROR "$me still executing after having sourced" \
+                   "helper script $helper_script"
+
+# vim: ft=sh ts=4 sw=4 et

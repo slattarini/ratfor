@@ -15,13 +15,17 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that the `define' builtin, when used in the form `define(x, ...)',
-# preserve comments.
+# Helper file, sourced by scripts checking that the `define' builtin,
+# when used in the form `define(x, ...)', preserve comments.  This
+# file is expected to be sourced by test scripts after the file
+# `rat4-testsuite-init.sh' has already been sourced, and the two
+# variables `$str1' and `$str2' properly defined.
 
-. ../lib/rat4-testsuite-init.sh || exit 99
-
-str1='|<|==|&&|==|>|'
-str2=',!=,^=,~=,'
+set +x
+ctrlerr() {
+    testcase_HARDERROR "\"control file\" ctrl.r: \`ratfor -C' $*"
+}
+set -x
 
 cat >tst.r <<EOF
 define(MACRO1,
@@ -58,12 +62,6 @@ bar=1
 bar=2 # c@mment2 $str2
 if (u == v) pass
 EOF
-  
-set +x
-ctrlerr() {
-    testcase_HARDERROR "\"control file\" ctrl.r: \`ratfor -C' $*"
-}
-set -x
 
 cat ctrl.r
 run_RATFOR -C ctrl.r || ctrlerr "failed"

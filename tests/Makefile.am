@@ -40,7 +40,9 @@ TESTS = \
   define-basic.test \
   define-basic_f77.test \
   define-case-sensibility.test \
-  define-comments-interaction.test \
+  define-comments-interaction-1.test \
+  define-comments-interaction-2.test \
+  define-comments-interaction-3.test \
   define-dollar-in-symbolic-name.test \
   define-fail.test \
   define-long-definition.test \
@@ -224,6 +226,11 @@ start-a-statement-semicolon.log: start-a-statement-sanitycheck.sh
 EXTRA_DIST += comments-at-stmt-begin.data
 comments-discard-at-stmt-begin.log: comments-at-stmt-begin.data
 comments-keep-at-stmt-begin.log: comments-at-stmt-begin.data
+
+EXTRA_DIST += define-comments-interaction.sh
+define-comments-interaction-1.log: define-comments-interaction.sh
+define-comments-interaction-2.log: define-comments-interaction.sh
+define-comments-interaction-3.log: define-comments-interaction.sh
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
