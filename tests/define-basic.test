@@ -22,15 +22,15 @@
 tr '_' "$TAB" >tst.r <<EOF
 define sym1 text1
 define(sym2,text2)
-define sym3  _"text3" _
-define (sym4,text4)_ _
+define (sym3,text3)_ _
+define sym4  _"text4" _
 x1 sym1
 sym 1
 x2:sym2
 sym 2
-x3?sym3
+x3,sym3
 sym 3
-x4,sym4
+x4.sym4
 sym 4
 sym5
 EOF
@@ -49,10 +49,12 @@ for i in 1 2 3 4; do
     $GREP "sym  *$i" stdout || testcase_FAIL
 done
 
-$FGREP 'x1 text1'   stdout || testcase_FAIL
-$FGREP 'x2:text2'   stdout || testcase_FAIL
-$FGREP 'x3?"text3"' stdout || testcase_FAIL
-$FGREP 'x4,text4'   stdout || testcase_FAIL
+$FGREP "x1 text1" stdout || testcase_FAIL
+$FGREP "x2:text2" stdout || testcase_FAIL
+$FGREP "x3,text3" stdout || testcase_FAIL
+# Double-quoted string in ratfor input can be output as single-quoted
+# string; we need to account for this.
+$FGREP 'x4."text4"' stdout || $FGREP "x4.'text4'" stdout || testcase_FAIL
 
 testcase_DONE
 

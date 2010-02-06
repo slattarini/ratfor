@@ -15,72 +15,38 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Stress test for the `define' builting (done with the aid of f77)
+# Check that `define(SYM, VALUE)' works if VALUE contains semicolons.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-rat4t_require_fortran_compiler
 
-cat > tst.r <<EOF
-define LPAR (
-define RPAR )
-define SetTo =
-define real integer
-define LBRACK {
-define RBRACK }
-define NOT !
-define STAR *
-define COMMA ,
-define IF if LPAR
-define THEN RPAR LBRACK
-define ELSE RBRACK else LBRACK
-define ENDIF RBRACK
-define PROGBEGIN program
-define PROGEND end
-define TRUE 1==1
-define FALSE 1==0
-
-PROGBEGIN stressdefine
-  implicit none
-  real x, y
-
-  x = 1
-define p1 { y =
-define p2 2 }
-  p1 p2
-
-  IF TRUE THEN write(*,10); 10 format('MUUU'); ENDIF
-  IF FALSE THEN write(*,20); 20 format('UMMM'); ENDIF
-
-  IF NOT LPAR y != 2)
-  THEN
-    x SetTo 5
-  ENDIF
-
-  IF x == 5
-  THEN
-    write(STAR COMMA 100 RPAR x
-  ELSE
-    write(STAR,200) x
-  ENDIF
-  call halt
-
-  100 format('OK:', I1)
-  200 format('BAD:', I1)
-
-PROGEND
+$SED -e "s/\\\\t/$TAB/g" > tst.r <<\EOF
+define(sym1, a = 1;b = 2)
+define(sym2,\tc = 3;\td = 4)
+define(sym3, \t\t  e = 5; ;\t; ;;f = 6)
+sym1
+sym2
+sym3
+alive
 EOF
 
-(echo "MUUU"; echo "OK:5") >exp
+
+cat > exp <<EOF
+a=1
+b=2
+c=3
+d=4
+e=5
+f=6
+alive
+EOF
 
 cat tst.r
 
 run_RATFOR tst.r || testcase_FAIL
-mv stdout tst.f
-run_F77 tst.f || testcase_FAIL
-run_command ./tst.exe || testcase_FAIL
 test ! -s stderr || testcase_FAIL
-mv stdout got
+$SED -e '/^[cC]/d' stdout | ws_normalize \
+  | $SED  -e 's/ *= */=/' -e '/^$/d' >got
 
 cat exp
 cat got

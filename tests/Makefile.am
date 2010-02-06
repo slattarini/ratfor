@@ -57,11 +57,13 @@ TESTS = \
   define-no-dot-in-symbolic-name.test \
   define-no-uppercase-alias.test \
   define-redefine.test \
-  define-semicolon.test \
-  define-semicolon_f77.test \
+  define-semicolon-no-parens.test \
+  define-semicolon-no-parens_f77.test \
+  define-semicolon-parens.test \
+  define-semicolon-parens_f77.test \
   define-stress_f77.test \
   define-underscore-in-symbolic-name.test \
-  define-whitespaces.test \
+  define-with-parens-preserve-whitespace.test \
   devnull-input.test \
   empty-input.test \
   exponentiation-operator_f77.test \

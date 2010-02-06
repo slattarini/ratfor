@@ -15,46 +15,37 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that `define(SYM, VALUE)' works if VALUE contains semicolons.
+# Check that `define SYM VALUE' works if VALUE contains semicolons.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-rat4t_require_fortran_compiler
-
-cat >tst.r <<EOF
-  define(stmt1, a = 1; b = 2; c = 3;)
-  define(stmt2, d = 4; ;;e = 5)
-  program testprogram
-    implicit none
-    integer a, b, c, d, e
-    stmt1
-    stmt2
-    write(*,100) a
-    write(*,100) b
-    write(*,100) c
-    write(*,100) d
-    write(*,100) e
-100 format(I1)
-    call halt
-  end # testprogram
+$SED -e "s/\\\\t/$TAB/g" > tst.r <<\EOF
+define sym1 a = 1;b = 2
+define sym2\tc = 3;\td = 4
+define sym3  \t\t  e = 5; ;\t; ;;f = 6
+sym1
+sym2
+sym3
+alive
 EOF
 
-cat >exp <<EOF
-1
-2
-3
-4
-5
+
+cat > exp <<EOF
+a=1
+b=2
+c=3
+d=4
+e=5
+f=6
+alive
 EOF
 
 cat tst.r
 
 run_RATFOR tst.r || testcase_FAIL
-mv stdout tst.f
-run_F77 tst.f || testcase_FAIL
-run_command ./tst.exe || testcase_FAIL
-mv stdout got
-test -s stderr && testcase_FAIL
+test ! -s stderr || testcase_FAIL
+$SED -e '/^[cC]/d' stdout | ws_normalize \
+  | $SED  -e 's/ *= */=/' -e '/^$/d' >got
 
 cat exp
 cat got

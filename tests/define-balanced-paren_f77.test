@@ -62,7 +62,7 @@ run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
 run_command ./tst.exe || testcase_FAIL
-test -s stderr && testcase_FAIL
+test ! -s stderr || testcase_FAIL
 mv stdout got
 
 cat exp
