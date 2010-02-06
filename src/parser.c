@@ -36,21 +36,21 @@ static int labval[MAXSTACK];
 static int lextyp[MAXSTACK];
 
 static bool
-detected_unusual_error(int token)
+detected_unusual_error(int toktype)
 {
-    char tmptok[MAXTOK];
+    char buf[MAXTOK];
 
-    if (token == LPAREN) {
-        token = get_nonblank_token(tmptok, MAXTOK); /* peek at next token */
-        put_back_string(tmptok);
-        if (token == TOKT_DIGITS) {
+    if (toktype == LPAREN) {
+        toktype = get_nonblank_token(buf, MAXTOK); /* peek at next token */
+        put_back_string(buf);
+        if (toktype == TOKT_DIGITS) {
             synerr("label following left parenthesis.");
             return(true);
         }
-    } else if (token == TOKT_DIGITS) {
-        token = get_nonblank_token(tmptok, MAXTOK); /* peek at next token */
-        put_back_string(tmptok);
-        if (token == SEMICOL) {
+    } else if (toktype == TOKT_DIGITS) {
+        toktype = get_nonblank_token(buf, MAXTOK); /* peek at next token */
+        put_back_string(buf);
+        if (toktype == SEMICOL) {
             synerr("label followed by empty statement.");
             return(true);
         }
@@ -59,7 +59,7 @@ detected_unusual_error(int token)
 }
 
 static void
-unstak(char token)
+unstak(int lextype)
 {
     for (; sp > 0; sp--) {
         switch(lextyp[sp]) {
@@ -68,7 +68,7 @@ unstak(char token)
                 return;
                 break;
             case LEXIF:
-                if (token == LEXELSE)
+                if (lextype == LEXELSE)
                     return;
                 ifend();
                 break;
@@ -87,7 +87,7 @@ unstak(char token)
                 fors(labval[sp]);
                 break;
             case LEXREPEAT:
-                untils(labval[sp], token);
+                untils(labval[sp], lextype);
                 break;
         } /* end switch */
     } /* end for */
@@ -97,18 +97,19 @@ C_DECL void
 parse(void)
 {
     char lexstr[MAXTOK];
-    int lab, i, token;
+    int lab, i;
+    int lextype; /* lexical type of next token read */
 
     lextyp[0] = EOF;
-    while ((token = lex(lexstr, MAXTOK)) != EOF) {
+    while ((lextype = lex(lexstr, MAXTOK)) != EOF) {
         
         /* some errors, if not treated specially, may give confusing
          * diagnostic, so we try to detect them in an ad-hoc way */
-        if (detected_unusual_error(token))
+        if (detected_unusual_error(lextype))
             continue;
 
         /* do code generation */
-        switch(token) {
+        switch(lextype) {
             case LEXIF:
                 ifcode(&lab);
                 break;
@@ -138,12 +139,12 @@ parse(void)
                         break; /* unmatched statement */
                 }
                 if (i < 0 || lextyp[i] != LEXSWITCH) {
-                    if (token == LEXCASE)
+                    if (lextype == LEXCASE)
                         synerr("illegal case");
                     else
                         synerr("illegal default");
                 } else {
-                    cascode(labval[i], token);
+                    cascode(labval[i], lextype);
                 }
                 break;
             case TOKT_DIGITS:
@@ -158,7 +159,7 @@ parse(void)
         } /* switch token */
         
         /* manange stack of statements */
-        switch(token) {
+        switch(lextype) {
             case TOKT_DIGITS:
             case LEXIF:
             case LEXELSE:
@@ -171,7 +172,7 @@ parse(void)
                 sp++; /* beginning of statement */
                 if (sp > MAXSTACK)
                     synerr_fatal("stack overflow in parser.");
-                lextyp[sp] = token; /* stack type and value */
+                lextyp[sp] = lextype; /* stack type and value */
                 labval[sp] = lab;
                 break;
             case LEXCASE:
@@ -180,7 +181,7 @@ parse(void)
                 break;
             default:
                 /* end of statement - prepare to unstack */
-                switch(token) {
+                switch(lextype) {
                     case RBRACE:
                         if (lextyp[sp] == LBRACE)
                             sp--;
@@ -191,7 +192,7 @@ parse(void)
                         break;
                     case LEXBREAK:
                     case LEXNEXT:
-                        brknxt(sp, lextyp, labval, token);
+                        brknxt(sp, lextyp, labval, lextype);
                         break;
                     case LEXRETURN:
                         retcode();
@@ -200,9 +201,9 @@ parse(void)
                         otherstmt(lexstr);
                         break;
                 }
-                token = lex(lexstr, MAXTOK); /* peek at next token */
+                lextype = lex(lexstr, MAXTOK); /* peek at next token */
                 put_back_string(lexstr);
-                unstak(token);
+                unstak(lextype);
         }
     } /* while read next token */
     if (sp != 0)
