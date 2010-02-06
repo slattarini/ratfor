@@ -2,6 +2,11 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
+ * Added new tests and extended existing ones, especially regarding
+   the `define' builtin, the handling of ratfor comments, and the `%'
+   escaping construct (for verbatim copy of input to output).
+ * The Ratfor Testsuite is now explicitly covered by the GNU General
+   Public License, version 3 or later.
  * The shell libraries used by the test scripts has been made more
    namespace-clean. This can enhance their usefulness and solidity
    for usage by client packages.
