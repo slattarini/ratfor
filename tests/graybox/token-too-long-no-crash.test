@@ -15,54 +15,44 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that "C Ratfor" complain and die gracefully when founding token
-# too long in input, rather than crashing.
+# Check that C Ratfor complains and dies gracefully (rather than crashing)
+# when it founds a token too long in input.
 
 . ../blackbox/lib/rat4-testsuite-init.sh || exit 99
 
-: 'define do_test()'
-set +x
-do_test() {
-    sed -e 's/xxxxxxxxx.*/xxxxxxxx.../g' "tst-$1.r"
-    run_RATFOR -e 1 "tst-$1.r" \
-      || testcase_FAIL
-    sed -e '20q' stdout >"stdout-$1"
-    mv stderr "stderr-$1"
-    $FGREP "tst-$1.r:1: alphanumeric token too long" "stderr-$1" \
-      || testcase_FAIL
-}
-set -x
+set +x # do not clutter output with long irrelevant traces
 
-# Assume that 2**16 = 65536 characters make up a token too long
+# Assume that 2**13 = 8192 characters make up a comment too long
 long_token=x
 i=1
-while test $i -le 16; do
+while test $i -le 13; do
     i=`expr $i + 1`
-    set +x
     long_token="$long_token$long_token"
-    set -x
 done
-
-set +x
 len_long_token=`echo $long_token | wc -c`
 len_long_token=`expr $len_long_token - 1` # account for extra newline
-test $len_long_token = 65536 \
-  || testcase_HARDERROR "len(\$long_token) = $len_long_token != 65536"
-set -x
+if test x"$len_long_token" != x"8192"; then
+    testcase_HARDERROR "len(\$long_token) = $len_long_token != 8192"
+fi
 
-set +x
+set -x # restore xtrace
+
+set +x # do not clutter output with long irrelevant traces
 echo "$long_token" >tst-tokn.r
 echo "function $long_token" >tst-func.r
 echo "subroutine $long_token" >tst-subr.r
 echo "str = '$long_token'" >tst-str1.r
 echo "str = \"$long_token\"" >tst-str2.r
-set -x
+set -x # restore xtrace
 
-do_test tokn
-do_test func
-do_test subr
-do_test str1
-do_test str2
+for x in tokn func subr str1 str2; do
+    cat tst-$x.r
+    run_RATFOR -e 1 tst-$x.r || testcase_FAIL "bad ratfor exit status"
+    mv stdout stdout-$x
+    mv stderr stderr-$x
+    $FGREP "tst-$x.r:1: alphanumeric token too long" stderr-$x \
+      || testcase_FAIL "expected diagnostic not found"
+done
 
 testcase_DONE
 

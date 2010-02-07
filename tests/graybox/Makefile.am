@@ -25,7 +25,7 @@ TESTS = \
   comment-too-long-in-define-no-crash.test \
   plain-define-and-comments.test \
   switch-segfault.test \
-  token-too-long.test
+  token-too-long-no-crash.test
 
 ## Testsuite environment and setup.
 include ../blackbox/am/TestsEnvironment.am
