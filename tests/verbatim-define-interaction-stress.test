@@ -28,8 +28,8 @@ define(PERCENT2,%)
 % && a2
 PERCENT1 && b1
 PERCENT2 && b2
-define mu1  % && c1
-define(mu2, % && c2)
+define mu1 % && c1
+define(mu2,% && c2)
 mu1
 mu2
 mu1 mu2
@@ -44,7 +44,7 @@ mv stderr stderr1
 
 test ! -s stderr1 || testcase_FAIL "tst1: unexpected message(s) on stderr"
 
-for x in a b c d; do
+for x in a b c; do
   for i in 1 2; do
     $FGREP "&& $x$i" stdout1 \
       || testcase_FAIL "tst1: not found proper raw \`&& $x$i'"
@@ -81,7 +81,8 @@ mv stderr stderr2
 
 test ! -s stderr2 || testcase_FAIL "tst2: unexpected message(s) on stderr"
 
-$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout2 >got
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e "s/$ws0p=$ws0p/=/" -e '/^$/d' \
+     <stdout2 >got
 cat exp
 cat got
 $DIFF_U exp got \
