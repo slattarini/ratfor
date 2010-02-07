@@ -316,7 +316,7 @@ get_non_alphanumeric_raw_token(char buf[], int bufsiz, FILE *fp)
             break;
         case SHARP:
             /* # ratfor comment */
-            if (!reading_parenthesized_macro_definition) {
+            if (!keep_comments || !reading_parenthesized_macro_definition) {
                 (void) ngetch(fp); /* TODO: assert == buf[0] */
                 dispatch_comment(fp);
                 tok = buf[0] = NEWLINE;

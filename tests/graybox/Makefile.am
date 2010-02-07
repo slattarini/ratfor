@@ -17,8 +17,6 @@ EXTRA_DIST += $(TESTS)
 
 # This fails, probably for a bug in cascode() or swend() in codegen.c
 XFAIL_TESTS = switch-segfault.test
-# This will be fixed soon. 
-XFAIL_TESTS += comment-too-long-in-define-ignored.test
 
 TESTS = \
   comment-too-long-in-define-ignored.test \
