@@ -1,0 +1,55 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of C Ratfor.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that C Ratfor do not uelessly complain when it founds a comment
+# too long in a `define(...)' construct while the `-C' flag is *not*
+# active.
+
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
+
+set +x # do not clutter output with long irrelevant traces
+
+# Assume that 2**13 = 8192 characters make up a comment too long
+long_token='.' # better if it's not alphanumeric, to avoid introducing
+               # spurious errors
+i=1
+while test $i -le 13; do
+    i=`expr $i + 1`
+    long_token="$long_token$long_token"
+done
+len_long_token=`echo $long_token | wc -c`
+len_long_token=`expr $len_long_token - 1` # account for extra newline
+if test x"$len_long_token" != x"8192"; then
+    testcase_HARDERROR "len(\$long_token) = $len_long_token != 8192"
+fi
+
+set -x # restore xtrace
+
+cat >tst.r <<EOF
+define(SYM,
+#$long_token
+)
+SYM
+EOF
+
+cat tst.r
+run_RATFOR tst.r || testcase_FAIL 
+test ! -s stderr || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
