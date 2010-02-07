@@ -7,9 +7,10 @@
 # should be outputted.
 no-double-quotes.test
 
-# Currently, `%'-escaping is badly implemented, and make some tests fail.
-verbatim-at-stmt-beginning-only.test
-verbatim-define-stress-interaction.test
+# The `%'-escaping is now implemented correctly, but due the "suboptimal"
+# (i.e. crappy) implementation of relation shortands' translation, the
+# following tests still fail.
+verbatim-define-interaction-stress.test
 verbatim-in-define.test
 
 # Errors about switch/case are correctly recognized, but can sometimes still
