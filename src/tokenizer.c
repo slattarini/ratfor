@@ -570,8 +570,12 @@ int
 get_nonblank_token(char buf[], int bufsiz)
 {
     int tok;
-    skip_blanks(infile[inclevel]);
-    tok = get_token(buf, bufsiz);
+    /* The following hack is required since skip_blanks do not account
+     * for expansion of macros containing leading white spaces. */
+    do {
+        skip_blanks(infile[inclevel]);
+        tok = get_token(buf, bufsiz);
+    } while(is_blank(tok));
     return(tok);
 }
 
