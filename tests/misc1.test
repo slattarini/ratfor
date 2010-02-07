@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that a bug involving unexpected interactions between `define',
-# `%' and leading whitespaces does not represent.
+# Test for a bug involving unexpected interactions between `define',
+# `%' and leading whitespaces.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
@@ -37,7 +37,7 @@ EOF
 
 cat tst.r
 run_RATFOR tst.r || testcase_FAIL
-mv stdout got
+$SED -e '/^[cC]/d' stdout >got
 cat exp
 cat got
 $DIFF_U exp got || testcase_FAIL
