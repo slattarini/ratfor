@@ -27,6 +27,13 @@ TESTS = \
   switch-segfault.test \
   token-too-long-no-crash.test
 
+## Requirements and dependencies of tests.
+
+EXTRA_DIST += too-long.sh
+comment-too-long-in-define-no-crash.log: too-long.sh
+comment-too-long-in-define-ignored.log: too-long.sh
+token-too-long-no-crash.log: too-long.sh
+
 ## Testsuite environment and setup.
 include ../blackbox/am/TestsEnvironment.am
 

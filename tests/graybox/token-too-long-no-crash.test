@@ -20,22 +20,12 @@
 
 . ../blackbox/lib/rat4-testsuite-init.sh || exit 99
 
+c='x'
+
+. "$srcdir/too-long.sh" \
+  || testcase_HARDERROR "failed to source file \`$srcdir/too-long.sh'"
+
 set +x # do not clutter output with long irrelevant traces
-
-# Assume that 2**13 = 8192 characters make up a comment too long
-long_token=x
-i=1
-while test $i -le 13; do
-    i=`expr $i + 1`
-    long_token="$long_token$long_token"
-done
-len_long_token=`echo $long_token | wc -c`
-len_long_token=`expr $len_long_token - 1` # account for extra newline
-if test x"$len_long_token" != x"8192"; then
-    testcase_HARDERROR "len(\$long_token) = $len_long_token != 8192"
-fi
-
-set -x # restore xtrace
 
 set +x # do not clutter output with long irrelevant traces
 echo "$long_token" >tst-tokn.r
