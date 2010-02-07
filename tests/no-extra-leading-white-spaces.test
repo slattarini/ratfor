@@ -1,0 +1,59 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor properly strips leading white spaces, even when
+# macros with leading spaes are involved.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+$SED -e "s/\\\\t/$TAB/" >tst.r <<\EOF
+define(SYM1,bar1)
+define(SYM2, bar2)
+define(SYM3,\tbar3)
+define(SYM4,bar4)
+define(SYM5, bar5)
+define(SYM6,\tbar6)
+define(SYM7,bar7)
+define(SYM8, bar8)
+define(SYM9,\tbar9)
+foo1
+ foo2
+\tfoo3
+SYM1
+SYM2
+SYM3
+ SYM4
+ SYM5
+ SYM6
+\tSYM7
+\tSYM8
+\tSYM9
+EOF
+
+cat tst.r
+run_RATFOR tst.r || testcase_HARDERROR "unexpected ratfor failure"
+$FGREP -i define stdout && testcase_HARDERROR "define failed"
+$FGREP -i sym stdout && testcase_HARDERROR "macros not properly expanded"
+
+$SED -e '/^[cC]/d' -e 's|^      ||' stdout >xstdout
+      #|^123456|
+
+$GREP "^$ws" xstdout && testcase_FAIL "found leadin whitespaces in output"
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

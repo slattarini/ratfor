@@ -127,6 +127,7 @@ TESTS = \
   next_f77.test \
   no-curly-brackets.test \
   no-double-quotes.test \
+  no-extra-leading-white-spaces.test \
   no-fortran66-if.test \
   no-fortran66-while.test \
   no-semicolons.test \
