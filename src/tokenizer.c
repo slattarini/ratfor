@@ -314,13 +314,6 @@ get_non_alphanumeric_raw_token(char buf[], int bufsiz, FILE *fp)
             /* maybe a ratfor relational shorthand */
             tok = convert_relational_shortand(buf, bufsiz, fp);
             break;
-        case PERCENT:
-            /* % verbatim string */
-            (void) ngetch(fp); /* TODO: assert == buf[0] */
-            outasis(fp); /* copy direct to output */
-            tok = buf[0] = NEWLINE;
-            buf[1] = EOS;
-            break;
         case SHARP:
             /* # ratfor comment */
             if (!reading_parenthesized_macro_definition) {
@@ -357,9 +350,9 @@ get_raw_token(char buf[], int bufsiz, FILE *fp)
         buf[0] = BLANK;
         while (is_blank(c)) /* compress many blanks to one */
             c = ngetch(fp);
-        if (c == PERCENT || c == SHARP) {
-            /* Special handling of `#' and `%' to avoid leaving extra
-             * white spaces in output. */
+        if (c == SHARP) {
+            /* Special handling of `#' to avoid leaving extra white
+             * spaces in output. */
             goto non_blank; /* fallthrough */
         }
         if (!is_newline(c))
@@ -596,7 +589,9 @@ lex(char buf[], int bufsiz)
 
     /* if buf[] is a ratfor keyword, update its token type accordingly,
      * else leave it unchanged */
-    if (STREQ(buf, "break"))
+    if (buf[0] == PERCENT && buf[1] == EOS)
+        tok = LEXVERBATIM;
+    else if (STREQ(buf, "break"))
         tok = LEXBREAK;
     else if (STREQ(buf, "case"))
         tok = LEXCASE;

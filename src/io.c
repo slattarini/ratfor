@@ -210,16 +210,16 @@ outnum(int n)
 }
 
 /*
- * outasis - copy directly out
+ * outasis - copy directly to output until the next newline character
  *
  */
 void
 outasis(FILE * fp)
 {
-    /* we can't use `outch(c)' here, since we want to output the text
+    /* We can't use `outch(c)' here, since we want to output the text
      * really verbatim, with no line wrapping (if the user want to output
      * raw fortran code, we expect him to know what he's doing, so we
-     * must be as unobtrusive as possible) */
+     * must be as unobtrusive as possible). */
     char c;
     for (c = ngetch(fp); !is_newline(c); c = ngetch(fp))
         putc_(c);

@@ -333,6 +333,13 @@ outgo(int n)
 
 BEGIN_C_DECLS
 
+/* verbatim - copy directly to output until the next newline character */
+void
+verbatim(void)
+{
+    outasis(infile[inclevel]);
+}
+
 /* brknxt - generate code for break n and next n; n = 1 is default */
 void
 brknxt(int sp, int lextyp[], int labval[], int token)

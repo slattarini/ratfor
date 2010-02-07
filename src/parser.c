@@ -110,6 +110,9 @@ parse(void)
 
         /* do code generation */
         switch(lextype) {
+            case LEXVERBATIM:
+                verbatim(); /* copy direct to output */
+                break;
             case LEXIF:
                 ifcode(&lab);
                 break;
@@ -177,6 +180,7 @@ parse(void)
                 break;
             case LEXCASE:
             case LEXDEFAULT:
+            case LEXVERBATIM:
                 /* do nothing */
                 break;
             default:

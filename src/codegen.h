@@ -49,6 +49,8 @@ void swend(int);
 void strdcl(void);
 void swcode(int *);
 
+void verbatim(void);
+
 END_C_DECLS
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */
