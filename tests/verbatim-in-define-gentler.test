@@ -16,20 +16,22 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Test that `%'-escaping plays well with define builtin at the beginning
-# of a line.
+# of a line. We try to do so while avoiding spurious failures due to
+# bogus implementetion of the relational shortands (&&, !=, etc.)
+# translation.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst.r <<EOF
-define(x,%||)
-define y %&&
+define(x,%while(0)pass)
+define y %for(a;b;c)pass
 x
 y
 EOF
 
 cat >exp <<EOF
-||
-&&
+while(0)pass
+for(a;b;c)pass
 EOF
 
 cat tst.r

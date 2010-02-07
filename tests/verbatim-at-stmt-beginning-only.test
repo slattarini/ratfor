@@ -20,7 +20,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-s='&&;|!=#{o}'
+s='&&;|x!=x#{o}'
 
 cat >tst.r <<EOF
 / a % b / $s /
