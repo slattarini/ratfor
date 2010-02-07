@@ -579,52 +579,6 @@ get_nonblank_token(char buf[], int bufsiz)
     return(tok);
 }
 
-/* Save next input token in buf[], and return its lexical type (if it's
- * a keyword) or its token type (otherwise). */
-int
-lex(char buf[], int bufsiz)
-{
-    int tok;
-
-    /* skip empty lines, get next token, copy it in buf[] */
-    do {
-        tok = get_nonblank_token(buf, bufsiz);
-    } while (is_newline(tok));
-
-    /* if buf[] is a ratfor keyword, update its token type accordingly,
-     * else leave it unchanged */
-    if (buf[0] == PERCENT && buf[1] == EOS)
-        tok = LEXVERBATIM;
-    else if (STREQ(buf, "break"))
-        tok = LEXBREAK;
-    else if (STREQ(buf, "case"))
-        tok = LEXCASE;
-    else if (STREQ(buf, "default"))
-        tok = LEXDEFAULT;
-    else if (STREQ(buf, "do"))
-        tok = LEXDO;
-    else if (STREQ(buf, "else"))
-        tok = LEXELSE;
-    else if (STREQ(buf, "for"))
-        tok = LEXFOR;
-    else if (STREQ(buf, "if"))
-        tok = LEXIF;
-    else if (STREQ(buf, "next"))
-        tok = LEXNEXT;
-    else if (STREQ(buf, "repeat"))
-        tok = LEXREPEAT;
-    else if (STREQ(buf, "return"))
-        tok = LEXRETURN;
-    else if (STREQ(buf, "switch"))
-        tok = LEXSWITCH;
-    else if (STREQ(buf, "until"))
-        tok = LEXUNTIL;
-    else if (STREQ(buf, "while"))
-        tok = LEXWHILE;
-
-    return(tok);
-}
-
 END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

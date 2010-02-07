@@ -18,6 +18,7 @@
 #include "rat4-common.h"
 #include "rat4-global.h"
 
+#include "lex-types.h"
 #include "io.h"
 #include "error.h"
 #include "tokenizer.h"
