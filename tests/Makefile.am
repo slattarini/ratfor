@@ -121,6 +121,7 @@ TESTS = \
   line-continuation_f77.test \
   long-infile.test \
   long-infile_f77.test \
+  misc1.test \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
   next-fail.test \
