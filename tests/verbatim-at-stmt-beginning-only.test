@@ -23,18 +23,16 @@
 s='&&;|x!=x#{o}'
 
 cat >tst.r <<EOF
-/ a % b / $s /
-/ c%d / $s /
-/ e.%$TAB:f / $s /
-/ ,,,  %${TAB}@ / $s /
+z/ a % b / $s /z
+z/ c%d / $s /z
+z/ e.%$TAB:f / $s /z
+z/ ,,,  %${TAB}@ / $s /z
 EOF
 
 cat tst.r
 
-run_RATFOR tst.r \
-  || testcase_FAIL "unexpected ratfor failure"
-test ! -s stderr \
-  || testcase_FAIL "stderr not empty"
+run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+test ! -s stderr || testcase_FAIL "stderr not empty"
 
 $SED -e "s/^${ws0p}//" \
      -e "s/${ws0p}$//" \

@@ -196,10 +196,10 @@ TESTS = \
   verbatim-basic.test \
   verbatim-basic_f77.test \
   verbatim-curly-brackets.test \
+  verbatim-define-interaction-basic-gentler.test \
+  verbatim-define-interaction-basic.test \
   verbatim-define-interaction-stress-gentler.test \
   verbatim-define-interaction-stress.test \
-  verbatim-in-define-gentler.test \
-  verbatim-in-define.test \
   verbatim-include-interaction.test \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
