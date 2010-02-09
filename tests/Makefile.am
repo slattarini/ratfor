@@ -5,7 +5,6 @@
 
 ## Some *.am files include later might require these special variables
 ## to be initialized, even if only with an empty value.
-MOSTLYCLEANFILES =
 EXTRA_DIST =
 
 ##
