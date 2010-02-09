@@ -168,6 +168,7 @@ TESTS = \
   stress1_f77.test \
   stress2_f77.test \
   stress3_f77.test \
+  stress4_f77.test \
   string-concatenation_f77.test \
   subprogram-name-invalid-not-repeated.test \
   subroutine-name-invalid-1.test \
