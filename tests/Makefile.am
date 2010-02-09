@@ -35,6 +35,8 @@ TESTS = \
   common-block_f77.test \
   data-statement.test \
   data-statement_f77.test \
+  define-at-stmt-beginning-at-least.test \
+  define-at-stmt-beginning-only.test \
   define-balanced-paren-comments.test \
   define-balanced-paren-strings.test \
   define-balanced-paren.test \
