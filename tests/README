@@ -1,5 +1,10 @@
 This is the README file for the testsuite of C Ratfor preprocessor.
 
+The directory `unit' contains some basic unit tests.  They require the
+`Check' library (http://check.sourceforge.net).  This library is searched
+and checked by the configure script.  If it's not available, the unit
+tests will be automatically skipped.
+
 The directory `graybox' contains "graybox-style" test scripts tailored to
 this implementation of Ratfor.  These tests are tailored to the limits,
 weak spots and previous bugs of "C Ratfor" (so they should provide also

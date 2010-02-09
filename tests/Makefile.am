@@ -6,8 +6,9 @@
 
 EXTRA_DIST = README
 
-# Please leave `blackbox' first, as some tests in `graybox' might
-# require files build there.
-SUBDIRS = blackbox graybox
+# Unit tests should be run first.  Also, leave `blackbox' before
+# `graybox', as some graybox tests require files from blackbox
+# which are build at make time.
+SUBDIRS = unit blackbox graybox
 
 ## vim: ft=automake noet sw=4 ts=4
