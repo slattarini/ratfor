@@ -3,15 +3,11 @@
 ##
 # Makefile for the tests in the Ratfor Testsuite.
 
-## Some *.am files include later might require these special variables
-## to be initialized, even if only with an empty value.
-EXTRA_DIST =
-
 ##
 ## List of tests.
 ##
 
-EXTRA_DIST += $(TESTS)
+EXTRA_DIST = $(TESTS)
 
 # Defined at configure time.
 XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
