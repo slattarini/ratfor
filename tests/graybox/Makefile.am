@@ -6,14 +6,9 @@
 
 AUTOMAKE_OPTIONS = color-tests parallel-tests
 
-## Some *.am files include later might require these special variables
-## to be initialized, even if only with an empty value.
-MOSTLYCLEANFILES =
-EXTRA_DIST =
-
 ## List of tests.
 
-EXTRA_DIST += $(TESTS)
+EXTRA_DIST = $(TESTS)
 
 # This fails, probably for a bug in cascode() or swend() in codegen.c
 XFAIL_TESTS = switch-segfault.test
