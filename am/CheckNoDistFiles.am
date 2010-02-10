@@ -1,5 +1,5 @@
 ## -*- Makefile -*-
-## Copied from SteLib at 2010-02-03 17:50:24 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-02-10 00:52:59 +0100.  DO NOT EDIT!
 ##
 ## Provide a dist-hook target checking that the user does not erreonously
 ## include in the tarball any file which is not meant for distribution.
@@ -25,9 +25,9 @@
 
 # Check that we do not erreonously include in the tarball any file which
 # is not meant for distribution.
-dist-hook: dist-hook-check-no-dist-files
-.PHONY: dist-hook-check-no-dist-files
-dist-hook-check-no-dist-files:
+dist-hook: stelib--dist-hook-check-no-dist-files
+.PHONY: stelib--dist-hook-check-no-dist-files
+stelib--dist-hook-check-no-dist-files:
 	$(AM_V_at)\
 	bad_dist_files=''; \
 ## make the following `for' loop working even if $(no_dist_files) is empty

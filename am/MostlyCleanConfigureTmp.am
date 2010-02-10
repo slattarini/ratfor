@@ -1,5 +1,5 @@
 ## -*- Makefile -*-
-## Copied from SteLib at 2010-02-03 17:50:24 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-02-10 00:52:59 +0100.  DO NOT EDIT!
 ##
 ## Usually included by top-level Makefile.am.  See below for more comments.
 ##
@@ -23,9 +23,9 @@
 # If config.status or configure are run by Zsh 3.x, they can erroneously
 # leave behind some temporary files, and this causes "make distcheck" to
 # fail.  So, to be safe, we clean up those temporary files.
-.PHONY: mostlyclean-configure-tmp
-mostlyclean-local: mostlyclean-configure-tmp
-mostlyclean-configure-tmp:
+.PHONY: stelib--mostlyclean-configure-tmp
+mostlyclean-local: stelib--mostlyclean-configure-tmp
+stelib--mostlyclean-configure-tmp:
 	@set +e; \
 ## we don't want to force the user to set $(FGREP) in configure.ac or
 ## in main makefile, so look for a suitable fgrep program when $(FGREP)

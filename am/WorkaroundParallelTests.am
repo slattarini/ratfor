@@ -1,5 +1,5 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2010-02-03 17:50:24 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-02-10 00:52:59 +0100.  DO NOT EDIT!
 ##
 ## Provide a workaround for a bug in FreeBSD make regarding parallel tests.
 ##
@@ -24,7 +24,9 @@
 # testsuite failures if more test scripts were being run in parallel.
 # This could cause false negatives in the list of failed test scripts,
 # which is a Very Bad Thing.  This hack offers a workaround.
-check-workaround--freebsd-make-bug: check-TESTS
+.PHONY: stelib--check-workaround-freebsd-make-bug
+check-local: stelib--check-workaround-freebsd-make-bug
+stelib--check-workaround-freebsd-make-bug: check-TESTS
 	@test -n "$(TEST_SUITE_LOG)" || { \
 	   echo "$@: \`\$$(TEST_SUITE_LOG)' is empty or unset." >&2; \
 	   echo "$@: Don't know which file is used as testsuite log" >&2; \
@@ -42,7 +44,5 @@ check-workaround--freebsd-make-bug: check-TESTS
 	 else \
 	   exit 0; \
 	 fi
-.PHONY: check-workaround--freebsd-make-bug
-check-local: check-workaround--freebsd-make-bug
 
 ## vim: ft=automake noet sw=4 ts=4

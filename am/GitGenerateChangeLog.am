@@ -1,5 +1,5 @@
 ## -*- Makefile -*-
-## Copied from SteLib at 2010-02-03 17:50:24 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-02-10 00:52:59 +0100.  DO NOT EDIT!
 ##
 ## Contains a target to generate the ChangeLog file from the Git log
 ## messages.  It tries to do the right thing in case the source tree is
@@ -27,10 +27,10 @@
 # to be declared PHONY.  Also, we create the ChangeLog in $(top_srcdir) so
 # that `make distcleancheck' won't fail (and also because $(top_srcdir) is
 # the place CHangeLog really belongs to).
-$(top_srcdir)/ChangeLog: git-changelog-gen
+$(top_srcdir)/ChangeLog: stelib--git-changelog-gen
 
-.PHONY: git-changelog-gen
-git-changelog-gen:
+.PHONY: stelib--git-changelog-gen
+stelib--git-changelog-gen:
 	$(AM_V_GEN)(set -u) >/dev/null 2>&1 && set -u; \
 	set -e; \
 	tmp='$(builddir)/ChangeLog.tmp'; \
@@ -85,9 +85,9 @@ git-changelog-gen:
 	  mv -f "$$tmp" "$$dst"; \
 	fi
 
-.PHONY: git-changelog-gen-mostlyclean
-mostlyclean-local: git-changelog-gen-mostlyclean
-git-changelog-gen-mostlyclean:
+.PHONY: stelib--mostlyclean-git-changelog-gen
+mostlyclean-local: stelib--mostlyclean-git-changelog-gen
+stelib--mostlyclean-git-changelog-gen:
 	rm -f ChangeLog.tmp
 
 .PHONY: git-changelog-gen-maintainerclean
