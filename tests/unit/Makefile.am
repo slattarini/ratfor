@@ -6,10 +6,6 @@
 
 AUTOMAKE_OPTIONS = color-tests parallel-tests
 
-## FIXME required by some included *.am files, hopefully it will soon be
-## FIXME possible to remove this
-MOSTLYCLEANFILES = ## dummy init
-
 ## List of tests.
 
 EXTRA_DIST = $(TESTS)
