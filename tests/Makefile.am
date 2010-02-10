@@ -80,6 +80,9 @@ TESTS = \
   ifelse-ambiguity_f77.test \
   illegal-case-default.test \
   include-abspath.test \
+  include-at-stmt-beginning-at-least-dquote.test \
+  include-at-stmt-beginning-at-least-plain.test \
+  include-at-stmt-beginning-at-least-squote.test \
   include-basic.test \
   include-case-sensible.test \
   include-cornercase.test \
@@ -237,6 +240,14 @@ EXTRA_DIST += define-comments-interaction.sh
 define-comments-interaction-1.log: define-comments-interaction.sh
 define-comments-interaction-2.log: define-comments-interaction.sh
 define-comments-interaction-3.log: define-comments-interaction.sh
+
+EXTRA_DIST += include-at-stmt-beginning-at-least.sh
+include-at-stmt-beginning-at-least-dquote.log: \
+  include-at-stmt-beginning-at-least.sh
+include-at-stmt-beginning-at-least-plain.log: \
+  include-at-stmt-beginning-at-least.sh
+include-at-stmt-beginning-at-least-squote.log: \
+  include-at-stmt-beginning-at-least.sh
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
