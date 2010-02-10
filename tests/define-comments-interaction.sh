@@ -84,6 +84,4 @@ cat got
 
 $DIFF_U exp got || testcase_FAIL
 
-testcase_DONE
-
 # vim: ft=sh ts=4 sw=4 et

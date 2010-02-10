@@ -33,7 +33,6 @@ str1='|<|==|&&|==|>|'
 str2=',!=,^=,~=,'
 . "$helper_script" # real test done here
 
-testcase_HARDERROR "$me still executing after having sourced" \
-                   "helper script $helper_script"
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
