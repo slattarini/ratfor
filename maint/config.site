@@ -15,4 +15,7 @@ enable_maintainer_make_rules=${enable_maintainer_make_rules-'yes'}
 # Enable silent-rules by default.
 enable_silent_rules=${enable_silent_rules-'yes'}
 
+# Abort if the `check' library (unittesting library for C) is not found.
+with_libcheck=yes
+
 # vim: ft=sh ts=4 sw=4 et
