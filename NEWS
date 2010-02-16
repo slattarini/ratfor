@@ -2,6 +2,9 @@ List of user-visible changes of C Ratfor.
 
 New in XXX
 -----------
+ * Blackbox and graybox tests have been extended and improved, especially
+   w.r.t. ratfor comments, `%' verbatim escaping and `include' and
+   `define' builtins.
  * Macros defined with the `define(NAME, BODY)' construct now preserve
    spacing and comments in BODY when the definition is read.  This way,
    if the `-C' ratfor switch is used, comments in BODY are not outputted
