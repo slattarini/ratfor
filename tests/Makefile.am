@@ -83,6 +83,9 @@ TESTS = \
   include-at-stmt-beginning-at-least-dquote.test \
   include-at-stmt-beginning-at-least-plain.test \
   include-at-stmt-beginning-at-least-squote.test \
+  include-at-stmt-beginning-only-dquote.test \
+  include-at-stmt-beginning-only-plain.test \
+  include-at-stmt-beginning-only-squote.test \
   include-basic.test \
   include-case-sensible.test \
   include-cornercase.test \
@@ -249,6 +252,14 @@ include-at-stmt-beginning-at-least-plain.log: \
   include-at-stmt-beginning-at-least.sh
 include-at-stmt-beginning-at-least-squote.log: \
   include-at-stmt-beginning-at-least.sh
+
+EXTRA_DIST += include-at-stmt-beginning-only.sh
+include-at-stmt-beginning-only-dquote.log: \
+  include-at-stmt-beginning-only.sh
+include-at-stmt-beginning-only-plain.log: \
+  include-at-stmt-beginning-only.sh
+include-at-stmt-beginning-only-squote.log: \
+  include-at-stmt-beginning-only.sh
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
