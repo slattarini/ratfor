@@ -1,4 +1,5 @@
 # -*- Autoconf -*-
+# Copied from SteLib at 2010-02-16 11:55:49 +0100.  DO NOT EDIT!
 # serial 1 ax_check_libcheck.m4
 
 #
