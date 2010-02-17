@@ -6,6 +6,8 @@
 
 AUTOMAKE_OPTIONS = color-tests parallel-tests
 
+AM_CPPFLAGS = -I $(top_srcdir)/src
+
 ## List of tests.
 
 EXTRA_DIST = $(TESTS)
