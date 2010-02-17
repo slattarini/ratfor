@@ -458,7 +458,7 @@ get_unpreprocessed_token(char buf[], int bufsiz)
     int tok;
 
     while (inclevel >= 0) {
-        while ((tok = get_raw_token(buf, bufsiz, infile[inclevel])) != EOF)
+        if ((tok = get_raw_token(buf, bufsiz, infile[inclevel])) != EOF)
             return(tok);
         /* close include and pop file name stack */
         pop_file_stack();
