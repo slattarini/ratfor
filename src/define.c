@@ -38,7 +38,6 @@ skip_raw_blanks(void)
     put_back_char(c);
 }
 
-
 /* Parse definition of ratfor macro.  If an error is detected, stop ratfor
  * with a suitable error message, else save macro name (in `name[]') and
  * macro definition (in `def[]'). */
@@ -128,14 +127,14 @@ get_and_install_macro_definition(void)
 
 /* Look-up definition of name[] in user-defined macros. If it's not found,
  * return false, else and copy the definition in buf[] and return true. */
-C_DECL bool
-macro_definition_lookup(const char name[], char buf[])
+C_DECL const char *
+macro_definition_lookup(const char *name)
 {
     struct hashlist *p;
     if ((p = hash_lookup(name)) == NULL)
-        return(false);
-    strcpy(buf, p->def); /* FIXME: potential overflow here! */
-    return(true);
+        return(NULL);
+    else
+        return(p->def);
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */

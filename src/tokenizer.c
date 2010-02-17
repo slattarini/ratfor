@@ -344,20 +344,20 @@ non_blank:
 static int
 get_expanded_token(char buf[], int bufsiz)
 {
-    char defn[MAXDEFLEN];
+    const char *macro_body;
     int t;
 
     while ((t = get_unexpanded_token(buf, bufsiz)) != EOF) {
         if (t != TOKT_ALPHA) {
             break; /* non-alpha */
-        } else if (!macro_definition_lookup(buf, defn)) {
+        } else if ((macro_body = macro_definition_lookup(buf)) == NULL) {
             break; /* not a macro name */
         } else {
             /* Push replacement onto input, with newlines properly
              * substituted by "fake newlines". This hack is needed
              * to keep the count of line in input correct even if
              * expansion of multiline macros is involved. */
-            put_back_string_cooked(defn);
+            put_back_string_cooked(macro_body);
         }
     }
     return(t);
