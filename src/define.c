@@ -72,7 +72,7 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
         synerr_fatal("empty name."); /* XXX: better diagnostic? */
     } else if (defn_with_paren && t2 == COMMA) {
         /* `define(name, def)' with empty name */
-        synerr_fatal("empty name.");
+        synerr_fatal("empty name."); /* XXX: better diagnostic? */
     } else if (t2 != TOKT_ALPHA) {
         synerr_fatal("non-alphanumeric name.");
     }
