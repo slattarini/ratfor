@@ -23,6 +23,7 @@
 #define MAXDEFLEN  2048  /* max length of a ratfor macro's body */
 
 C_DECL void get_and_install_macro_definition(void);
+C_DECL bool macro_definition_lookup(const char [], char []);
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

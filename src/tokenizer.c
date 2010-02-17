@@ -23,8 +23,7 @@
 #include "io.h"
 #include "xopen.h"
 #include "error.h"
-#include "define.h" /*XXX*/
-#include "hash.h" /*XXX*/
+#include "define.h"
 #include "rat4-global.h"
 
 #define MAXPATH  1024  /* max length of the name of a file included */
@@ -93,18 +92,6 @@ read_until_char_match(char buf[], int bufsiz, FILE *fp,
     } else {
         buf[++i] = EOS;
     }
-}
-
-/* Look-up definition of name[] in user-defined macros. If it's not found,
- * return false, else and copy the definition in defn[] and return true. */
-static bool
-defn_lookup(const char name[], char defn[])
-{
-    struct hashlist *p;
-    if ((p = hash_lookup(name)) == NULL)
-        return(false);
-    strcpy(defn, p->def); /* XXX potential overflow here! */
-    return(true);
 }
 
 static void
@@ -363,7 +350,7 @@ get_expanded_token(char buf[], int bufsiz)
     while ((t = get_unexpanded_token(buf, bufsiz)) != EOF) {
         if (t != TOKT_ALPHA) {
             break; /* non-alpha */
-        } else if (!defn_lookup(buf, defn)) {
+        } else if (!macro_definition_lookup(buf, defn)) {
             break; /* not a macro name */
         } else {
             /* Push replacement onto input, with newlines properly

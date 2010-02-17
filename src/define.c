@@ -113,7 +113,8 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
 #   undef EXTEND_DEFN_WITH_TOKEN_
 }
 
-/* Read and save macro definition. */
+/* Read macro definition from current ratfor input stream, and save it
+ * in global list of user-defined macros. */
 C_DECL void
 get_and_install_macro_definition(void)
 {
@@ -123,6 +124,18 @@ get_and_install_macro_definition(void)
     get_macro_definition(name, MAXTOK, body, MAXDEFLEN);
     /* ... and install it. */
     hash_install(name, body);
+}
+
+/* Look-up definition of name[] in user-defined macros. If it's not found,
+ * return false, else and copy the definition in buf[] and return true. */
+C_DECL bool
+macro_definition_lookup(const char name[], char buf[])
+{
+    struct hashlist *p;
+    if ((p = hash_lookup(name)) == NULL)
+        return(false);
+    strcpy(buf, p->def); /* FIXME: potential overflow here! */
+    return(true);
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */
