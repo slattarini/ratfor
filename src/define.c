@@ -15,7 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Get tokens for the ratfor preprocessor. */
+/*   M A C R O   D E F I N I T I O N   A N D   E X P A N S I O N   */
+
+/*
+ * GLOBAL INCLUDES.
+ */
 
 #include "rat4-common.h"
 #include "rat4-global.h"
@@ -25,6 +29,10 @@
 #include "io.h"
 #include "error.h"
 #include "hash.h"
+
+/*
+ * PRIVATE FUNCTIONS.
+ */
 
 /* Skip next blanks in current input stream, _without_ accounting for
  * macro expansions. */
@@ -112,9 +120,15 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
 #   undef EXTEND_DEFN_WITH_TOKEN_
 }
 
+/*
+ * PUBLIC FUNCTIONS.
+ */
+
+BEGIN_C_DECLS
+
 /* Read macro definition from current ratfor input stream, and save it
  * in global list of user-defined macros. */
-C_DECL void
+void
 get_and_install_macro_definition(void)
 {
     char body[MAXDEFLEN], name[MAXTOK];
@@ -127,7 +141,7 @@ get_and_install_macro_definition(void)
 
 /* Look-up definition of name[] in user-defined macros. If it's not found,
  * return false, else and copy the definition in buf[] and return true. */
-C_DECL const char *
+const char *
 macro_definition_lookup(const char *name)
 {
     struct hashlist *p;
@@ -136,5 +150,7 @@ macro_definition_lookup(const char *name)
     else
         return(p->def);
 }
+
+END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */
