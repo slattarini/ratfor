@@ -26,7 +26,7 @@
 #include "error.h"
 #include "hash.h"
 
-/* Skip next blanks in current input stream, *without* accounting for
+/* Skip next blanks in current input stream, _without_ accounting for
  * macro expansions. */
 static inline void
 skip_raw_blanks(void)
@@ -47,20 +47,20 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
 {
     int i, j, nlpar, t, t2;
     bool defn_with_paren;
-    char ptoken[MAXTOK]; /* temporary buffer for token */
+    char buf[MAXTOK];
 
     /* hackish internal macro to avoid code duplication below */
-#   define EXTEND_DEFN_WITH_TOKEN_(token_) \
-        for (j = 0; token_[j] != EOS; i++, j++) { \
+#   define EXTEND_DEFN_WITH_TOKEN_(buf_) \
+        for (j = 0; buf_[j] != EOS; i++, j++) { \
             if (i >= defsiz) \
                 synerr_fatal("definition too long."); \
-            def[i] = token_[j]; \
+            def[i] = buf_[j]; \
         }
 
     skip_raw_blanks();
-    if ((t = get_unexpanded_token(ptoken, MAXTOK)) != LPAREN) {
+    if ((t = get_unexpanded_token(buf, MAXTOK)) != LPAREN) {
         defn_with_paren = false; /* define name def */
-        put_back_string(ptoken);
+        put_back_string(buf);
     } else {
         defn_with_paren = true; /* define(name,def) */
         reading_parenthesized_macro_definition = true;
@@ -80,27 +80,27 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
     if (!defn_with_paren) { /* define name def */
         i = 0;
         for (;;) {
-            t2 = get_unexpanded_token(ptoken, MAXTOK);
+            t2 = get_unexpanded_token(buf, MAXTOK);
             if (is_newline(t2) || t2 == EOF) {
-                put_back_string(ptoken);
+                put_back_string(buf);
                 break;
             }
-            EXTEND_DEFN_WITH_TOKEN_(ptoken);
+            EXTEND_DEFN_WITH_TOKEN_(buf);
         }
         def[i] = EOS;
     } else { /* define (name, def) */
-        if (get_unexpanded_token(ptoken, MAXTOK) != COMMA)
+        if (get_unexpanded_token(buf, MAXTOK) != COMMA)
             synerr_fatal("missing comma in define.");
         /* else got (name, */
         for (i = 0, nlpar = 0; nlpar >= 0; /* empty clause */) {
-            t2 = get_unexpanded_token(ptoken, MAXTOK);
+            t2 = get_unexpanded_token(buf, MAXTOK);
             if (t2 == EOF)
                 synerr_fatal("missing right paren.");
             else if (t2 == LPAREN)
                 nlpar++;
             else if (t2 == RPAREN)
                 nlpar--;
-            EXTEND_DEFN_WITH_TOKEN_(ptoken);
+            EXTEND_DEFN_WITH_TOKEN_(buf);
         }
         /* TODO: assert def[i - 1] == ')' */
         def[i - 1] = EOS;
@@ -108,11 +108,12 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
          * true anymore that we are scanning it. */
         reading_parenthesized_macro_definition = false;
     }
+    
     /* get rid of temporary internal macro */
 #   undef EXTEND_DEFN_WITH_TOKEN_
 }
 
-/* Save macro definition. */
+/* Read and save macro definition. */
 C_DECL void
 get_and_install_macro_definition(void)
 {
