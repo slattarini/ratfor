@@ -1,6 +1,6 @@
 #-*- Autoconf -*-
-# Copied from SteLib at 2010-02-03 18:00:45 +0100.  DO NOT EDIT!
-# serial 6 ax_misc_report_if_beta.m4
+# Copied from SteLib at 2010-02-17 00:50:49 +0100.  DO NOT EDIT!
+# serial 7 ax_misc_report_if_beta.m4
 
 #
 # Copyright (C) 2008-2010 Stefano Lattarini.
@@ -30,32 +30,29 @@ It may suffer of strange bugs and undocumented incompatibilities,
 so beware.
 EOF
 
-ax_flist=""
-ax_s=""
-for ax_fname in README.alpha BUGS TODO; do
-    f="$srcdir/$ax_fname"
-    test -f "$f" || continue
-    if test -z "$ax_flist"; then
-        ax_flist=$ax_fname
-        ax_flist2=$ax_fname
-        ax_s=""
-    else
-        ax_flist="$ax_flist2 and $ax_fname"
-        ax_flist2="$ax_flist2, $ax_fname"
-        ax_s="s"
-    fi
+ax_report_if_beta__list=''
+ax_report_if_beta__seen=no
+ax_report_if_beta__what=file
+for ax_report_if_beta__f in README.alpha README.beta BUGS TODO; do
+  test -f "$srcdir/$ax_report_if_beta__f" || continue
+  if test x"$ax_report_if_beta__seen" = x"yes"; then
+    AS_VAR_APPEND([ax_report_if_beta__list], [", $ax_report_if_beta__f"])
+    ax_report_if_beta__what=files
+  else
+    ax_report_if_beta__seen=yes
+    ax_report_if_beta__list=$ax_report_if_beta__f
+  fi
 done
-if test -n "$ax_flist"; then
-    cat >&2 <<EOF
-
-Be sure to read carefully the file${ax_s} $ax_flist before proceeding.
-EOF
+if test x"$ax_report_if_beta__seen" = x"yes"; then
+    echo "" >&2
+    echo "Be sure to read carefully the $ax_report_if_beta__what" \
+         "$ax_report_if_beta__list before proceeding." >&2
 fi
 
-AS_UNSET([ax_fname])
-AS_UNSET([ax_flist])
-AS_UNSET([ax_flist2])
-AS_UNSET([ax_s])dnl
+AS_UNSET([ax_report_if_beta__list])
+AS_UNSET([ax_report_if_beta__seen])
+AS_UNSET([ax_report_if_beta__what])
+AS_UNSET([ax_report_if_beta__f])dnl
 ])dnl* m4_bmatch
 ])dnl* AC_DEFUN
 
