@@ -1,5 +1,5 @@
 #-*- Autoconf -*-
-# Copied from SteLib at 2010-02-03 18:07:04 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-02-17 01:09:10 +0100.  DO NOT EDIT!
 # serial 3 ax_check_cc_flag.m4
 
 #
@@ -17,10 +17,14 @@
 # For internal usage only.
 AC_DEFUN([_AX_CHECK_CC_FLAG],
     [AC_LANG_PUSH([C])
-    ax_check_cc_flag_save_CFLAGS="$CFLAGS"
-    CFLAGS="$CFLAGS $1"
-    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$2],[$3])], [$4], [$5])
-    CFLAGS="$ax_check_cc_flag_save_CFLAGS"
+    # Save original value of $CFLAGS.
+    AS_VAR_COPY([ax_check_cc_flag_save_CFLAGS], [CFLAGS])
+    # Temporarly append the flag to be checke to $CFLAGS.
+    AS_VAR_APPEND([CFLAGS], [" $1"])
+    # Check the flag in combination of the original $CFLAGS.
+    AC_COMPILE_IFELSE([AC_LANG_PROGRAM([$2], [$3])], [$4], [$5])
+    # Restore original value of $CFLAGS.
+    AS_VAR_COPY([CFLAGS], [ax_check_cc_flag_save_CFLAGS])
     AS_UNSET([ax_check_cc_flag_save_CFLAGS])
     AC_LANG_POP()])
 
@@ -33,22 +37,20 @@ AC_DEFUN([_AX_CHECK_CC_FLAG],
 #  in the AC_LANG_PROGRAM macro.
 #  The check is cached, and the cache variable is named:
 #   `ax_cv_cc_check_flag_FLAG'
-#  where FLAG is obtained normalizing `FLAG-TO-CHECK', i.e. by substituting
-#  non-alphanumeric characters in FLAG-TO-CHECK with underscores (`_').
+#  where FLAG is obtained normalizing `FLAG-TO-CHECK' as through the
+#  use of m4sh macro `AS_TR_SH' (which basically should just substite
+#  non-alphanumeric characters in FLAG-TO-CHECK with underscores `_').
 AC_DEFUN([AX_CACHE_CHECK_CC_FLAG],
-    [ax_cc_flag_norm=`echo x"$1" | sed -e 's/^x//' -e 's/[[^A-Za-z0-9_]]/_/g'`
+    [AS_VAR_PUSHDEF([_$0_var], [ax_cv_check_cc_flag_$1])dnl
     AC_CACHE_CHECK(
         [whether the C compiler accepts the $1 flag],
-        [ax_cv_check_cc_flag_${ax_cc_flag_norm}],
+        [_$0_var],
         [_AX_CHECK_CC_FLAG(
             [$1], [$2], [$3],
-            [eval "ax_cv_check_cc_flag_${ax_cc_flag_norm}=yes"],
-            [eval "ax_cv_check_cc_flag_${ax_cc_flag_norm}=no"])])
-    
-    AS_IF(
-        [eval test \"\$ax_cv_check_cc_flag_${ax_cc_flag_norm}\" = yes],
-        [$4],
-        [$5])
-    AS_UNSET([ax_cc_flag_norm])])
+            [AS_VAR_SET([_$0_var], [yes])],
+            [AS_VAR_SET([_$0_var], [no])])])
+    AS_VAR_IF([_$0_var], [yes], [$4], [$5])
+    AS_UNSET([_$0_var])
+    AS_VAR_POPDEF([_$0_var])])
 
 # vim: ft=m4 ts=4 sw=4 et

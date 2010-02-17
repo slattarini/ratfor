@@ -1,5 +1,5 @@
 #-*- Autoconf -*-
-# Copied from SteLib at 2010-02-03 18:07:04 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-02-17 01:09:10 +0100.  DO NOT EDIT!
 # serial 3 ax_misc_include_maint_config_site.m4
 
 #

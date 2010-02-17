@@ -1,6 +1,6 @@
 # -*- Autoconf -*-
-# Copied from SteLib at 2010-02-03 18:07:04 +0100.  DO NOT EDIT!
-# serial 2 ax_arg_enable_werror_cflag.m4
+# Copied from SteLib at 2010-02-17 01:09:10 +0100.  DO NOT EDIT!
+# serial 3 ax_arg_enable_werror_cflag.m4
 
 #
 # Copyright (C) 2010 Stefano Lattarini.
@@ -24,8 +24,9 @@ AC_DEFUN([AX_ARG_ENABLE_WERROR_CFLAG],
         [enable the `-Werror' C compiler flag, if supported],
         [ax_use_cc_werror_flag=yes],
         [ax_use_cc_werror_flag=no])
-    if test x"$ax_use_cc_werror_flag" = x"yes"; then
-      AX_CACHE_CHECK_CC_FLAG([-Werror], [], [], [CFLAGS="$CFLAGS -Werror"])
-    fi])
+    AS_VAR_IF([ax_use_cc_werror_flag], [yes],
+        [AX_CACHE_CHECK_CC_FLAG(
+            [-Werror], [], [],
+            [AS_VAR_APPEND([CFLAGS], [" -Werror"])])])])
 
 # vim: ft=m4 ts=4 sw=4 et

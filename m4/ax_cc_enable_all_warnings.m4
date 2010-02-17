@@ -1,6 +1,6 @@
 # -*- Autoconf -*-
-# Copied from SteLib at 2010-02-03 18:07:04 +0100.  DO NOT EDIT!
-# serial 2 ax_cc_is_cxx_support.m4
+# Copied from SteLib at 2010-02-17 01:09:10 +0100.  DO NOT EDIT!
+# serial 3 ax_cc_is_cxx_support.m4
 
 #
 # Copyright (C) 2010 Stefano Lattarini.
@@ -42,7 +42,7 @@ AC_DEFUN([AX_CC_ENABLE_ALL_COMPILER_WARNINGS],
     fi
     for ax_gcc_warning_flag in $ax_gcc_all_warning_flags; do
         AX_CACHE_CHECK_CC_FLAG([$ax_gcc_warning_flag], [], [],
-                               [CFLAGS="$CFLAGS $ax_gcc_warning_flag"])
+                               [AS_VAR_APPEND([CFLAGS], [" $ax_gcc_warning_flag"])])
     done
     AS_UNSET([ax_gcc_warning_flag])
 ])
