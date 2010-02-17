@@ -32,26 +32,29 @@
 /* Define here ALL the global variables declared in "rat4-global.h".
    This is REQUIRED by C++ compilers. */
 
-/* Tell if a macro definition is being scanned.  Used to share state between
- * `getdef' and functions of the `get_raw_token' family. */
-bool reading_parenthesized_macro_definition;
-
-/* text of current subprogram (function or subroutine) name */
-char current_subprogram_name[MAXFUNCNAME];
-
-/* true if comments should be kept, false otherwise */
+/* True if comments should be (properly) copied to output, false
+ * otherwise. */
 bool keep_comments;
 
-/* type of current subprogram (function, subroutine, everithing else) */
+/* Name of current subprogram (function or subroutine).  It should
+ * be empty outside functions and subroutines. */
+char current_subprogram_name[MAXFUNCNAME];
+
+/* Type of current subprogram (function, subroutine, everithing else). */
 enum subprg_t current_subprogram_type;
 
-/* level of file inclusion; init = 1 */
+/* Level of file inclusion (init = 1). */
 int inclevel;
 
-/* stack of inluded files: line nuber, file name, file pointer */
+/* Stack of included files: line nuber, file name, file pointer */
 int lineno[MAX_INCLUDE_DEPTH];
 FILE *infile[MAX_INCLUDE_DEPTH];
 const char *filename[MAX_INCLUDE_DEPTH];
+
+/* Tell if a macro definition is being scanned.  Used to share state
+ * between function `get_macro_definition' in file `define.c' and
+ * function `get_non_alphanumeric_raw_token' in file `tokenizer.c'. */
+bool reading_parenthesized_macro_definition;
 
 #endif /* C++ */
 

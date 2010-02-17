@@ -20,27 +20,29 @@
 
 #include "rat4-common.h"
 
-/* Tell if a macro definition is being scanned.  Used to share state between
- * `getdef' and functions of the `get_raw_token' family. */
-C_DECL bool reading_parenthesized_macro_definition;
-
-/* type of current subprogram (function, subroutine, everything else) */
-C_DECL enum subprg_t current_subprogram_type;
-
-/* text of current subprogram (function or subroutine) name (it should
-   be empty outside functions and subroutines) */
-C_DECL char current_subprogram_name[MAXFUNCNAME];
-
-/* true if comments should be kept, false otherwise */
+/* True if comments should be (properly) copied to output, false
+ * otherwise. */
 C_DECL bool keep_comments;
 
-/* level of file inclusion; init = 1 */
+/* Name of current subprogram (function or subroutine).  It should
+ * be empty outside functions and subroutines. */
+C_DECL char current_subprogram_name[MAXFUNCNAME];
+
+/* Type of current subprogram (function, subroutine, everithing else). */
+C_DECL enum subprg_t current_subprogram_type;
+
+/* Level of file inclusion (init = 1). */
 C_DECL int inclevel;
 
-/* stack of inluded files: line nuber, file name, file pointer */
+/* Stack of included files: line nuber, file name, file pointer */
 C_DECL int lineno[MAX_INCLUDE_DEPTH];
 C_DECL FILE *infile[MAX_INCLUDE_DEPTH];
 C_DECL const char *filename[MAX_INCLUDE_DEPTH];
+
+/* Tell if a macro definition is being scanned.  Used to share state
+ * between function `get_macro_definition' in file `define.c' and
+ * function `get_non_alphanumeric_raw_token' in file `tokenizer.c'. */
+C_DECL bool reading_parenthesized_macro_definition;
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */
