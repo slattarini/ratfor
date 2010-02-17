@@ -20,6 +20,7 @@
 #include "error.h"
 #include "io.h"
 
+
 /*
  *   I / O   W R A P P E R S
  */
@@ -29,11 +30,9 @@
 static char buf[BUFSIZE];   /* pushed-back chars buffer */
 static int bp = -1;         /* pushed-back chars buffer offset */
 
-/*
- * The three following subroutines are part of an hack needed to keep
+/* The three following subroutines are part of an hack needed to keep
  * the count of line numbers correct even when expansion multiline macros
- * (defined through the `define' builtin) is involved .
- */
+ * (defined through the `define' builtin) is involved. */
 
 static inline void
 putc_(const char c)
@@ -60,15 +59,13 @@ pbstr_(const char str[], const bool cooked)
 }
 
 
-/* get next char (either pushed back or new from the stream) */
+/* Get next char (either pushed back or new from the stream). */
 #define NGETC_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
     
 BEGIN_C_DECLS
 
-/*
- * ngetch - get a (possibly pushed back) character, dealing with line
- *          continuation and keeping the count of line number.
- */
+/* Get a (possibly pushed back) character, dealing with line continuation
+ * and keeping the count of line number. */
 int
 ngetch(FILE *fp)
 {
@@ -93,6 +90,17 @@ ngetch(FILE *fp)
 
 #undef NGETC_
 
+/* Push character back onto input. */
+void
+put_back_char(char c)
+{
+    if (++bp >= BUFSIZE)
+        synerr_fatal("too many characters pushed back.");
+    if (is_strict_newline(c))
+        --lineno[inclevel];
+    buf[bp] = c;
+}
+
 /* Push string back onto input. */
 void
 put_back_string(const char str[])
@@ -108,18 +116,8 @@ put_back_string_cooked(const char str[])
     pbstr_(str, true);
 }
 
-/* put_back_char() - push character back onto input */
-void
-put_back_char(char c)
-{
-    if (++bp >= BUFSIZE)
-        synerr_fatal("too many characters pushed back.");
-    if (is_strict_newline(c))
-        --lineno[inclevel];
-    buf[bp] = c;
-}
-
 END_C_DECLS
+
 
 /*
  *  O U T P U T  F O R T R A N - C O M P A T I B L E  T E X T
@@ -130,10 +128,8 @@ static int outp = 0;    /*  last position filled in outbuf */
 
 BEGIN_C_DECLS
 
-/*
- * outch - put one char into output buffer
- *
- */
+/* Put one char into output card, with automatic line wrapping and
+ * continuation. */
 void
 outch(char c)
 {
@@ -149,10 +145,8 @@ outch(char c)
     outbuf[outp++] = c;
 }
 
-/*
- * outstr - output string
- *
- */
+/* Put a string into output card, with automatic line wrapping and
+ * continuation. */
 void
 outstr(const char str[])
 {
@@ -161,10 +155,7 @@ outstr(const char str[])
         outch(*s++);
 }
 
-/*
- * outtab - get past column 6
- *
- */
+/* Get past column 6 in output card. */
 void
 outtab(void)
 {
@@ -172,10 +163,7 @@ outtab(void)
         outch(BLANK);
 }
 
-/*
- * outdon - finish off an output line
- *
- */
+/* Finish off an output line. */
 void
 outdon(void)
 {
@@ -185,10 +173,7 @@ outdon(void)
     outp = 0;
 }
 
-/*
- * outnum - output decimal number
- *
- */
+/* Write a decimal number in output card. */
 void 
 outnum(int n)
 {
@@ -209,10 +194,9 @@ outnum(int n)
 #undef MAXCHARS_
 }
 
-/*
- * outasis - copy directly to output until the next newline character
- *
- */
+/* Copy directly to output until the next newline character.  No line
+ * wrapping, no line continuation, no sanitazation: just a real verbatim
+ * copy. */
 void
 outasis(FILE * fp)
 {
@@ -226,10 +210,7 @@ outasis(FILE * fp)
     putc_(NEWLINE);
 }
 
-/*
- * outcmnt - copy comment to output
- *
- */
+/* Copy comment to output card, dealing with line wrapping if necessary. */
 void
 outcmnt(FILE * fp)
 {
