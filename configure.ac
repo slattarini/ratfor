@@ -129,14 +129,6 @@ done
 AS_UNSET([func])
 
 #
-# Checks for third-party libraries.
-#
-
-# Search the `Check' library, an unittest library for C used by our
-# testsuite.
-AX_CHECK_LIBCHECK
-
-#
 # Enable maintainer-specific make rules, on user request.
 #
 
