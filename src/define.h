@@ -16,6 +16,13 @@
  */
 #ifndef RAT4_DEFINE_H
 #  define RAT4_DEFINE_H 1
-C_DECL void getdef(char [], int , char [], int);
+
+/* NOTE: due to implementation details, it is pointless to have MAXDEFLEN
+         here greater than BUFSIZE in io.c */
+
+#define MAXDEFLEN  2048  /* max length of a ratfor macro's body */
+
+C_DECL void get_and_install_macro_definition(void);
+
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

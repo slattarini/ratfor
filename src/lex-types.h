@@ -44,6 +44,7 @@
 #define LEXCASE         23
 #define LEXDEFAULT      24
 #define LEXVERBATIM     25
+#define LEXDEFN         26
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

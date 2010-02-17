@@ -23,10 +23,9 @@ line-continuation-automatic-relationals-raw.test
 function-name-invalid-3.test
 subroutine-name-invalid-3.test
 
-# Currently, C Rafor process `define' and `include' builtins also in the
-# middle of a statement, which makes the following tests fail.  This is
-# not a good behaviour, and will hopefully be fixed in a future release.
-define-at-stmt-beginning-only.test
+# Currently, C Rafor process `include' builtin also in the middle of a
+# statement, which makes the following tests fail.  This is not a good
+# behaviour, and will hopefully be fixed in a future release.
 include-at-stmt-beginning-only-dquote.test
 include-at-stmt-beginning-only-squote.test
 include-at-stmt-beginning-only-plain.test

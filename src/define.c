@@ -24,6 +24,7 @@
 #include "define.h"
 #include "io.h"
 #include "error.h"
+#include "hash.h"
 
 /* Skip next blanks in current input stream, *without* accounting for
  * macro expansions. */
@@ -41,8 +42,8 @@ skip_raw_blanks(void)
 /* Parse definition of ratfor macro.  If an error is detected, stop ratfor
  * with a suitable error message, else save macro name (in `name[]') and
  * macro definition (in `def[]'). */
-C_DECL void
-getdef(char name[], int namesiz, char def[], int defsiz)
+static void
+get_macro_definition(char name[], int namesiz, char def[], int defsiz)
 {
     int i, j, nlpar, t, t2;
     bool defn_with_paren;
@@ -68,7 +69,7 @@ getdef(char name[], int namesiz, char def[], int defsiz)
     t2 = get_unexpanded_token(name, namesiz); /* name */
     if (!defn_with_paren && is_stmt_ending(t2)) {
         /* stray `define', as in `...; define; ...' */
-        synerr_fatal("empty name.");
+        synerr_fatal("empty name."); /* XXX: better diagnostic? */
     } else if (defn_with_paren && t2 == COMMA) {
         /* `define(name, def)' with empty name */
         synerr_fatal("empty name.");
@@ -109,6 +110,18 @@ getdef(char name[], int namesiz, char def[], int defsiz)
     }
     /* get rid of temporary internal macro */
 #   undef EXTEND_DEFN_WITH_TOKEN_
+}
+
+/* Save macro definition. */
+C_DECL void
+get_and_install_macro_definition(void)
+{
+    char body[MAXDEFLEN], name[MAXTOK];
+
+    /* get definition for name, save it in body ... */
+    get_macro_definition(name, MAXTOK, body, MAXDEFLEN);
+    /* ... and install it. */
+    hash_install(name, body);
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */

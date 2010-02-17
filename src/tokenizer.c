@@ -20,25 +20,20 @@
 #include "rat4-common.h"
 
 #include "tokenizer.h"
-#include "define.h"
 #include "io.h"
 #include "xopen.h"
 #include "error.h"
-#include "hash.h"
+#include "define.h" /*XXX*/
+#include "hash.h" /*XXX*/
 #include "rat4-global.h"
 
-#define MAXPATH     1024    /* max length of the name of a file included */
-#define MAXDEFLEN   2048    /* max length of a ratfor macro's definition */
-
-/* NOTE: due to implementation details, it is pointless to have MAXDEFLEN
-         here greater than BUFSIZE in io.c */
+#define MAXPATH  1024  /* max length of the name of a file included */
 
 /*
  * PRIVATE VARIABLES.
  */
 
 static const char KEYWORD_INCLUDE[] = "include";
-static const char KEYWORD_DEFINE[]  = "define";
 
 
 /*
@@ -365,31 +360,24 @@ non_blank:
     return(tok);
 }
 
-/* Get token and save it in buf[], expanding macro calls and processing
- * macro definitions. */
+/* Get token and save it in buf[], expanding macro calls. */
 static int
 get_expanded_token(char buf[], int bufsiz)
 {
-    char tkdefn[MAXDEFLEN];
+    char defn[MAXDEFLEN];
     int t;
 
     while ((t = get_raw_token(buf, bufsiz, infile[inclevel])) != EOF) {
         if (t != TOKT_ALPHA) {
             break; /* non-alpha */
-        }
-        /* XXX willl be moved out */
-        else if (STREQ(buf, KEYWORD_DEFINE)) {
-            /* get definition for token, save it in tkdefn */
-            getdef(buf, bufsiz, tkdefn, MAXDEFLEN);
-            hash_install(buf, tkdefn);
-        } else if (!defn_lookup(buf, tkdefn)) {
-            break; /* undefined */
+        } else if (!defn_lookup(buf, defn)) {
+            break; /* not a macro name */
         } else {
             /* Push replacement onto input, with newlines properly
              * substituted by "fake newlines". This hack is needed
              * to keep the count of line in input correct even if
-             *expansion of multiline macros is involved. */
-            put_back_string_cooked(tkdefn);
+             * expansion of multiline macros is involved. */
+            put_back_string_cooked(defn);
         }
     }
     return(t);

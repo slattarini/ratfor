@@ -21,6 +21,7 @@
 #include "lex-types.h"
 #include "parser.h"
 #include "tokenizer.h"
+#include "define.h"
 #include "codegen.h"
 #include "error.h"
 #include "io.h" /* for `put_back_string()' */
@@ -116,6 +117,8 @@ lex(char buf[], int bufsiz)
         tok = LEXCASE;
     else if (STREQ(buf, "default"))
         tok = LEXDEFAULT;
+    else if (STREQ(buf, "define"))
+        tok = LEXDEFN;
     else if (STREQ(buf, "do"))
         tok = LEXDO;
     else if (STREQ(buf, "else"))
@@ -160,6 +163,9 @@ parse(void)
         switch(lextype) {
             case LEXVERBATIM:
                 verbatim(); /* copy direct to output */
+                break;
+            case LEXDEFN:
+                get_and_install_macro_definition();
                 break;
             case LEXIF:
                 ifcode(&lab);
@@ -220,7 +226,8 @@ parse(void)
             case LEXDO:
             case LEXSWITCH:
             case LBRACE:
-                sp++; /* beginning of statement */
+                /* begin control-flow statement - will need unstack */
+                sp++;
                 if (sp > MAXSTACK)
                     synerr_fatal("stack overflow in parser.");
                 lextyp[sp] = lextype; /* stack type and value */
@@ -229,7 +236,8 @@ parse(void)
             case LEXCASE:
             case LEXDEFAULT:
             case LEXVERBATIM:
-                /* do nothing */
+            case LEXDEFN:
+                /* self-contained statement - no need to later unstack */
                 break;
             default:
                 /* end of statement - prepare to unstack */
