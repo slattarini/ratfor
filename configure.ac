@@ -157,6 +157,7 @@ AC_CONFIG_FILES([
     src/Makefile
     tests/Makefile
     tests/graybox/Makefile
+    tests/unit/Makefile
 ])
 
 # Make GNUmakefile available also in VPATH builds.
