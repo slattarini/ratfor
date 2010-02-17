@@ -30,13 +30,6 @@
 #define MAXPATH  1024  /* max length of the name of a file included */
 
 /*
- * PRIVATE VARIABLES.
- */
-
-static const char KEYWORD_INCLUDE[] = "include";
-
-
-/*
  * PRIVATE FUNCTIONS.
  */
 
@@ -467,9 +460,10 @@ get_token(char buf[], int bufsiz)
     int tok;
     char path[MAXPATH];
 
+    /* FIXME: file inclusion to be moved outto parser */
     while (inclevel >= 0) {
         while ((tok = get_expanded_token(buf, bufsiz)) != EOF) {
-            if (!STREQ(buf, KEYWORD_INCLUDE))
+            if (!STREQ(buf, "include"))
                 return(tok);
             /* deal with file inclusion */
             for (i = 0; ; i = SSTRLEN(path)) {
