@@ -22,7 +22,7 @@
 
 BEGIN_C_DECLS
 
-int get_unpreprocessed_token(char [], int);
+int get_unexpanded_token(char [], int);
 int get_token(char [], int);
 int get_nonblank_token(char [], int);
 

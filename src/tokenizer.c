@@ -367,9 +367,8 @@ non_blank:
 
 /* Get token and save it in buf[], expanding macro calls and processing
  * macro definitions. */
-/*** FIXME: a clearer name for thi function? ***/
 static int
-deftok(char buf[], int bufsiz)
+get_expanded_token(char buf[], int bufsiz)
 {
     char tkdefn[MAXDEFLEN];
     int t;
@@ -453,7 +452,7 @@ BEGIN_C_DECLS
  * Also deal with ratfor comments (# COMMENT...) and verbatim escapes
  * (% VERBATIM..).  Return the type of the token read. */
 int
-get_unpreprocessed_token(char buf[], int bufsiz)
+get_unexpanded_token(char buf[], int bufsiz)
 {
     int tok;
 
@@ -481,14 +480,14 @@ get_token(char buf[], int bufsiz)
     char path[MAXPATH];
 
     while (inclevel >= 0) {
-        while ((tok = deftok(buf, bufsiz)) != EOF) {
+        while ((tok = get_expanded_token(buf, bufsiz)) != EOF) {
             if (!STREQ(buf, KEYWORD_INCLUDE))
                 return(tok);
             /* deal with file inclusion */
             for (i = 0; ; i = SSTRLEN(path)) {
                 if (i >= MAXPATH)
                     synerr_fatal("name of included file too long.");
-                t = deftok(&path[i], MAXPATH);
+                t = get_expanded_token(&path[i], MAXPATH);
                 if (is_stmt_ending(t))
                     break;
             }

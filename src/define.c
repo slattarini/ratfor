@@ -57,7 +57,7 @@ getdef(char name[], int namesiz, char def[], int defsiz)
         }
 
     skip_raw_blanks();
-    if ((t = get_unpreprocessed_token(ptoken, MAXTOK)) != LPAREN) {
+    if ((t = get_unexpanded_token(ptoken, MAXTOK)) != LPAREN) {
         defn_with_paren = false; /* define name def */
         put_back_string(ptoken);
     } else {
@@ -65,7 +65,7 @@ getdef(char name[], int namesiz, char def[], int defsiz)
         reading_parenthesized_macro_definition = true;
     }
     skip_raw_blanks();
-    t2 = get_unpreprocessed_token(name, namesiz); /* name */
+    t2 = get_unexpanded_token(name, namesiz); /* name */
     if (!defn_with_paren && is_stmt_ending(t2)) {
         /* stray `define', as in `...; define; ...' */
         synerr_fatal("empty name.");
@@ -79,7 +79,7 @@ getdef(char name[], int namesiz, char def[], int defsiz)
     if (!defn_with_paren) { /* define name def */
         i = 0;
         for (;;) {
-            t2 = get_unpreprocessed_token(ptoken, MAXTOK);
+            t2 = get_unexpanded_token(ptoken, MAXTOK);
             if (is_newline(t2) || t2 == EOF) {
                 put_back_string(ptoken);
                 break;
@@ -88,11 +88,11 @@ getdef(char name[], int namesiz, char def[], int defsiz)
         }
         def[i] = EOS;
     } else { /* define (name, def) */
-        if (get_unpreprocessed_token(ptoken, MAXTOK) != COMMA)
+        if (get_unexpanded_token(ptoken, MAXTOK) != COMMA)
             synerr_fatal("missing comma in define.");
         /* else got (name, */
         for (i = 0, nlpar = 0; nlpar >= 0; /* empty clause */) {
-            t2 = get_unpreprocessed_token(ptoken, MAXTOK);
+            t2 = get_unexpanded_token(ptoken, MAXTOK);
             if (t2 == EOF)
                 synerr_fatal("missing right paren.");
             else if (t2 == LPAREN)
