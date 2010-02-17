@@ -248,10 +248,6 @@ balpar(void)
         synerr("missing parenthesis in condition.");
 }
 
-/**XXX**
- **XXX**  Is this the right place to deal with comments and verbatim text
- **XXX**  in a more rational/systematic way?  I'm beginning to think so...
- **XXX**/
 /* eatup - process rest of statement; interpret automatic continuations */
 static void
 eatup(void)
