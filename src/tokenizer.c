@@ -360,7 +360,7 @@ get_expanded_token(char buf[], int bufsiz)
     char defn[MAXDEFLEN];
     int t;
 
-    while ((t = get_raw_token(buf, bufsiz, infile[inclevel])) != EOF) {
+    while ((t = get_unexpanded_token(buf, bufsiz)) != EOF) {
         if (t != TOKT_ALPHA) {
             break; /* non-alpha */
         } else if (!defn_lookup(buf, defn)) {
@@ -460,31 +460,22 @@ get_token(char buf[], int bufsiz)
     int tok;
     char path[MAXPATH];
 
-    /* FIXME: file inclusion to be moved outto parser */
-    while (inclevel >= 0) {
-        while ((tok = get_expanded_token(buf, bufsiz)) != EOF) {
-            if (!STREQ(buf, "include"))
-                return(tok);
-            /* deal with file inclusion */
-            for (i = 0; ; i = SSTRLEN(path)) {
-                if (i >= MAXPATH)
-                    synerr_fatal("name of included file too long.");
-                t = get_expanded_token(&path[i], MAXPATH);
-                if (is_stmt_ending(t))
-                    break;
-            }
-            path[i] = EOS;
-            push_file_stack(path);
+    for(;;) {
+        tok = get_expanded_token(buf, bufsiz);
+        if (!STREQ(buf, "include"))
+            return(tok);
+        /* FIXME: file inclusion to be moved out to parser */
+        /* deal with file inclusion */
+        for (i = 0; ; i = SSTRLEN(path)) {
+            if (i >= MAXPATH)
+                synerr_fatal("name of included file too long.");
+            t = get_expanded_token(&path[i], MAXPATH);
+            if (is_stmt_ending(t))
+                break;
         }
-        /* close include and pop file name stack */
-        pop_file_stack();
+        path[i] = EOS;
+        push_file_stack(path);
     }
-
-    /* in case called again after input ended */
-    buf[0] = EOF;
-    buf[1] = EOS;
-    tok = EOF;
-    return(tok);
 }
 
 /* Like `get_token()', but skip any leading blanks. */
