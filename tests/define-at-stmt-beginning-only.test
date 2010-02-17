@@ -42,7 +42,7 @@ test ! -s stderr || testcase_FAIL "stderr not empty"
 
 $FGREP define stdout \
   || testcase_FAIL "string \"define\" not found in output"
-test x"`$FGREP -c define stdout`" = x"4" \
+test x"`$FGREP -c define stdout`" = x"`$FGREP -c define tst.r`" \
   || testcase_FAIL "bad count of strings \"define\" in output"
 
 for s in x1 x2 y1 y2 z1 z2; do
