@@ -25,14 +25,15 @@
 #include "io.h"
 #include "error.h"
 
-/* Skip next blanks in inpput stream fp, *without* accounting for macro
- * expansions. */
-static void
-skip_raw_blanks(FILE *fp)
+/* Skip next blanks in current input stream, *without* accounting for
+ * macro expansions. */
+static inline void
+skip_raw_blanks(void)
 {
     char c;
-    for (c = ngetch(fp); is_blank(c); c = ngetch(fp))
-        /* skip blank characters */;
+    do {
+        c = ngetch(infile[inclevel]);
+    } while (is_blank(c));
     put_back_char(c);
 }
 
@@ -41,7 +42,7 @@ skip_raw_blanks(FILE *fp)
  * with a suitable error message, else save macro name (in `name[]') and
  * macro definition (in `def[]'). */
 C_DECL void
-getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
+getdef(char name[], int namesiz, char def[], int defsiz)
 {
     int i, j, nlpar, t, t2;
     bool defn_with_paren;
@@ -55,16 +56,16 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
             def[i] = token_[j]; \
         }
 
-    skip_raw_blanks(fp);
-    if ((t = get_raw_token(ptoken, MAXTOK, fp)) != LPAREN) {
+    skip_raw_blanks();
+    if ((t = get_unpreprocessed_token(ptoken, MAXTOK)) != LPAREN) {
         defn_with_paren = false; /* define name def */
         put_back_string(ptoken);
     } else {
         defn_with_paren = true; /* define(name,def) */
         reading_parenthesized_macro_definition = true;
     }
-    skip_raw_blanks(fp);
-    t2 = get_raw_token(name, namesiz, fp); /* name */
+    skip_raw_blanks();
+    t2 = get_unpreprocessed_token(name, namesiz); /* name */
     if (!defn_with_paren && is_stmt_ending(t2)) {
         /* stray `define', as in `...; define; ...' */
         synerr_fatal("empty name.");
@@ -74,11 +75,11 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
     } else if (t2 != TOKT_ALPHA) {
         synerr_fatal("non-alphanumeric name.");
     }
-    skip_raw_blanks(fp);
+    skip_raw_blanks();
     if (!defn_with_paren) { /* define name def */
         i = 0;
         for (;;) {
-            t2 = get_raw_token(ptoken, MAXTOK, fp);
+            t2 = get_unpreprocessed_token(ptoken, MAXTOK);
             if (is_newline(t2) || t2 == EOF) {
                 put_back_string(ptoken);
                 break;
@@ -87,11 +88,11 @@ getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
         }
         def[i] = EOS;
     } else { /* define (name, def) */
-        if (get_raw_token(ptoken, MAXTOK, fp) != COMMA)
+        if (get_unpreprocessed_token(ptoken, MAXTOK) != COMMA)
             synerr_fatal("missing comma in define.");
         /* else got (name, */
         for (i = 0, nlpar = 0; nlpar >= 0; /* empty clause */) {
-            t2 = get_raw_token(ptoken, MAXTOK, fp);
+            t2 = get_unpreprocessed_token(ptoken, MAXTOK);
             if (t2 == EOF)
                 synerr_fatal("missing right paren.");
             else if (t2 == LPAREN)

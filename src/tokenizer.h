@@ -19,11 +19,10 @@
 #  define RAT4_TOKENIZER_H 1
 
 #include "tok-types.h"
-#include <stdio.h> /* for `FILE' */
 
 BEGIN_C_DECLS
 
-int get_raw_token(char [], int, FILE *);
+int get_unpreprocessed_token(char [], int);
 int get_token(char [], int);
 int get_nonblank_token(char [], int);
 

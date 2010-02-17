@@ -16,6 +16,6 @@
  */
 #ifndef RAT4_DEFINE_H
 #  define RAT4_DEFINE_H 1
-C_DECL void getdef(char[], int , char[], int, FILE *);
+C_DECL void getdef(char[], int , char[], int);
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

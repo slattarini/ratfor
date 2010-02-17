@@ -325,23 +325,63 @@ get_non_alphanumeric_raw_token(char buf[], int bufsiz, FILE *fp)
     return(tok);
 }
 
+/* Get a "raw" ratfor token from input stream fp (i.e. without performing
+ * macro expansion), and save it in buf[].  Also deal with ratfor comments
+ * (# COMMENT...) and verbatim escapes (% VERBATIM..).  Return the type of
+ * the token read. */
+static int
+get_raw_token(char buf[], int bufsiz, FILE *fp)
+{
+    int tok;
+    int c;
+    c = buf[0] = ngetch(fp);
+    if (is_blank(c)) {
+        buf[0] = BLANK;
+        while (is_blank(c)) /* compress many blanks to one */
+            c = ngetch(fp);
+        if (c == SHARP) {
+            /* Special handling of `#' to avoid leaving extra white
+             * spaces in output. */
+            goto non_blank; /* fallthrough */
+        }
+        if (!is_newline(c))
+            put_back_char(c);
+        else
+            buf[0] = c;
+        buf[1] = EOS;
+        return(buf[0]);
+    }
+non_blank:
+    put_back_char(c); /* so that we can read back the whole token */
+    if (is_rat4_alpha(c)) {
+        tok = get_alphanumeric_raw_token(buf, bufsiz, fp);
+    } else if (is_digit(c)) {
+        tok = get_numerical_raw_token(buf, bufsiz, fp);
+    } else if (c == SQUOTE || c == DQUOTE) {
+        tok = get_quoted_string_raw_token(buf, bufsiz, fp);
+    } else {
+        tok = get_non_alphanumeric_raw_token(buf, bufsiz, fp);
+    }
+    return(tok);
+}
+
 /* Get token and save it in buf[], expanding macro calls and processing
  * macro definitions. */
 /*** FIXME: a clearer name for thi function? ***/
 static int
-deftok(char buf[], int bufsiz, FILE *fp)
+deftok(char buf[], int bufsiz)
 {
     char tkdefn[MAXDEFLEN];
     int t;
 
-    while ((t = get_raw_token(buf, bufsiz, fp)) != EOF) {
+    while ((t = get_raw_token(buf, bufsiz, infile[inclevel])) != EOF) {
         if (t != TOKT_ALPHA) {
             break; /* non-alpha */
         }
         /* XXX willl be moved out */
         else if (STREQ(buf, KEYWORD_DEFINE)) {
             /* get definition for token, save it in tkdefn */
-            getdef(buf, bufsiz, tkdefn, MAXDEFLEN, fp);
+            getdef(buf, bufsiz, tkdefn, MAXDEFLEN);
             hash_install(buf, tkdefn);
         } else if (!defn_lookup(buf, tkdefn)) {
             break; /* undefined */
@@ -408,49 +448,31 @@ pop_file_stack(void)
 
 BEGIN_C_DECLS
 
-/* Get a "raw" ratfor token from input stream fp (i.e. without performing
- * macro expansion), and save it in buf[].  Also deal with ratfor comments
- * (# COMMENT...) and verbatim escapes (% VERBATIM..).  Return the type of
- * the token read. */
+/* Get "unpreprocessed" (i.e. without performing macro expansion) token
+ * from ratfor current global input stream, and save it in buf[].
+ * Also deal with ratfor comments (# COMMENT...) and verbatim escapes
+ * (% VERBATIM..).  Return the type of the token read. */
 int
-get_raw_token(char buf[], int bufsiz, FILE *fp)
+get_unpreprocessed_token(char buf[], int bufsiz)
 {
     int tok;
-    int c;
-    c = buf[0] = ngetch(fp);
-    if (is_blank(c)) {
-        buf[0] = BLANK;
-        while (is_blank(c)) /* compress many blanks to one */
-            c = ngetch(fp);
-        if (c == SHARP) {
-            /* Special handling of `#' to avoid leaving extra white
-             * spaces in output. */
-            goto non_blank; /* fallthrough */
-        }
-        if (!is_newline(c))
-            put_back_char(c);
-        else
-            buf[0] = c;
-        buf[1] = EOS;
-        return(buf[0]);
+
+    while (inclevel >= 0) {
+        while ((tok = get_raw_token(buf, bufsiz, infile[inclevel])) != EOF)
+            return(tok);
+        /* close include and pop file name stack */
+        pop_file_stack();
     }
-non_blank:
-    put_back_char(c); /* so that we can read back the whole token */
-    if (is_rat4_alpha(c)) {
-        tok = get_alphanumeric_raw_token(buf, bufsiz, fp);
-    } else if (is_digit(c)) {
-        tok = get_numerical_raw_token(buf, bufsiz, fp);
-    } else if (c == SQUOTE || c == DQUOTE) {
-        tok = get_quoted_string_raw_token(buf, bufsiz, fp);
-    } else {
-        tok = get_non_alphanumeric_raw_token(buf, bufsiz, fp);
-    }
+    /* in case called again after input ended */
+    buf[0] = EOF;
+    buf[1] = EOS;
+    tok = EOF;
     return(tok);
 }
 
-
-/* Get token (handling macro expansions, macro definitons and file
- * inclusion), and save it in buf[]. */
+/* Get token from ratfor current global input stream (handling macro
+ * expansions, macro definitons and file inclusion), and save it in
+ * buf[]. */
 int
 get_token(char buf[], int bufsiz)
 {
@@ -459,14 +481,14 @@ get_token(char buf[], int bufsiz)
     char path[MAXPATH];
 
     while (inclevel >= 0) {
-        while ((tok = deftok(buf, bufsiz, infile[inclevel])) != EOF) {
+        while ((tok = deftok(buf, bufsiz)) != EOF) {
             if (!STREQ(buf, KEYWORD_INCLUDE))
                 return(tok);
             /* deal with file inclusion */
             for (i = 0; ; i = SSTRLEN(path)) {
                 if (i >= MAXPATH)
                     synerr_fatal("name of included file too long.");
-                t = deftok(&path[i], MAXPATH, infile[inclevel]);
+                t = deftok(&path[i], MAXPATH);
                 if (is_stmt_ending(t))
                     break;
             }
