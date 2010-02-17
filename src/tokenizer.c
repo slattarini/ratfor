@@ -20,6 +20,7 @@
 #include "rat4-common.h"
 
 #include "tokenizer.h"
+#include "define.h"
 #include "io.h"
 #include "xopen.h"
 #include "error.h"
@@ -32,16 +33,12 @@
 /* NOTE: due to implementation details, it is pointless to have MAXDEFLEN
          here greater than BUFSIZE in io.c */
 
-
 /*
  * PRIVATE VARIABLES.
  */
 
 static const char KEYWORD_INCLUDE[] = "include";
 static const char KEYWORD_DEFINE[]  = "define";
-/* Tell if a macro definition is being scanned.  Used to share state between
- * `getdef' and functions of the `get_raw_token' family. */
-static bool reading_parenthesized_macro_definition = false;
 
 
 /*
@@ -131,15 +128,6 @@ dispatch_comment(FILE *fp)
     else
         for (i = ngetch(fp); !is_newline(i); i = ngetch(fp))
             /* strip comments */;
-}
-
-static void
-skip_blanks(FILE *fp)
-{
-    char c;
-    for (c = ngetch(fp); is_blank(c); c = ngetch(fp))
-        /* skip blank characters */;
-    put_back_char(c);
 }
 
 /* Convert relational shorthands (e.g. `&&' --> `.and.', '<' --> '.lt.'),
@@ -337,118 +325,6 @@ get_non_alphanumeric_raw_token(char buf[], int bufsiz, FILE *fp)
     return(tok);
 }
 
-/* Get raw ratfor token from input stream fp, saving it in buf[].  Also
- * deal with comments (# COMMENT...) and verbatim lines (% VERBATIM..).
- * Return the type of the token read. */
-static int
-get_raw_token(char buf[], int bufsiz, FILE *fp)
-{
-    int tok;
-    int c;
-    c = buf[0] = ngetch(fp);
-    if (is_blank(c)) {
-        buf[0] = BLANK;
-        while (is_blank(c)) /* compress many blanks to one */
-            c = ngetch(fp);
-        if (c == SHARP) {
-            /* Special handling of `#' to avoid leaving extra white
-             * spaces in output. */
-            goto non_blank; /* fallthrough */
-        }
-        if (!is_newline(c))
-            put_back_char(c);
-        else
-            buf[0] = c;
-        buf[1] = EOS;
-        return(buf[0]);
-    }
-non_blank:
-    put_back_char(c); /* so that we can read back the whole token */
-    if (is_rat4_alpha(c)) {
-        tok = get_alphanumeric_raw_token(buf, bufsiz, fp);
-    } else if (is_digit(c)) {
-        tok = get_numerical_raw_token(buf, bufsiz, fp);
-    } else if (c == SQUOTE || c == DQUOTE) {
-        tok = get_quoted_string_raw_token(buf, bufsiz, fp);
-    } else {
-        tok = get_non_alphanumeric_raw_token(buf, bufsiz, fp);
-    }
-    return(tok);
-}
-
-/* Parse definition of ratfor macro. If an error is detected, stop ratfor
- * with a suitable error message, alse save macro name (in `name[]') and
- * macro definition (in `def[]'). */
-static void
-getdef(char name[], int namesiz, char def[], int defsiz, FILE *fp)
-{
-    int i, j, nlpar, t, t2;
-    bool defn_with_paren;
-    char ptoken[MAXTOK]; /* temporary buffer for token */
-
-    /* hackish internal macro to avoid code duplication below */
-#   define EXTEND_DEFN_WITH_TOKEN_(token_) \
-        for (j = 0; token_[j] != EOS; i++, j++) { \
-            if (i >= defsiz) \
-                synerr_fatal("definition too long."); \
-            def[i] = token_[j]; \
-        }
-
-    skip_blanks(fp);
-    if ((t = get_raw_token(ptoken, MAXTOK, fp)) != LPAREN) {
-        defn_with_paren = false; /* define name def */
-        put_back_string(ptoken);
-    } else {
-        defn_with_paren = true; /* define(name,def) */
-        reading_parenthesized_macro_definition = true;
-    }
-    skip_blanks(fp);
-    t2 = get_raw_token(name, namesiz, fp); /* name */
-    if (!defn_with_paren && is_stmt_ending(t2)) {
-        /* stray `define', as in `...; define; ...' */
-        synerr_fatal("empty name.");
-    } else if (defn_with_paren && t2 == COMMA) {
-        /* `define(name, def)' with empty name */
-        synerr_fatal("empty name.");
-    } else if (t2 != TOKT_ALPHA) {
-        synerr_fatal("non-alphanumeric name.");
-    }
-    skip_blanks(fp);
-    if (!defn_with_paren) { /* define name def */
-        i = 0;
-        for (;;) {
-            t2 = get_raw_token(ptoken, MAXTOK, fp);
-            if (is_newline(t2) || t2 == EOF) {
-                put_back_string(ptoken);
-                break;
-            }
-            EXTEND_DEFN_WITH_TOKEN_(ptoken);
-        }
-        def[i] = EOS;
-    } else { /* define (name, def) */
-        if (get_raw_token(ptoken, MAXTOK, fp) != COMMA)
-            synerr_fatal("missing comma in define.");
-        /* else got (name, */
-        for (i = 0, nlpar = 0; nlpar >= 0; /* empty clause */) {
-            t2 = get_raw_token(ptoken, MAXTOK, fp);
-            if (t2 == EOF)
-                synerr_fatal("missing right paren.");
-            else if (t2 == LPAREN)
-                nlpar++;
-            else if (t2 == RPAREN)
-                nlpar--;
-            EXTEND_DEFN_WITH_TOKEN_(ptoken);
-        }
-        /* TODO: assert def[i - 1] == ')' */
-        def[i - 1] = EOS;
-        /* The macro definition has been read completely, so it's not
-         * true anymore that we are scanning it. */
-        reading_parenthesized_macro_definition = false;
-    }
-    /* get rid of temporary internal macro */
-#   undef EXTEND_DEFN_WITH_TOKEN_
-}
-
 /* Get token and save it in buf[], expanding macro calls and processing
  * macro definitions. */
 /*** FIXME: a clearer name for thi function? ***/
@@ -461,7 +337,9 @@ deftok(char buf[], int bufsiz, FILE *fp)
     while ((t = get_raw_token(buf, bufsiz, fp)) != EOF) {
         if (t != TOKT_ALPHA) {
             break; /* non-alpha */
-        } else if (STREQ(buf, KEYWORD_DEFINE)) {
+        }
+        /* XXX willl be moved out */
+        else if (STREQ(buf, KEYWORD_DEFINE)) {
             /* get definition for token, save it in tkdefn */
             getdef(buf, bufsiz, tkdefn, MAXDEFLEN, fp);
             hash_install(buf, tkdefn);
@@ -530,6 +408,47 @@ pop_file_stack(void)
 
 BEGIN_C_DECLS
 
+/* Get a "raw" ratfor token from input stream fp (i.e. without performing
+ * macro expansion), and save it in buf[].  Also deal with ratfor comments
+ * (# COMMENT...) and verbatim escapes (% VERBATIM..).  Return the type of
+ * the token read. */
+int
+get_raw_token(char buf[], int bufsiz, FILE *fp)
+{
+    int tok;
+    int c;
+    c = buf[0] = ngetch(fp);
+    if (is_blank(c)) {
+        buf[0] = BLANK;
+        while (is_blank(c)) /* compress many blanks to one */
+            c = ngetch(fp);
+        if (c == SHARP) {
+            /* Special handling of `#' to avoid leaving extra white
+             * spaces in output. */
+            goto non_blank; /* fallthrough */
+        }
+        if (!is_newline(c))
+            put_back_char(c);
+        else
+            buf[0] = c;
+        buf[1] = EOS;
+        return(buf[0]);
+    }
+non_blank:
+    put_back_char(c); /* so that we can read back the whole token */
+    if (is_rat4_alpha(c)) {
+        tok = get_alphanumeric_raw_token(buf, bufsiz, fp);
+    } else if (is_digit(c)) {
+        tok = get_numerical_raw_token(buf, bufsiz, fp);
+    } else if (c == SQUOTE || c == DQUOTE) {
+        tok = get_quoted_string_raw_token(buf, bufsiz, fp);
+    } else {
+        tok = get_non_alphanumeric_raw_token(buf, bufsiz, fp);
+    }
+    return(tok);
+}
+
+
 /* Get token (handling macro expansions, macro definitons and file
  * inclusion), and save it in buf[]. */
 int
@@ -570,10 +489,7 @@ int
 get_nonblank_token(char buf[], int bufsiz)
 {
     int tok;
-    /* The following hack is required since skip_blanks do not account
-     * for expansion of macros containing leading white spaces. */
     do {
-        skip_blanks(infile[inclevel]);
         tok = get_token(buf, bufsiz);
     } while(is_blank(tok));
     return(tok);

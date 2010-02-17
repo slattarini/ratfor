@@ -1,4 +1,4 @@
-/* tokenizer.h -- this file is part of C Ratfor.
+/* define.h -- this file is part of C Ratfor.
  * Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>
  *
  * This program is free software: you can redistribute it and/or modify
@@ -14,20 +14,8 @@
  * You should have received a copy of the GNU General Public License
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
-
-#ifndef RAT4_TOKENIZER_H
-#  define RAT4_TOKENIZER_H 1
-
-#include "tok-types.h"
-#include <stdio.h> /* for `FILE' */
-
-BEGIN_C_DECLS
-
-int get_raw_token(char [], int, FILE *);
-int get_token(char [], int);
-int get_nonblank_token(char [], int);
-
-END_C_DECLS
-
+#ifndef RAT4_DEFINE_H
+#  define RAT4_DEFINE_H 1
+C_DECL void getdef(char[], int , char[], int, FILE *);
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

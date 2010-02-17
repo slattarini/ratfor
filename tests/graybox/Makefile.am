@@ -10,9 +10,6 @@ AUTOMAKE_OPTIONS = color-tests parallel-tests
 
 EXTRA_DIST = $(TESTS)
 
-# This fails, probably for a bug in cascode() or swend() in codegen.c
-XFAIL_TESTS = switch-segfault.test
-
 TESTS = \
   comment-too-long-in-define-ignored.test \
   comment-too-long-in-define-no-crash.test \

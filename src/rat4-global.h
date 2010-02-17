@@ -20,6 +20,10 @@
 
 #include "rat4-common.h"
 
+/* Tell if a macro definition is being scanned.  Used to share state between
+ * `getdef' and functions of the `get_raw_token' family. */
+C_DECL bool reading_parenthesized_macro_definition;
+
 /* type of current subprogram (function, subroutine, everything else) */
 C_DECL enum subprg_t current_subprogram_type;
 

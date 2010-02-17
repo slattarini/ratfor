@@ -18,6 +18,7 @@ c_ratfor_SOURCES = \
 	hash.c hash.h \
 	init.c init.h \
 	tokenizer.c tokenizer.h \
+	define.c define.h \
 	parser.c parser.h \
 	labgen.c labgen.h \
 	codegen.c codegen.h

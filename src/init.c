@@ -32,6 +32,10 @@
 /* Define here ALL the global variables declared in "rat4-global.h".
    This is REQUIRED by C++ compilers. */
 
+/* Tell if a macro definition is being scanned.  Used to share state between
+ * `getdef' and functions of the `get_raw_token' family. */
+bool reading_parenthesized_macro_definition;
+
 /* text of current subprogram (function or subroutine) name */
 char current_subprogram_name[MAXFUNCNAME];
 
@@ -70,6 +74,7 @@ init(int x_startlab, int x_keep_comments, const char *x_filename)
     keep_comments = x_keep_comments;
     current_subprogram_name[0] = EOS;
     current_subprogram_type = SUBPRG_NONE;
+    reading_parenthesized_macro_definition = false;
     set_starting_label(x_startlab);
 }
 
