@@ -85,11 +85,11 @@
 
 #define STREQ(x, y) (strcmp((x),(y)) == 0)
 
-/* help to avoid irrelevant compiler warnings w.r.t. signed/unsigned
- * conversion */
+/* Help to avoid irrelevant compiler warnings w.r.t. signed/unsigned
+ * conversion. */
 #define SSTRLEN(s) ((int) strlen(s))
 
-/* simulate booleans if not present */
+/* Simulate booleans if not present. */
 #ifdef HAVE_STDBOOL_H
 #  include <stdbool.h>
 #else /* !HAVE_STDBOOL_H */
@@ -104,6 +104,14 @@
 #  endif /* !__cplusplus */
 #endif /* HAVE_STDBOOL_H */
 
+/* Use this to declare static functions which must be exposed in the
+ * testsuite.  Useful to enahnce testability of C Ratfor sources. */
+#if IS_RAT4_UNITTEST
+# define STATIC_TESTABLE_FUNC /* extranlly visible */
+#else
+# define STATIC_TESTABLE_FUNC static
+#endif
+
 /* Enumeration representing possible types of subprograms in Fortran. */
 enum subprg_t {
     SUBPRG_FUNC, /* function */
@@ -111,11 +119,9 @@ enum subprg_t {
     SUBPRG_NONE  /* everything else */
 };
 
-/*
- * We cannot use the <ctype.h> macros like `isalpha()', `isblank()',
- * `isdigit()', etc, since they are locale-dependent.  So we define our
- * own versions, tailored to our needs.
- */
+/* We cannot use the <ctype.h> macros like isalpha(), isblank(), isdigit(),
+ * etc, since they are locale-dependent.  So we define our own versions,
+ * tailored to our needs. */
 
 static inline bool
 is_upper(int c)
