@@ -17,10 +17,11 @@
 
 #ifndef RAT4_ERROR_H 
 #  define RAT4_ERROR_H 1
-BEGIN_C_DECLS
 
 #include <errno.h>  /* for the `errno' variable */
 #include <string.h> /* for `strerror()' function */
+
+BEGIN_C_DECLS
 
 extern int exit_status;
 
@@ -31,5 +32,6 @@ void synerr_include(const char *, ...);
 void synerr_fatal(const char *, ...);
 
 END_C_DECLS
+
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */
