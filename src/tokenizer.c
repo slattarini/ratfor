@@ -17,20 +17,22 @@
 
 /*  G E T   T O K E N S   F O R   R A T F O R   P R E P R O C E S S O R  */
 
+
 /*
  * GLOBAL INCLUDES.
  */
 
 #include "rat4-common.h"
+#include "rat4-global.h"
 
 #include "tokenizer.h"
 #include "io.h"
-#include "xopen.h"
 #include "error.h"
 #include "define.h"
-#include "rat4-global.h"
+#include "include.h"
 
 #define MAXPATH  1024  /* max length of the name of a file included */
+
 
 /*
  * PRIVATE FUNCTIONS.
@@ -365,51 +367,6 @@ get_expanded_token(char buf[], int bufsiz)
         }
     }
     return(t);
-}
-
-/* Open path and push it on the input files stack. Deal with errors. */
-/* XXX: re-add support for quoted filenames, sooner or later */
-static void
-push_file_stack(const char *path)
-{
-    int i;
-    FILE *fp;
-
-    if (inclevel >= MAX_INCLUDE_DEPTH - 1) {
-        synerr_include("includes nested too deeply.");
-        return;
-    }
-    /* skip leading white space in path */
-    for (i = 0; is_blank(path[i]); i++)
-        /* empty body */;
-    if ((path = strdup(&path[i])) == NULL) {
-        synerr_include("memory error.");
-        return;
-    }
-    if (*path == EOS) {
-        synerr_include("missing filename.");
-        return;
-    }
-    if ((fp = xopen(path, IO_MODE_READ, synerr_include)) == NULL)
-        return;
-    ++inclevel;
-    lineno[inclevel] = 1;
-    filename[inclevel] = path;
-    infile[inclevel] = fp;
-}
-
-/* Pop the input files stack. */
-static void
-pop_file_stack(void)
-{
-    /* XXX: assert inclevel >= 0? */
-    if (inclevel > 0) {
-        fclose(infile[inclevel]); /* XXX: check return status? */
-        infile[inclevel] = NULL; /* just to be sure */
-        free((void *)filename[inclevel]);
-        filename[inclevel] = NULL; /* just to be sure */
-    }
-    inclevel--;
 }
 
 
