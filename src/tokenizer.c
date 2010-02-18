@@ -15,7 +15,11 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/* Get tokens for the ratfor preprocessor. */
+/*  G E T   T O K E N S   F O R   R A T F O R   P R E P R O C E S S O R  */
+
+/*
+ * GLOBAL INCLUDES.
+ */
 
 #include "rat4-common.h"
 
