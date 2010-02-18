@@ -18,6 +18,8 @@
 #ifndef RAT4_INCLUDE_H
 #  define RAT4_INCLUDE_H 1
 
+#define MAXPATH  1024  /* max length of the name of a file included */
+
 C_DECL void push_file_stack(const char *);
 C_DECL void pop_file_stack(void);
 

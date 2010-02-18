@@ -31,9 +31,6 @@
 #include "define.h"
 #include "include.h"
 
-#define MAXPATH  1024  /* max length of the name of a file included */
-
-
 /*
  * PRIVATE FUNCTIONS.
  */
