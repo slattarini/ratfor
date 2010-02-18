@@ -20,8 +20,13 @@
 
 #define MAXPATH  1024  /* max length of the name of a file included */
 
-C_DECL void push_file_stack(const char *);
-C_DECL void pop_file_stack(void);
+BEGIN_C_DECLS
+
+void push_file_stack(const char *);
+void pop_file_stack(void);
+void process_file_inclusion(void);
+
+END_C_DECLS
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

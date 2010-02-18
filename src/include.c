@@ -24,6 +24,7 @@
 #include "rat4-common.h"
 #include "rat4-global.h"
 
+#include "tokenizer.h"
 #include "include.h"
 #include "xopen.h"
 #include "error.h"
@@ -79,6 +80,25 @@ pop_file_stack(void)
         filename[inclevel] = NULL; /* just to be sure */
     }
     inclevel--;
+}
+
+/* Process file inclusion statement in current input stream. */
+void
+process_file_inclusion(void)
+{
+    int tok;
+    int i;
+    char path[MAXPATH];
+
+    for (i = 0; ; i = SSTRLEN(path)) {
+        if (i >= MAXPATH)
+            synerr_fatal("name of included file too long.");
+        tok = get_expanded_token(&path[i], MAXPATH);
+        if (is_stmt_ending(tok))
+            break;
+    }
+    path[i] = EOS;
+    push_file_stack(path);
 }
 
 END_C_DECLS

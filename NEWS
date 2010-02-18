@@ -2,6 +2,10 @@ List of user-visible changes of C Ratfor.
 
 New in XXX
 -----------
+ * FIle inclusion with `include FILENAME' is now recognized only at
+   the beginning of a ratfor statement (e.g. after a newline or a
+   semicolon).  This is a consciuos design choice, not a limitation
+   or an implementation detail.
  * Macro definitions with either `define NAME VAL' or `define(NAME,VAL)'
    is now recognized only at the beginning of a ratfor statement (e.g.
    after a newline or a semicolon).  This is a consciuos design choice,

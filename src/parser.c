@@ -15,6 +15,14 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+
+/*   R A T F O R   L E X E R   A N D   P A R S E R   */
+
+
+/*
+ * GLOBAL INCLUDES
+ */
+
 #include "rat4-common.h"
 #include "rat4-global.h"
 
@@ -22,20 +30,27 @@
 #include "parser.h"
 #include "tokenizer.h"
 #include "define.h"
+#include "include.h"
 #include "codegen.h"
 #include "error.h"
 #include "io.h" /* for `put_back_string()' */
 
 #define MAXSTACK 1024  /* max stack depth for parser */
 
+
 /*
- *  P A R S E R
+ * PRIVATE GLOBAL VARIABLES
  */
 
 /* shared among unstak() and parser() */
 static int sp = 0;
 static int labval[MAXSTACK];
 static int lextyp[MAXSTACK];
+
+
+/*
+ * PRIVATE FUNCTIONS
+ */
 
 static bool
 detected_unusual_error(int toktype)
@@ -127,6 +142,8 @@ lex(char buf[], int bufsiz)
         tok = LEXFOR;
     else if (STREQ(buf, "if"))
         tok = LEXIF;
+    else if (STREQ(buf, "include"))
+        tok = LEXINCLUDE;
     else if (STREQ(buf, "next"))
         tok = LEXNEXT;
     else if (STREQ(buf, "repeat"))
@@ -143,6 +160,10 @@ lex(char buf[], int bufsiz)
     return(tok);
 }
 
+
+/*
+ * PUBLIC FUNCTIONS
+ */
 
 C_DECL void
 parse(void)
@@ -163,6 +184,9 @@ parse(void)
         switch(lextype) {
             case LEXVERBATIM:
                 verbatim(); /* copy direct to output */
+                break;
+            case LEXINCLUDE:
+                process_file_inclusion();
                 break;
             case LEXDEFN:
                 get_and_install_macro_definition();
@@ -236,6 +260,7 @@ parse(void)
             case LEXCASE:
             case LEXDEFAULT:
             case LEXVERBATIM:
+            case LEXINCLUDE:
             case LEXDEFN:
                 /* self-contained statement - no need to later unstack */
                 break;

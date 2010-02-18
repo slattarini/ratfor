@@ -15,13 +15,10 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+/*   L E X E R   S Y M B O L S   */
+
 #ifndef LEX_TYPES_H
 #  define LEX_TYPES_H 1
-
-/*
- *  L E X E R  S Y M B O L S
- *
- */
 
 /*
  * WARNING: the values of all these macros must be smaller than the
@@ -45,6 +42,7 @@
 #define LEXDEFAULT      24
 #define LEXVERBATIM     25
 #define LEXDEFN         26
+#define LEXINCLUDE      27
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */
