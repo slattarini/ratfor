@@ -27,15 +27,13 @@ fi
 
 echo notseen > inc.r
 
-n=0
-for p in a A 1 'foo=' 'foo =' 'foo; bar' @ + - : . , _ '&' '|' '=='; do
+for p in a A 'foo=' 'foo =' 'foo; bar' @ + - : . , _ '&' '|' '=='; do
     for s in '' ' ' "$TAB" " $TAB$TAB "; do
         p1=$p p2=$p
         case $p in *[a-zA-Z0-9_]) test -z "$s" && p1="$p "; p2="$p ";; esac
         echo "${p1}${s}include 'inc.r'"
         echo "${s}${p2}include 'inc.r'"
         echo "${s}${p1}${s}include 'inc.r'"
-        n=`expr $n + 3`
     done
 done | sed -e "s/'/$quote_char/g" >tst.r
 
@@ -54,10 +52,11 @@ if $FGREP notseen xstdout; then
     testcase_FAIL "string \"notseen\" found in output"
 fi
 
-g=`$FGREP -c include xstdout || :`
-if test x"$g" != x"$n"; then
+exp=`$FGREP -c include tst.r` || testcase_HADERRROR
+got=`$FGREP -c include xstdout || test $? -eq 1` || testcase_HADERROR
+if test x"$got" != x"$exp"; then
     testcase_FAIL "bad count of strings \"include\" in output" \
-                  "(expexted = '$n', got = '$g')"
+                  "(expected = '$exp', got = '$got')"
 fi
 
 testcase_DONE
