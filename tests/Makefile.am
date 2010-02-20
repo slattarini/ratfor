@@ -44,6 +44,7 @@ TESTS = \
   define-comments-interaction-3.test \
   define-dollar-in-symbolic-name.test \
   define-fail.test \
+  define-label-interaction.test \
   define-long-definition.test \
   define-long-name.test \
   define-multiline-with-comment.test \
