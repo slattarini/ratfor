@@ -4,11 +4,14 @@ New in XXX
 -----------
  * Added new tests and extended existing ones, especially regarding the
    `define' and `include' builtins, the handling of ratfor comments, and
-   the `%' escaping construct (for verbatim copy of input to output).
+   the `%' escaping construct (for verbatim copy of input to output).  In
+   particular, there are now test checking that the `define' and `include'
+   builtins and the `%' escaping construct are processed only when placed
+   at the beginning of a statement.
  * The Ratfor Testsuite is now explicitly covered by the GNU General
    Public License, version 3 or later.
  * The shell libraries used by the test scripts has been made more
-   namespace-clean. This can enhance their usefulness and solidity
+   namespace-clean.  This can enhance their usefulness and solidity
    for usage by client packages.
 
 New in 0.9g
