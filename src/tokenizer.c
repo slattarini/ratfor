@@ -349,10 +349,11 @@ non_blank:
 
 BEGIN_C_DECLS
 
-/* Get "unpreprocessed" (i.e. without performing macro expansion) token
- * from ratfor current global input stream, and save it in buf[].
- * Also deal with ratfor comments (# COMMENT...) and verbatim escapes
- * (% VERBATIM..).  Return the type of the token read. */
+/* Get "unpreprocessed" token from ratfor current global input stream
+ * (without performing macro expansion, but being aware of active file
+ * inclusions) and save it in buf[].  Also deal with ratfor comments
+ * (# COMMENT...) and verbatim escapes (% VERBATIM..).  Return the type
+ * of the token read. */
 int
 get_unexpanded_token(char buf[], int bufsiz)
 {
@@ -371,9 +372,10 @@ get_unexpanded_token(char buf[], int bufsiz)
     return(tok);
 }
 
-/* Get token and save it in buf[], expanding macro calls. */
+/* Get token and save it in buf[], expanding macro calls and being aware
+ * of file inclusions.  Return the type of the token read. */
 int
-get_expanded_token(char buf[], int bufsiz)
+get_token(char buf[], int bufsiz)
 {
     const char *macro_body;
     int tok;
@@ -391,17 +393,6 @@ get_expanded_token(char buf[], int bufsiz)
             put_back_string_cooked(macro_body);
         }
     }
-    return(tok);
-}
-
-/* Get token from ratfor current global input stream (handling macro
- * expansions and being aware of file inclusion), and save it in buf[]. */
-int
-get_token(char buf[], int bufsiz)
-{
-    int tok;
-
-    tok = get_expanded_token(buf, bufsiz);
     return(tok);
 }
 

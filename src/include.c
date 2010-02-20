@@ -93,7 +93,7 @@ process_file_inclusion(void)
     for (i = 0; ; i = SSTRLEN(path)) {
         if (i >= MAXPATH)
             synerr_fatal("name of included file too long.");
-        tok = get_expanded_token(&path[i], MAXPATH);
+        tok = get_token(&path[i], MAXPATH);
         if (is_stmt_ending(tok))
             break;
     }
