@@ -15,9 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that the `include' builtin for macro definition is recognized
-# *only* at the beginning of a statement when used on an unquoted
-# filename.
+# Check that the `include' builtin for file inclusion is recognized *only*
+# at the beginning of a statement when used on an unquoted filename.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
