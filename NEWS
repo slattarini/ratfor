@@ -214,7 +214,6 @@ New in 1.0d
 -----------
 
  * Ratfor build system now uses automake and autoconf.
- * Added an article of B.W. Kernighan on ratfor (doc/ratfor.pdf).
  * Added a testsuite.
  * Added this NEWS file.
  * Ratfor uses Subversion as its version control system.
