@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Helper file, sourced by scripts checking that the `include' statement
+# Helper file, sourced by scripts checking that the `include' builtin
 # is activated *only* at the beginning of a statement.
 # This file is expected to be sourced by test scripts after the file
 # `rat4-testsuite-init.sh' has already been sourced, and the variable
