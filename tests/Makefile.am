@@ -208,6 +208,7 @@ TESTS = \
   verbatim-define-interaction-stress-gentler.test \
   verbatim-define-interaction-stress.test \
   verbatim-include-interaction.test \
+  verbatim-label-interaction.test \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim-stress_f77.test \
