@@ -4,11 +4,11 @@ New in XXX
 -----------
  * FIle inclusion with `include FILENAME' is now recognized only at
    the beginning of a ratfor statement (e.g. after a newline or a
-   semicolon).  This is a consciuos design choice, not a limitation
+   semicolon).  This is a conscious design choice, not a limitation
    or an implementation detail.
  * Macro definitions with either `define NAME VAL' or `define(NAME,VAL)'
    is now recognized only at the beginning of a ratfor statement (e.g.
-   after a newline or a semicolon).  This is a consciuos design choice,
+   after a newline or a semicolon).  This is a conscious design choice,
    not a limitation or an implementation detail.
  * Blackbox and graybox tests have been extended and improved, especially
    w.r.t. ratfor comments, `%' verbatim escaping and `include' and
