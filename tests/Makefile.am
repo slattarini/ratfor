@@ -94,9 +94,6 @@ TESTS = \
   include-fail-directory.test \
   include-fail-nonexistent.test \
   include-fail-unreadable.test \
-  include-label-interaction-dquote.test \
-  include-label-interaction-plain.test \
-  include-label-interaction-squote.test \
   include-missing-filename.test \
   include-nested-deep.test \
   include-nested.test \
@@ -265,12 +262,6 @@ include-at-stmt-beginning-only-plain.log: \
   include-at-stmt-beginning-only.sh
 include-at-stmt-beginning-only-squote.log: \
   include-at-stmt-beginning-only.sh
-
-EXTRA_DIST += include-label-interaction.sh
-include-label-interaction-dquote.log: include-label-interaction.sh
-include-label-interaction-plain.log: include-label-interaction.sh
-include-label-interaction-squote.log: include-label-interaction.sh
-
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
