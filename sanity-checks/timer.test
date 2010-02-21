@@ -50,14 +50,18 @@ $FGREP 'option requires an argument' stderr || testcase_FAIL
 ls -l none || :
 test ! -f none
 run_command -e 127 timer ./none || testcase_FAIL
-$GREP './none: [nN]o such file or directory' stderr || testcase_FAIL
+$GREP '\./none: [nN]o such file or directory' stderr \
+  || $GREP '[nN]o such file or directory: \./none' stderr \
+  || testcase_FAIL
 
 : > noexec
 chmod a-x noexec
 ls -l noexec || :
 test ! -x noexec
 run_command -e 126 timer ./noexec || testcase_FAIL
-$GREP './noexec: [pP]ermission denied' stderr || testcase_FAIL
+$GREP '\./noexec: [pP]ermission denied' stderr \
+  || $GREP '[pP]ermission denied: \./noexec' stderr \
+  || testcase_FAIL
 
 testcase_DONE
 
