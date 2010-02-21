@@ -11,7 +11,7 @@ New in XXX
    after a newline or a semicolon).  This is a conscious design choice,
    not a limitation or an implementation detail.
  * Blackbox and graybox tests have been extended and improved, especially
-   w.r.t. ratfor comments, `%' verbatim escaping and `include' and
+   w.r.t. ratfor comments, `%' verbatim escaping, and `include' and
    `define' builtins.
  * Macros defined with the `define(NAME, BODY)' construct now preserve
    spacing and comments in BODY when the definition is read.  This way,
