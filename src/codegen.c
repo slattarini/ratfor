@@ -504,7 +504,7 @@ fors(int lab)
 }
 
 /* ifgo - generate "if(.not.(...))goto lab" */
-static void
+void
 ifgo(int lab)
 {
 

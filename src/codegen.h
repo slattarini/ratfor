@@ -36,6 +36,7 @@ void ifcode(int *);
 void ifthenc(void);
 void ifend(void);
 void elseifc(void);
+void ifgo(int);
 
 void repcode(int *);
 void untils(int, int);
