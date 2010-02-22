@@ -63,9 +63,11 @@ TESTS = \
   define-with-parens-preserve-whitespace.test \
   devnull-input.test \
   do-after-numeric-label.test \
+  do-after-numeric-label_f77.test \
   empty-input.test \
   exponentiation-operator_f77.test \
   for-after-numeric-label.test \
+  for-after-numeric-label_f77.test \
   for-with-empty-clauses_f77.test \
   for_f77.test \
   forever1_f77.test \
@@ -79,8 +81,10 @@ TESTS = \
   function-return_f77.test \
   goto_f77.test \
   if-after-numeric-label.test \
+  if-after-numeric-label_f77.test \
   if_f77.test \
   ifelse-after-numeric-label.test \
+  ifelse-after-numeric-label_f77.test \
   ifelse-ambiguity_f77.test \
   illegal-case-default.test \
   include-abspath.test \
@@ -153,10 +157,12 @@ TESTS = \
   outfile-unwritable-fail.test \
   outfile.test \
   repeat-after-numeric-label.test \
+  repeat-after-numeric-label_f77.test \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
   repeatuntil-after-numeric-label.test \
+  repeatuntil-after-numeric-label_f77.test \
   return-a-value-from-subroutine-fail.test \
   return-keyword-function-1.test \
   return-keyword-function-2.test \
@@ -214,6 +220,7 @@ TESTS = \
   verbatim-no-extra-new-line.test \
   verbatim-stress_f77.test \
   while-after-numeric-label.test \
+  while-after-numeric-label_f77.test \
   while_f77.test
 
 
@@ -276,6 +283,22 @@ for-after-numeric-label.log: control-structure-after-numeric-label.sh
 do-after-numeric-label.log: control-structure-after-numeric-label.sh
 repeat-after-numeric-label.log: control-structure-after-numeric-label.sh
 repeatuntil-after-numeric-label.log: control-structure-after-numeric-label.sh
+
+EXTRA_DIST += control-structure-after-numeric-label_f77.sh
+ifelse-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
+if-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
+while-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
+for-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
+do-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
+repeat-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
+repeatuntil-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
