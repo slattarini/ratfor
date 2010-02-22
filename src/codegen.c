@@ -382,6 +382,7 @@ docode(int *lab)
     xfer = false;
     outtab();
     outstr(sdo);
+    outch(BLANK);
     *lab = labgen(2);
     outnum(*lab);
     eatup();
