@@ -1,6 +1,6 @@
 List of user-visible changes of C Ratfor.
 
-New in XXX
+New in 1.0r
 -----------
  * FIle inclusion with `include FILENAME' is now recognized only at
    the beginning of a ratfor statement (e.g. after a newline or a
