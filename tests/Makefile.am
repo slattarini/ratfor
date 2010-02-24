@@ -197,6 +197,8 @@ TESTS = \
   subroutine-name-invalid-3.test \
   subroutine-name-missing-1.test \
   subroutine-name-missing-2.test \
+  switch-after-numeric-label.test \
+  switch-after-numeric-label_f77.test \
   switch-fail-case-label-duplicated.test \
   switch-fail-case-label-invalid.test \
   switch-fail-no-braces.test \
@@ -293,6 +295,7 @@ for-after-numeric-label.log: control-structure-after-numeric-label.sh
 do-after-numeric-label.log: control-structure-after-numeric-label.sh
 repeat-after-numeric-label.log: control-structure-after-numeric-label.sh
 repeatuntil-after-numeric-label.log: control-structure-after-numeric-label.sh
+switch-after-numeric-label_f77.log: control-structure-after-numeric-label.sh
 
 EXTRA_DIST += control-structure-after-numeric-label_f77.sh
 ifelse-after-numeric-label_f77.log: \
@@ -308,6 +311,8 @@ do-after-numeric-label_f77.log: \
 repeat-after-numeric-label_f77.log: \
   control-structure-after-numeric-label_f77.sh
 repeatuntil-after-numeric-label_f77.log: \
+  control-structure-after-numeric-label_f77.sh
+switch-after-numeric-label_f77.log: \
   control-structure-after-numeric-label_f77.sh
 
 EXTRA_DIST += keyword-in-statement-middle.sh

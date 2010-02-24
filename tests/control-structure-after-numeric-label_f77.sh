@@ -34,7 +34,6 @@ EOF
 write_test_file() {
   cat > tst.r <<EOF
 program test
-    implicit none
     integer i
     i = 1
     goto 10
