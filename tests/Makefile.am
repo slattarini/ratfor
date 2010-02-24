@@ -16,6 +16,7 @@ TESTS = \
   balanced-parens.test \
   break-fail.test \
   break_f77.test \
+  case-in-statement-middle.test \
   case-sensibility-basic.test \
   comments-discard-after-numerical-label.test \
   comments-discard-at-stmt-begin.test \
@@ -30,6 +31,7 @@ TESTS = \
   common-block_f77.test \
   data-statement.test \
   data-statement_f77.test \
+  default-in-statement-middle.test \
   define-at-stmt-beginning-at-least.test \
   define-at-stmt-beginning-only.test \
   define-balanced-paren-comments.test \
@@ -64,10 +66,13 @@ TESTS = \
   devnull-input.test \
   do-after-numeric-label.test \
   do-after-numeric-label_f77.test \
+  do-in-statement-middle.test \
+  else-in-statement-middle.test \
   empty-input.test \
   exponentiation-operator_f77.test \
   for-after-numeric-label.test \
   for-after-numeric-label_f77.test \
+  for-in-statement-middle.test \
   for-with-empty-clauses_f77.test \
   for_f77.test \
   forever1_f77.test \
@@ -82,6 +87,7 @@ TESTS = \
   goto_f77.test \
   if-after-numeric-label.test \
   if-after-numeric-label_f77.test \
+  if-in-statement-middle.test \
   if_f77.test \
   ifelse-after-numeric-label.test \
   ifelse-after-numeric-label_f77.test \
@@ -158,6 +164,7 @@ TESTS = \
   outfile.test \
   repeat-after-numeric-label.test \
   repeat-after-numeric-label_f77.test \
+  repeat-in-statement-middle.test \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
@@ -193,6 +200,7 @@ TESTS = \
   switch-fail-case-label-duplicated.test \
   switch-fail-case-label-invalid.test \
   switch-fail-no-braces.test \
+  switch-in-statement-middle.test \
   switch-non-positive-values_f77.test \
   switch_f77.test \
   synerr-basic.test \
@@ -203,6 +211,7 @@ TESTS = \
   synerr-nonfatal_f77.test \
   synerr-stdin.test \
   translate-relationals.test \
+  until-in-statement-middle.test \
   usage-option-missing-argument.test \
   usage-option-unknown.test \
   usage-too-many-args.test \
@@ -221,6 +230,7 @@ TESTS = \
   verbatim-stress_f77.test \
   while-after-numeric-label.test \
   while-after-numeric-label_f77.test \
+  while-in-statement-middle.test \
   while_f77.test
 
 
@@ -299,6 +309,18 @@ repeat-after-numeric-label_f77.log: \
   control-structure-after-numeric-label_f77.sh
 repeatuntil-after-numeric-label_f77.log: \
   control-structure-after-numeric-label_f77.sh
+
+EXTRA_DIST += keyword-in-statement-middle.sh
+else-in-statement-middle.log: keyword-in-statement-middle.sh
+if-in-statement-middle.log: keyword-in-statement-middle.sh
+while-in-statement-middle.log: keyword-in-statement-middle.sh
+for-in-statement-middle.log: keyword-in-statement-middle.sh
+do-in-statement-middle.log: keyword-in-statement-middle.sh
+repeat-in-statement-middle.log: keyword-in-statement-middle.sh
+until-in-statement-middle.log: keyword-in-statement-middle.sh
+switch-in-statement-middle.log: keyword-in-statement-middle.sh
+case-in-statement-middle.log: keyword-in-statement-middle.sh
+default-in-statement-middle.log: keyword-in-statement-middle.sh
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am

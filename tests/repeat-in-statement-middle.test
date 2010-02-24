@@ -1,0 +1,34 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check (through grep) that the ratfor `repeat' keyword is *not*
+# recognized when found in the middle of a statement.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+helper_script="$srcdir/keyword-in-statement-middle.sh"
+
+test -f "$helper_script" \
+  || testcase_HARDERROR "helper_script \`$helper_script' not found"
+ls -l "$helper_script"
+
+stmt='repeat'
+. "$helper_script" # real test done here
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
