@@ -26,8 +26,6 @@
 
 str1='##@##'
 str2='#x($)'
-
 rat4t_require_helper_script 'define-comments-interaction.sh'
-testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

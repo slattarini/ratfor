@@ -32,6 +32,6 @@ $FGREP "$stmt(1)" out \
 $FGREP "goto" out \
   && testcase_FAIL "literal \"goto\" found in ratfor output"
 
-: # required by the `.' builtin
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

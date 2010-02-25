@@ -22,6 +22,5 @@
 
 stmt='repeat' stmt_arg='' stmt_post='until' stmt_post_arg='(1)'
 rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
-testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

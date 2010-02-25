@@ -23,6 +23,5 @@
 stmt='if' stmt_arg='(1)' stmt_post='else' stmt_post_arg='none'
 fail_if_stmt_in_output=no fail_if_stmt_post_in_output=no
 rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
-testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

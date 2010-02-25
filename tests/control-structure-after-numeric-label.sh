@@ -51,4 +51,6 @@ if test x"${fail_if_stmt_post_in_output-no}" != x"no"; then
       && testcase_FAIL "string \"$stmt_post\" found in ratfor output"
 fi
 
+testcase_DONE
+
 # vim: ft=sh ts=4 sw=4 et

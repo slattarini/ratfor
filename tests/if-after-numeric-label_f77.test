@@ -22,6 +22,5 @@
 
 rat4t_require_helper_script 'control-structure-after-numeric-label_f77.sh'
 do_test 'if(i < 3) {' 'i=i+1; goto 10; }'
-testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

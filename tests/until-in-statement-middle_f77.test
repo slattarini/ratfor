@@ -22,6 +22,5 @@
 
 stmt='until'
 rat4t_require_helper_script 'keyword-in-statement-middle_f77.sh'
-testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

@@ -22,6 +22,5 @@
 
 stmt='for' stmt_arg='(x=1;x<10;x=x+1)' stmt_post='' stmt_post_arg=''
 rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
-testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

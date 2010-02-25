@@ -49,6 +49,6 @@ test ! -s stderr \
 test x"`cat stdout`" = x"1" \
   || testcase_FAIL "bad test-program output"
 
-: # required by the `.' builtin
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

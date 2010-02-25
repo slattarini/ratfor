@@ -64,6 +64,7 @@ do_test() {
   cat exp
   cat got
   $DIFF_U exp got || testcase_FAIL "expected output and got output differs"
+  testcase_DONE
 }
 
 echo "$me: INFO: reactivate shell verbosity before running tests"
