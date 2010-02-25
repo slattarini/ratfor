@@ -21,6 +21,8 @@
 # test scripts after the file `rat4-testsuite-init.sh' has already been
 # sourced.
 
+rat4t_require_fortran_compiler
+
 set +x
 echo "$me: INFO: disable shell verbosity while defining shell function"
 

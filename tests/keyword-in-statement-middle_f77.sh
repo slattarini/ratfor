@@ -21,6 +21,8 @@
 # by test scripts after the file `rat4-testsuite-init.sh' has already been
 # sourced, and also expect the variable `$stmt' to be defined correctly.
 
+rat4t_require_fortran_compiler
+
 cat >tst.r <<EOF
 subroutine $stmt(x)
     integer x
