@@ -2,9 +2,13 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
- * Added new tests and extended existing ones, especially regarding the
-   `define' and `include' builtins, the handling of ratfor comments, and
-   the `%' escaping construct (for verbatim copy of input to output).  In
+ * Added and extended tests regarding Ratfor keywords.  In particular,
+   there are tests checking that (most of) those keywords (e.g. `while',
+   `for', `if') are recognized and processed when placed after a numerical
+   label, and are on the contrary not recognized/processed when placed in
+   the middle of a statement.
+ * Added and extended tests regarding the `define' and `include' builtins,
+   the handling of Ratfor comments, and the `%' verbatim escaping.  In
    particular, there are now test checking that the `define' and `include'
    builtins and the `%' escaping construct are processed only when placed
    at the beginning of a statement.
