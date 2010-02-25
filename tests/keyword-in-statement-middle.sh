@@ -16,12 +16,10 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Helper file, sourced by scripts checking (through grep) that ratfor
-# control statements (if, while, for, etc) are *not* processed when
-# found in the middle of a statement. This file is expected to be sourced
-# by test scripts after the file `rat4-testsuite-init.sh' has already been
+# keywords (if, while, for, etc) are *not* processed when found in the
+# middle of a statement. This file is expected to be sourced by test
+# scripts after the file `rat4-testsuite-init.sh' has already been
 # sourced, and also expect the variable `$stmt' to be defined correctly.
-
-# let the user override the writing of the test file
 
 echo "x $stmt(1) { pass }" > tst.r
 
@@ -33,6 +31,7 @@ $FGREP "$stmt(1)" out \
   || testcase_FAIL "literal \"$stmt(1)\" not found in ratfor output"
 $FGREP "goto" out \
   && testcase_FAIL "literal \"goto\" found in ratfor output"
-: # required for the `.' builtin
+
+: # required by the `.' builtin
 
 # vim: ft=sh ts=4 sw=4 et
