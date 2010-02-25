@@ -249,105 +249,98 @@ TESTS = \
 ## Requirements and dependencies of tests.
 
 EXTRA_DIST += integers-many-bases.data
-integers-many-bases.log: integers-many-bases.data
-integers-many-bases_f77.log: integers-many-bases.data
+integers-many-bases.log integers-many-bases_f77.log: \
+  integers-many-bases.data
 
 EXTRA_DIST += break-next-fail.data
-break-fail.test: break-next-fail.data
-next-fail.test: break-next-fail.data
+break-fail.test next-fail.test: break-next-fail.data
 
 EXTRA_DIST += subprog-name-invalid.sh
-subroutine-name-missing-1.log: subprog-name-invalid.sh
-subroutine-name-missing-2.log: subprog-name-invalid.sh
-subroutine-name-invalid-1.log: subprog-name-invalid.sh
-subroutine-name-invalid-2.log: subprog-name-invalid.sh
-subroutine-name-invalid-3.log: subprog-name-invalid.sh
-function-name-missing-1.log: subprog-name-invalid.sh
-function-name-missing-2.log: subprog-name-invalid.sh
-function-name-invalid-1.log: subprog-name-invalid.sh
-function-name-invalid-2.log: subprog-name-invalid.sh
-function-name-invalid-3.log: subprog-name-invalid.sh
+subroutine-name-missing-1.log \
+subroutine-name-missing-2.log \
+subroutine-name-invalid-1.log \
+subroutine-name-invalid-2.log \
+subroutine-name-invalid-3.log \
+function-name-missing-1.log \
+function-name-missing-2.log \
+function-name-invalid-1.log \
+function-name-invalid-2.log \
+function-name-invalid-3.log \
+  : subprog-name-invalid.sh
 
 EXTRA_DIST += start-a-statement-sanitycheck.sh
-start-a-statement-curly-bracket.log: start-a-statement-sanitycheck.sh
-start-a-statement-semicolon.log: start-a-statement-sanitycheck.sh
+start-a-statement-curly-bracket.log start-a-statement-semicolon.log: \
+  start-a-statement-sanitycheck.sh
 
 EXTRA_DIST += comments-at-stmt-begin.data
-comments-discard-at-stmt-begin.log: comments-at-stmt-begin.data
-comments-keep-at-stmt-begin.log: comments-at-stmt-begin.data
+comments-discard-at-stmt-begin.log comments-keep-at-stmt-begin.log: \
+  comments-at-stmt-begin.data
 
 EXTRA_DIST += define-comments-interaction.sh
-define-comments-interaction-1.log: define-comments-interaction.sh
-define-comments-interaction-2.log: define-comments-interaction.sh
-define-comments-interaction-3.log: define-comments-interaction.sh
+define-comments-interaction-1.log \
+define-comments-interaction-2.log \
+define-comments-interaction-3.log \
+  : define-comments-interaction.sh
 
 EXTRA_DIST += include-at-stmt-beginning-at-least.sh
-include-at-stmt-beginning-at-least-dquote.log: \
-  include-at-stmt-beginning-at-least.sh
-include-at-stmt-beginning-at-least-plain.log: \
-  include-at-stmt-beginning-at-least.sh
-include-at-stmt-beginning-at-least-squote.log: \
-  include-at-stmt-beginning-at-least.sh
+include-at-stmt-beginning-at-least-dquote.log \
+include-at-stmt-beginning-at-least-plain.log \
+include-at-stmt-beginning-at-least-squote.log \
+  : include-at-stmt-beginning-at-least.sh
 
 EXTRA_DIST += include-at-stmt-beginning-only.sh
-include-at-stmt-beginning-only-dquote.log: \
-  include-at-stmt-beginning-only.sh
-include-at-stmt-beginning-only-plain.log: \
-  include-at-stmt-beginning-only.sh
-include-at-stmt-beginning-only-squote.log: \
-  include-at-stmt-beginning-only.sh
+include-at-stmt-beginning-only-dquote.log \
+include-at-stmt-beginning-only-plain.log \
+include-at-stmt-beginning-only-squote.log \
+  : include-at-stmt-beginning-only.sh
 
 EXTRA_DIST += control-structure-after-numeric-label.sh
-ifelse-after-numeric-label.log: control-structure-after-numeric-label.sh
-if-after-numeric-label.log: control-structure-after-numeric-label.sh
-while-after-numeric-label.log: control-structure-after-numeric-label.sh
-for-after-numeric-label.log: control-structure-after-numeric-label.sh
-do-after-numeric-label.log: control-structure-after-numeric-label.sh
-repeat-after-numeric-label.log: control-structure-after-numeric-label.sh
-repeatuntil-after-numeric-label.log: control-structure-after-numeric-label.sh
-switch-after-numeric-label_f77.log: control-structure-after-numeric-label.sh
+ifelse-after-numeric-label.log \
+if-after-numeric-label.log \
+while-after-numeric-label.log \
+for-after-numeric-label.log \
+do-after-numeric-label.log \
+repeat-after-numeric-label.log \
+repeatuntil-after-numeric-label.log \
+switch-after-numeric-label_f77.log \
+  : control-structure-after-numeric-label.sh
 
 EXTRA_DIST += control-structure-after-numeric-label_f77.sh
-ifelse-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
-if-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
-while-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
-for-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
-do-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
-repeat-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
-repeatuntil-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
-switch-after-numeric-label_f77.log: \
-  control-structure-after-numeric-label_f77.sh
+ifelse-after-numeric-label_f77.log \
+if-after-numeric-label_f77.log \
+while-after-numeric-label_f77.log \
+for-after-numeric-label_f77.log \
+do-after-numeric-label_f77.log \
+repeat-after-numeric-label_f77.log \
+repeatuntil-after-numeric-label_f77.log \
+switch-after-numeric-label_f77.log \
+  : control-structure-after-numeric-label_f77.sh
 
 EXTRA_DIST += keyword-in-statement-middle.sh
-else-in-statement-middle.log: keyword-in-statement-middle.sh
-if-in-statement-middle.log: keyword-in-statement-middle.sh
-while-in-statement-middle.log: keyword-in-statement-middle.sh
-for-in-statement-middle.log: keyword-in-statement-middle.sh
-do-in-statement-middle.log: keyword-in-statement-middle.sh
-repeat-in-statement-middle.log: keyword-in-statement-middle.sh
-until-in-statement-middle.log: keyword-in-statement-middle.sh
-switch-in-statement-middle.log: keyword-in-statement-middle.sh
-case-in-statement-middle.log: keyword-in-statement-middle.sh
-default-in-statement-middle.log: keyword-in-statement-middle.sh
+else-in-statement-middle.log \
+if-in-statement-middle.log \
+while-in-statement-middle.log \
+for-in-statement-middle.log \
+do-in-statement-middle.log \
+repeat-in-statement-middle.log \
+until-in-statement-middle.log \
+switch-in-statement-middle.log \
+case-in-statement-middle.log \
+default-in-statement-middle.log \
+  : keyword-in-statement-middle.sh
 
 EXTRA_DIST += keyword-in-statement-middle_f77.sh
-else-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-if-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-while-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-for-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-do-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-repeat-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-until-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-switch-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-case-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
-default-in-statement-middle_f77.log: keyword-in-statement-middle_f77.sh
+else-in-statement-middle_f77.log \
+if-in-statement-middle_f77.log \
+while-in-statement-middle_f77.log \
+for-in-statement-middle_f77.log \
+do-in-statement-middle_f77.log \
+repeat-in-statement-middle_f77.log \
+until-in-statement-middle_f77.log \
+switch-in-statement-middle_f77.log \
+case-in-statement-middle_f77.log \
+default-in-statement-middle_f77.log \
+  : keyword-in-statement-middle_f77.sh
 
 
 ## Testsuite environment and setup.
