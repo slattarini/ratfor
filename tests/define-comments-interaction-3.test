@@ -19,11 +19,6 @@
 # preserve comments.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
-helper_script=$srcdir/define-comments-interaction.sh
-
-test -f "$helper_script" \
-  || testcase_HARDERROR "helper_script \`$helper_script' not found"
-ls -l "$helper_script"
 
 # The use of relation shortands (as `==', `<' or `&&') in comments might
 # cause problems to some ratfor preprocessors which handle those shortands
@@ -31,7 +26,8 @@ ls -l "$helper_script"
 # should simply declare this test as XFAIL'ing
 str1='|<|==|&&|==|>|'
 str2=',!=,^=,~=,'
-. "$helper_script" # real test done here
+
+rat4t_require_helper_script 'define-comments-interaction.sh'
 
 testcase_DONE
 

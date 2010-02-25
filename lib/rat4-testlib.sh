@@ -28,6 +28,22 @@ rat4t_require_fortran_compiler() {
     esac
 }
 
+# Check that the given helper script is available (look it up in
+# $srcdir if it's not an absolute path), and source it.
+rat4t_require_helper_script() {
+    case $1 in
+           /*) rat4t_hs=$1;;
+      ./*|../) rat4t_hs=`pwd`/$1;;
+            *) rat4t_hs=$srcdir/$1;;
+    esac
+    shift # $1
+    test -f "$rat4t_hs" && test -r "$rat4t_hs" \
+      || testcase_HARDERROR "helper script \`$rat4t_hs' not found"
+    . "$rat4t_hs" \
+      || testcase_HARDERROR "failed to source helper script \`$rat4t_hs'"
+}
+
+
 # Check that we have available a valid fortran 77 compiler without silly
 # limits, else cause the testcase to be SKIP'd.
 rat4t_require_strong_fortran_compiler() {

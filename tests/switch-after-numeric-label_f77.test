@@ -20,16 +20,8 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-helper_script=$srcdir/control-structure-after-numeric-label_f77.sh
-
-test -f "$helper_script" \
-  || testcase_HARDERROR "helper_script \`$helper_script' not found"
-ls -l "$helper_script"
-
-. "$helper_script"
-
+rat4t_require_helper_script 'control-structure-after-numeric-label_f77.sh'
 do_test 'switch(i) { case 1,2: ' 'i=i+1; goto 10; }'
-
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

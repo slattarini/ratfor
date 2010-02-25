@@ -23,16 +23,11 @@
 # ratfor comments.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
-helper_script=$srcdir/define-comments-interaction.sh
-
-test -f "$helper_script" \
-  || testcase_HARDERROR "helper_script \`$helper_script' not found"
-ls -l "$helper_script"
 
 str1='##@##'
 str2='#x($)'
-. "$helper_script" # real test done here
 
+rat4t_require_helper_script 'define-comments-interaction.sh'
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

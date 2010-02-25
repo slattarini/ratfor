@@ -20,15 +20,8 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-helper_script="$srcdir/keyword-in-statement-middle.sh"
-
-test -f "$helper_script" \
-  || testcase_HARDERROR "helper_script \`$helper_script' not found"
-ls -l "$helper_script"
-
 stmt='if'
-. "$helper_script" # real test done here
-
+rat4t_require_helper_script 'keyword-in-statement-middle.sh'
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

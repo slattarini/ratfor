@@ -20,16 +20,9 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-helper_script=$srcdir/control-structure-after-numeric-label.sh
-
-test -f "$helper_script" \
-  || testcase_HARDERROR "helper_script \`$helper_script' not found"
-ls -l "$helper_script"
-
 stmt='if' stmt_arg='(1)' stmt_post='' stmt_post_arg=''
 fail_if_stmt_in_output=no
-. "$helper_script" # real test done here
-
+rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
