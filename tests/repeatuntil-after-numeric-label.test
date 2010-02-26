@@ -20,7 +20,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-stmt='repeat' stmt_arg='' stmt_post='until' stmt_post_arg='(1)'
 rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
+testgrep_control_structure_after_label 'repeat' '' 'until' '(1)'
 
 # vim: ft=sh ts=4 sw=4 et

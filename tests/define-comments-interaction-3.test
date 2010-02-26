@@ -20,12 +20,12 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
+rat4t_require_helper_script 'define-comments-interaction.sh'
+
 # The use of relation shortands (as `==', `<' or `&&') in comments might
 # cause problems to some ratfor preprocessors which handle those shortands
 # in a clumsy way (e.g. older versions of C Ratfor).  Those preprocessor
 # should simply declare this test as XFAIL'ing
-str1='|<|==|&&|==|>|'
-str2=',!=,^=,~=,'
-rat4t_require_helper_script 'define-comments-interaction.sh'
+test_with_commented_strings '|<|==|&&|==|>|' ',!=,^=,~=,'
 
 # vim: ft=sh ts=4 sw=4 et

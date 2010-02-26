@@ -18,72 +18,78 @@
 # Helper file, sourced by scripts checking that the `define' builtin,
 # when used in the form `define(x, ...)', preserve comments.  This
 # file is expected to be sourced by test scripts after the file
-# `rat4-testsuite-init.sh' has already been sourced, and the two
-# variables `$str1' and `$str2' properly defined.
+# `rat4-testsuite-init.sh' has already been sourced.
 
 set +x
+echo "$me: INFO: disable shell verbosity while defining shell function"
+
 ctrlerr() {
     testcase_HARDERROR "\"control file\" ctrl.r: \`ratfor -C' $*"
 }
+
+test_with_commented_strings() {
+
+    $SED -e 's/^    //' >tst.r <<EOF
+    define(MACRO1,
+    foo=1 # this macro contains one c@mment
+    )
+    define(MACRO2,
+    # c@mment1 $1
+    bar=1
+    bar=2 # c@mment2 $2
+    )
+    tt
+    MACRO1
+    tt
+    MACRO1 x=y
+    tt
+    MACRO2
+    tt
+    MACRO2 if(u == v) pass
+EOF
+
+    $SED -e 's/^    //' >ctrl.r <<EOF
+    tt
+    foo=1 # this macro contains one c@mment
+    tt
+    foo=1 # this macro contains one c@mment
+    x=y
+    tt
+    # c@mment1 $1
+    bar=1
+    bar=2 # c@mment2 $2
+    tt
+    # c@mment1 $1
+    bar=1
+    bar=2 # c@mment2 $2
+    if (u == v) pass
+EOF
+
+    cat ctrl.r
+    run_RATFOR -C ctrl.r || ctrlerr "failed"
+    mv stdout ctrl-stdout
+    mv stderr ctrl-stderr
+    test ! -s ctrl-stderr || ctrlerr "complained on stderr"
+    $FGREP "this macro contains one c@mment" ctrl-stdout \
+      && $FGREP "c@mment1 $1" ctrl-stdout \
+      && $FGREP "c@mment2 $2" ctrl-stdout \
+      || ctrlerr "dind't kept comments"
+    $SED "/^$ws0p$/d" ctrl-stdout > exp
+
+    cat tst.r
+    run_RATFOR -C tst.r || testcase_FAIL
+    test ! -s stderr || testcase_FAIL
+    $SED "/^$ws0p$/d" stdout > got
+
+    cat exp
+    cat got
+
+    $DIFF_U exp got || testcase_FAIL
+
+    testcase_DONE
+}
+
+echo "$me: INFO: reactivate shell verbosity before running tests"
 set -x
-
-cat >tst.r <<EOF
-define(MACRO1,
-foo=1 # this macro contains one c@mment
-)
-define(MACRO2,
-# c@mment1 $str1
-bar=1
-bar=2 # c@mment2 $str2
-)
-tt
-MACRO1
-tt
-MACRO1 x=y
-tt
-MACRO2
-tt
-MACRO2 if(u == v) pass
-EOF
-
-cat >ctrl.r <<EOF
-tt
-foo=1 # this macro contains one c@mment
-tt
-foo=1 # this macro contains one c@mment
-x=y
-tt
-# c@mment1 $str1
-bar=1
-bar=2 # c@mment2 $str2
-tt
-# c@mment1 $str1
-bar=1
-bar=2 # c@mment2 $str2
-if (u == v) pass
-EOF
-
-cat ctrl.r
-run_RATFOR -C ctrl.r || ctrlerr "failed"
-mv stdout ctrl-stdout
-mv stderr ctrl-stderr
-test ! -s ctrl-stderr || ctrlerr "complained on stderr"
-$FGREP "this macro contains one c@mment" ctrl-stdout \
-  && $FGREP "c@mment1 $str1" ctrl-stdout \
-  && $FGREP "c@mment2 $str2" ctrl-stdout \
-  || ctrlerr "dind't kept comments"
-$SED "/^$ws0p$/d" ctrl-stdout > exp
-
-cat tst.r
-run_RATFOR -C tst.r || testcase_FAIL
-test ! -s stderr || testcase_FAIL
-$SED "/^$ws0p$/d" stdout > got
-
-cat exp
-cat got
-
-$DIFF_U exp got || testcase_FAIL
-
-testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

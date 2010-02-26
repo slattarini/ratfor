@@ -20,8 +20,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-stmt='if'
 rat4t_require_helper_script 'keyword-in-statement-middle.sh'
-testcase_DONE
+testgrep_keyword_in_statement_middle 'if'
 
 # vim: ft=sh ts=4 sw=4 et

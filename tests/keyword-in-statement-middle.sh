@@ -19,19 +19,33 @@
 # keywords (if, while, for, etc) are *not* processed when found in the
 # middle of a statement. This file is expected to be sourced by test
 # scripts after the file `rat4-testsuite-init.sh' has already been
-# sourced, and also expect the variable `$stmt' to be defined correctly.
+# sourced.
 
-echo "x $stmt(1) { pass }" > tst.r
+set +x
+echo "$me: INFO: disable shell verbosity while defining shell function"
 
-cat tst.r
-run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
-test ! -s stderr || testcase_FAIL "ratfor produced diagnostic on stderr"
-$SED -e '/^[cC]/d' stdout > out
-$FGREP "$stmt(1)" out \
-  || testcase_FAIL "literal \"$stmt(1)\" not found in ratfor output"
-$FGREP "goto" out \
-  && testcase_FAIL "literal \"goto\" found in ratfor output"
+testgrep_keyword_in_statement_middle() {
 
-testcase_DONE
+    stmt=$1
+    shift
+
+    echo "x $stmt(1) { pass }" > tst.r
+    cat tst.r
+
+    run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+    test -s stderr && testcase_FAIL "ratfor produced diagnostic on stderr"
+
+    $SED -e '/^[cC]/d' stdout > out
+
+    $FGREP "$stmt(1)" out \
+      || testcase_FAIL "literal \"$stmt(1)\" not found in ratfor output"
+    $FGREP "goto" out \
+      && testcase_FAIL "literal \"goto\" found in ratfor output"
+
+    testcase_DONE
+}
+
+echo "$me: INFO: reactivate shell verbosity before running tests"
+set -x
 
 # vim: ft=sh ts=4 sw=4 et

@@ -23,32 +23,47 @@
 
 rat4t_require_fortran_compiler
 
-cat >tst.r <<EOF
+set +x
+echo "$me: INFO: disable shell verbosity while defining shell function"
+
+testf77_keyword_in_statement_middle() {
+
+    stmt=$1
+    shift
+
+    cat >tst.r <<EOF
 subroutine $stmt(x)
     integer x
     write(*,100) x; 100 format(I1)
 end
 program test$stmt
-    call $stmt(1);
+    call $stmt(1)
 end
 EOF
+    cat tst.r
 
-cat tst.r
-run_RATFOR tst.r \
-  || testcase_FAIL "unexpected ratfor failure"
-test ! -s stderr \
-  || testcase_FAIL "ratfor produced diagnostic on stderr"
-mv stdout tst.f && mv stderr ratfor-stderr \
-  || testcase_HARDERROR
-run_F77 tst.f \
-  || testcase_FAIL "unexpected fortran failure"
-run_command ./tst.exe \
-  || testcase_FAIL "unexpected test-program failure"
-test ! -s stderr \
-  || testcase_FAIL "test-program produced diagnostic on stderr"
-test x"`cat stdout`" = x"1" \
-  || testcase_FAIL "bad test-program output"
+    run_RATFOR tst.r \
+      || testcase_FAIL "unexpected ratfor failure"
+    test ! -s stderr \
+      || testcase_FAIL "ratfor produced diagnostic on stderr"
 
-testcase_DONE
+    mv stdout tst.f && mv stderr ratfor-stderr \
+      || testcase_HARDERROR
+
+    run_F77 tst.f \
+      || testcase_FAIL "unexpected fortran failure"
+
+    run_command ./tst.exe \
+      || testcase_FAIL "unexpected test-program failure"
+    test ! -s stderr \
+      || testcase_FAIL "test-program produced diagnostic on stderr"
+    test x"`cat stdout`" = x"1" \
+      || testcase_FAIL "bad test-program output"
+
+    testcase_DONE
+}
+
+echo "$me: INFO: reactivate shell verbosity before running tests"
+set -x
 
 # vim: ft=sh ts=4 sw=4 et

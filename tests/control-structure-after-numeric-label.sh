@@ -19,38 +19,84 @@
 # control statements (if, while, for, etc) are processed correctly when
 # found after a numerical label.  This file is expected to be sourced by
 # test scripts after the file `rat4-testsuite-init.sh' has already been
-# sourced.  It also expect the variables $stmt, $stmt_arg, $stmt_post
-# and $stmt_post_arg to be set correctly.
+# sourced.
 
-for v in stmt stmt_arg stmt_post stmt_post_arg; do
-    if eval "test x\${$v+\"set\"} != x\"set\""; then
-        testcase_HARDERROR "shell variable \`\$$v' not set"
+set +x
+echo "$me: INFO: disable shell verbosity while defining shell function"
+
+testgrep_control_structure_after_label() {
+
+    funcname=testgrep_control_structure_after_label # for error messages
+
+    fail_if_stmt_is_in_output=:
+    fail_if_stmt_post_is_in_output='' # default will be set later
+    while test $# -gt 0; do
+        case $1 in
+            '--dont-fail-if-stmt-is-in-output')
+                fail_if_stmt_is_in_output=false
+                ;;
+            '--fail-if-stmt-is-in-output')
+                fail_if_stmt_is_in_output=:
+                ;;
+            '--dont-fail-if-stmt-post-is-in-output')
+                fail_if_stmt_post_is_in_output=false
+                ;;
+            '--fail-if-stmt-post-is-in-output')
+                fail_if_stmt_post_is_in_output=:
+                ;;
+            -*)
+                testcase_HADERROR "$funcname: $1: invalid option"
+                ;;
+             *)
+                break
+                ;;
+        esac
+        shift
+    done
+
+    test $# -ge 2 || testcase_HADERROR "$funcname: missing argument"
+
+    stmt=$1
+    stmt_arg=$2
+    stmt_post=${3-}
+    stmt_post_arg=${4-}
+    shift $#
+
+    if test -z "$fail_if_stmt_post_is_in_output"; then
+        # set default for $fail_if_stmt_post_is_in_output
+        if test -z "$stmt_post"; then
+            fail_if_stmt_post_is_in_output=false
+        else
+            fail_if_stmt_post_is_in_output=:
+        fi
     fi
-done
 
-echo "100 $stmt $stmt_arg pass; $stmt_post $stmt_post_arg" > tst.r
+    echo "100 $stmt $stmt_arg pass; $stmt_post $stmt_post_arg" > tst.r
+    cat tst.r
 
-cat tst.r
+    run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+    test -s stderr && testcase_FAIL "ratfor produced diagnostic on stderr"
 
-run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
-test ! -s stderr || testcase_FAIL "ratfor produced diagnostic on stderr"
+    $SED -e '/^[cC]/d' stdout > out
+    cat out
 
-$SED -e '/^[cC]/d' stdout > out
-cat out
+    if $fail_if_stmt_is_in_output; then
+        $FGREP "$stmt" out \
+          && testcase_FAIL "string \"$stmt\" found in ratfor output"
+    fi
 
-if test x"${fail_if_stmt_in_output-yes}" != x"no"; then
-    $FGREP "$stmt" out \
-      && testcase_FAIL "string \"$stmt\" found in ratfor output"
-fi
+    $GREP "^100 .*pass" out \
+      && testcase_FAIL "statement \"$stmt\" not expanded correctly"
 
-$GREP "^100 .*pass" out \
-  && testcase_FAIL "statement \"$stmt\" not expanded correctly"
+    if $fail_if_stmt_post_is_in_output; then
+        $FGREP "$stmt_post" out \
+          && testcase_FAIL "string \"$stmt_post\" found in ratfor output"
+    fi
 
-if test x"${fail_if_stmt_post_in_output-no}" != x"no"; then
-    $FGREP "$stmt_post" out \
-      && testcase_FAIL "string \"$stmt_post\" found in ratfor output"
-fi
+    testcase_DONE
+}
 
-testcase_DONE
+echo "$me: INFO: reactivate shell verbosity before running tests"
+set -x
 
 # vim: ft=sh ts=4 sw=4 et

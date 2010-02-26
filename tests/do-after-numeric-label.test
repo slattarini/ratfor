@@ -20,8 +20,11 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-stmt='do' stmt_arg='i=1,10 {' stmt_post='}' stmt_post_arg=''
-fail_if_stmt_in_output=no fail_if_stmt_post_in_output=no
 rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
+testgrep_control_structure_after_label \
+    --dont-fail-if-stmt-is-in-output \
+    'do' \
+    'i=1,10 {' \
+    '}'
 
 # vim: ft=sh ts=4 sw=4 et

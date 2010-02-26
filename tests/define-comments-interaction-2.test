@@ -24,8 +24,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-str1='##@##'
-str2='#x($)'
 rat4t_require_helper_script 'define-comments-interaction.sh'
+test_with_commented_strings '##@##' '#x($)'
 
 # vim: ft=sh ts=4 sw=4 et

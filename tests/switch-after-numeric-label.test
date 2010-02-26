@@ -20,8 +20,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-stmt='switch' stmt_arg='(1) { case 1:' stmt_post='}' stmt_post_arg=''
-fail_if_stmt_in_output=no
 rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
+testgrep_control_structure_after_label 'switch' '(1) { case 1:' '}'
 
 # vim: ft=sh ts=4 sw=4 et

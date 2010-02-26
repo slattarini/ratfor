@@ -50,20 +50,28 @@ end
 EOF
 }
 
-do_test() {
-  write_test_file "$@"
+testf77_control_structure_after_label() {
+
+  write_test_file "$1" "$2"
   cat tst.r
+
   run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
   test ! -s stderr || testcase_FAIL "ratfor produced diagnostic on stderr"
+
   mv stdout tst.f
   mv stderr ratfor-stderr
+
   run_F77 tst.f || testcase_FAIL "ratfor produced uncompilable code"
+
   run_command ./tst.exe || testcase_FAIL "testprg failed"
   test ! -s stderr || testcase_FAIL "testprg produced diagnostic on stderr"
+
   mv stdout got
+
   cat exp
   cat got
   $DIFF_U exp got || testcase_FAIL "expected output and got output differs"
+
   testcase_DONE
 }
 

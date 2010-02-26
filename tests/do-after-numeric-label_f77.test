@@ -21,6 +21,8 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 rat4t_require_helper_script 'control-structure-after-numeric-label_f77.sh'
-do_test 'do i=1,2' ''
+testf77_control_structure_after_label \
+  'do i=1,2' \
+  ''
 
 # vim: ft=sh ts=4 sw=4 et

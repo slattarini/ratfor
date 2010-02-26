@@ -21,6 +21,8 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 rat4t_require_helper_script 'control-structure-after-numeric-label_f77.sh'
-do_test 'repeat {' 'i=i+1; } until (i >= 3)'
+testf77_control_structure_after_label \
+  'repeat {' \
+  'i=i+1; } until (i >= 3)'
 
 # vim: ft=sh ts=4 sw=4 et
