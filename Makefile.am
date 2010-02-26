@@ -85,24 +85,7 @@ distcheck-hook:
 # Rule(s) to clean temporary files left around by configure/config.status.
 include am/MostlyCleanConfigureTmp.am
 
-# Maintainer-specific checks.
-.PHONY: maintainer-check
-maintainer-check: maintainer-check-list-of-tests
-
-# List of directories where to recurse into for testing and related
-# maintainer-checks.
-TEST_SUBDIRS = sanity-checks tests
-
-# Check that the list of tests given in the Makefile is equal to the
-# list of all test scripts in the Automake testsuite.
-.PHONY: maintainer-check-list-of-tests
-maintainer-check-list-of-tests:
-	@target='$@'; fail=''; \
-	 CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
-	 for subdir in $(TEST_SUBDIRS); do \
-	   echo "Making $$target in $$subdir"; \
-	   (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
-	 done; \
-	 test -z "$$fail"
+# Include maintainer-specific checks.
+include am/MaintainerChecks.am
 
 ## vim: ft=automake noet sw=4 ts=4

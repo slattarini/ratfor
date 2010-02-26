@@ -1,0 +1,46 @@
+## -*- Makefile.am -*-
+##
+## Maintainer-specific checks for the Ratfor Testsuite.
+## This file should be included by the top-level Makefile.am.
+##
+## Copyright (C) 2010 Stefano Lattarini
+## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+##
+## This program is free software: you can redistribute it and/or modify it
+## under the terms of the GNU Lesser General Public License as published
+## by the Free Software Foundation; either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## Lesser General Public License for more details.
+##
+## You should have received a copy of the GNU Lesser General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+
+# The target running all the maintainer-checks.  Its dependencies will be
+# individually declared later in this file.
+maintainer-check:
+.PHONY: maintainer-check
+
+# List of directories where to recurse into for testing and related
+# maintainer-checks.
+TEST_SUBDIRS = sanity-checks tests
+
+# Check that the list of tests given in the Makefile is equal to the
+# list of all test scripts in the Automake testsuite.
+maintainer-check-list-of-tests:
+	@target='$@'; fail=''; \
+	 CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
+	 for subdir in $(TEST_SUBDIRS); do \
+	   echo "Making $$target in $$subdir"; \
+	   (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
+	 done; \
+	 test -z "$$fail"
+.PHONY: maintainer-check-list-of-tests
+maintainer-check: maintainer-check-list-of-tests
+
+
+## vim: ft=automake noet sw=4 ts=4
