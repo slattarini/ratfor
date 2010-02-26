@@ -50,8 +50,8 @@ maintainer-check-list-of-tests:
 	$(AM_V_at)target='$@'; fail=''; \
 	CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
 	for subdir in $(test_subdirs); do \
-	  echo "Making $$target in $$subdir"; \
-	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
+	  test x'$(AM_V_at)' = x'@' || echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && $(MAKE) -s $(AM_MAKEFLAGS) $$target) || fail=yes; \
 	done; \
 	test -z "$$fail"
 
