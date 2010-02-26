@@ -23,11 +23,11 @@
 ###########################################################################
 
 # Internal macro to deal with silent-rules.
-rat4__maintcheck_pre = @test '@' != '$(AM_V_at)' || echo " MAINTCHECK $@"
+maintcheck__pre = @test x'$(AM_V_at)' != x'@' || echo " MAINTCHECK $@"
 
 # List of directories where to recurse into for testing and related
 # maintainer-checks.
-TEST_SUBDIRS = sanity-checks tests
+test_subdirs = sanity-checks tests
 
 # List of the targets doing maintainer-specific checks.
 maintcheck_targets = ## will be updated later
@@ -46,10 +46,10 @@ maintainer-check: $(maintcheck_targets)
 maintcheck_targets += maintainer-check-list-of-tests
 
 maintainer-check-list-of-tests:
-	$(rat4__maintcheck_pre)
+	$(maintcheck__pre)
 	$(AM_V_at)target='$@'; fail=''; \
 	CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
-	for subdir in $(TEST_SUBDIRS); do \
+	for subdir in $(test_subdirs); do \
 	  echo "Making $$target in $$subdir"; \
 	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
 	done; \
@@ -92,9 +92,9 @@ sc__typos_wrt_testing_framework_functions__pl = \
 maintcheck_targets += sc--typos-wrt-testing-framework-functions
 
 sc--typos-wrt-testing-framework-functions:
-	$(rat4__maintcheck_pre)
+	$(maintcheck__pre)
 	$(AM_V_at)files=`\
-	   for d in $(TEST_SUBDIRS); do \
+	   for d in $(test_subdirs); do \
 	     for f in $$d/*.test $$d/*.sh; do \
 	       test -f $$f && echo $$f; \
 	     done; \
