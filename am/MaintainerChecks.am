@@ -62,7 +62,6 @@ maintainer-check-list-of-tests:
 ## framework.
 ##
 
-## helper internal macro
 sc__typos_wrt_testing_framework_functions__pl = \
     use strict; \
     use warnings FATAL => "all"; \
@@ -100,6 +99,55 @@ sc--typos-wrt-testing-framework-functions:
 	     done; \
 	   done; :`; \
 	 perl -e '$(sc__typos_wrt_testing_framework_functions__pl)' $$files
+
+###########################################################################
+
+##
+## Check that test scripts never use a "vanilla" `grep' command, but
+# instead always use the `$GREP' found by configure.
+##
+
+sc__no_vanilla_grep__pl = \
+    use strict; \
+    use warnings FATAL => "all"; \
+    $$^W = 1; \
+    my $$sharp = "\#"; \
+    my $$vanilla = "grep"; \
+    my $$cooked = "\$$GREP"; \
+    my $$ok = 1; \
+    foreach my $$file (@ARGV) { \
+        open(FILE, "<$$file") or die "$$file: cannot open: $$!\n"; \
+        while (<FILE>) { \
+            ## remove trailing and leading spaces
+            s/^\s*//; s/\s*$$//; \
+            ## assume lines starting with `#' are comments.
+            next if /^$$sharp/; \
+            if (/\b$$vanilla\b/) { \
+                print STDERR "$$file:$$.: $$_\n"; \
+                $$ok = 0; \
+            }; \
+        }; \
+        close(FILE) or die "$$file: cannot close: $$!\n"; \
+    }; \
+    if (not $$ok) { \
+        print STDERR "Use of vanilla `$$vanilla` command found " . \
+                     "in the lines above\n"; \
+        print STDERR "Use `$$cooked` instead\n"; \
+        exit 1; \
+    } else { \
+        exit 0; \
+    }
+
+maintcheck_targets += sc--no-vanilla-grep
+sc--no-vanilla-grep:
+	$(maintcheck__pre)
+	$(AM_V_at)files=`\
+	   for d in $(test_subdirs); do \
+	     for f in $$d/*.test $$d/*.sh; do \
+	       test -f $$f && echo $$f; \
+	     done; \
+	   done; :`; \
+	 perl -e '$(sc__no_vanilla_grep__pl)' $$files
 
 ###########################################################################
 
