@@ -29,18 +29,65 @@ maintainer-check:
 # maintainer-checks.
 TEST_SUBDIRS = sanity-checks tests
 
-# Check that the list of tests given in the Makefile is equal to the
-# list of all test scripts in the Automake testsuite.
+# Internal macro to deal with silent-rules.
+rat4__maintcheck_pre = @test '@' != '$(AM_V_at)' || echo " MAINTCHECK $@"
+
+##
+## Check that the list of tests given in the Makefile is equal to the
+## list of all test scripts in the Automake testsuite.
+##
+
 maintainer-check-list-of-tests:
-	@target='$@'; fail=''; \
-	 CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
-	 for subdir in $(TEST_SUBDIRS); do \
-	   echo "Making $$target in $$subdir"; \
-	   (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
-	 done; \
-	 test -z "$$fail"
+	$(rat4__maintcheck_pre)
+	$(AM_V_at)target='$@'; fail=''; \
+	CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
+	for subdir in $(TEST_SUBDIRS); do \
+	  echo "Making $$target in $$subdir"; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
+	done; \
+	test -z "$$fail"
 .PHONY: maintainer-check-list-of-tests
 maintainer-check: maintainer-check-list-of-tests
 
+##
+## Check against known typos in the names of functions from our testing
+## framework.
+##
+sc__typos_wrt_testing_framework_functions__pl = \
+    use strict; \
+    use warnings FATAL => "all"; \
+    $$^W = 1; \
+    my @ok = qw/FAIL SKIP HARDERROR DONE/; \
+    my $$rx_ok = "(" . join("|", @ok) . ")"; \
+    my @bad = (); \
+    foreach my $$file (@ARGV) { \
+        open(FILE, "<$$file") or die "$$file: cannot open: $$!\n"; \
+        while (<FILE>) { \
+            my @x1 = split /\b/; \
+            my @x2 = grep { /^testcase_\w+$$/ } @x1; \
+            my @x3 = grep { !/^testcase_$$rx_ok$$/ } @x2; \
+            push @bad, map { "$$file:$$.: $$_" } @x3; \
+        }; \
+        close(FILE) or die "$$file: cannot close: $$!\n"; \
+    }; \
+    map { print STDERR "$$_ (suspicious token)\n" } @bad; \
+    if (@bad) { \
+        print STDERR "Valid testcase_xxx functions listed here:\n"; \
+        map { print STDERR "  - testcase_$$_\n"; } @ok; \
+        exit 1; \
+    } else { \
+        exit 0; \
+    }
+sc--typos-wrt-testing-framework-functions:
+	$(rat4__maintcheck_pre)
+	$(AM_V_at)files=`\
+	   for d in $(TEST_SUBDIRS); do \
+	     for f in $$d/*.test $$d/*.sh; do \
+	       test -f $$f && echo $$f; \
+	     done; \
+	   done; :`; \
+	 perl -e '$(sc__typos_wrt_testing_framework_functions__pl)' $$files
+.PHONY: sc--typos-wrt-testing-framework-functions
+maintainer-check: sc--typos-wrt-testing-framework-functions
 
 ## vim: ft=automake noet sw=4 ts=4
