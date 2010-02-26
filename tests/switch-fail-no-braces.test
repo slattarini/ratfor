@@ -31,7 +31,7 @@ EOF
 
 cat tst.r
 
-run_RATFOR -e 1 tst.r || testcase_FATAL_FAILURE
+run_RATFOR -e 1 tst.r || testcase_FAIL
 emsg='missing left brace in switch statement'
 $GREP "^tst\.r:2: $emsg.$" stderr || testcase_FAIL
 $GREP "^tst\.r:6: $emsg.$" stderr || testcase_FAIL

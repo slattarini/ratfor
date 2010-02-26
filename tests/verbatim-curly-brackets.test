@@ -27,7 +27,7 @@ do_test() {
     case ${1-} in
         s*) e=0;; # expect success
         f*) e=1;; # expect failure
-        *) testcase_HADERROR "bad argument \`$1' to do_tests()";;
+        *) testcase_HARDERROR "bad argument \`$1' to do_tests()";;
     esac
     t=$1
     rx="^ $vs$2$"

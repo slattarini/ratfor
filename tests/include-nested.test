@@ -53,14 +53,14 @@ cat top.r
 cat incl.r
 cat nest.r
 
-run_RATFOR top.r || testcase_FATAL_FAILURE
+run_RATFOR top.r || testcase_FAIL
 
 $SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
 
 cat exp
 cat got
 
-$DIFF_U exp got || testcase_FATAL_FAILURE
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

@@ -45,7 +45,7 @@ testgrep_control_structure_after_label() {
                 fail_if_stmt_post_is_in_output=:
                 ;;
             -*)
-                testcase_HADERROR "$funcname: $1: invalid option"
+                testcase_HARDERROR "$funcname: $1: invalid option"
                 ;;
              *)
                 break
@@ -54,7 +54,7 @@ testgrep_control_structure_after_label() {
         shift
     done
 
-    test $# -ge 2 || testcase_HADERROR "$funcname: missing argument"
+    test $# -ge 2 || testcase_HARDERROR "$funcname: missing argument"
 
     stmt=$1
     stmt_arg=$2

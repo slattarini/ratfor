@@ -52,8 +52,8 @@ if $FGREP notseen xstdout; then
     testcase_FAIL "string \"notseen\" found in output"
 fi
 
-exp=`$FGREP -c include tst.r` || testcase_HADERRROR
-got=`$FGREP -c include xstdout || test $? -eq 1` || testcase_HADERROR
+exp=`$FGREP -c include tst.r` || testcase_HARDERROR
+got=`$FGREP -c include xstdout || test $? -eq 1` || testcase_HARDERROR
 if test x"$got" != x"$exp"; then
     testcase_FAIL "bad count of strings \"include\" in output" \
                   "(expected = '$exp', got = '$got')"
