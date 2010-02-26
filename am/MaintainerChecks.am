@@ -20,22 +20,30 @@
 ## along with this program.  If not, see <http://www.gnu.org/licenses/>.
 ##
 
-# The target running all the maintainer-checks.  Its dependencies will be
-# individually declared later in this file.
-maintainer-check:
-.PHONY: maintainer-check
+###########################################################################
+
+# Internal macro to deal with silent-rules.
+rat4__maintcheck_pre = @test '@' != '$(AM_V_at)' || echo " MAINTCHECK $@"
 
 # List of directories where to recurse into for testing and related
 # maintainer-checks.
 TEST_SUBDIRS = sanity-checks tests
 
-# Internal macro to deal with silent-rules.
-rat4__maintcheck_pre = @test '@' != '$(AM_V_at)' || echo " MAINTCHECK $@"
+# List of the targets doing maintainer-specific checks.
+maintcheck_targets = ## will be updated later
+
+# The target running all the maintainer-checks.
+maintainer-check: $(maintcheck_targets)
+.PHONY: maintainer-check $(maintcheck_targets)
+
+###########################################################################
 
 ##
 ## Check that the list of tests given in the Makefile is equal to the
 ## list of all test scripts in the Automake testsuite.
 ##
+
+maintcheck_targets += maintainer-check-list-of-tests
 
 maintainer-check-list-of-tests:
 	$(rat4__maintcheck_pre)
@@ -46,13 +54,15 @@ maintainer-check-list-of-tests:
 	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$target) || fail=yes; \
 	done; \
 	test -z "$$fail"
-.PHONY: maintainer-check-list-of-tests
-maintainer-check: maintainer-check-list-of-tests
+
+###########################################################################
 
 ##
 ## Check against known typos in the names of functions from our testing
 ## framework.
 ##
+
+## helper internal macro
 sc__typos_wrt_testing_framework_functions__pl = \
     use strict; \
     use warnings FATAL => "all"; \
@@ -78,6 +88,9 @@ sc__typos_wrt_testing_framework_functions__pl = \
     } else { \
         exit 0; \
     }
+
+maintcheck_targets += sc--typos-wrt-testing-framework-functions
+
 sc--typos-wrt-testing-framework-functions:
 	$(rat4__maintcheck_pre)
 	$(AM_V_at)files=`\
@@ -87,7 +100,7 @@ sc--typos-wrt-testing-framework-functions:
 	     done; \
 	   done; :`; \
 	 perl -e '$(sc__typos_wrt_testing_framework_functions__pl)' $$files
-.PHONY: sc--typos-wrt-testing-framework-functions
-maintainer-check: sc--typos-wrt-testing-framework-functions
+
+###########################################################################
 
 ## vim: ft=automake noet sw=4 ts=4
