@@ -155,6 +155,9 @@ AC_PROG_LN_S
 # Look for a diff command that can produce better human-readable output.
 AX_PROG_DIFF_U
 
+# Look for perl, which is used by some maintainer-specific checks.
+AX_PROG_PERL([5.008], [perl], [sh -c 'echo No perl available >&2; exit 1'])
+
 #
 # Do output.
 #

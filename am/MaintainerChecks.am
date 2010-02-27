@@ -78,7 +78,7 @@ maintcheck_targets += maintainer-check-list-of-tests
 sc--typos-wrt-testing-framework-functions:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  perl build-aux/typos-wrt-testing-framework-functions.pl $$sc_files
+	  $(PERL) build-aux/typos-wrt-testing-framework-functions.pl $$sc_files
 
 maintcheck_targets += sc--typos-wrt-testing-framework-functions
 EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
@@ -93,20 +93,20 @@ EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
 sc--no-vanilla-grep:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  perl build-aux/no-vanilla-command.pl \
-	       --vanilla='grep' --cooked='$$GREP' $$sc_files
+	  $(PERL) build-aux/no-vanilla-command.pl \
+	         --vanilla='grep' --cooked='$$GREP' $$sc_files
 
 sc--no-vanilla-egrep:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  perl build-aux/no-vanilla-command.pl \
-	       --vanilla='egrep' --cooked='$$EGREP' $$sc_files
+	  $(PERL) build-aux/no-vanilla-command.pl \
+	          --vanilla='egrep' --cooked='$$EGREP' $$sc_files
 
 sc--no-vanilla-fgrep:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  perl build-aux/no-vanilla-command.pl \
-	       --vanilla='fgrep' --cooked='$$FGREP' $$sc_files
+	  $(PERL) build-aux/no-vanilla-command.pl \
+	          --vanilla='fgrep' --cooked='$$FGREP' $$sc_files
 
 maintcheck_targets += sc--no-vanilla-grep
 maintcheck_targets += sc--no-vanilla-egrep
@@ -122,8 +122,8 @@ maintcheck_targets += sc--no-vanilla-fgrep
 sc--no-vanilla-diff:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  perl build-aux/no-vanilla-command.pl \
-	       --vanilla='diff' --cooked='$$DIFF_U' $$sc_files
+	  $(PERL) build-aux/no-vanilla-command.pl \
+	          --vanilla='diff' --cooked='$$DIFF_U' $$sc_files
 
 maintcheck_targets += sc--no-vanilla-diff
 
