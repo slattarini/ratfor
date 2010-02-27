@@ -25,6 +25,17 @@
 # Internal macro to deal with silent-rules.
 maintcheck__pre = @test x'$(AM_V_at)' != x'@' || echo " MAINTCHECK $@"
 
+# Internal macro, contains shell code to obtain the list of files on
+# which to perform syntax-checks.
+maintcheck__get_sc_files = \
+  sc_files=`\
+    echo lib/rat4-testlib.sh; \
+    for d in $(test_subdirs); do \
+      for f in $$d/*.test $$d/*.sh; do \
+        test -f $$f && echo $$f; \
+      done; \
+    done; :`
+
 # List of directories where to recurse into for testing and related
 # maintainer-checks.
 test_subdirs = sanity-checks tests
@@ -66,13 +77,8 @@ maintcheck_targets += sc--typos-wrt-testing-framework-functions
 
 sc--typos-wrt-testing-framework-functions:
 	$(maintcheck__pre)
-	$(AM_V_at)files=`\
-	   for d in $(test_subdirs); do \
-	     for f in $$d/*.test $$d/*.sh; do \
-	       test -f $$f && echo $$f; \
-	     done; \
-	   done; :`; \
-	 perl build-aux/typos-wrt-testing-framework-functions.pl $$files
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  perl build-aux/typos-wrt-testing-framework-functions.pl $$sc_files
 
 EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
 
@@ -86,13 +92,8 @@ EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
 maintcheck_targets += sc--no-vanilla-grep
 sc--no-vanilla-grep:
 	$(maintcheck__pre)
-	$(AM_V_at)files=`\
-	   for d in $(test_subdirs); do \
-	     for f in $$d/*.test $$d/*.sh; do \
-	       test -f $$f && echo $$f; \
-	     done; \
-	   done; :`; \
-	 perl build-aux/no-vanilla-command.pl -v grep -c '$$GREP' $$files
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  perl build-aux/no-vanilla-command.pl -v grep -c '$$GREP' $$sc_files
 
 EXTRA_DIST += build-aux/no-vanilla-command.pl
 
