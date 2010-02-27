@@ -115,6 +115,21 @@ maintcheck_targets += sc--no-vanilla-fgrep
 ###########################################################################
 
 #
+# Check that test scripts never use a "vanilla" `sed' command, but instead
+# always use the `$SED' command provided by configure.
+#
+
+sc--no-vanilla-sed:
+	$(maintcheck__pre)
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  $(PERL) build-aux/no-vanilla-command.pl \
+	          --vanilla='sed' --cooked='$$SED' $$sc_files
+
+maintcheck_targets += sc--no-vanilla-sed
+
+###########################################################################
+
+#
 # Check that test scripts never use a "vanilla" `diff' command, but
 # instead always use the `$DIFF_U' command provided by configure.
 #
