@@ -1,5 +1,6 @@
 #-*- Autoconf -*-
-# serial 1 ax_prog_perl.m4
+# Copied from SteLib at 2010-02-27 20:34:43 +0100.  DO NOT EDIT!
+# serial 2 ax_prog_perl.m4
 
 #
 # Copyright (C) 2010 Stefano Lattarini.
