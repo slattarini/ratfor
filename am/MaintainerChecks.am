@@ -49,12 +49,10 @@ maintainer-check: $(maintcheck_targets)
 
 ###########################################################################
 
-##
-## Check that the list of tests given in the Makefile is equal to the
-## list of all test scripts in the Automake testsuite.
-##
-
-maintcheck_targets += maintainer-check-list-of-tests
+#
+# Check that the list of tests given in the Makefile is equal to the
+# list of all test scripts in the Automake testsuite.
+#
 
 maintainer-check-list-of-tests:
 	$(maintcheck__pre)
@@ -65,37 +63,56 @@ maintainer-check-list-of-tests:
 	  (cd $$subdir && $(MAKE) -s $(AM_MAKEFLAGS) $$target) || fail=yes; \
 	done; \
 	test -z "$$fail"
+maintcheck_targets += maintainer-check-list-of-tests
 
 ###########################################################################
 
-##
-## Check against known typos in the names of functions from our testing
-## framework.
-##
-
-maintcheck_targets += sc--typos-wrt-testing-framework-functions
+#
+# Check against known typos in the names of functions from our testing
+# framework.
+#
 
 sc--typos-wrt-testing-framework-functions:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
 	  perl build-aux/typos-wrt-testing-framework-functions.pl $$sc_files
 
+maintcheck_targets += sc--typos-wrt-testing-framework-functions
 EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
 
 ###########################################################################
 
-##
-## Check that test scripts never use a "vanilla" `grep' command, but
-# instead always use the `$GREP' found by configure.
-##
+## Used by many syntax checks below.
+EXTRA_DIST += build-aux/no-vanilla-command.pl
 
-maintcheck_targets += sc--no-vanilla-grep
+###########################################################################
+
+#
+# Check that test scripts never use a "vanilla" `{,e,f}grep' command, but
+# instead always use the `${,E,F}GREP' found by configure.
+#
+
 sc--no-vanilla-grep:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  perl build-aux/no-vanilla-command.pl -v grep -c '$$GREP' $$sc_files
+	  perl build-aux/no-vanilla-command.pl \
+	       --vanilla='grep' --cooked='$$GREP' $$sc_files
 
-EXTRA_DIST += build-aux/no-vanilla-command.pl
+sc--no-vanilla-egrep:
+	$(maintcheck__pre)
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  perl build-aux/no-vanilla-command.pl \
+	       --vanilla='egrep' --cooked='$$EGREP' $$sc_files
+
+sc--no-vanilla-fgrep:
+	$(maintcheck__pre)
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  perl build-aux/no-vanilla-command.pl \
+	       --vanilla='fgrep' --cooked='$$FGREP' $$sc_files
+
+maintcheck_targets += sc--no-vanilla-grep
+maintcheck_targets += sc--no-vanilla-egrep
+maintcheck_targets += sc--no-vanilla-fgrep
 
 ###########################################################################
 
