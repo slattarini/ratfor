@@ -58,7 +58,7 @@ my_run_rat4 2-2 -e 0
 $FGREP upper stdout.2-2 || testcase_FAIL
 
 my_run_rat4 3 -e 0
-ws_normalize <stdout.3 | grep '.' >got3
+ws_normalize <stdout.3 | $SED '/^$/d' >got3
 cat exp3
 cat got3
 $DIFF_U exp3 got3 || testcase_FAIL

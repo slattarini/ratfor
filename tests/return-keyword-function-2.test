@@ -85,8 +85,8 @@ check_func_return() {
     mv stderr stderr$n || testcase_HARDERROR
     mv stdout stdout$n || testcase_HARDERROR
     test -s stderr$n && testcase_FAIL
-    grep "^ *return *$" stdout$n || testcase_FAIL
-    grep "^ *func *= *$r *$" stdout$n || testcase_FAIL
+    $GREP "^ *return *$" stdout$n || testcase_FAIL
+    $GREP "^ *func *= *$r *$" stdout$n || testcase_FAIL
 }
 
 check_func_return 01 "1"

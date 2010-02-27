@@ -27,7 +27,7 @@ EOF
 cat tst.r
 
 run_RATFOR tst.r || testcase_FAIL
-grep -v '^[cC]' stdout >stdout-t
+$SED '/^[cC]/d' stdout >stdout-t
 mv stdout-t stdout
 
 $FGREP 'goto'  stdout || testcase_FAIL

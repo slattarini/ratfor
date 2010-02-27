@@ -30,7 +30,7 @@ $AWK </dev/null >tst.r "BEGIN {
     }
 }"
 
-$GREP -v '^#' <tst.r | ws_normalize >exp
+$SED '/^#/d' <tst.r | ws_normalize >exp
 wc -l tst.r
 wc -c tst.r
 sed '22q' tst.r
@@ -39,7 +39,7 @@ sed '22q' tst.r
 # so be sure to leave it some times (say 3 minutes) before considering
 # it timed out (default with run_RATFOR would be 5 or 10 seconds).
 run_RATFOR -t 180 -- -l $startlab tst.r || testcase_FAIL
-grep -v '^[cC]' <stdout | ws_normalize >got
+$SED '/^[cC]/d' <stdout | ws_normalize >got
 
 # Avoid to `cat' again exp and got, as they might be huge.
 $DIFF_U exp got || testcase_FAIL
