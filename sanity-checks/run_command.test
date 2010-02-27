@@ -31,7 +31,7 @@ test_cleanup() {
 PATH=$cwd:$PATH
 export PATH
 
-sed 's/^ *//' >test_script <<'EOF'
+$SED 's/^ *//' >test_script <<'EOF'
     #!/bin/sh
     echo "OUT${1-}"
     echo "ERR${1-}" >&2

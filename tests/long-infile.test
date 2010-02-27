@@ -33,7 +33,7 @@ $AWK </dev/null >tst.r "BEGIN {
 $SED '/^#/d' <tst.r | ws_normalize >exp
 wc -l tst.r
 wc -c tst.r
-sed '22q' tst.r
+$SED -e '22q' tst.r
 
 # Ratfor might require quite a long time to process such a large file,
 # so be sure to leave it some times (say 3 minutes) before considering

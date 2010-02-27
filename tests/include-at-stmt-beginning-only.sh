@@ -35,7 +35,7 @@ for p in a A 'foo=' 'foo =' 'foo; bar' @ + - : . , _ '&' '|' '=='; do
         echo "${s}${p2}include 'inc.r'"
         echo "${s}${p1}${s}include 'inc.r'"
     done
-done | sed -e "s/'/$quote_char/g" >tst.r
+done | $SED -e "s/'/$quote_char/g" >tst.r
 
 cat inc.r
 cat tst.r

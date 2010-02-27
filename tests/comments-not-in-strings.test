@@ -41,7 +41,7 @@ repeat "# $k 13" until(3)
 repeat { s = "# $k 13" }
 EOF
 
-sed "s/\"/'/g" tst1.r >tst2.r
+$SED -e "s/\"/'/g" tst1.r >tst2.r
 
 for i in 1 2; do
     cat tst$i.r
