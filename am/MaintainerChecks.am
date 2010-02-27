@@ -92,9 +92,9 @@ sc--no-vanilla-grep:
 	       test -f $$f && echo $$f; \
 	     done; \
 	   done; :`; \
-	 perl build-aux/no-vanilla-grep.pl $$files
+	 perl build-aux/no-vanilla-command.pl -v grep -c '$$GREP' $$files
 
-EXTRA_DIST += build-aux/no-vanilla-grep.pl
+EXTRA_DIST += build-aux/no-vanilla-command.pl
 
 ###########################################################################
 

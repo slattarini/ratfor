@@ -20,15 +20,24 @@
 
 require 5.008;
 
+BEGIN { $^W = 1; }
 use strict;
 use warnings FATAL => "all";
-$^W = 1;
+
+use Getopt::Long;
 
 (my $me = $0) =~ s|.*/||;
 
-my $vanilla = 'grep';
-my $cooked = '$GREP';
+my ($vanilla, $cooked); # must be define from command line
 my @bad = ();
+
+my %options_hash = (
+    "v|vanilla=s" => \$vanilla,
+    "c|cooked=s" => \$cooked,
+);
+Getopt::Long::Configure(qw/gnu_getopt require_order no_ignore_case/);
+GetOptions(%options_hash) && @ARGV 
+  or die "Usage: $me -v VANILLA-CMD -c COOKED-CMD FILES\n";
 
 foreach my $file (@ARGV) {
     open(FILE, "<$file") or die "$me: $file: cannot open: $!\n";
@@ -37,7 +46,7 @@ foreach my $file (@ARGV) {
         s/^\s*//; s/\s*$//;
         # assume lines starting with `#' are comments
         next if /^#/;
-        push @bad, "$file:$.: $_" if (/\b$vanilla\b/);
+        push @bad, "$file:$.: $_" if (/\b\Q$vanilla\E\b/);
     }
     close(FILE) or die "$me: $file: cannot close: $!\n";
 }

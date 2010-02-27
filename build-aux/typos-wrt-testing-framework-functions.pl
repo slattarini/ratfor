@@ -25,6 +25,7 @@ use warnings FATAL => "all";
 $^W = 1;
 
 (my $me = $0) =~ s|.*/||;
+@ARGV or die "$me: Missing argument(s).\nUsage: $me FILES\n";
 
 my @valid = qw/FAIL SKIP HARDERROR DONE/;
 my $rx_valid = "(" . join("|", @valid) . ")";
