@@ -47,6 +47,9 @@ maintcheck_targets = ## will be updated later
 maintainer-check: $(maintcheck_targets)
 .PHONY: maintainer-check $(maintcheck_targets)
 
+# Used by many syntax checks below.
+EXTRA_DIST += build-aux/no-vanilla-command.pl
+
 ###########################################################################
 
 #
@@ -82,11 +85,6 @@ EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
 
 ###########################################################################
 
-## Used by many syntax checks below.
-EXTRA_DIST += build-aux/no-vanilla-command.pl
-
-###########################################################################
-
 #
 # Check that test scripts never use a "vanilla" `{,e,f}grep' command, but
 # instead always use the `${,E,F}GREP' found by configure.
@@ -113,6 +111,21 @@ sc--no-vanilla-fgrep:
 maintcheck_targets += sc--no-vanilla-grep
 maintcheck_targets += sc--no-vanilla-egrep
 maintcheck_targets += sc--no-vanilla-fgrep
+
+###########################################################################
+
+#
+# Check that test scripts never use a "vanilla" `diff' command, but
+# instead always use the `$DIFF_U' command provided by configure.
+#
+
+sc--no-vanilla-diff:
+	$(maintcheck__pre)
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  perl build-aux/no-vanilla-command.pl \
+	       --vanilla='diff' --cooked='$$DIFF_U' $$sc_files
+
+maintcheck_targets += sc--no-vanilla-diff
 
 ###########################################################################
 
