@@ -54,17 +54,21 @@ Configuring and building
 Recording changes
 -----------------
 
- * Add an adequate and clear comment for every check-in.
- * Format the git commit message following the GNU Coding Standards for
-   ChangeLog entries:
-     http://www.gnu.org/prep/standards/html_node/Change-Logs.html
- * We do not mantain a ChangeLog file.  It is automatically generated from
-   `git log' output (look the `ChangeLog' target in top-level Makefile.am).
- * Changes other than minor bug fixes must be mentioned in NEWS.
- * Important bug fixings must be mentioned in NEWS, too.
- * If you do a change that add some obscure code for a good reason,
-   please comment the code carefully and explicitly describe the resason
-   that led you to write it.
+  Add an adequate and clear comment for every check-in.
+
+  Format the git commit message following the GNU Coding Standards for
+  ChangeLog entries:
+    http://www.gnu.org/prep/standards/html_node/Change-Logs.html
+  Note that we do not mantain a ChangeLog file directly.  Such a file is
+  automatically generated from `git log' output (look at the `ChangeLog'
+  target in top-level Makefile for more information).
+
+  Changes other than minor bug fixes must be mentioned in NEWS.
+  Important bug fixings must be mentioned in NEWS, too.
+
+  If you do a change that add some obscure code for a good reason, please
+  comment the code carefully and explicitly describe the resason that led
+  you to write it.
 
 
 C Coding Style
