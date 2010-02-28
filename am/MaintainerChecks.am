@@ -130,6 +130,21 @@ maintcheck_targets += sc--no-vanilla-sed
 ###########################################################################
 
 #
+# Check that test scripts never use a "vanilla" `awk' command, but instead
+# always use the `$AWK' command provided by configure.
+#
+
+sc--no-vanilla-awk:
+	$(maintcheck__pre)
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  $(PERL) build-aux/no-vanilla-command.pl \
+	          --vanilla='awk' --cooked='$$AWK' $$sc_files
+
+maintcheck_targets += sc--no-vanilla-awk
+
+###########################################################################
+
+#
 # Check that test scripts never use a "vanilla" `diff' command, but
 # instead always use the `$DIFF_U' command provided by configure.
 #
