@@ -36,7 +36,7 @@ my %options_hash = (
     "c|cooked=s" => \$cooked,
 );
 Getopt::Long::Configure(qw/gnu_getopt require_order no_ignore_case/);
-GetOptions(%options_hash) && @ARGV 
+GetOptions(%options_hash) && @ARGV && defined $vanilla && defined $cooked
   or die "Usage: $me -v VANILLA-CMD -c COOKED-CMD FILES\n";
 
 foreach my $file (@ARGV) {
