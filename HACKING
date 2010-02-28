@@ -54,6 +54,27 @@ Introduction and general information
     that led you to write it.
 
 
+ Tests and maintainer checks
+ ---------------------------
+  
+  Run `make check' liberally.  If you have a decent make program, prefer
+  `make -k check' instead, which doesn't stop at the first failure.
+  
+  The tests in the `sanity-checks' subdirectory perform checks on the
+  testing framework itself.  Such sanity checks can greatly help to avoid
+  spurious failures or (worse) spurious successfull runs.  So try to keep
+  these checks up-to-date, and properly extend them if whenever a bug in
+  the testing framework is found.
+  
+  The top-level target `maintainer-check' runs many maintainer-specific
+  checks (again, it's better to run it with `make -k maintainer-check').
+  They can help preventing subtle bugs by catching suspicious constructs
+  in test scripts and by running additional checks on the layout of the
+  source tree (e.g. by ensuring that all test scripts are distributed).
+  They also provide some syntax checks, which greatly help to ensure that
+  a uniform coding style is used throughout.
+
+
 
 Making a release
 ================
