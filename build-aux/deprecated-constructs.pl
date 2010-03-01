@@ -26,22 +26,29 @@ use warnings FATAL => "all";
 
 (my $me = $0) =~ s|.*/||;
 
-my %deprecated_vanilla_commands = (
-    'sed'   => '$SED',
-    'awk'   => '$AWK',
-    'diff'  => '$DIFF_U',
-    'grep'  => '$GREP',
-    'fgrep' => '$FGREP',
-    'egrep' => '$EGREP',
-);
+# The hash of static checks to be run on test scripts. Indexed by
+# check name, it's values are proper hash references.
+my %checks;
 
-my %checks = map +(
-    "vanilla_$_" => {
-        run_check => qr/\b\Q$_\E\b/,
-        description => "raw `$_` command",
-        instead_use => "`$deprecated_vanilla_commands{$_}`",
+# Commands that should not be used directly, but only in the proper
+# versions found at configure time and saved in shell variables.
+SET_DEPRECATED_VANILLA_COMMAND: {
+    my %commands = (
+        'sed'   => '$SED',
+        'awk'   => '$AWK',
+        'diff'  => '$DIFF_U',
+        'grep'  => '$GREP',
+        'fgrep' => '$FGREP',
+        'egrep' => '$EGREP',
+    );
+    while (my ($raw, $cooked) = each %commands) {
+        $checks{"vanilla_$raw"} = {
+            run_check => qr/\b\Q$raw\E\b/,
+            description => "raw `$raw` command",
+            instead_use => "`$cooked`",
+        };
     }
-), keys %deprecated_vanilla_commands;
+}
 
 # Redirecting standard error to something != /dev/null might be
 # inappropriate when shell traces are on, due to a bug in Zsh hadling
