@@ -49,6 +49,7 @@ SET_DEPRECATED_VANILLA_COMMAND: {
             bad_match => qr/\b\Q$raw\E\b/,
             description => "raw `$raw` command",
             instead_use => "`$cooked`",
+            must_skip => qr/^\s*#/, # comment lines
         };
     }
     $checks{'vanilla_sed'}{'whitelist'} = [
@@ -76,6 +77,7 @@ $checks{'bad-stderr-redirect'} = {
     },
     description => "problematic stderr redirection",
     instead_use => "the `run_command` shell function",
+    must_skip => qr/^\s*#/,
 };
 
 my @check_names = sort keys %checks;
@@ -86,16 +88,20 @@ my @errors = ();
 foreach my $c (@check_names) {
     die "$me: check $c: `bad_match' undefined.\n"
       unless defined $checks{$c}->{bad_match};
-    my $x = $checks{$c}->{bad_match};
-    my $r = ref $x || ""; # be sure it's defined
-    if ($r =~ /code/i) {
-        1; # nothing to do
-    } elsif ($r =~ /regexp/i) {
-        $checks{$c}->{bad_match} = sub { return (shift =~ $x ? 1 : 0) };
-    } elsif (not $r) {
-        die "$me: check $c: `bad_match': not a reference.\n";
-    } else {
-        die "$me: check $c: `bad_match': bad reference type: $r.\n";
+    $checks{$c}->{must_skip} = sub { return 0; }
+      unless defined $checks{$c}->{must_skip};
+    foreach my $k (qw/bad_match must_skip/) {
+        my $x = $checks{$c}->{$k};
+        my $r = ref $x || ""; # be sure it's defined
+        if ($r =~ /code/i) {
+            1; # nothing to do
+        } elsif ($r =~ /regexp/i) {
+            $checks{$c}->{$k} = sub { return (shift =~ $x ? 1 : 0) };
+        } elsif (not $r) {
+            die "$me: check $c: `$k': not a reference.\n";
+        } else {
+            die "$me: check $c: `$k': bad reference type: $r.\n";
+        }
     }
 }
 
@@ -118,11 +124,10 @@ foreach my $file (@ARGV) {
     }
     LINE_LOOP:
     while (<FILE>) {
-        # remove trailing newline
-        chomp;
-        # assume lines starting with `#' are comments
-        next if /^#/;
+        chomp; # remove trailing newline
+        CHECKNAMES_LOOP:
         foreach my $c (@check_names) {
+            next CHECKNAMES_LOOP if &{$checks{$c}->{must_skip}}($_);
             unless ($ignore_whitelist) {
                 my $whitelist = $checks{$c}->{whitelist} || [];
                 next if grep { /^$file(:\s*$.)?$/ } @$whitelist;
