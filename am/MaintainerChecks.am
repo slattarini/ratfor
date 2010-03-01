@@ -47,9 +47,6 @@ maintcheck_targets = ## will be updated later
 maintainer-check: $(maintcheck_targets)
 .PHONY: maintainer-check $(maintcheck_targets)
 
-# Used by many syntax checks below.
-EXTRA_DIST += build-aux/no-vanilla-command.pl
-
 ###########################################################################
 
 #
@@ -86,94 +83,16 @@ EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
 ###########################################################################
 
 #
-# Check that test scripts never use a "vanilla" `{,e,f}grep' command, but
-# instead always use the `${,E,F}GREP' found by configure.
+# Generic checks against deprecated commands/constructs.
 #
 
-sc--no-vanilla-grep:
+sc--deprecated-constructs:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  $(PERL) build-aux/no-vanilla-command.pl \
-	         --no-regexp='\bgrep\b' \
-			 --description='raw `grep` command' \
-			 --use-instead='$$GREP' \
-			 $$sc_files
+	  $(PERL) build-aux/deprecated-constructs.pl $$sc_files
 
-sc--no-vanilla-egrep:
-	$(maintcheck__pre)
-	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  $(PERL) build-aux/no-vanilla-command.pl \
-	         --no-regexp='\begrep\b' \
-			 --description='raw `egrep` command' \
-			 --use-instead='$$EGREP' \
-			 $$sc_files
-
-sc--no-vanilla-fgrep:
-	$(maintcheck__pre)
-	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  $(PERL) build-aux/no-vanilla-command.pl \
-	         --no-regexp='\bfgrep\b' \
-			 --description='raw `fgrep` command' \
-			 --use-instead='$$FGREP' \
-			 $$sc_files
-
-maintcheck_targets += sc--no-vanilla-grep
-maintcheck_targets += sc--no-vanilla-egrep
-maintcheck_targets += sc--no-vanilla-fgrep
-
-###########################################################################
-
-#
-# Check that test scripts never use a "vanilla" `sed' command, but instead
-# always use the `$SED' command provided by configure.
-#
-
-sc--no-vanilla-sed:
-	$(maintcheck__pre)
-	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  $(PERL) build-aux/no-vanilla-command.pl \
-	         --no-regexp='\bsed\b' \
-			 --description='raw `sed` command' \
-			 --use-instead='$$SED' \
-			 $$sc_files
-
-maintcheck_targets += sc--no-vanilla-sed
-
-###########################################################################
-
-#
-# Check that test scripts never use a "vanilla" `awk' command, but instead
-# always use the `$AWK' command provided by configure.
-#
-
-sc--no-vanilla-awk:
-	$(maintcheck__pre)
-	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  $(PERL) build-aux/no-vanilla-command.pl \
-	         --no-regexp='\bawk\b' \
-			 --description='raw `awk` command' \
-			 --use-instead='$$AWK' \
-			 $$sc_files
-
-maintcheck_targets += sc--no-vanilla-awk
-
-###########################################################################
-
-#
-# Check that test scripts never use a "vanilla" `diff' command, but
-# instead always use the `$DIFF_U' command provided by configure.
-#
-
-sc--no-vanilla-diff:
-	$(maintcheck__pre)
-	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  $(PERL) build-aux/no-vanilla-command.pl \
-	         --no-regexp='\bdiff\b' \
-			 --description='raw `diff` command' \
-			 --use-instead='$$DIFF_U' \
-			 $$sc_files
-
-maintcheck_targets += sc--no-vanilla-diff
+maintcheck_targets += sc--deprecated-constructs
+EXTRA_DIST += build-aux/deprecated-constructs.pl
 
 ###########################################################################
 
