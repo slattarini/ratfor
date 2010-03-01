@@ -37,7 +37,7 @@ my %deprecated_vanilla_commands = (
 
 my %checks = map +(
     "vanilla_$_" => {
-        regexp => qr/\b\Q$_\E\b/,
+        run_check => qr/\b\Q$_\E\b/,
         description => "raw `$_` command",
         instead_use => "`$deprecated_vanilla_commands{$_}`",
     }
@@ -46,6 +46,23 @@ my %checks = map +(
 my @check_names = sort keys %checks;
 my %bad_lines = map { $_ => [] } @check_names;
 my @errors = ();
+
+# Normalize checks, looking for errors.
+foreach my $c (@check_names) {
+    die "$me: check $c: `run_check' undefined.\n"
+      unless defined $checks{$c}->{run_check};
+    my $x = $checks{$c}->{run_check};
+    my $r = ref $x || ""; # be sure it's defined
+    if ($r =~ /code/i) {
+        1; # nothing to do
+    } elsif ($r =~ /regexp/i) {
+        $checks{$c}->{run_check} = sub { return (shift =~ $x ? 1 : 0) };
+    } elsif (not $r) {
+        die "$me: check $c: `run_check': not a reference.\n";
+    } else {
+        die "$me: check $c: `run_check': bad reference type: $r.\n";
+    }
+}
 
 @ARGV or die "$me: Missing arguments\n";
 
@@ -62,8 +79,8 @@ foreach my $file (@ARGV) {
         # assume lines starting with `#' are comments
         next if /^#/;
         foreach my $c (@check_names) {
-            my $rx = $checks{$c}->{regexp};
-            push @{$bad_lines{$c}}, "$file:$.: $_" if ($_ =~ $rx);
+            push @{$bad_lines{$c}}, "$file:$.: $_"
+              if &{$checks{$c}->{run_check}}($_);
         }
     }
     close FILE or push @errors, "$me: $file: cannot close: $!";
@@ -72,11 +89,18 @@ foreach my $file (@ARGV) {
 foreach my $c (@check_names) {
     if (@{$bad_lines{$c}}) {
         my $h = $checks{$c};
-        push @errors,
-            "$c: In the lines below: found $h->{description}\n" .
-            "$c: Instead, you should use: $h->{instead_use}\n" .
-            " " . join("\n ", @{$bad_lines{$c}}) . "\n" .
-            "$c: Check failed";
+        my $msg = "";
+        if (defined $h->{description}) {
+            $msg .= "$c: In the lines below: found $h->{description}\n";
+        } else {
+            $msg .= "$c: Bad lines below\n";
+        }
+        if (defined $h->{instead_use}) {
+            $msg .= "$c: Instead, you should use: $h->{instead_use}\n";
+        }
+        $msg .= " " . join("\n ", @{$bad_lines{$c}}) . "\n";
+        $msg .= "$c: Check failed, sorry.";
+        push @errors, $msg;
     }
 }
 die "\n" . join("\n\n", @errors) . "\n\n$me: FAILED\n" if @errors;
