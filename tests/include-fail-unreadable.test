@@ -22,7 +22,7 @@
 
 echo 'NOTINCLUDED' > unread.r
 chmod a-r unread.r
-ls -l unread.r 2>&1 || :
+ls -l unread.r || :
 test -f unread.r
 test ! -r unread.r
 

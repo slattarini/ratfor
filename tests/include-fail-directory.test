@@ -21,7 +21,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 mkdir dir.d
-ls -ld dir.d 2>&1 || :
+ls -ld dir.d || :
 test -d dir.d
 
 cat > tst.r <<EOF
