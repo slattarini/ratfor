@@ -74,8 +74,8 @@ foreach my $file (@ARGV) {
     }
     LINE_LOOP:
     while (<FILE>) {
-        # remove trailing and leading spaces
-        s/^\s*//; s/\s*$//;
+        # remove trailing newline
+        chomp;
         # assume lines starting with `#' are comments
         next if /^#/;
         foreach my $c (@check_names) {
