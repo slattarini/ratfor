@@ -43,6 +43,27 @@ my %checks = map +(
     }
 ), keys %deprecated_vanilla_commands;
 
+# Redirecting standard error to something != /dev/null might be
+# inappropriate when shell traces are on, due to a bug in Zsh hadling
+# of the xtrace flag.
+$checks{'bad-stderr-redirect'} = {
+    run_check => sub {
+        local $_ = shift;
+        # Normalize format of redirections.
+        s|(>+)\s*|$1|g;
+        # For our purposes, there is no distinction between overriding
+        # (`> out') and appending (`>> out') redirections.
+        s|>>|>|g;
+        # The construct `>/dev/null 2>&1' still redirects stderr to
+        # /dev/null, so we can safely ignore it.
+        s|>/dev/null\s+2>&1\b||g;
+        # Look for bad/suspicious stderr redirections.
+        return (m|\b2>(?!/dev/null\b)| ? 1 : 0);
+    },
+    description => "problematic stderr redirection",
+    instead_use => "the `run_command` shell function",
+};
+
 my @check_names = sort keys %checks;
 my %bad_lines = map { $_ => [] } @check_names;
 my @errors = ();
