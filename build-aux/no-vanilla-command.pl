@@ -28,16 +28,36 @@ use Getopt::Long;
 
 (my $me = $0) =~ s|.*/||;
 
-my ($vanilla, $cooked); # must be define from command line
+my ($no_regexp, $use_instead, $description);
 my @bad = ();
 
-my %options_hash = (
-    "v|vanilla=s" => \$vanilla,
-    "c|cooked=s" => \$cooked,
-);
 Getopt::Long::Configure(qw/gnu_getopt require_order no_ignore_case/);
-GetOptions(%options_hash) && @ARGV && defined $vanilla && defined $cooked
-  or die "Usage: $me -v VANILLA-CMD -c COOKED-CMD FILES\n";
+GetOptions(
+    "no-regexp=s" => \$no_regexp,
+    "description=s" => \$description,
+    "use-instead|instead-use=s" => \$use_instead
+) && @ARGV && defined $use_instead && defined $no_regexp
+or do {
+    my $sp = ' 'x length($me);
+    die <<EOF
+Usage: $me --no-regexp=DEPRECATED-REGEXP --use-instead=SUGGESTED-COMMAND
+       $sp [--description=BAD-REGEXP-DESCRIPTION] FILES
+EOF
+}; # semicolon required
+
+$description ||= "regular expression `$no_regexp`";
+
+COMPILE_REGEXP: {
+    local $@;
+    eval {
+        $no_regexp = qr/$no_regexp/o;
+        (my $dummy = "") =~ $no_regexp;
+    }; # semicolon required
+    if ($@) {
+        $@ =~ s/ at \Q$0\E line \d+\.?\s*\z//;
+        die "$me: Bad regular expression given.\n" . "$me: $@\n";
+    }
+}
 
 foreach my $file (@ARGV) {
     open(FILE, "<$file") or die "$me: $file: cannot open: $!\n";
@@ -46,16 +66,16 @@ foreach my $file (@ARGV) {
         s/^\s*//; s/\s*$//;
         # assume lines starting with `#' are comments
         next if /^#/;
-        push @bad, "$file:$.: $_" if (/\b\Q$vanilla\E\b/);
+        push @bad, "$file:$.: $_" if $_ =~ $no_regexp;
     }
     close(FILE) or die "$me: $file: cannot close: $!\n";
 }
 
 if (@bad) {
-    die("$me: Found vanilla `$vanilla` command in the lines below.\n" .
-        "$me: Use `$cooked` instead.\n" .
+    die "$me: Found $description in the lines below.\n" .
+        "$me: Use $use_instead instead.\n" .
         " " . join("\n ", @bad) . "\n" .
-        "$me: Check failed.\n");
+        "$me: Check failed.\n";
 }
 
 # vim: ft=perl et sw=4 ts=4

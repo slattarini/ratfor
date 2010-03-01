@@ -94,19 +94,28 @@ sc--no-vanilla-grep:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
 	  $(PERL) build-aux/no-vanilla-command.pl \
-	         --vanilla='grep' --cooked='$$GREP' $$sc_files
+	         --no-regexp='\bgrep\b' \
+			 --description='raw `grep` command' \
+			 --use-instead='$$GREP' \
+			 $$sc_files
 
 sc--no-vanilla-egrep:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
 	  $(PERL) build-aux/no-vanilla-command.pl \
-	          --vanilla='egrep' --cooked='$$EGREP' $$sc_files
+	         --no-regexp='\begrep\b' \
+			 --description='raw `egrep` command' \
+			 --use-instead='$$EGREP' \
+			 $$sc_files
 
 sc--no-vanilla-fgrep:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
 	  $(PERL) build-aux/no-vanilla-command.pl \
-	          --vanilla='fgrep' --cooked='$$FGREP' $$sc_files
+	         --no-regexp='\bfgrep\b' \
+			 --description='raw `fgrep` command' \
+			 --use-instead='$$FGREP' \
+			 $$sc_files
 
 maintcheck_targets += sc--no-vanilla-grep
 maintcheck_targets += sc--no-vanilla-egrep
@@ -123,7 +132,10 @@ sc--no-vanilla-sed:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
 	  $(PERL) build-aux/no-vanilla-command.pl \
-	          --vanilla='sed' --cooked='$$SED' $$sc_files
+	         --no-regexp='\bsed\b' \
+			 --description='raw `sed` command' \
+			 --use-instead='$$SED' \
+			 $$sc_files
 
 maintcheck_targets += sc--no-vanilla-sed
 
@@ -138,7 +150,10 @@ sc--no-vanilla-awk:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
 	  $(PERL) build-aux/no-vanilla-command.pl \
-	          --vanilla='awk' --cooked='$$AWK' $$sc_files
+	         --no-regexp='\bawk\b' \
+			 --description='raw `awk` command' \
+			 --use-instead='$$AWK' \
+			 $$sc_files
 
 maintcheck_targets += sc--no-vanilla-awk
 
@@ -153,7 +168,10 @@ sc--no-vanilla-diff:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
 	  $(PERL) build-aux/no-vanilla-command.pl \
-	          --vanilla='diff' --cooked='$$DIFF_U' $$sc_files
+	         --no-regexp='\bdiff\b' \
+			 --description='raw `diff` command' \
+			 --use-instead='$$DIFF_U' \
+			 $$sc_files
 
 maintcheck_targets += sc--no-vanilla-diff
 
