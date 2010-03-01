@@ -46,7 +46,7 @@ SET_DEPRECATED_VANILLA_COMMAND: {
     );
     while (my ($raw, $cooked) = each %commands) {
         $checks{"vanilla_$raw"} = {
-            run_check => qr/\b\Q$raw\E\b/,
+            bad_match => qr/\b\Q$raw\E\b/,
             description => "raw `$raw` command",
             instead_use => "`$cooked`",
         };
@@ -61,7 +61,7 @@ SET_DEPRECATED_VANILLA_COMMAND: {
 # inappropriate when shell traces are on, due to a bug in Zsh hadling
 # of the xtrace flag.
 $checks{'bad-stderr-redirect'} = {
-    run_check => sub {
+    bad_match => sub {
         local $_ = shift;
         # Normalize format of redirections.
         s|(>+)\s*|$1|g;
@@ -84,18 +84,18 @@ my @errors = ();
 
 # Normalize checks, looking for errors.
 foreach my $c (@check_names) {
-    die "$me: check $c: `run_check' undefined.\n"
-      unless defined $checks{$c}->{run_check};
-    my $x = $checks{$c}->{run_check};
+    die "$me: check $c: `bad_match' undefined.\n"
+      unless defined $checks{$c}->{bad_match};
+    my $x = $checks{$c}->{bad_match};
     my $r = ref $x || ""; # be sure it's defined
     if ($r =~ /code/i) {
         1; # nothing to do
     } elsif ($r =~ /regexp/i) {
-        $checks{$c}->{run_check} = sub { return (shift =~ $x ? 1 : 0) };
+        $checks{$c}->{bad_match} = sub { return (shift =~ $x ? 1 : 0) };
     } elsif (not $r) {
-        die "$me: check $c: `run_check': not a reference.\n";
+        die "$me: check $c: `bad_match': not a reference.\n";
     } else {
-        die "$me: check $c: `run_check': bad reference type: $r.\n";
+        die "$me: check $c: `bad_match': bad reference type: $r.\n";
     }
 }
 
@@ -127,8 +127,9 @@ foreach my $file (@ARGV) {
                 my $whitelist = $checks{$c}->{whitelist} || [];
                 next if grep { /^$file(:\s*$.)?$/ } @$whitelist;
             }
-            next unless &{$checks{$c}->{run_check}}($_);
-            push @{$bad_lines{$c}}, "$file:$.: $_"
+            if (&{$checks{$c}->{bad_match}}($_)) {
+                push @{$bad_lines{$c}}, "$file:$.: $_";
+            }
         }
     }
     close FILE or push @errors, "$me: $file: cannot close: $!";
