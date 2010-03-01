@@ -22,6 +22,10 @@
 
 ###########################################################################
 
+# User-configurable: wheter to ignore whitelist of known and/or spurious
+# failures in maintainer-checks.
+USE_MAINTCHECK_WHITELIST = yes
+
 # Internal macro to deal with silent-rules.
 maintcheck__pre = @test x'$(AM_V_at)' != x'@' || echo " MAINTCHECK $@"
 
@@ -89,7 +93,12 @@ EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
 sc--deprecated-constructs:
 	$(maintcheck__pre)
 	$(AM_V_at)$(maintcheck__get_sc_files); \
-	  $(PERL) build-aux/deprecated-constructs.pl $$sc_files
+	  if test x'$(USE_MAINTCHECK_WHITELIST)' = x'yes'; then \
+	    opts='--use-whitelist'; \
+	  else \
+	    opts='--ignore-whitelist'; \
+	  fi; \
+	  $(PERL) build-aux/deprecated-constructs.pl $$opts -- $$sc_files
 
 maintcheck_targets += sc--deprecated-constructs
 EXTRA_DIST += build-aux/deprecated-constructs.pl

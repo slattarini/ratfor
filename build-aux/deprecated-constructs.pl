@@ -26,6 +26,9 @@ use warnings FATAL => "all";
 
 (my $me = $0) =~ s|.*/||;
 
+# Wheter to fail laso on whitelisted failures.
+my $ignore_whitelist = 0;
+
 # The hash of static checks to be run on test scripts. Indexed by
 # check name, it's values are proper hash references.
 my %checks;
@@ -48,6 +51,10 @@ SET_DEPRECATED_VANILLA_COMMAND: {
             instead_use => "`$cooked`",
         };
     }
+    $checks{'vanilla_sed'}{'whitelist'} = [
+        'sanity-checks/run_RATFOR.test:30',
+        'sanity-checks/run_RATFOR.test:31',
+    ];
 }
 
 # Redirecting standard error to something != /dev/null might be
@@ -92,6 +99,15 @@ foreach my $c (@check_names) {
     }
 }
 
+OPTION_PARSING:
+while (@ARGV and $_ = shift(@ARGV)) {
+    /^--$/ and last;
+    /^--?ignore-whitelist$/ and $ignore_whitelist = 1, next;
+    /^--?use-whitelist$/ and $ignore_whitelist = 0, next;
+    /^-.*/ and die "$me: Invalid option: `$_'\n";
+    unshift @ARGV, $_; last;
+}
+
 @ARGV or die "$me: Missing arguments\n";
 
 FILE_LOOP:
@@ -107,8 +123,12 @@ foreach my $file (@ARGV) {
         # assume lines starting with `#' are comments
         next if /^#/;
         foreach my $c (@check_names) {
+            unless ($ignore_whitelist) {
+                my $whitelist = $checks{$c}->{whitelist} || [];
+                next if grep { /^$file(:\s*$.)?$/ } @$whitelist;
+            }
+            next unless &{$checks{$c}->{run_check}}($_);
             push @{$bad_lines{$c}}, "$file:$.: $_"
-              if &{$checks{$c}->{run_check}}($_);
         }
     }
     close FILE or push @errors, "$me: $file: cannot close: $!";
