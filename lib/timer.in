@@ -190,7 +190,7 @@ start_timer() {
     t=$1
     trap 'timeout' 14
     # NOTE.  We use SIGQUIT (3), not SIGTERM (15), to stop the background
-    # shell working as our timer.  This  is done because some Korn shells
+    # shell working as our timer.  This is done because some Korn shells
     # display (on standard error) a message like:
     #  "timer: line 242:  5986 Terminated ..."
     # when we terminate that background shell with SIGTERM, even if the
