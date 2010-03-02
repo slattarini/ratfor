@@ -16,7 +16,7 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Check that ratfor properly strips all white spaces before comments,
-# and do not leave extra empty lines when processinf comments.
+# and do not leave extra empty lines when processing comments.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
