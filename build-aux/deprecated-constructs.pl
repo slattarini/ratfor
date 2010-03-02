@@ -80,84 +80,90 @@ $checks{'bad-stderr-redirect'} = {
     must_skip => qr/^\s*#/,
 };
 
-my @check_names = sort keys %checks;
-my %bad_lines = map { $_ => [] } @check_names;
-my @errors = ();
-
 # Normalize checks, looking for errors.
-foreach my $c (@check_names) {
-    die "$me: check $c: `bad_match' undefined.\n"
-      unless defined $checks{$c}->{bad_match};
-    $checks{$c}->{must_skip} = sub { return 0; }
-      unless defined $checks{$c}->{must_skip};
+NORMALIZE_CHECKS:
+while (my ($n, $c) = each %checks) {
+    defined $c->{bad_match} or die "$me: check $n: `bad_match' missing.\n";
+    defined $c->{must_skip} or $c->{must_skip} = sub { return 0; };
+    $c->{bad_lines} = [];
     foreach my $k (qw/bad_match must_skip/) {
-        my $x = $checks{$c}->{$k};
-        my $r = ref $x || ""; # be sure it's defined
-        if ($r =~ /code/i) {
+        my $reftyp = ref($c->{$k}) || ""; # be sure it's defined
+        if ($reftyp =~ /code/i) {
             1; # nothing to do
-        } elsif ($r =~ /regexp/i) {
-            $checks{$c}->{$k} = sub { return (shift =~ $x ? 1 : 0) };
-        } elsif (not $r) {
-            die "$me: check $c: `$k': not a reference.\n";
+        } elsif ($reftyp =~ /regexp/i) {
+            my $rx = $c->{$k}; # *required* for closure to work correctly
+            $c->{$k} = sub { return (shift =~ $rx ? 1 : 0) };
+        } elsif (not $reftyp) {
+            die "$me: check $n: `$k': not a reference.\n";
         } else {
-            die "$me: check $c: `$k': bad reference type: $r.\n";
+            die "$me: check $n: `$k': bad reference type: $reftyp.\n";
         }
     }
 }
 
-OPTION_PARSING:
-while (@ARGV and $_ = shift(@ARGV)) {
-    /^--$/ and last;
-    /^--?ignore-whitelist$/ and $ignore_whitelist = 1, next;
-    /^--?use-whitelist$/ and $ignore_whitelist = 0, next;
-    /^-.*/ and die "$me: Invalid option: `$_'\n";
-    unshift @ARGV, $_; last;
+OPTION_PARSING: {
+    while (@ARGV and $_ = shift(@ARGV)) {
+        /^--$/ and last;
+        /^--?ignore-whitelist$/ and $ignore_whitelist = 1, next;
+        /^--?use-whitelist$/ and $ignore_whitelist = 0, next;
+        /^-.*/ and die "$me: Invalid option: `$_'\n";
+        unshift @ARGV, $_; last;
+    }
+    @ARGV or die "$me: Missing arguments\n";
 }
 
-@ARGV or die "$me: Missing arguments\n";
+my (@io_errors, @sc_errors);
 
 FILE_LOOP:
 foreach my $file (@ARGV) {
     unless(open FILE, "<$file") {
-        push @errors, "$me: $file: cannot open: $!";
+        push @io_errors, "$file: cannot open: $!";
         next FILE_LOOP;
     }
     LINE_LOOP:
     while (<FILE>) {
         chomp; # remove trailing newline
-        CHECKNAMES_LOOP:
-        foreach my $c (@check_names) {
-            next CHECKNAMES_LOOP if &{$checks{$c}->{must_skip}}($_);
+        CHECKS_LOOP:
+        while (my ($n, $c) = each %checks) {
+            next CHECKS_LOOP if $c->{must_skip}->($_, $file, $.);
             unless ($ignore_whitelist) {
-                my $whitelist = $checks{$c}->{whitelist} || [];
-                next if grep { /^$file(:\s*$.)?$/ } @$whitelist;
+                my $whitelist = $c->{whitelist} || [];
+                next CHECKS_LOOP if grep /^$file(:\s*$.)?$/, @$whitelist;
             }
-            if (&{$checks{$c}->{bad_match}}($_)) {
-                push @{$bad_lines{$c}}, "$file:$.: $_";
+            if ($c->{bad_match}->($_, $file, $.)) {
+                push @{$c->{bad_lines}}, "$file:$.: $_";
             }
         }
     }
-    close FILE or push @errors, "$me: $file: cannot close: $!";
+    close FILE or push @io_errors, "$file: cannot close: $!";
 }
 
-foreach my $c (@check_names) {
-    if (@{$bad_lines{$c}}) {
-        my $h = $checks{$c};
+BUILD_FAILURE_DETAILS:
+while (my ($n, $c) = each %checks) {
+    if (@{$c->{bad_lines}}) {
         my $msg = "";
-        if (defined $h->{description}) {
-            $msg .= "$c: In the lines below: found $h->{description}\n";
+        if (defined $c->{description}) {
+            $msg .= "$n: In the lines below: found $c->{description}\n";
         } else {
-            $msg .= "$c: Bad lines below\n";
+            $msg .= "$n: Bad lines below\n";
         }
-        if (defined $h->{instead_use}) {
-            $msg .= "$c: Instead, you should use: $h->{instead_use}\n";
+        if (defined $c->{instead_use}) {
+            $msg .= "$n: You should use $c->{instead_use}\n";
         }
-        $msg .= " " . join("\n ", @{$bad_lines{$c}}) . "\n";
-        $msg .= "$c: Check failed, sorry.";
-        push @errors, $msg;
+        $msg .= " " . join("\n ", @{$c->{bad_lines}}) . "\n";
+        $msg .= "$n: Check failed, sorry.";
+        push @sc_errors, $msg;
     }
 }
-die "\n" . join("\n\n", @errors) . "\n\n$me: FAILED\n" if @errors;
+
+REPORT: {
+    my $msg = "";
+    $msg .= "---\n" . join("\n---\n", @sc_errors) . "\n---\n"
+        if @sc_errors;
+    $msg .= join("\n", map {"I/O ERROR: $_"} @io_errors). "\n---\n"
+        if @io_errors;
+    die "$msg" . "$me: FAILED." if $msg;
+}
 
 # vim: ft=perl et sw=4 ts=4
 
