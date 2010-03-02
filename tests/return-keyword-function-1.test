@@ -40,7 +40,7 @@ cat tst.r
 
 run_RATFOR tst.r || testcase_FAIL
 $GREP "^ *return *$" stdout || testcase_FAIL
-test `$GREP "^ *return *$" stdout | wc -l` -eq 4 || testcase_FAIL
+test `$GREP -c "^ *return *$" stdout` -eq 4 || testcase_FAIL
 $GREP "[^ ].*return" stdout && testcase_FAIL
 $GREP "return.*[^ ]" stdout && testcase_FAIL
 $GREP "^ *f1 *= *1+1 *$" stdout || testcase_FAIL

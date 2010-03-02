@@ -76,8 +76,8 @@ $FGREP 'in2.r:2:'  stderr || testcase_FAIL
 $FGREP 'in2.r:7:'  stderr || testcase_FAIL
 $FGREP 'in3.r:'    stderr && testcase_FAIL
 
-c2=`$FGREP 'in2.r:2:' stderr | wc -l` || testcase_HARDERROR
-c7=`$FGREP 'in2.r:7:' stderr | wc -l` || testcase_HARDERROR
+c2=`$FGREP -c 'in2.r:2:' stderr || :`
+c7=`$FGREP -c 'in2.r:7:' stderr || :`
 
 test 2 -eq "$c2" || testcase_FAIL
 test 4 -eq "$c7" || testcase_FAIL

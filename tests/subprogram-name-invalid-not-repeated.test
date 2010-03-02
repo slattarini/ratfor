@@ -43,12 +43,10 @@ for badname in \
         run_RATFOR -e IGNORE "$tst"
         mv stderr "$stderr"
         mv stdout "$stdout"
-        errcount=`$FGREP "invalid $subprogtype name" "$stderr" | wc -l`
-        set +x
+        errcount=`$FGREP -c "invalid $subprogtype name" "$stderr" || :`
         if test $errcount -gt 1; then
             testcase_FAIL "$stderr: too many error messages: $errcount"
         fi
-        set -x
     done
 done
 

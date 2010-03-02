@@ -34,9 +34,9 @@ $FGREP 'goto'  stdout || testcase_FAIL
 $FGREP 'then'  stdout || testcase_FAIL
 $FGREP 'endif' stdout || testcase_FAIL
 
-test `$FGREP 'then'  stdout | wc -l` -eq 1 || testcase_FAIL
-test `$FGREP 'endif' stdout | wc -l` -eq 1 || testcase_FAIL
-test `$FGREP 'goto'  stdout | wc -l` -eq 1 || testcase_FAIL
+test `$FGREP -c 'then'  stdout` -eq 1 || testcase_FAIL
+test `$FGREP -c 'endif' stdout` -eq 1 || testcase_FAIL
+test `$FGREP -c 'goto'  stdout` -eq 1 || testcase_FAIL
 
 test `$GREP '^ *[0-9]' stdout | $GREP -v '^ *2300[01] ' | wc -l` -eq 0 \
   || testcase_FAIL 'Too many labels in generated fortran code'

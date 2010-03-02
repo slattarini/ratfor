@@ -80,6 +80,17 @@ $checks{'bad-stderr-redirect'} = {
     must_skip => qr/^\s*#/,
 };
 
+# We should prefer `grep -c ...' over `grep ... | wc -l': it is both
+# cleared and more efficient, while being posix-compliant too.
+$checks{'grep-wc-l-pipeline'} = {
+    bad_match => qr/\b((?i)[ef]?grep)\b.*\|\s*wc\s*-l/,
+    description => "use of pipeline like `grep ... | wc -l`",
+    instead_use => "`-c` option of the `grep` programs",
+    must_skip => qr/^\s*#/,
+    whitelist => ['tests/no-fortran66-while.test:41'],
+};
+
+
 # Normalize checks, looking for errors.
 NORMALIZE_CHECKS:
 while (my ($n, $c) = each %checks) {
