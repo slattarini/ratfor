@@ -15,6 +15,8 @@ XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 TESTS = \
   balanced-parens.test \
   break-fail.test \
+  break-in-statement-middle.test \
+  break-in-statement-middle_f77.test \
   break_f77.test \
   case-in-statement-middle.test \
   case-in-statement-middle_f77.test \
@@ -148,6 +150,8 @@ TESTS = \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
   next-fail.test \
+  next-in-statement-middle.test \
+  next-in-statement-middle_f77.test \
   next_f77.test \
   no-curly-brackets.test \
   no-double-quotes.test \
@@ -327,6 +331,8 @@ until-in-statement-middle.log \
 switch-in-statement-middle.log \
 case-in-statement-middle.log \
 default-in-statement-middle.log \
+next-in-statement-middle.log \
+break-in-statement-middle.log \
   : keyword-in-statement-middle.sh
 
 EXTRA_DIST += keyword-in-statement-middle_f77.sh
@@ -340,6 +346,8 @@ until-in-statement-middle_f77.log \
 switch-in-statement-middle_f77.log \
 case-in-statement-middle_f77.log \
 default-in-statement-middle_f77.log \
+next-in-statement-middle_f77.log \
+break-in-statement-middle_f77.log \
   : keyword-in-statement-middle_f77.sh
 
 
