@@ -45,7 +45,7 @@ until(false #$t
 ) # $t
 
 for (i = 1 # $t
-     i < 10$TAB # $t 
+     i < 10$TAB # $t
      i = i + 1;# $t
 ) pass
 
@@ -54,7 +54,7 @@ for(j=1;j<2;j=j+1)
     while(y != 11)
       repeat
         pass # $t
-      until(z^=4) 
+      until(z^=4)
     call foo() # $t
   }
 EOF

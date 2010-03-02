@@ -35,7 +35,7 @@ cat > tst.dat <<EOF
 12: }
 13: while(false) {
 14:      case 4: pass
-15:      repeat  
+15:      repeat
 16:         default: pass
 17:      until(true)
 18: }

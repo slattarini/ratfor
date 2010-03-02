@@ -90,6 +90,18 @@ $checks{'grep-wc-l-pipeline'} = {
     whitelist => ['tests/no-fortran66-while.test:41'],
 };
 
+# We should use ony spaces, not tabs. Also, trailing whitespaces should
+# be zapped.
+$checks{'no-tabs'} = {
+    bad_match => qr/\t/,
+    description => "tabulation characters",
+    instead_use => "repeated white spaces where needed",
+};
+$checks{'no-trailing-spaces'} = {
+    bad_match => qr/\s+\z/,
+    description => "triling white spaces",
+};
+
 
 # Normalize checks, looking for errors.
 NORMALIZE_CHECKS:

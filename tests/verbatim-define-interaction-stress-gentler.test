@@ -17,7 +17,7 @@
 
 # Stress-testing interactions between `%' construct and `define' builtin.
 # Here we try to avoid spurious failures due to bogus implementetion of
-# the relational shortands (&&, !=,	etc.) translation.
+# the relational shortands (&&, !=, etc.) translation.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
