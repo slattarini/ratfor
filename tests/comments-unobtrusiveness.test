@@ -89,10 +89,10 @@ $AWK '
     /#~/ { i = i + 1; sub("#~.*$", "# c@mment n." i); }
     { print }
 ' $me.data > tst.r
-$SED -e "s/$TAB/^I/" tst.r # show it in human-readable form
+$SED -e "s/$TAB/^I/g" tst.r # show it in human-readable form
 
 $SED -e "s/\\\\t/$TAB/g" -e "s/$ws0p#~.*$//" $me.data > ctrl.r
-$SED -e "s/$TAB/^I/" ctrl.r # show it in human-readable form
+$SED -e "s/$TAB/^I/g" ctrl.r # show it in human-readable form
 
 run_RATFOR ctrl.r \
   || testcase_HARDERROR "ratfor failed on \"control file\" ctrl.r"
