@@ -102,6 +102,22 @@ $checks{'no-trailing-spaces'} = {
     description => "triling white spaces",
 };
 
+# We should never run fortran compiler and ratfor interpreted directly,
+# but rather the proper shell functions wrapping them.
+$checks{'no-raw-f77'} = {
+    bad_match => qr/\bf77\b/i,
+    description => "direct use of Fortran 77 compiler",
+    instead_use => "the `run_F77` shell function",
+    must_skip => qr/^\s*#/, # comment lines
+    whitelist => ['lib/rat4-testlib.sh'],
+};
+$checks{'no-raw-ratfor'} = {
+    bad_match => qr/\$RATFOR\b/,
+    description => "direct use of Ratfor preprocessor",
+    instead_use => "the `run_RATFOR` shell function",
+    must_skip => qr/^\s*#/, # comment lines
+    whitelist => [qw{lib/rat4-testlib.sh tests/comments-no-hang.test}],
+};
 
 # Normalize checks, looking for errors.
 NORMALIZE_CHECKS:
