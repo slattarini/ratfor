@@ -19,84 +19,59 @@
 # control statements (if, while, for, etc) are processed correctly when
 # found after a numerical label.  This file is expected to be sourced by
 # test scripts after the file `rat4-testsuite-init.sh' has already been
-# sourced.
+# sourced and the `$stmt' variable properly defined.
 
-set +x
-echo "$me: INFO: disable shell verbosity while defining shell function"
+test x${stmt+"set"} = x"set" \
+  || testcase_HARDERROR "variable \`\$stmt' not set"
 
-testgrep_control_structure_after_label() {
+label=100
+out=out
 
-    funcname=testgrep_control_structure_after_label # for error messages
-
-    fail_if_stmt_is_in_output=:
-    fail_if_stmt_post_is_in_output='' # default will be set later
-    while test $# -gt 0; do
-        case $1 in
-            '--dont-fail-if-stmt-is-in-output')
-                fail_if_stmt_is_in_output=false
-                ;;
-            '--fail-if-stmt-is-in-output')
-                fail_if_stmt_is_in_output=:
-                ;;
-            '--dont-fail-if-stmt-post-is-in-output')
-                fail_if_stmt_post_is_in_output=false
-                ;;
-            '--fail-if-stmt-post-is-in-output')
-                fail_if_stmt_post_is_in_output=:
-                ;;
-            -*)
-                testcase_HARDERROR "$funcname: $1: invalid option"
-                ;;
-             *)
-                break
-                ;;
-        esac
-        shift
-    done
-
-    test $# -ge 2 || testcase_HARDERROR "$funcname: missing argument"
-
-    stmt=$1
-    stmt_arg=$2
-    stmt_post=${3-}
-    stmt_post_arg=${4-}
-    shift $#
-
-    if test -z "$fail_if_stmt_post_is_in_output"; then
-        # set default for $fail_if_stmt_post_is_in_output
-        if test -z "$stmt_post"; then
-            fail_if_stmt_post_is_in_output=false
-        else
-            fail_if_stmt_post_is_in_output=:
-        fi
-    fi
-
-    echo "100 $stmt $stmt_arg pass; $stmt_post $stmt_post_arg" > tst.r
-    cat tst.r
-
-    run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
-    test -s stderr && testcase_FAIL "ratfor produced diagnostic on stderr"
-
-    $SED -e '/^[cC]/d' stdout > out
-    cat out
-
-    if $fail_if_stmt_is_in_output; then
-        $FGREP "$stmt" out \
-          && testcase_FAIL "string \"$stmt\" found in ratfor output"
-    fi
-
-    $GREP "^100 .*pass" out \
+check_expanded() {
+    $GREP "^$label.*pass" $out \
       && testcase_FAIL "statement \"$stmt\" not expanded correctly"
-
-    if $fail_if_stmt_post_is_in_output; then
-        $FGREP "$stmt_post" out \
-          && testcase_FAIL "string \"$stmt_post\" found in ratfor output"
-    fi
-
-    testcase_DONE
 }
 
-echo "$me: INFO: reactivate shell verbosity before running tests"
-set -x
+check_not_in_output() {
+    for s in ${1+"$@"}; do
+        $FGREP "$s" $out \
+          && testcase_FAIL "string \"$s\" found in ratfor output"
+    done
+}
+
+case $stmt in
+    
+    # The double quoting here is *required* to avoid spurious parsing
+    # errors from some shells (among them, Bash). Sigh.
+    "break"|"next") echo "while(1) { $label $stmt; }"           ;;
+    "if"|"while")   echo "$label $stmt(1) pass;"                ;;
+    "if-else")      echo "$label if(1) pass; else pass;"        ;;
+    "do")           echo "$label do i=1,2 { pass; }"            ;;
+    "for")          echo "$label for (x=1; x<2; x=x+1) pass;"   ;;
+    "repeat")       echo "$label repeat pass;"                  ;;
+    "repeat-until") echo "$label repeat pass; until(1)"         ;;
+    "switch")       echo "$label switch(1) { case 1: pass; }"   ;;
+    
+    *) testcase_HARDERROR "invalid statement \`$stmt";;
+
+esac > tst.r
+
+case $stmt in
+    break|next|while|for|repeat|switch) bad_strings="$stmt";;
+    repeat-until) bad_strings="repeat until";;
+    *) bad_strings="";;
+esac
+
+cat tst.r
+run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+test -s stderr && testcase_FAIL "ratfor produced diagnostic on stderr"
+
+$SED -e '/^[cC]/d' stdout > $out
+cat $out
+
+check_expanded
+check_not_in_output $bad_strings
+
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

@@ -20,11 +20,7 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
+stmt='if-else'
 rat4t_require_helper_script 'control-structure-after-numeric-label.sh'
-
-testgrep_control_structure_after_label \
-    --dont-fail-if-stmt-is-in-output \
-    --dont-fail-if-stmt-post-is-in-output \
-    'if' '(1)' 'else' 'pass'
 
 # vim: ft=sh ts=4 sw=4 et
