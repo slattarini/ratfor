@@ -23,59 +23,172 @@
 
 rat4t_require_fortran_compiler
 
-set +x
-echo "$me: INFO: disable shell verbosity while defining shell function"
+test x${stmt+"set"} = x"set" \
+  || testcase_HARDERROR "variable \`\$stmt' not set"
+
+# labels used in our test program
+ilabel=10
+fmt=100
 
 cat >exp <<'EOF'
 1
 2
 3
+4
 EOF
 
-# Usage: write_test_file LOOP-OPENING-CODE LOOP-CLOSING-CODE
-write_test_file() {
-  cat > tst.r <<EOF
+cat > tst.r <<EOF
 program test
     integer i
     i = 1
-    goto 10
-    write(*,100) i-1
-10  $1
-      write(*,100) i
-    $2
-20  write(*,100) i
-30  call halt
-100 format(I1)
+    goto $ilabel
+    write(*,$fmt) 666
+EOF
+
+case $stmt in
+
+# DO statement.
+"do")
+cat <<EOF
+    $ilabel do i=1,3
+        write(*,$fmt) i
+EOF
+;;
+
+# BREAK keyword.
+"break")
+cat <<EOF
+    while(i < 5) {
+        $ilabel break
+        write(*,$fmt) i
+        i=i+1
+    }
+    write(*,$fmt) i
+    i=i+1
+    write(*,$fmt) i
+EOF
+;;
+
+# NEXT keyword.
+"next")
+cat <<EOF
+    while(i < 4) {
+        write(*,$fmt) i
+        i=i+1
+        $ilabel next
+        write(*,$fmt) i
+    }
+EOF
+;;
+
+# FOR statement.
+"for")
+cat <<EOF
+    $ilabel for(i = 1; i < 4; i = i + 1)
+        write(*,$fmt) i
+EOF
+;;
+
+# IF statement.
+"if")
+cat <<EOF
+    $ilabel if(i < 4) {
+        write(*,$fmt) i
+        i=i+1
+        goto $ilabel
+    }
+EOF
+;;
+
+# IF statement with an ELSE part.
+"if-else")
+cat <<EOF
+    $ilabel if(i < 3) {
+        write(*,$fmt) i
+        i=i+1
+        goto $ilabel
+    } else {
+        write(*,$fmt) i
+        i=i+1
+    }
+EOF
+;;
+
+# REPEAT statement without UNTIL.
+"repeat")
+cat <<EOF
+    $ilabel repeat {
+        write(*,$fmt) i
+        i=i+1
+        if(i >= 4)
+            break
+    }
+EOF
+;;
+
+# REPEAT/UNTIL statement.
+"repeat-until")
+cat <<EOF
+    $ilabel repeat {
+        write(*,$fmt) i
+        i=i+1
+    } until(i >=4)
+EOF
+;;
+
+# SWITCH statement.
+"switch")
+cat <<EOF
+    $ilabel switch(i) {
+        case 1,2,3:
+            write(*,$fmt) i
+            i=i+1
+            goto $ilabel
+    }
+EOF
+;;
+
+# WHILE statement.
+"while")
+cat <<EOF
+    $ilabel while(i < 4) {
+        write(*,$fmt) i
+        i=i+1
+    }
+EOF
+;;
+
+# This shouldn't happen, really.
+*) testcase_HARDERROR "invalid statement \`$stmt";;
+
+esac >> tst.r
+
+cat >> tst.r <<EOF
+    write(*,$fmt) i
+    call halt
+    $fmt    format(I1)
 end
 EOF
-}
 
-testf77_control_structure_after_label() {
+cat tst.r
 
-  write_test_file "$1" "$2"
-  cat tst.r
+run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+test ! -s stderr || testcase_FAIL "ratfor produced diagnostic on stderr"
 
-  run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
-  test ! -s stderr || testcase_FAIL "ratfor produced diagnostic on stderr"
+mv stdout tst.f
+mv stderr ratfor-stderr
 
-  mv stdout tst.f
-  mv stderr ratfor-stderr
+run_F77 tst.f || testcase_FAIL "ratfor produced uncompilable code"
 
-  run_F77 tst.f || testcase_FAIL "ratfor produced uncompilable code"
+run_command ./tst.exe || testcase_FAIL "testprg failed"
+test ! -s stderr || testcase_FAIL "testprg produced diagnostic on stderr"
 
-  run_command ./tst.exe || testcase_FAIL "testprg failed"
-  test ! -s stderr || testcase_FAIL "testprg produced diagnostic on stderr"
+mv stdout got
 
-  mv stdout got
+cat exp
+cat got
+$DIFF_U exp got || testcase_FAIL "expected output and got output differs"
 
-  cat exp
-  cat got
-  $DIFF_U exp got || testcase_FAIL "expected output and got output differs"
-
-  testcase_DONE
-}
-
-echo "$me: INFO: reactivate shell verbosity before running tests"
-set -x
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
