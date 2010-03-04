@@ -99,7 +99,7 @@ $checks{'no-tabs'} = {
 };
 $checks{'no-trailing-spaces'} = {
     bad_match => qr/\s+\z/,
-    description => "triling white spaces",
+    description => "trailing white spaces",
 };
 
 # We should never run fortran compiler and ratfor interpreted directly,

@@ -40,7 +40,7 @@ check_not_in_output() {
 }
 
 case $stmt in
-    
+
     # The double quoting here is *required* to avoid spurious parsing
     # errors from some shells (among them, Bash). Sigh.
     "break"|"next") echo "while(1) { $label $stmt; }"           ;;
@@ -51,7 +51,7 @@ case $stmt in
     "repeat")       echo "$label repeat pass;"                  ;;
     "repeat-until") echo "$label repeat pass; until(1)"         ;;
     "switch")       echo "$label switch(1) { case 1: pass; }"   ;;
-    
+
     *) testcase_HARDERROR "invalid statement \`$stmt";;
 
 esac > tst.r
