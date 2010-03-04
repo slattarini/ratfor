@@ -14,6 +14,8 @@ XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 
 TESTS = \
   balanced-parens.test \
+  break-after-numeric-label.test \
+  break-after-numeric-label_f77.test \
   break-fail.test \
   break-in-statement-middle.test \
   break-in-statement-middle_f77.test \
@@ -149,6 +151,8 @@ TESTS = \
   misc1.test \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
+  next-after-numeric-label.test \
+  next-after-numeric-label_f77.test \
   next-fail.test \
   next-in-statement-middle.test \
   next-in-statement-middle_f77.test \
@@ -307,6 +311,8 @@ do-after-numeric-label.log \
 repeat-after-numeric-label.log \
 repeatuntil-after-numeric-label.log \
 switch-after-numeric-label_f77.log \
+break-after-numeric-label.log \
+next-after-numeric-label.log \
   : control-structure-after-numeric-label.sh
 
 EXTRA_DIST += control-structure-after-numeric-label_f77.sh
@@ -318,6 +324,8 @@ do-after-numeric-label_f77.log \
 repeat-after-numeric-label_f77.log \
 repeatuntil-after-numeric-label_f77.log \
 switch-after-numeric-label_f77.log \
+break-after-numeric-label_f77.log \
+next-after-numeric-label_f77.log \
   : control-structure-after-numeric-label_f77.sh
 
 EXTRA_DIST += keyword-in-statement-middle.sh

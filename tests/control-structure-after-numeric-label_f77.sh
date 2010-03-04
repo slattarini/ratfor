@@ -63,9 +63,9 @@ cat <<EOF
         write(*,$fmt) i
         i=i+1
     }
-    write(*,$fmt) i
-    i=i+1
-    write(*,$fmt) i
+    write(*,$fmt) i; i=i+1
+    write(*,$fmt) i; i=i+1
+    write(*,$fmt) i; i=i+1
 EOF
 ;;
 
