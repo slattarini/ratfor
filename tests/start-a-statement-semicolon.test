@@ -20,12 +20,9 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 # Sanity check.
-
-ls -l "$srcdir"/start-a-statement-sanitycheck.sh
-. "$srcdir"/start-a-statement-sanitycheck.sh || testcase_HARDERROR
+rat4t_require_helper_script 'start-a-statement-sanitycheck.sh'
 
 # Real test.
-
 i=0
 for x in \
   " { repeat none }" \
