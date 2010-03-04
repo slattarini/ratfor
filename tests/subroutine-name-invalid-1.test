@@ -19,8 +19,8 @@
 # by a non-alphanumeric token (basic checks).
 
 . ../lib/rat4-testsuite-init.sh || exit 99
-ls -l "$srcdir"/subprog-name-invalid.sh
-. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+rat4t_require_helper_script 'subprog-name-invalid.sh'
 
 check_default_subprog_badnames 'subroutine'
 

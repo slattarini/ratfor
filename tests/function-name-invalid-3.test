@@ -20,8 +20,8 @@
 # or `>=').
 
 . ../lib/rat4-testsuite-init.sh || exit 99
-ls -l "$srcdir"/subprog-name-invalid.sh
-. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+rat4t_require_helper_script 'subprog-name-invalid.sh'
 
 check_problematic_subprog_badnames 'function'
 

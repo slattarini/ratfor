@@ -20,9 +20,8 @@
 # macros is involved.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
-ls -l "$srcdir"/subprog-name-invalid.sh
-. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
 
+rat4t_require_helper_script 'subprog-name-invalid.sh'
 
 write_testfile() {
     do_define BADNAME "$2"

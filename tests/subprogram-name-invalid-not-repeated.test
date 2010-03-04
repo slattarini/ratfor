@@ -20,8 +20,8 @@
 # token.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
-ls -l "$srcdir"/subprog-name-invalid.sh
-. "$srcdir"/subprog-name-invalid.sh || testcase_HARDERROR
+
+rat4t_require_helper_script 'subprog-name-invalid.sh'
 
 i=0
 for badname in \
