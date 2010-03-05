@@ -60,12 +60,25 @@ maintainer-check: $(maintcheck_targets)
 
 maintainer-check-list-of-tests:
 	$(maintcheck__pre)
-	$(AM_V_at)target='$@'; fail=''; \
+	$(AM_V_at)(set -u) >/dev/null 2>&1 && set -u; \
+	target='$@'; \
+	fail=''; \
+	if echo a: | $(MAKE) --no-print-directory -f- a >/dev/null 2>&1; then \
+	  make_opts='--no-print-directory'; \
+	else \
+	  make_opts=''; \
+	fi; \
 	CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
+	cwd=`pwd` || exit 1; \
+	echo ' ---'; \
+	echo " {pwd = $$cwd}"; \
 	for subdir in $(test_subdirs); do \
-	  test x'$(AM_V_at)' = x'@' || echo "Making $$target in $$subdir"; \
-	  (cd $$subdir && $(MAKE) -s $(AM_MAKEFLAGS) $$target) || fail=yes; \
+	  echo " [cd $$cwd/$$subdir]"; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$make_opts $$target) \
+	    || fail=yes; \
 	done; \
+	echo " {pwd = $$cwd}"; \
+	echo ' ---'; \
 	test -z "$$fail"
 maintcheck_targets += maintainer-check-list-of-tests
 

@@ -3,18 +3,28 @@
 ##
 # Makefile for the tests in the Ratfor Testsuite.
 
-##
-## List of tests.
-##
+# Required to avoid make erronously seeing comments in shell code.
+sharp = \#
 
-EXTRA_DIST = $(TESTS)
+## All updated later throughout the file.
+TESTS =
+check_SCRIPTS =
+EXTRA_DIST =
+MOSTLYCLEANFILES =
+CLEANFILES =
 
 # Defined at configure time.
 XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
 
-TESTS = \
+
+##
+## Hand-written tests.
+##
+
+EXTRA_DIST += $(handwritten_tests)
+TESTS += $(handwritten_tests)
+handwritten_tests = \
   balanced-parens.test \
-  break-after-numeric-label.test \
   break-after-numeric-label_f77.test \
   break-fail.test \
   break-in-statement-middle.test \
@@ -70,7 +80,6 @@ TESTS = \
   define-underscore-in-symbolic-name.test \
   define-with-parens-preserve-whitespace.test \
   devnull-input.test \
-  do-after-numeric-label.test \
   do-after-numeric-label_f77.test \
   do-in-statement-middle.test \
   do-in-statement-middle_f77.test \
@@ -78,7 +87,6 @@ TESTS = \
   else-in-statement-middle_f77.test \
   empty-input.test \
   exponentiation-operator_f77.test \
-  for-after-numeric-label.test \
   for-after-numeric-label_f77.test \
   for-in-statement-middle.test \
   for-in-statement-middle_f77.test \
@@ -94,12 +102,10 @@ TESTS = \
   function-return.test \
   function-return_f77.test \
   goto_f77.test \
-  if-after-numeric-label.test \
   if-after-numeric-label_f77.test \
   if-in-statement-middle.test \
   if-in-statement-middle_f77.test \
   if_f77.test \
-  ifelse-after-numeric-label.test \
   ifelse-after-numeric-label_f77.test \
   ifelse-ambiguity_f77.test \
   illegal-case-default.test \
@@ -151,7 +157,6 @@ TESTS = \
   misc1.test \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
-  next-after-numeric-label.test \
   next-after-numeric-label_f77.test \
   next-fail.test \
   next-in-statement-middle.test \
@@ -176,14 +181,12 @@ TESTS = \
   outfile-overwrite.test \
   outfile-unwritable-fail.test \
   outfile.test \
-  repeat-after-numeric-label.test \
   repeat-after-numeric-label_f77.test \
   repeat-in-statement-middle.test \
   repeat-in-statement-middle_f77.test \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
-  repeatuntil-after-numeric-label.test \
   repeatuntil-after-numeric-label_f77.test \
   return-a-value-from-subroutine-fail.test \
   return-keyword-function-1.test \
@@ -212,7 +215,6 @@ TESTS = \
   subroutine-name-invalid-3.test \
   subroutine-name-missing-1.test \
   subroutine-name-missing-2.test \
-  switch-after-numeric-label.test \
   switch-after-numeric-label_f77.test \
   switch-fail-case-label-duplicated.test \
   switch-fail-case-label-invalid.test \
@@ -247,14 +249,15 @@ TESTS = \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim-stress_f77.test \
-  while-after-numeric-label.test \
   while-after-numeric-label_f77.test \
   while-in-statement-middle.test \
   while-in-statement-middle_f77.test \
   while_f77.test
 
 
+##
 ## Requirements and dependencies of tests.
+##
 
 EXTRA_DIST += integers-many-bases.data
 integers-many-bases.log integers-many-bases_f77.log: \
@@ -302,18 +305,66 @@ include-at-stmt-beginning-only-plain.log \
 include-at-stmt-beginning-only-squote.log \
   : include-at-stmt-beginning-only.sh
 
+
+##
+## Generated tests.
+##
+
+generated_tests = ## updated later
+check_SCRIPTS += $(generated_tests)
+TESTS += $(generated_tests)
+CLEANFILES += $(generated_tests)
+MOSTLYCLEANFILES += *.test-t
+
+## helper internal variables
+autogen_sh__pre = $(AM_V_at)set -e;\
+  rm -f $@ $@-t; \
+  { \
+    echo '$(sharp)! /bin/sh'; \
+    echo '$(sharp) This file is part of the Ratfor Testsuite.'; \
+    echo '$(sharp) This file has been automatically generated. ' \
+         'DO NOT EDIT BY HAND!'; \
+    echo; \
+    echo '. $(top_builddir)/lib/rat4-testsuite-init.sh || exit 99'; \
+    echo; \
+  } >$@-t
+
+autogen_sh__post = $(AM_V_at)set -e;\
+  echo >>$@-t; \
+  echo '$(sharp) vim: ft=sh ts=4 sw=4 et' >>$@-t; \
+  chmod a-w,a+x $@-t; \
+  mv -f $@-t $@
+
+# Ratfor control structures after numeric labels.
+
+tests_control_structure_after_numeric_label = \
+  if-else-after-numeric-label.test \
+  if-after-numeric-label.test \
+  while-after-numeric-label.test \
+  for-after-numeric-label.test \
+  do-after-numeric-label.test \
+  repeat-after-numeric-label.test \
+  repeat-until-after-numeric-label.test \
+  switch-after-numeric-label.test \
+  break-after-numeric-label.test \
+  next-after-numeric-label.test
+generated_tests += $(tests_control_structure_after_numeric_label)
+
 EXTRA_DIST += control-structure-after-numeric-label.sh
-ifelse-after-numeric-label.log \
-if-after-numeric-label.log \
-while-after-numeric-label.log \
-for-after-numeric-label.log \
-do-after-numeric-label.log \
-repeat-after-numeric-label.log \
-repeatuntil-after-numeric-label.log \
-switch-after-numeric-label_f77.log \
-break-after-numeric-label.log \
-next-after-numeric-label.log \
-  : control-structure-after-numeric-label.sh
+$(tests_control_structure_after_numeric_label:.test=.log): \
+  control-structure-after-numeric-label.sh
+
+$(tests_control_structure_after_numeric_label): Makefile
+	$(autogen_sh__pre)
+	$(AM_V_GEN): \
+	 && helper='control-structure-after-numeric-label.sh' \
+	 && stmt=`echo $@ | sed 's/-after-numeric-label.test$$//'` \
+	 && echo "stmt='$$stmt'" >> $@-t \
+	 && echo "rat4t_require_helper_script '$$helper'" >> $@-t
+	$(autogen_sh__post)
+
+
+#-#-#-#
 
 EXTRA_DIST += control-structure-after-numeric-label_f77.sh
 ifelse-after-numeric-label_f77.log \
@@ -367,6 +418,7 @@ include ../am/LocalCleanup.am
 
 ## Consistency checks on the list of tests.
 include ../am/CheckListOfTests.am
+maintainer-check-list-of-tests: $(generated_tests)
 
 ## Work around a bug of FreeBSD make w.r.t. parallel tests.
 include ../am/WorkaroundParallelTests.am

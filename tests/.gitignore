@@ -1,3 +1,14 @@
 /*.log
 /*.log-t
 /*.dir
+/*.test-t
+/if-else-after-numeric-label.test
+/if-after-numeric-label.test
+/while-after-numeric-label.test
+/for-after-numeric-label.test
+/do-after-numeric-label.test
+/repeat-after-numeric-label.test
+/repeat-until-after-numeric-label.test
+/switch-after-numeric-label.test
+/break-after-numeric-label.test
+/next-after-numeric-label.test
