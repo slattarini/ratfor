@@ -25,7 +25,6 @@ EXTRA_DIST += $(handwritten_tests)
 TESTS += $(handwritten_tests)
 handwritten_tests = \
   balanced-parens.test \
-  break-after-numeric-label_f77.test \
   break-fail.test \
   break-in-statement-middle.test \
   break-in-statement-middle_f77.test \
@@ -80,14 +79,12 @@ handwritten_tests = \
   define-underscore-in-symbolic-name.test \
   define-with-parens-preserve-whitespace.test \
   devnull-input.test \
-  do-after-numeric-label_f77.test \
   do-in-statement-middle.test \
   do-in-statement-middle_f77.test \
   else-in-statement-middle.test \
   else-in-statement-middle_f77.test \
   empty-input.test \
   exponentiation-operator_f77.test \
-  for-after-numeric-label_f77.test \
   for-in-statement-middle.test \
   for-in-statement-middle_f77.test \
   for-with-empty-clauses_f77.test \
@@ -102,11 +99,9 @@ handwritten_tests = \
   function-return.test \
   function-return_f77.test \
   goto_f77.test \
-  if-after-numeric-label_f77.test \
   if-in-statement-middle.test \
   if-in-statement-middle_f77.test \
   if_f77.test \
-  ifelse-after-numeric-label_f77.test \
   ifelse-ambiguity_f77.test \
   illegal-case-default.test \
   include-abspath.test \
@@ -157,7 +152,6 @@ handwritten_tests = \
   misc1.test \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
-  next-after-numeric-label_f77.test \
   next-fail.test \
   next-in-statement-middle.test \
   next-in-statement-middle_f77.test \
@@ -181,13 +175,11 @@ handwritten_tests = \
   outfile-overwrite.test \
   outfile-unwritable-fail.test \
   outfile.test \
-  repeat-after-numeric-label_f77.test \
   repeat-in-statement-middle.test \
   repeat-in-statement-middle_f77.test \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
-  repeatuntil-after-numeric-label_f77.test \
   return-a-value-from-subroutine-fail.test \
   return-keyword-function-1.test \
   return-keyword-function-2.test \
@@ -215,7 +207,6 @@ handwritten_tests = \
   subroutine-name-invalid-3.test \
   subroutine-name-missing-1.test \
   subroutine-name-missing-2.test \
-  switch-after-numeric-label_f77.test \
   switch-fail-case-label-duplicated.test \
   switch-fail-case-label-invalid.test \
   switch-fail-no-braces.test \
@@ -249,7 +240,6 @@ handwritten_tests = \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim-stress_f77.test \
-  while-after-numeric-label_f77.test \
   while-in-statement-middle.test \
   while-in-statement-middle_f77.test \
   while_f77.test
@@ -310,6 +300,10 @@ include-at-stmt-beginning-only-squote.log \
 ## Generated tests.
 ##
 
+#
+# General scaffolding.
+#
+
 generated_tests = ## updated later
 check_SCRIPTS += $(generated_tests)
 TESTS += $(generated_tests)
@@ -335,7 +329,9 @@ autogen_sh__post = $(AM_V_at)set -e;\
   chmod a-w,a+x $@-t; \
   mv -f $@-t $@
 
+#
 # Ratfor control structures after numeric labels.
+#
 
 tests_control_structure_after_numeric_label = \
   if-else-after-numeric-label.test \
@@ -348,36 +344,36 @@ tests_control_structure_after_numeric_label = \
   switch-after-numeric-label.test \
   break-after-numeric-label.test \
   next-after-numeric-label.test
-generated_tests += $(tests_control_structure_after_numeric_label)
+tests_control_structure_after_numeric_label_f77 = \
+  $(tests_control_structure_after_numeric_label:.test=_f77.test)
+generated_tests += \
+  $(tests_control_structure_after_numeric_label) \
+  $(tests_control_structure_after_numeric_label_f77)
 
 EXTRA_DIST += control-structure-after-numeric-label.sh
 $(tests_control_structure_after_numeric_label:.test=.log): \
   control-structure-after-numeric-label.sh
 
-$(tests_control_structure_after_numeric_label): Makefile
+EXTRA_DIST += control-structure-after-numeric-label_f77.sh
+$(tests_control_structure_after_numeric_label_f77:.test=.log): \
+  control-structure-after-numeric-label_f77.sh
+
+$(tests_control_structure_after_numeric_label) \
+$(tests_control_structure_after_numeric_label_f77): Makefile
 	$(autogen_sh__pre)
-	$(AM_V_GEN): \
-	 && helper='control-structure-after-numeric-label.sh' \
-	 && stmt=`echo $@ | sed 's/-after-numeric-label.test$$//'` \
-	 && echo "stmt='$$stmt'" >> $@-t \
-	 && echo "rat4t_require_helper_script '$$helper'" >> $@-t
+	$(AM_V_GEN)case '$@' in \
+	   *_f77.test) a='_f77';; \
+	   *.test) a='';; \
+	   *) echo "Invalid script \`$@' to be generated" >&2; exit 1;; \
+	 esac \
+	   && helper="control-structure-after-numeric-label$$a.sh" \
+	   && stmt=`echo $@ | sed "s/-after-numeric-label$$a\.test$$//"` \
+	   && echo "stmt='$$stmt'" >> $@-t \
+	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
 	$(autogen_sh__post)
 
 
 #-#-#-#
-
-EXTRA_DIST += control-structure-after-numeric-label_f77.sh
-ifelse-after-numeric-label_f77.log \
-if-after-numeric-label_f77.log \
-while-after-numeric-label_f77.log \
-for-after-numeric-label_f77.log \
-do-after-numeric-label_f77.log \
-repeat-after-numeric-label_f77.log \
-repeatuntil-after-numeric-label_f77.log \
-switch-after-numeric-label_f77.log \
-break-after-numeric-label_f77.log \
-next-after-numeric-label_f77.log \
-  : control-structure-after-numeric-label_f77.sh
 
 EXTRA_DIST += keyword-in-statement-middle.sh
 else-in-statement-middle.log \

@@ -12,3 +12,13 @@
 /switch-after-numeric-label.test
 /break-after-numeric-label.test
 /next-after-numeric-label.test
+/break-after-numeric-label_f77.test
+/do-after-numeric-label_f77.test
+/for-after-numeric-label_f77.test
+/if-after-numeric-label_f77.test
+/if-else-after-numeric-label_f77.test
+/next-after-numeric-label_f77.test
+/repeat-after-numeric-label_f77.test
+/repeat-until-after-numeric-label_f77.test
+/switch-after-numeric-label_f77.test
+/while-after-numeric-label_f77.test
