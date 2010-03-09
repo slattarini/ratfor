@@ -26,11 +26,7 @@ TESTS += $(handwritten_tests)
 handwritten_tests = \
   balanced-parens.test \
   break-fail.test \
-  break-in-statement-middle.test \
-  break-in-statement-middle_f77.test \
   break_f77.test \
-  case-in-statement-middle.test \
-  case-in-statement-middle_f77.test \
   case-sensibility-basic.test \
   comments-discard-after-numerical-label.test \
   comments-discard-at-stmt-begin.test \
@@ -45,8 +41,6 @@ handwritten_tests = \
   common-block_f77.test \
   data-statement.test \
   data-statement_f77.test \
-  default-in-statement-middle.test \
-  default-in-statement-middle_f77.test \
   define-at-stmt-beginning-at-least.test \
   define-at-stmt-beginning-only.test \
   define-balanced-paren-comments.test \
@@ -79,14 +73,8 @@ handwritten_tests = \
   define-underscore-in-symbolic-name.test \
   define-with-parens-preserve-whitespace.test \
   devnull-input.test \
-  do-in-statement-middle.test \
-  do-in-statement-middle_f77.test \
-  else-in-statement-middle.test \
-  else-in-statement-middle_f77.test \
   empty-input.test \
   exponentiation-operator_f77.test \
-  for-in-statement-middle.test \
-  for-in-statement-middle_f77.test \
   for-with-empty-clauses_f77.test \
   for_f77.test \
   forever1_f77.test \
@@ -99,8 +87,6 @@ handwritten_tests = \
   function-return.test \
   function-return_f77.test \
   goto_f77.test \
-  if-in-statement-middle.test \
-  if-in-statement-middle_f77.test \
   if_f77.test \
   ifelse-ambiguity_f77.test \
   illegal-case-default.test \
@@ -153,8 +139,6 @@ handwritten_tests = \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
   next-fail.test \
-  next-in-statement-middle.test \
-  next-in-statement-middle_f77.test \
   next_f77.test \
   no-curly-brackets.test \
   no-double-quotes.test \
@@ -175,8 +159,6 @@ handwritten_tests = \
   outfile-overwrite.test \
   outfile-unwritable-fail.test \
   outfile.test \
-  repeat-in-statement-middle.test \
-  repeat-in-statement-middle_f77.test \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
@@ -210,8 +192,6 @@ handwritten_tests = \
   switch-fail-case-label-duplicated.test \
   switch-fail-case-label-invalid.test \
   switch-fail-no-braces.test \
-  switch-in-statement-middle.test \
-  switch-in-statement-middle_f77.test \
   switch-non-positive-values_f77.test \
   switch_f77.test \
   synerr-basic.test \
@@ -222,8 +202,6 @@ handwritten_tests = \
   synerr-nonfatal_f77.test \
   synerr-stdin.test \
   translate-relationals.test \
-  until-in-statement-middle.test \
-  until-in-statement-middle_f77.test \
   usage-option-missing-argument.test \
   usage-option-unknown.test \
   usage-too-many-args.test \
@@ -240,8 +218,6 @@ handwritten_tests = \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim-stress_f77.test \
-  while-in-statement-middle.test \
-  while-in-statement-middle_f77.test \
   while_f77.test
 
 
@@ -372,38 +348,50 @@ $(tests_control_structure_after_numeric_label_f77): Makefile
 	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
 	$(autogen_sh__post)
 
+#
+# Ratfor keywords in the middle of statements.
+#
 
-#-#-#-#
+tests_keyword_in_statement_middle = \
+  else-in-statement-middle.test \
+  if-in-statement-middle.test \
+  while-in-statement-middle.test \
+  for-in-statement-middle.test \
+  do-in-statement-middle.test \
+  repeat-in-statement-middle.test \
+  until-in-statement-middle.test \
+  switch-in-statement-middle.test \
+  case-in-statement-middle.test \
+  default-in-statement-middle.test \
+  next-in-statement-middle.test \
+  break-in-statement-middle.test
+tests_keyword_in_statement_middle_f77 = \
+  $(tests_keyword_in_statement_middle:.test=_f77.test)
+generated_tests += \
+  $(tests_keyword_in_statement_middle) \
+  $(tests_keyword_in_statement_middle_f77)
 
 EXTRA_DIST += keyword-in-statement-middle.sh
-else-in-statement-middle.log \
-if-in-statement-middle.log \
-while-in-statement-middle.log \
-for-in-statement-middle.log \
-do-in-statement-middle.log \
-repeat-in-statement-middle.log \
-until-in-statement-middle.log \
-switch-in-statement-middle.log \
-case-in-statement-middle.log \
-default-in-statement-middle.log \
-next-in-statement-middle.log \
-break-in-statement-middle.log \
-  : keyword-in-statement-middle.sh
+$(tests_keyword_in_statement_middle:.test=.log): \
+  keyword-in-statement-middle.sh
 
 EXTRA_DIST += keyword-in-statement-middle_f77.sh
-else-in-statement-middle_f77.log \
-if-in-statement-middle_f77.log \
-while-in-statement-middle_f77.log \
-for-in-statement-middle_f77.log \
-do-in-statement-middle_f77.log \
-repeat-in-statement-middle_f77.log \
-until-in-statement-middle_f77.log \
-switch-in-statement-middle_f77.log \
-case-in-statement-middle_f77.log \
-default-in-statement-middle_f77.log \
-next-in-statement-middle_f77.log \
-break-in-statement-middle_f77.log \
-  : keyword-in-statement-middle_f77.sh
+$(tests_keyword_in_statement_middle_f77:.test=.log): \
+  keyword-in-statement-middle_f77.sh
+
+$(tests_keyword_in_statement_middle) \
+$(tests_keyword_in_statement_middle_f77): Makefile
+	$(autogen_sh__pre)
+	$(AM_V_GEN)case '$@' in \
+	   *_f77.test) a='_f77';; \
+	   *.test) a='';; \
+	   *) echo "Invalid script \`$@' to be generated" >&2; exit 1;; \
+	 esac \
+	   && helper="keyword-in-statement-middle$$a.sh" \
+	   && stmt=`echo $@ | sed "s/-in-statement-middle$$a\.test$$//"` \
+	   && echo "stmt='$$stmt'" >> $@-t \
+	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
+	$(autogen_sh__post)
 
 
 ## Testsuite environment and setup.

@@ -21,31 +21,22 @@
 # scripts after the file `rat4-testsuite-init.sh' has already been
 # sourced.
 
-set +x
-echo "$me: INFO: disable shell verbosity while defining shell function"
+test x${stmt+"set"} = x"set" \
+  || testcase_HARDERROR "variable \`\$stmt' not set"
 
-testgrep_keyword_in_statement_middle() {
+echo "x $stmt(1) { pass }" > tst.r
+cat tst.r
 
-    stmt=$1
-    shift
+run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+test -s stderr && testcase_FAIL "ratfor produced diagnostic on stderr"
 
-    echo "x $stmt(1) { pass }" > tst.r
-    cat tst.r
+$SED -e '/^[cC]/d' stdout > out
 
-    run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
-    test -s stderr && testcase_FAIL "ratfor produced diagnostic on stderr"
+$FGREP "$stmt(1)" out \
+  || testcase_FAIL "literal \"$stmt(1)\" not found in ratfor output"
+$FGREP "goto" out \
+  && testcase_FAIL "literal \"goto\" found in ratfor output"
 
-    $SED -e '/^[cC]/d' stdout > out
-
-    $FGREP "$stmt(1)" out \
-      || testcase_FAIL "literal \"$stmt(1)\" not found in ratfor output"
-    $FGREP "goto" out \
-      && testcase_FAIL "literal \"goto\" found in ratfor output"
-
-    testcase_DONE
-}
-
-echo "$me: INFO: reactivate shell verbosity before running tests"
-set -x
+testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et
