@@ -393,6 +393,50 @@ $(tests_keyword_in_statement_middle_f77): Makefile
 	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
 	$(autogen_sh__post)
 
+#
+# Ratfor control structures with empty bodies.
+#
+
+tests_control_structure_with_empty_body = \
+  if-with-empty-body.test \
+  if-else-with-empty-body.test \
+  else-with-empty-body.test \
+  while-with-empty-body.test \
+  for-with-empty-body.test \
+  do-with-empty-body.test \
+  repeat-with-empty-body.test \
+  repeat-until-with-empty-body.test \
+  switch-with-empty-body.test \
+  case-with-empty-body.test \
+  default-with-empty-body.test
+tests_control_structure_with_empty_body_f77 = \
+  $(tests_control_structure_with_empty_body:.test=_f77.test)
+generated_tests += \
+  $(tests_control_structure_with_empty_body) \
+  $(tests_control_structure_with_empty_body_f77)
+
+EXTRA_DIST += control-structure-with-empty-body.sh
+$(tests_control_structure_with_empty_body:.test=.log): \
+  control-structure-with-empty-body.sh
+
+EXTRA_DIST += control-structure-with-empty-body_f77.sh
+$(tests_control_structure_with_empty_body_f77:.test=.log): \
+  control-structure-with-empty-body_f77.sh
+
+$(tests_control_structure_with_empty_body) \
+$(tests_control_structure_with_empty_body_f77): Makefile
+	$(autogen_sh__pre)
+	$(AM_V_GEN)case '$@' in \
+	   *_f77.test) a='_f77';; \
+	   *.test) a='';; \
+	   *) echo "Invalid script \`$@' to be generated" >&2; exit 1;; \
+	 esac \
+	   && helper="control-structure-with-empty-body$$a.sh" \
+	   && stmt=`echo $@ | sed "s/-with-empty-body$$a\.test$$//"` \
+	   && echo "stmt='$$stmt'" >> $@-t \
+	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
+	$(autogen_sh__post)
+
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
