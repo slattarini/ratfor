@@ -159,6 +159,7 @@ handwritten_tests = \
   outfile-overwrite.test \
   outfile-unwritable-fail.test \
   outfile.test \
+  repeat-until-run-body-at-least-once_f77.test \
   repeat-until_f77.test \
   repeat-without-until.test \
   repeat-without-until_f77.test \
