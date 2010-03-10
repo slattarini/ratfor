@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copied from SteLib at 2010-03-10 01:56:22 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-03-10 16:46:32 +0100.  DO NOT EDIT!
 #
 # -------------------------------------------------------------------------
 #
@@ -102,10 +102,24 @@ ws="[${SPACE}${TAB}]"
 ws0p="${ws}*" # zero or more white spaces
 ws1p="${ws}${ws0p}" # one or more white spaces
 
-# In a test script, it is an error if any command which must read from
-# standard input does so without first redirecting it; so close stdin
+# In a test script, it is an error if any command reading from standard
+# input does so without first redirecting it; so we want to close stdin
 # to make such an error sticking out clearly.
-exec <&-
+# However, some shells give spurious errors when their stdin is closed
+# (especially when dealing with here documents); in that case, just
+# redirect the standard input from /dev/null, to be at least sure that
+# script, when running attached to a tty, does not hang waiting input
+# from the user.
+if (exec <&- && cat <<EOF
+foo
+EOF
+) >/dev/null 2>&1; then
+    exec <&-
+    stdin_is_closed=yes
+else
+    exec </dev/null
+    stdin_is_closed=no
+fi
 
 # Name of the running test script.
 me=`echo x/"$argv0" | $SED -e 's|.*/||' -e 's/\.test$//'`
