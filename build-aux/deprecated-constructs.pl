@@ -90,6 +90,17 @@ $checks{'grep-wc-l-pipeline'} = {
     whitelist => ['tests/no-fortran66-while.test:41'],
 };
 
+# The `$status' variable is special in Zsh, and should never be used or
+# assigned.
+$checks{'status-shell-variable'} = {
+    bad_match => qr/\bstatus=|[\$]\{?status\b/,
+    description => "`\$status` shell variable",
+    instead_use => "`\$?` for exit status, `\$rc` as variable name",
+    must_skip => qr/^\s*#/,
+#    whitelist => ['tests/no-fortran66-while.test:41'],
+};
+
+
 # We should use ony spaces, not tabs. Also, trailing whitespaces should
 # be zapped.
 $checks{'no-tabs'} = {
