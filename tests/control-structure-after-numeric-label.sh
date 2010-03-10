@@ -28,14 +28,20 @@ label=100
 out=out
 
 check_expanded() {
-    $GREP "^$label.*pass" $out \
-      && testcase_FAIL "statement \"$stmt\" not expanded correctly"
+    if $GREP "^$label.*pass" $out; then
+        testcase_FAIL "statement \"$stmt\" not expanded correctly"
+    else
+        : # required otherwise some shells aborts since `set -e' is on
+    fi
 }
 
 check_not_in_output() {
     for s in ${1+"$@"}; do
-        $FGREP "$s" $out \
-          && testcase_FAIL "string \"$s\" found in ratfor output"
+        if $FGREP "$s" $out; then
+            testcase_FAIL "string \"$s\" found in ratfor output"
+        else
+            : # required otherwise some shells aborts since `set -e' is on
+        fi
     done
 }
 
