@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copied from SteLib at 2010-01-22 15:15:30 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-03-10 01:56:22 +0100.  DO NOT EDIT!
 #
 # -------------------------------------------------------------------------
 #
@@ -385,14 +385,20 @@ run_command() {
     else
         run_evald_cmd='"$run_cmd" ${1+"$@"} >stdout 2>stderr'
     fi
-    # NOTE: do not use the apparently simpler construct:
-    #   if eval "$run_evald_cmd"; then
-    #     run_exitcode_got=0
-    #   else
-    #     run_exitcode_got=$?
-    #   fi
-    # as FreeBSD /bin/sh chokes on it when `set -e' is on.
-    if (eval "exec $run_evald_cmd"); then
+    #
+    # NOTE 1:
+    #   We do not use the apparently simpler construct:
+    #     if eval "$run_evald_cmd"; then
+    #       run_exitcode_got=0
+    #     else
+    #       run_exitcode_got=$?
+    #     fi
+    #   as FreeBSD /bin/sh chokes on it when `set -e' is on.
+    #
+    # NOTE 2:
+    #   We use the `env' command since some Korn Shells (e.g. pdksh)
+    #   run shell builtins even with `exec'.
+    if (eval "exec env $run_evald_cmd"); then
         run_exitcode_got=0
     else
         run_exitcode_got=$?
