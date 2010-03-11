@@ -1,6 +1,9 @@
 #!/usr/bin/env perl
 # -*- perl -*-
 #
+# This script implements a maintainer-check looking for potential
+# typos in the names of functions from our testing framework.
+#
 # Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
 # This file is part of the Ratfor Testsuite.
 #
@@ -49,4 +52,3 @@ if (@bad) {
 }
 
 # vim: ft=perl et sw=4 ts=4
-

@@ -1,5 +1,6 @@
 #!/usr/bin/env perl
 # -*- perl -*-
+# Generic maintainer checks against deprecated commands/constructs.
 #
 # Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
 # This file is part of the Ratfor Testsuite.
@@ -216,4 +217,3 @@ REPORT: {
 }
 
 # vim: ft=perl et sw=4 ts=4
-
