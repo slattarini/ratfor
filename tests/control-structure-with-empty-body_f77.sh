@@ -21,6 +21,8 @@
 # be sourced by test scripts after the file `rat4-testsuite-init.sh' has
 # already been sourced.
 
+rat4t_require_fortran_compiler
+
 test x${stmt+"set"} = x"set" \
   || testcase_HARDERROR "variable \`\$stmt' not set"
 
