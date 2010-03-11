@@ -21,8 +21,6 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-rat4t_require_fortran_compiler
-
 OK=100
 BAD=110
 DIG=120

@@ -78,6 +78,14 @@ run_F77() {
     # prefix, to minimize possibility of name clashes with global variables
     # defined in user code.
     set +x # xtrace verbosity stops here
+    # sanity check
+    case "$F77" in
+        "") rat4t_run77_err="variable \`\$F77 is empty";;
+      NONE) rat4t_run77_err="variable \`\$F77 equals \"NONE\"";;
+         *) rat4t_run77_err="";;
+    esac
+    test -z "$rat4t_run77_err" || testcase_HARDERROR "$rat4t_run77_err"
+    # option parsing
     rat4t_runf77_opts='' # options to be passed to run_command
     while test $# -gt 0; do
         case "$1" in

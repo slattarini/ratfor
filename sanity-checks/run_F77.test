@@ -19,6 +19,8 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
+# This is required, since the test name (run_F77.test) doesn't follow the
+# pattern (*_f77.test) which automatically triggers the check below.
 rat4t_require_fortran_compiler
 
 # -*-*-
