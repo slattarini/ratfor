@@ -11,6 +11,7 @@ AUTOMAKE_OPTIONS = color-tests parallel-tests
 EXTRA_DIST = $(TESTS)
 
 TESTS = \
+  comments-no-hang.test \
   comment-too-long-in-define-ignored.test \
   comment-too-long-in-define-no-crash.test \
   plain-define-and-comments.test \
