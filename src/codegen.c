@@ -33,6 +33,19 @@
  *  C O D E  G E N E R A T I O N
  */
 
+/*
+ *** NOTE on unlabled "continue" ***
+ *
+ * The unlabeled "continue"s generated in the functions `whilecode',
+ * `repcode' and `forcode' below are *required* in the unlikely
+ * circumstance that the "while"/"for"/"repeat" statement in the
+ * ratfor input has been labeled, as in e.g.:
+ *   10 while(i > 0) ...
+ * Without the unabeled "continue", the result would be something like:
+ *   10 23000 if((1))then
+ *   ...
+ * which is clearly wrong.
+ */
 
 /*
  * Private Constant Strings.
@@ -415,6 +428,8 @@ forcode(int *lab)
 
     tlab = *lab;
     tlab = labgen(3);
+    /* Output an unlabeled "continue", in case there was a label.  See
+     * the "NOTE on unlabled continue" above for more information. */
     outcon(0);
     if (get_nonblank_token(token, MAXTOK) != LPAREN) {
         synerr("missing left paren.");
@@ -591,7 +606,9 @@ void repcode(int *lab)
     int tlab;
 
     tlab = *lab;
-    outcon(0); /* in case there was a label */
+    /* Output an unlabeled "continue", in case there was a label.  See
+     * the "NOTE on unlabled continue" above for more information. */
+    outcon(0);
     tlab = labgen(3);
     outcon(tlab);
     *lab = ++tlab; /* label to go on next's */
@@ -619,7 +636,9 @@ untils(int lab, int token)
 void
 whilecode(int *lab)
 {
-    outcon(0); /* unlabeled continue, in case there was a label */
+    /* Output an unlabeled "continue", in case there was a label.  See
+     * the "NOTE on unlabled continue" above for more information. */
+    outcon(0);
     *lab = labgen(2); /* see whiles() to know why we need 2 labels */
     outnum(*lab);
     ifthenc();
