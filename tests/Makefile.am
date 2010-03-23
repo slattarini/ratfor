@@ -122,8 +122,8 @@ handwritten_tests = \
   label-fail-unexpected-eof.test \
   label-line-continuation.test \
   label-line-continuation_f77.test \
-  labelled-format.test \
-  labelled-format_f77.test \
+  labeled-format.test \
+  labeled-format_f77.test \
   line-continuation-automatic-operators.test \
   line-continuation-automatic-others.test \
   line-continuation-automatic-relationals-raw.test \
