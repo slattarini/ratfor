@@ -35,7 +35,7 @@ cat >tst.r <<\EOF
 200     format(I1,":",I1)
         return
     end # sub2()
-    program testprogram
+    program testdefinebalpar
         implicit none
         integer i, j
         xsubr
@@ -44,7 +44,7 @@ cat >tst.r <<\EOF
         j = 2; i = 1;
         xmain
         call halt
-    end # testprogram
+    end # testdefinebalpar
 EOF
 
 

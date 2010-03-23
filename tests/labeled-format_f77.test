@@ -23,7 +23,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst.r <<EOF
-program test
+program testlabelformat
 10 format(A2)
 write(*,10) 'OK'
 end

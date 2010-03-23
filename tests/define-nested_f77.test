@@ -20,7 +20,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst.r <<\EOF
-    program testprogram
+    program testdefinenest
 
         implicit none
 
@@ -53,7 +53,7 @@ cat >tst.r <<\EOF
 
         call halt
 
-    end # testprogram
+    end
 EOF
 
 cat > exp <<EOF

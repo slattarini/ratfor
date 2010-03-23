@@ -21,7 +21,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<\EOF
-program testprog
+program stress4
 implicit none
 integer define   # should not complain about empty/missing name
 integer include  # should not complain about empty/missing filename
@@ -30,7 +30,7 @@ integer include  # should not complain about empty/missing filename
 %      include=5
 write(*,100) define
 write(*,100) include
-end # program
+end
 EOF
 
 cat >exp <<\EOF

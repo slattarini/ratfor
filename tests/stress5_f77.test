@@ -20,13 +20,13 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<\EOF
-program testprog
+program stress5
 implicit none
 integer a
 a = 1; %     &2
 write(*,100) a
 100 format(I2)
-end # testprog
+end
 EOF
 
 echo '12' >exp

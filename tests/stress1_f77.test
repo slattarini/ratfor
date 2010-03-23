@@ -36,7 +36,7 @@ integer function foo(a, b)
         write(*,102) a, b; 102 format(Ifmt, ' < ', Ifmt);
     }
     return 0
-end # foo
+end # function foo
 
 subroutine bar()
     integer m, n, t, foo
@@ -51,9 +51,9 @@ subroutine bar()
     t = foo(V0, 4)
     define V1 1
     t = foo(V0, m)
-end # bar
+end # subroutine bar
 
-program testprog
+program stress1
     integer x, y, r, foo
     define(TSTLBL, write(*,800))
 
@@ -95,7 +95,7 @@ program testprog
 800 format(Afmt)
 900 format("x:", Ifmt)
 
-end
+end # program stress1
 EOF
 
 cat > exp <<EOF

@@ -21,7 +21,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<\EOF
-program testprog
+program testverb
   implicit none
   integer x, y, c, i
   x = 8  # this should be overwritten

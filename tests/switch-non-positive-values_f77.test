@@ -22,7 +22,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-program testswtich
+program testswtichnonpos
     integer i
 100 format(A20);
     for(i = -3; i <= 3; i = i + 1) {

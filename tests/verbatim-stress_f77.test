@@ -21,7 +21,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-program VerbatimStress
+program stressverb
     implicit none
     integer i, j, sum, realsum, fakesum, lastsum
     sum = 0
@@ -38,7 +38,7 @@ for(i = 0; i <= 1; i = i + 1) {
 # six leading spaces here
 %      lastsum = sum
     PRINT(*, 100) lastsum; 100 format(I10)
-end # VerbatimStress
+end
 EOF
 
 cat tst.r

@@ -21,7 +21,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-program test
+program repeatrunbody
     integer x
     x = 0
     write(*,10) x;      10 format('x = ', I1)

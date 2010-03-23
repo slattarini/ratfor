@@ -35,8 +35,9 @@ cat >exp <<'EOF'
 4
 EOF
 
+testprogname=`echo x"$stmt"| $SED -e 's/^x//' -e 's/[^a-zA-Z0-9]//g'`
 cat > tst.r <<EOF
-program test
+program $testprogname
     integer i
     i = 1
     goto $ilabel

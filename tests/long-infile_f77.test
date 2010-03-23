@@ -25,7 +25,7 @@ rat4t_require_strong_fortran_compiler
 startlab=6000
 
 cat > tst.r <<EOF
-program longprog
+program testlongprog
 implicit none
 integer x, y, t
 5 format("n:", I10, "|", "x:", I10, "|", "y:" I10)

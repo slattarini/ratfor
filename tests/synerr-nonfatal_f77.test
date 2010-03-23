@@ -20,13 +20,13 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-program testprogram
+program synerrnonfatal
     write(*,100) "ALIVE"
     } # syntax error here
 100 format(A5)
     next # syntax error here
     call halt
-end # testprogram
+end
 EOF
 
 echo 'ALIVE' > exp

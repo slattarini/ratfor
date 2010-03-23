@@ -20,7 +20,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst.r <<EOF
-  program testprogram
+  program testdefinex
     implicit none
     integer a, b
     a = 0
@@ -33,7 +33,7 @@ cat >tst.r <<EOF
     write(*,100) b
 100 format(I1)
     call halt
-  end # testprogram
+  end
 EOF
 
 cat >exp <<EOF

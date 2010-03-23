@@ -27,7 +27,7 @@ DIG=120
 
 SEP=500
 cat > tst.r <<EOF
-program testfor
+program testgoto
     implicit none
     integer x
 

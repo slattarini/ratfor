@@ -140,10 +140,12 @@ EOF
 ls -l tst-*.r
 
 for r in tst-*.r; do
+    x=`echo $r | $SED -e 's/^tst-//' -e 's/\.r$//'`
+    testprogname=`echo $stmt$x | $SED -e 's/[^a-zA-Z0-9]//g'`
     { cat nfunc.r
       echo
       $SED "s/^$ws0p//" <<EOF
-        program test
+        program $testprogname
         integer n, nfunc
         common /counter/ n
         n = 0

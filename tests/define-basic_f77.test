@@ -23,14 +23,14 @@ tr '_' "$TAB" >tst.r <<\EOF
     define(ONE, 1)
     define TWO 2
     define( _ THREE _, _3__ )
-    program testprogram
+    program testdefn
         implicit none
         write(*,100) "ONE", ONE
         write(*,100) "TWO", TWO
         write(*,100) "THREE", THREE
 100     format(A10,":",I1)
         call halt
-    end # testprogram
+    end
 EOF
 
 cat > exp <<EOF

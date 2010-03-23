@@ -26,7 +26,7 @@ define(cmd,
     z = 3
 100 format(I1))
 
-    program testprogram
+    program testdefnmultiline
         implicit none
         integer x, y, z
         cmd
@@ -34,7 +34,7 @@ define(cmd,
         write(*,100) y
         write(*,100) z
         call halt
-    end # testprogram
+    end
 EOF
 
 cat > exp <<EOF

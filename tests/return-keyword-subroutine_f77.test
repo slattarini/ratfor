@@ -33,7 +33,7 @@ subroutine bar
     write(*,30); 30 format('BAD')
 end
 
-program testreturn
+program testreturnsub
     write(*,100); 100 format('start')
     call bar
     write(*,200); 200 format('end')

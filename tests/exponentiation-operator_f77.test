@@ -21,7 +21,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat >tst.r <<EOF
-program testexpoent
+program testexponent
     implicit none
     integer m, n
     real r, s, t

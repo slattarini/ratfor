@@ -24,7 +24,7 @@
 : >tst.r
 
 cat >>tst.r <<EOF
-program testprog
+program testintbases
     implicit none
 100 format(A30, " ==> ", I30)
 EOF
@@ -97,8 +97,8 @@ echo " ==="
 echo " ==="
 (set -x; $DIFF_U exp got) || testcase_FAIL
 echo " ==="
-
 set -x
+
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

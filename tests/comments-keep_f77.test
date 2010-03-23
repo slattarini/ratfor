@@ -21,7 +21,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 $SED -e "s/\\\\t/${TAB}/g" >tst.r <<\EOF
-program testprog
+program testkeepcmnt
     # this is a "%c@mm3nt%'!
 # this too is a "%c@mm3nt%'!
     integer x

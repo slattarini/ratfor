@@ -23,7 +23,7 @@ tr '%@' "${NEWLINE}${TAB}" > tst.r <<EOF
 subroutine ok(n){{integer n;write(*,100)n; 100%@@@@@ format(%'ok',%%I1 @@)}
 @%@%@%@%end
 %%;%;%%%%%%%%%%%%%%%%;%;%%%%%%%%@@;@;@@@@@@@@ %@  % @ @@% %@%@%;;;;;;;;;;;}
-program stess3;implicit@none;integer@@@x,@y,%@%@%  %%  @@  @ z,t
+program stress3;implicit@none;integer@@@x,@y,%@%@%  %%  @@  @ z,t
 x=100;y=10   @@ %%%%%%%%%%%%%%%%%%%%%%% z@@=%%%%1
 if(%%%%%%%%%%%%%%x%%%%%%+1%%%%%%==101){call@@@@@@@@@@@@ok(1)} @ @ @ @ @ @ @
 if@(y@@@*10==%%%%%%%%%%%x){{{{;;;;call ok( 2 ); ;}}@@@}%%%%%%%%%%%%%%%%%%%}

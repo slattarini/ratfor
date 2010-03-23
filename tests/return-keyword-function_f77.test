@@ -29,7 +29,7 @@ integer function bar(i)
     integer i
     return(i*2)
 end
-program testreturn
+program testreturnfunc
     integer x, foo, bar
     x = foo(1)
     write(*,100) x

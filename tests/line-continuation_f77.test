@@ -20,7 +20,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 tr '@' ' ' > tst.r <<\EOF
-program testprog
+program testlinecont
 implicit none
 
 in_
