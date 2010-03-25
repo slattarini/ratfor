@@ -72,6 +72,7 @@ handwritten_tests = \
   define-underscore-in-symbolic-name.test \
   define-with-parens-preserve-whitespace.test \
   devnull-input.test \
+  else-without-if-fail.test \
   empty-input.test \
   exponentiation-operator_f77.test \
   for-with-empty-clauses_f77.test \
