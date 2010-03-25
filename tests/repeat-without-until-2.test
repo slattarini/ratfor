@@ -16,13 +16,46 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Check that the `repeat' statement does not require a following until
-# (basic test).
+# (more complete test)
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-echo 'repeat nothing' >tst.r
+cat >tst.r <<EOF
+foo foo foo
+repeat stmt1
+pass1
+repeat stmt2
+20 pass2
+repeat stmt3; pass3
+repeat stmt4; 40 pass4
+repeat { stmt5 }  pass5
+repeat { stmt6 } 60 pass6
+bar bar bar
+EOF
+
+cat tst.r
+
 run_RATFOR tst.r || testcase_FAIL
 test ! -s stderr || testcase_FAIL
+
+$GREP "^${ws0p}pass1${ws0p}$" stdout
+$GREP "^${ws0p}stmt1${ws0p}$" stdout
+
+$GREP "^20 .*pass2" stdout
+$GREP "^${ws0p}stmt2${ws0p}$" stdout
+
+$GREP "^${ws0p}pass3${ws0p}$" stdout
+$GREP "^${ws0p}stmt3${ws0p}$" stdout
+
+$GREP "^40 .*pass4" stdout
+$GREP "^${ws0p}stmt4${ws0p}$" stdout
+
+$GREP "^${ws0p}pass5${ws0p}$" stdout
+$GREP "^${ws0p}stmt5${ws0p}$" stdout
+
+$GREP "^60 .*pass6" stdout
+$GREP "^${ws0p}stmt6${ws0p}$" stdout
+
 testcase_DONE
 
 # vim: ft=sh ts=4 sw=4 et

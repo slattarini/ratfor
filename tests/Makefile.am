@@ -164,6 +164,7 @@ handwritten_tests = \
   repeat-until-run-body-at-least-once_f77.test \
   repeat-until_f77.test \
   repeat-without-until.test \
+  repeat-without-until-2.test \
   repeat-without-until_f77.test \
   return-a-value-from-subroutine-fail.test \
   return-keyword-function-1.test \
