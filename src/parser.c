@@ -53,6 +53,17 @@ static int lextyp[MAXSTACK];
  */
 
 static bool
+detected_trailing_nonblank_tokens(void)
+{
+    char buf[MAXTOK];
+    int tok;
+
+    tok = get_nonblank_token(buf, MAXTOK);
+    put_back_string(buf);
+    return(tok != EOF && !is_stmt_ending(tok));
+}
+
+static bool
 detected_unusual_error(int toktype)
 {
     char buf[MAXTOK];
@@ -89,6 +100,18 @@ unstak(int lextype)
                     return;
                 ifend();
                 break;
+            case LEXREPEAT:
+                if (lextype == LEXUNTIL) {
+                    untilcode(labval[sp]);
+                    if (detected_trailing_nonblank_tokens())
+                        synerr("extra tokens after until.");
+                    /* this is required in case of an unusual statement
+                     * "repeat repeat STMT until(COND)" */
+                    lextype = EOF;
+                } else {
+                    repeats(labval[sp]);
+                }
+                break;
             case LEXELSE:
                 if (sp > 1)
                     sp--;
@@ -102,9 +125,6 @@ unstak(int lextype)
                 break;
             case LEXFOR:
                 fors(labval[sp]);
-                break;
-            case LEXREPEAT:
-                untils(labval[sp], lextype);
                 break;
         } /* end switch */
     } /* end for */
@@ -174,7 +194,7 @@ parse(void)
 
     lextyp[0] = EOF;
     while ((lextype = lex(lexstr, MAXTOK)) != EOF) {
-        
+
         /* some errors, if not treated specially, may give confusing
          * diagnostic, so we try to detect them in an ad-hoc way */
         if (detected_unusual_error(lextype))
@@ -242,7 +262,7 @@ parse(void)
                     synerr("illegal until.");
                 break;
         } /* switch token */
-        
+
         /* manange stack of statements */
         switch(lextype) {
             case TOKT_DIGITS:
@@ -295,6 +315,7 @@ parse(void)
                 unstak(lextype);
         }
     } /* while read next token */
+
     if (sp != 0)
         synerr_eof(); /* XXX: more detailed error message? */
 }

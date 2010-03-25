@@ -10,8 +10,6 @@ AUTOMAKE_OPTIONS = color-tests parallel-tests
 
 EXTRA_DIST = $(TESTS)
 
-XFAIL_TESTS = nested-repeat.test nested-repeat_f77.test
-
 TESTS = \
   comments-no-hang.test \
   comment-too-long-in-define-ignored.test \

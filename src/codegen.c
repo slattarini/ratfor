@@ -519,13 +519,12 @@ fors(int lab)
     fordep--;
 }
 
-/* ifgo - generate "if(.not.(...))goto lab" */
+/* ifngo - generate "if(.not.(...))goto lab" */
 void
-ifgo(int lab)
+ifngo(int lab)
 {
-
     outtab();       /* get to column 7 */
-    outstr(sifnot); /* " if(.not. " */
+    outstr(sifnot); /* " if(.not." */
     balpar();       /* collect and output condition */
     outch(RPAREN);  /* " ) " */
     outgo(lab);     /* " goto lab " */
@@ -603,39 +602,35 @@ outcon(int lab)
 /* repcod - generate code for beginning of repeat */
 void repcode(int *lab)
 {
-    int tlab;
-
-    tlab = *lab;
     /* Output an unlabeled "continue", in case there was a label.  See
      * the "NOTE on unlabled continue" above for more information. */
     outcon(0);
-    tlab = labgen(3);
-    outcon(tlab);
-    *lab = ++tlab; /* label to go on next's */
+    *lab = labgen(3);
+    outcon(*lab);   /* start the loop */
+    *lab += 1;      /* label to go on next's */
 }
 
-/* untils - generate code for until or end of repeat */
+/* untilcode - generate code for "until(COND)" after a "repeat STMT". */
 void
-untils(int lab, int token)
+untilcode(int lab)
 {
     char buf[MAXTOK];
-    int tok;
-
     xfer = false;
-    outnum(lab);
-    if (token == LEXUNTIL) {
-        get_nonblank_token(buf, MAXTOK);
-        /* TODO: assert ptoken == "until" */
-        ifgo(lab-1);
-        /* peek at next token to detect syntax errors */
-        tok = get_nonblank_token(buf, MAXTOK);
-        put_back_string(buf);
-        if (tok != EOF && !is_stmt_ending(tok))
-            synerr("extra tokens after until.");
-    } else {
-        outgo(lab-1);
-    }
-    outcon(lab+1);
+    get_token(buf, MAXTOK);
+    /* TODO: asser buf[] == "until" */
+    outcon(lab);    /* where to go on `next` */
+    ifngo(lab-1);   /* collect COND, if it's false start the loop again */
+    outcon(lab+1);  /* end loop */
+}
+
+/* repeats - generate code for end of bare "repeat STMT" */
+void
+repeats(int lab)
+{
+    xfer = false;
+    outcon(lab);    /* where to go on `next` */
+    outgo(lab-1);   /* go back to the beginning of the loop */
+    outcon(lab+1);  /* end loop */
 }
 
 /* whilecode - generate code for beginning of while */

@@ -20,7 +20,7 @@
 . ../blackbox/lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-begin tstnestrpt
+program tstnestrpt
 100 format('ok ',I1)
     integer i
     i = 0
@@ -28,7 +28,7 @@ begin tstnestrpt
         repeat { 
             i = i + 1
             write(*,100) i
-            if (i => 4)
+            if (i >= 4)
                 goto 10
         } until(i > 10)
     continue

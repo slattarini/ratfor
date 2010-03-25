@@ -36,10 +36,11 @@ void ifcode(int *);
 void ifthenc(void);
 void ifend(void);
 void elseifc(void);
-void ifgo(int);
+void ifngo(int);
 
 void repcode(int *);
-void untils(int, int);
+void repeats(int);
+void untilcode(int);
 
 void whilecode(int *);
 void whiles(int);
