@@ -618,17 +618,17 @@ void repcode(int *lab)
 void
 untils(int lab, int token)
 {
-    char ptoken[MAXTOK];
+    char buf[MAXTOK];
 
     xfer = false;
     outnum(lab);
     if (token == LEXUNTIL) {
-        while (is_newline(get_nonblank_token(ptoken, MAXTOK)))
-            /* skip empty lines, get next token */;
+        get_nonblank_token(buf, MAXTOK);
+        /* TODO: assert ptoken == "until" */
         ifgo(lab-1);
-    }
-    else
+    } else {
         outgo(lab-1);
+    }
     outcon(lab+1);
 }
 
