@@ -619,6 +619,7 @@ void
 untils(int lab, int token)
 {
     char buf[MAXTOK];
+    int tok;
 
     xfer = false;
     outnum(lab);
@@ -626,6 +627,11 @@ untils(int lab, int token)
         get_nonblank_token(buf, MAXTOK);
         /* TODO: assert ptoken == "until" */
         ifgo(lab-1);
+        /* peek at next token to detect syntax errors */
+        tok = get_nonblank_token(buf, MAXTOK);
+        put_back_string(buf);
+        if (tok != EOF && !is_stmt_ending(tok))
+            synerr("extra tokens after until.");
     } else {
         outgo(lab-1);
     }
