@@ -206,6 +206,7 @@ handwritten_tests = \
   synerr-nonfatal_f77.test \
   synerr-stdin.test \
   translate-relationals.test \
+  until-after-empty-lines.test \
   until-with-extra-traling-tokens-fail.test \
   until-with-statement-terminator.test \
   until-with-trailing-blanks.test \
