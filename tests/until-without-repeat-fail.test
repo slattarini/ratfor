@@ -1,0 +1,37 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that an `until' without a preceding `repeat' fails.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+echo 'until(cond)' >tst1.r
+echo 'pass; until(cond); pass' >tst2.r
+echo 'if(cond1) { stmt } until(cond2)' >tst3.r
+echo 'repeat { stmt } until(cond1); until(cond2)' >tst4.r
+
+for i in 1 2 3 4; do
+    cat tst$i.r
+    run_RATFOR -e 1 tst$i.r || testcase_FAIL
+    mv stdout stdout$i
+    mv stderr stderr$i
+    $FGREP ': illegal until.' stderr$i || testcase_FAIL
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

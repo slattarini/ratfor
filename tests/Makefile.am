@@ -205,6 +205,7 @@ handwritten_tests = \
   synerr-nonfatal_f77.test \
   synerr-stdin.test \
   translate-relationals.test \
+  until-without-repeat-fail.test \
   usage-option-missing-argument.test \
   usage-option-unknown.test \
   usage-too-many-args.test \
