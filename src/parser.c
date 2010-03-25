@@ -237,6 +237,10 @@ parse(void)
                 else
                     synerr("illegal else.");
                 break;
+            case LEXUNTIL:
+                if (lextyp[sp] != LEXREPEAT)
+                    synerr("illegal until.");
+                break;
         } /* switch token */
         
         /* manange stack of statements */
