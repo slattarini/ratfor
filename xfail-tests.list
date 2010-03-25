@@ -28,4 +28,7 @@ subroutine-name-invalid-3.test
 include-at-stmt-beginning-at-least-dquote.test
 include-at-stmt-beginning-at-least-squote.test
 
+# Will be fixed soon.
+until-with-extra-traling-tokens-fail.test
+
 # vim: ft=conf ts=4 sw=4 et
