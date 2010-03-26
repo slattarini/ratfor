@@ -24,10 +24,6 @@ Introduction and general information
   enable the importing of the maintainer-specific rules (saved in files
   `maint/*.mk') in GNUmakefile.
 
-  Run configure with the option `--enable-werror-cflag', to enable the
-  `-Werror' flag in the C compiler (if supported).  This helps catching
-  errors at compile-time.
-
   Use GNU make to enable the automatic depedencies tracking (done by
   automake) and to render the maintainer-specific make rules usable.
 
