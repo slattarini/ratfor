@@ -53,17 +53,6 @@ static int lextyp[MAXSTACK];
  */
 
 static bool
-detected_trailing_nonblank_tokens(void)
-{
-    char buf[MAXTOK];
-    int tok;
-
-    tok = get_nonblank_token(buf, MAXTOK);
-    put_back_string(buf);
-    return(tok != EOF && !is_stmt_ending(tok));
-}
-
-static bool
 detected_unusual_error(int toktype)
 {
     char buf[MAXTOK];
@@ -249,20 +238,16 @@ parse(void)
                 labelc(lexstr);
                 break;
             case LEXELSE:
-                if (lextyp[sp] == LEXIF) {
+                if (lextyp[sp] == LEXIF)
                     elseifc();
-                } else {
+                else
                     synerr("illegal else.");
-                }
                 break;
             case LEXUNTIL:
-                if (lextyp[sp] == LEXREPEAT) {
+                if (lextyp[sp] == LEXREPEAT)
                     untilcode(labval[sp]);
-                    if (detected_trailing_nonblank_tokens())
-                        synerr("extra tokens after until.");
-                } else {
+                else
                     synerr("illegal until.");
-                }
                 break;
         } /* switch lextype */
 

@@ -16,6 +16,8 @@ TESTS = \
   comment-too-long-in-define-no-crash.test \
   plain-define-and-comments.test \
   switch-segfault.test \
+  tokens-after-until.test \
+  tokens-after-until_f77.test \
   token-too-long-no-crash.test
 
 ## Requirements and dependencies of tests.
