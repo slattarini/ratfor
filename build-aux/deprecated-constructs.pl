@@ -128,7 +128,11 @@ $checks{'no-raw-ratfor'} = {
     description => "direct use of Ratfor preprocessor",
     instead_use => "the `run_RATFOR` shell function",
     must_skip => qr/^\s*#/, # comment lines
-    whitelist => [qw{lib/rat4-testlib.sh tests/comments-no-hang.test}],
+    whitelist => [qw{
+        lib/rat4-testlib.sh
+        tests/comments-no-hang.test
+        tests/subprog-in-stmt-condition.sh:32
+    }],
 };
 
 # Normalize checks, looking for errors.
