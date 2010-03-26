@@ -101,21 +101,18 @@ unstak(int lextype)
                 ifend();
                 break;
             case LEXREPEAT:
-                if (lextype == LEXUNTIL) {
-                    untilcode(labval[sp]);
-                    if (detected_trailing_nonblank_tokens())
-                        synerr("extra tokens after until.");
-                    /* this is required in case of an unusual statement
-                     * "repeat repeat STMT until(COND)" */
-                    lextype = EOF;
-                } else {
-                    repeats(labval[sp]);
-                }
+                if (lextype == LEXUNTIL)
+                    return;
+                repeats(labval[sp]);
                 break;
             case LEXELSE:
                 if (sp > 1)
                     sp--;
                 ifend();
+                break;
+            case LEXUNTIL:
+                if (sp > 1)
+                    sp--;
                 break;
             case LEXDO:
                 dostat(labval[sp]);
@@ -252,25 +249,36 @@ parse(void)
                 labelc(lexstr);
                 break;
             case LEXELSE:
-                if (lextyp[sp] == LEXIF)
+                if (lextyp[sp] == LEXIF) {
                     elseifc();
-                else
+                } else {
                     synerr("illegal else.");
+                }
                 break;
             case LEXUNTIL:
-                if (lextyp[sp] != LEXREPEAT)
+                if (lextyp[sp] == LEXREPEAT) {
+                    untilcode(labval[sp]);
+                    if (detected_trailing_nonblank_tokens())
+                        synerr("extra tokens after until.");
+                } else {
                     synerr("illegal until.");
+                }
                 break;
-        } /* switch token */
+        } /* switch lextype */
 
         /* manange stack of statements */
         switch(lextype) {
+            case LEXUNTIL:
+                /* until statements are auto-terminating; this hack
+                 * accounts for this. */
+                put_back_char(SEMICOL);
+                /* fallthrough ... */
             case TOKT_DIGITS:
             case LEXIF:
             case LEXELSE:
             case LEXWHILE:
-            case LEXFOR:
             case LEXREPEAT:
+            case LEXFOR:
             case LEXDO:
             case LEXSWITCH:
             case LBRACE:
@@ -313,7 +321,9 @@ parse(void)
                 lextype = lex(lexstr, MAXTOK); /* peek at next token */
                 put_back_string(lexstr);
                 unstak(lextype);
-        }
+                break;
+        } /* switch lextype */
+
     } /* while read next token */
 
     if (sp != 0)

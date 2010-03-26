@@ -614,10 +614,7 @@ void repcode(int *lab)
 void
 untilcode(int lab)
 {
-    char buf[MAXTOK];
     xfer = false;
-    get_token(buf, MAXTOK);
-    /* TODO: asser buf[] == "until" */
     outcon(lab);    /* where to go on `next` */
     ifngo(lab-1);   /* collect COND, if it's false start the loop again */
     outcon(lab+1);  /* end loop */
