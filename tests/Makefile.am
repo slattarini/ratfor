@@ -163,8 +163,13 @@ handwritten_tests = \
   outfile.test \
   repeat-nested-1.test \
   repeat-nested-2.test \
+  repeat-nested-3.test \
+  repeat-nested-4.test \
+  repeat-nested-5.test \
   repeat-nested-1_f77.test \
   repeat-nested-2_f77.test \
+  repeat-nested-3_f77.test \
+  repeat-nested-4_f77.test \
   repeat-until-ambiguity_f77.test \
   repeat-until-run-body-at-least-once_f77.test \
   repeat-until_f77.test \

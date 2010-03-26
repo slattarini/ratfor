@@ -20,10 +20,21 @@
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-echo 'repeat repeat stmt; until(cond1) until(cond2)' > tst.r
+cat >tst.r <<EOF
+repeat
+    repeat
+        repeat
+            repeat
+                stmt
+            until(cond1)
+        until(cond2)
+    until(cond3)
+until(cond4)
+EOF
+
 cat tst.r
 run_RATFOR tst.r || testcase_FAIL
-test ! -s stderr || testcase_FAIL
+test -s stderr && testcase_FAIL
 
 testcase_DONE
 

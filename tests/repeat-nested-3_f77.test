@@ -1,6 +1,6 @@
 #!/bin/sh
 # Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
-# This file is part of The Ratfor Testsuite.
+# This file is part of C Ratfor.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,15 +15,54 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that nested "repeat/until" statements are processed without
-# errors by Ratfor.
+# Check that "deeply" nested "repeat/until" statements work.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-echo 'repeat repeat stmt; until(cond1) until(cond2)' > tst.r
+cat > tst.r <<EOF
+function ifunc(i)
+    integer i
+10  format(I1)
+    write(*,10) i
+    i = i + 1
+end
+
+program tstnestrpt
+    integer i
+    integer ifunc
+    i = 0
+    repeat
+        repeat
+            repeat
+                repeat
+                    repeat
+                        repeat
+                            call ifunc(i)
+                        until(i > 0)
+                    until(i > 0)
+                until(i > 0)
+            until(i > 0)
+        until(i > 0)
+    until(i > 0)
+    call halt
+end
+EOF
+
+echo '0' >exp
+
 cat tst.r
+
 run_RATFOR tst.r || testcase_FAIL
-test ! -s stderr || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 
