@@ -98,7 +98,6 @@ $checks{'status-shell-variable'} = {
     description => "`\$status` shell variable",
     instead_use => "`\$?` for exit status, `\$rc` as variable name",
     must_skip => qr/^\s*#/,
-#    whitelist => ['tests/no-fortran66-while.test:41'],
 };
 
 
@@ -130,7 +129,6 @@ $checks{'no-raw-ratfor'} = {
     must_skip => qr/^\s*#/, # comment lines
     whitelist => [qw{
         lib/rat4-testlib.sh
-        tests/comments-no-hang.test
         tests/subprog-in-stmt-condition.sh:32
     }],
 };
