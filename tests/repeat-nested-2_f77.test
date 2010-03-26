@@ -15,32 +15,43 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that code generated from `repeat repeat STMT until(COND)' works.
+# Check that nested "repeat/until" statements works.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
 program tstnestrpt
-100 format('ok ',I1)
+100 format('i=',I1)
+100 format('j=',I1)
     integer i
-    i = 0
+    j = 0
     repeat
+        i = 0
         repeat {
             i = i + 1
+            j = j + 1
             write(*,100) i
-            if (i >= 4)
-                goto 10
-        } until(i > 10)
-    continue
-10  call halt
+            write(*,200) j
+         }
+        until(i > 2)
+    until(j > 5)
+    call halt
 end
 EOF
 
 cat > exp <<EOF
-ok 1
-ok 2
-ok 3
-ok 4
+i=1
+j=1
+i=2
+j=2
+i=3
+j=3
+i=1
+j=4
+i=2
+j=5
+i=3
+j=6
 EOF
 
 cat tst.r

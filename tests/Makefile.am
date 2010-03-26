@@ -161,8 +161,10 @@ handwritten_tests = \
   outfile-overwrite.test \
   outfile-unwritable-fail.test \
   outfile.test \
-  repeat-nested.test \
-  repeat-nested_f77.test \
+  repeat-nested-1.test \
+  repeat-nested-2.test \
+  repeat-nested-1_f77.test \
+  repeat-nested-2_f77.test \
   repeat-until-ambiguity_f77.test \
   repeat-until-run-body-at-least-once_f77.test \
   repeat-until_f77.test \

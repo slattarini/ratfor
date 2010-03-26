@@ -1,0 +1,39 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of The Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that `repeat repeat STMT until(COND)' is processed without
+# errors by Ratfor.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+echo 'repeat repeat { stmt } until(cond)' > tst1.r
+cat tst1.r
+run_RATFOR tst1.r || testcase_FAIL
+mv stdout stdout1
+mv stderr stderr1
+test -s stderr1 && testcase_FAIL
+
+echo 'repeat repeat repeat repeat { stmt } until(cond)' > tst2.r
+cat tst2.r
+run_RATFOR tst2.r || testcase_FAIL
+mv stdout stdout2
+mv stderr stderr2
+test -s stderr2 && testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
