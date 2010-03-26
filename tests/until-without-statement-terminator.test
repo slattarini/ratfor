@@ -15,14 +15,23 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that an `until(cond) ...' with extra trailing tokens fails.
+# Check (with grep) that tokens after an "until(COND)" statements are
+# recognized as new, separated statements.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-echo 'repeat { stmt } until(cond) trash' >tst.r
+cat > tst.r <<EOF
+repeat { stmt1 } until(cond1) foobar
+repeat stmt2; until(cond2) x=1
+repeat stmt3; until(cond3) 100 labeled
+EOF
+
 cat tst.r
-run_RATFOR -e 1 tst.r || testcase_FAIL
-$FGREP ': extra tokens after until.' stderr || testcase_FAIL
+run_RATFOR tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+$GREP "^${ws0p}foobar${ws0p}$" stdout || testcase_FAIL
+$GREP "^${ws0p}x=1${ws0p}$" stdout || testcase_FAIL
+$GREP "^100${ws1p}labeled${ws0p}$" stdout || testcase_FAIL
 
 testcase_DONE
 

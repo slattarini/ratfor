@@ -1,6 +1,6 @@
 #!/bin/sh
 # Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
-# This file is part of The Ratfor Testsuite.
+# This file is part of the Ratfor Testsuite.
 #
 # This program is free software; you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -15,34 +15,45 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that nested "repeat/until" statements are processed without
-# errors by Ratfor.
+# Check (with the fortran compiler) that tokens after an "until(COND)"
+# statements are recognized as new, separated statements.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
-echo 'repeat repeat stmt; until(cond1) until(cond2)' > tst1.r
-cat tst1.r
-run_RATFOR tst1.r || testcase_FAIL
-mv stdout stdout1
-mv stderr stderr1
-test -s stderr1 && testcase_FAIL
-
-cat >tst2.r <<EOF
-repeat
-    repeat
-        repeat
-            repeat
-                stmt
-            until(cond1)
-        until(cond2)
-    until(cond3)
-until(cond4)
+cat > tst.r <<EOF
+program tokaftuntil
+    integer i
+10  format(I1)
+    i = 0
+    repeat { i = 1 } until(i > 0) write(*,10) i
+    repeat { i = 2 } until(i > 1) 20 write(*,10) i
+    if (i == 2) {
+        i = 3
+        goto 20
+    }
+    call halt
+end
 EOF
-cat tst2.r
-run_RATFOR tst2.r || testcase_FAIL
-mv stdout stdout2
-mv stderr stderr2
-test -s stderr2 && testcase_FAIL
+
+cat > exp <<EOF
+1
+2
+3
+EOF
+
+cat tst.r
+run_RATFOR tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 10 ./tst.exe || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
 

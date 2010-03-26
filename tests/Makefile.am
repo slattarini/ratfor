@@ -214,7 +214,8 @@ handwritten_tests = \
   until-after-empty-lines.test \
   until-do-not-require-further-stmt.test \
   until-followed-by-right-bracket.test \
-  until-with-extra-traling-tokens-fail.test \
+  until-without-statement-terminator.test \
+  until-without-statement-terminator_f77.test \
   until-with-statement-terminator.test \
   until-with-trailing-blanks.test \
   until-without-repeat-fail.test \
