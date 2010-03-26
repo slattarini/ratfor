@@ -22,10 +22,10 @@
 cat > tst.r <<EOF
 program tstnestrpt
 100 format('i=',I1)
-100 format('j=',I1)
+200 format('j=',I1)
     integer i
     j = 0
-    repeat
+    repeat {
         i = 0
         repeat {
             i = i + 1
@@ -34,7 +34,7 @@ program tstnestrpt
             write(*,200) j
          }
         until(i > 2)
-    until(j > 5)
+    } until(j > 5)
     call halt
 end
 EOF
