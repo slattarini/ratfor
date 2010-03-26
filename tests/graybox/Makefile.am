@@ -10,10 +10,13 @@ AUTOMAKE_OPTIONS = color-tests parallel-tests
 
 EXTRA_DIST = $(TESTS)
 
+XFAIL_TESTS = no-blank-lines.test
+
 TESTS = \
   comments-no-hang.test \
   comment-too-long-in-define-ignored.test \
   comment-too-long-in-define-no-crash.test \
+  no-blank-lines.test \
   plain-define-and-comments.test \
   switch-segfault.test \
   tokens-after-until.test \
