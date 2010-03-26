@@ -230,14 +230,16 @@ Writing test cases
   instead of simply `bar.test').  This way, the test driver will skip
   it automatically if the Fortran 77 compiler is not available.
 
-  If you plan to test a ratfor feature (let's call it "foo") by both
+  If you plan to test a ratfor feature (let's call it "foo") both by
   grepping its output and testing the generated Fortran code, divide the
-  test into two scripts, say `scripts/foo.test' and `scripts/foo_f77.test',
-  and place any shared bata between them in `data/foo.data' (if you need
-  more data files, use `data/foo.data1', `data/foo.data2' etc. instead).
-  This is done so that, even when a Fortran 77 compiler is not available,
-  the tests about the feature "foo" will not be completely skipped (only
-  "half-skipped").
+  checks into two scripts, say `foo.test' and `foo_f77.test'.  The script
+  `foo.test' will contain the tests which do not require the Fortran
+  compiler, the script `foo_f77.test' those which require it.  This way,
+  even when no Fortran 77 compiler is available, the tests about "foo"
+  will be at least partially run (which is better than skipping them
+  altogheter).  If the two tests share some common data, it's advisable
+  to place such data in e.g. a `foo.data' file, to avoid error-prone
+  duplication.
 
   Keep the shell code as portable as possible.  This can be trickier that
   you think; for more information, you can refer to the Autoconf manual,
