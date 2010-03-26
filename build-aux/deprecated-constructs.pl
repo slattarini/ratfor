@@ -213,7 +213,7 @@ REPORT: {
         if @sc_errors;
     $msg .= join("\n", map {"I/O ERROR: $_"} @io_errors). "\n---\n"
         if @io_errors;
-    die "$msg" . "$me: FAILED." if $msg;
+    die "$msg" . "$me: FAILED.\n" if $msg;
 }
 
 # vim: ft=perl et sw=4 ts=4
