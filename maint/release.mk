@@ -1,5 +1,5 @@
 # -*- Makefile -*-
-# Copied from SteLib at 2010-02-03 17:49:01 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-05-26 10:58:18 +0200.  DO NOT EDIT!
 #
 #  Contains maintainer-specific rules to create a beta or stable release.
 #  Included by top-level maint.mk.
@@ -51,7 +51,7 @@ git-no-diff-check:
 	  exit 1; \
 	};
 	@rm -f $@.tmp;
-CLEAN_FILES += git-no-diff-check.tmp
+MOSTLYCLEANFILES += git-no-diff-check.tmp
 
 .PHONY: git-no-diff-cached-check
 git-no-diff-cached-check:
@@ -63,7 +63,7 @@ git-no-diff-cached-check:
 	  exit 1; \
 	};
 	@rm -f $@.tmp;
-CLEAN_FILES += git-no-diff-cached-check.tmp
+MOSTLYCLEANFILES += git-no-diff-cached-check.tmp
 
 .PHONY: check-version-alpha check-version-beta check-version-stable
 check-version-for-alpha check-version-beta check-version-stable:
