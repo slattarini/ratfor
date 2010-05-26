@@ -28,9 +28,6 @@ subroutine-name-invalid-3.test
 include-at-stmt-beginning-at-least-dquote.test
 include-at-stmt-beginning-at-least-squote.test
 
-# Obsoleted, wil be removed soonish.
-until-with-extra-traling-tokens-fail.test
-
 # The recent changes in parser have revealed a limitation in the code
 # generation subroutines of C Ratfor, which causes this test to fail.
 # Once we'll have fixed those limitations, this test should pass again,
