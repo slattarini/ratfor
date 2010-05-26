@@ -20,7 +20,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-function ifunc(i)
+subroutine xsub(i)
     integer i
 10  format(I1)
     write(*,10) i
@@ -29,7 +29,6 @@ end
 
 program tstnestrpt
     integer i
-    integer ifunc
     i = 0
     repeat
         repeat
@@ -37,7 +36,7 @@ program tstnestrpt
                 repeat
                     repeat
                         repeat
-                            call ifunc(i)
+                            call xsub(i)
                         until(i > 0)
                     until(i > 0)
                 until(i > 0)
