@@ -35,6 +35,7 @@ handwritten_tests = \
   comments-keep_f77.test \
   comments-no-extra-white-spaces.test \
   comments-not-in-strings.test \
+  comments-semicolon.test \
   comments-unobtrusiveness.test \
   common-block.test \
   common-block_f77.test \
