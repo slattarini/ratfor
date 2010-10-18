@@ -22,7 +22,7 @@
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-program testswtich
+program testnestswitch
     integer i, j
 10 format('SWITCH n.1: i = ', I10, ', j = ', I10)
 20 format('SWITCH n.2: i = ', I10, ', j = ', I10, ', k = ', I10)
