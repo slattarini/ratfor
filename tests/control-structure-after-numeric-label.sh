@@ -31,7 +31,7 @@ check_expanded() {
     if $GREP "^$label.*pass" $out; then
         testcase_FAIL "statement \"$stmt\" not expanded correctly"
     else
-        : # required otherwise some shells aborts since `set -e' is on
+        : # required otherwise some shells abort since `set -e' is on
     fi
 }
 
