@@ -40,7 +40,7 @@ check_not_in_output() {
         if $FGREP "$s" $out; then
             testcase_FAIL "string \"$s\" found in ratfor output"
         else
-            : # required otherwise some shells aborts since `set -e' is on
+            : # required otherwise some shells abort since `set -e' is on
         fi
     done
 }
