@@ -1,5 +1,5 @@
 ## -*- Makefile.am -*-
-## Copied from SteLib at 2010-03-05 17:12:08 +0100.  DO NOT EDIT!
+## Copied from SteLib at 2010-10-18 23:18:01 +0200.  DO NOT EDIT!
 ##
 ## Provide a rule checking that the list of tests given in the Makefile
 ## is equal to the list of all test scripts in the same directory.
@@ -26,7 +26,6 @@ stelib__tmk = tests-in-makefile-list.tmp
 stelib__tfs = tests-on-filesystem-list.tmp
 stelib__tdf = diff-in-tests-lists.tmp
 
-
 # Check that the list of tests given in the Makefile is equal to the
 # list of all test scripts in the same directory.  Take into account
 # also generated tests, by looking for them in $(builddir).
@@ -36,34 +35,34 @@ stelib__tdf = diff-in-tests-lists.tmp
 maintainer-check-list-of-tests:
 	@test x'$(AM_V_at)' != x'@' || echo " MAINTCHECK $@"
 	$(AM_V_at):; \
-	  ## prefer unified diffs over plain diffs, for readability
-	  if test -n '$(DIFF_U)'; then \
-	    diff='$(DIFF_U)'; \
-	  elif diff -u /dev/null /dev/null >/dev/null 2>&1; then \
-	    diff='diff -u'; \
-	  else \
-	    diff='diff'; \
-	  fi; \
-	  ## list of tests in Makefile
-	  for t in $(TESTS); do \
-	    echo "$$t"; \
-	  done | sort >$(stelib__tmk); \
-	  ## list of tests on filesystem
-	  glob="$(srcdir)/*.test"; \
-	  if test x"$(srcdir)" != x"$(builddir)"; then \
-	    glob="$$glob $(builddir)/*.test"; \
-	  fi; \
-	  for t in $$glob; do \
-	    echo "$$t"; \
-	  done | sed 's,^.*/,,' | sort >$(stelib__tfs); \
-	  ## compare the two lists
-	  if $$diff $(stelib__tmk) $(stelib__tfs) >$(stelib__tdf); then \
-	     e=0; \
-	  else \
-	     echo '$@: list of tests in Makefile an on filesystem differ' >&2; \
-	     echo "+ $$diff in-makefile on-filesystem" >&2; \
-	     cat $(stelib__tdf) >&2; \
-	     e=1; \
+	## prefer unified diffs over plain diffs, for readability
+	if test -n '$(DIFF_U)'; then \
+	  diff='$(DIFF_U)'; \
+	elif diff -u /dev/null /dev/null >/dev/null 2>&1; then \
+	  diff='diff -u'; \
+	else \
+	  diff='diff'; \
+	fi; \
+	## list of tests in Makefile
+	for t in $(TESTS); do \
+	  echo "$$t"; \
+	done | sort >$(stelib__tmk); \
+	## list of tests on filesystem
+	glob="$(srcdir)/*.test"; \
+	if test x"$(srcdir)" != x"$(builddir)"; then \
+	  glob="$$glob $(builddir)/*.test"; \
+	fi; \
+	for t in $$glob; do \
+	  echo "$$t"; \
+	done | sed 's,^.*/,,' | sort >$(stelib__tfs); \
+	## compare the two lists
+	if $$diff $(stelib__tmk) $(stelib__tfs) >$(stelib__tdf); then \
+	   e=0; \
+	else \
+	   echo '$@: list of tests in Makefile and on filesystem differ' >&2; \
+	   echo "+ $$diff in-makefile on-filesystem" >&2; \
+	   cat $(stelib__tdf) >&2; \
+	   e=1; \
 	fi; \
 	rm -f $(stelib__tmk) $(stelib__tfs) $(stelib__tdf); \
 	exit $$e;
