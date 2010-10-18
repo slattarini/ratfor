@@ -81,7 +81,6 @@ rat4_var_append() {
     eval $1=\$v
 }
 
-m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
 AC_ARG_VAR([RAT4_TESTSUITE_XFAIL_TESTS],
            [List of testcases expected to fail with your version of
             Ratfor (list is empty by default)])
