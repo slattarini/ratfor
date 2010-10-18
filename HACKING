@@ -13,7 +13,7 @@ Bootstrap
   variable).
 
   Note that to correctly generate the autotools' files you'll need to have
-  installed the latest version of autoconf (2.64) and automake (1.11).
+  installed the recent versions of autoconf (2.64) and automake (1.11.1).
 
 
 Git Submodules
