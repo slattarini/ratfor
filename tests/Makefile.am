@@ -459,6 +459,31 @@ $(tests_control_structure_with_empty_body_f77): Makefile
 	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
 	$(autogen_sh__post)
 
+#
+# Ratfor should complain when some control structures keywords ("if",
+# "for", "until", ...) are not followed by a left parenthesis.
+#
+
+tests_keyword_missing_left_paren = \
+  if-missing-left-paren.test \
+  while-missing-left-paren.test \
+  for-missing-left-paren.test \
+  until-missing-left-paren.test
+generated_tests += $(tests_keyword_missing_left_paren)
+
+EXTRA_DIST += keyword-missing-left-paren.sh
+$(tests_keyword_missing_left_paren:.test=.log): \
+  keyword-missing-left-paren.sh
+
+$(tests_keyword_missing_left_paren): Makefile
+	$(autogen_sh__pre)
+	$(AM_V_GEN): \
+	   && helper="keyword-missing-left-paren.sh" \
+	   && stmt=`echo $@ | sed "s/-missing-left-paren\.test$$//"` \
+	   && echo "stmt='$$stmt'" >> $@-t \
+	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
+	$(autogen_sh__post)
+
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am

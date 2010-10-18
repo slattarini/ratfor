@@ -5,6 +5,8 @@ New in XXX
  * Much better and more extensive tests on the "repeat/until" statement.
  * Added tests checking that ratfor statements with empty bodies (e.g.
    "if(cond);" or "while(cond){}") work as expected.
+ * Added tests checking that ratfor correctly complains when parentheses
+   are missing after keywords that require them (e.g. "if" and "until").
  * Added tests checking that the `break' and `next' ratfor keywords are
    recognized and processed when placed after a numerical label, and are
    not recognized/processed when placed in the middle of a statement (we

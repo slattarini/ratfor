@@ -71,3 +71,8 @@
 /switch-with-empty-body_f77.test
 /while-with-empty-body.test
 /while-with-empty-body_f77.test
+
+/if-missing-left-paren.test
+/while-missing-left-paren.test
+/for-missing-left-paren.test
+/until-missing-left-paren.test
