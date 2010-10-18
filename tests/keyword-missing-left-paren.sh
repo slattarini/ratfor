@@ -37,7 +37,7 @@ esac > template
 i=0
 for token in '' '1' 'foo' ';' 'a;b' '_' ':' '\&' '@'; do
   i=`expr $i + 1`
-  sed "s/TOKEN/$token/" template | tr '@' "$NEWLINE" > tst-$i.r
+  $SED "s/TOKEN/$token/" template | tr '@' "$NEWLINE" > tst-$i.r
   cat tst-$i.r
   run_RATFOR -e 1 tst-$i.r
   mv stdout stdout-$i
