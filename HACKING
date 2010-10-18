@@ -13,8 +13,8 @@ Introduction and general information
 
   To bootstrap checked-out sources, just run
     $ autoreconf -vi
-  from the top directory. Note that to do this you'll need to have
-  installed the latest version of autoconf (2.62) and automake (1.11).
+  from the top directory.  Note that to do this you'll need fairly modern
+  versions of autoconf (>= 2.64) and automake (>= 1.11.1).
 
 
  Configuring and building
@@ -130,10 +130,18 @@ Writing test cases
  Do
  --
 
-  Make sure the new test is executable.  Add it to TESTS in Makefile.am,
-  add it to XFAIL_TESTS in addition if needed.  If it depends on a data
-  file (say `foo.data'), add the proper dependency in Makefile.am, e.g.
-  `foo.log: foo.data', and add `foo.data' to EXTRA_DIST.
+  Make sure the new test is executable.  Add it to $(handwritten_tests)
+  in `tests/Makefile.am', and if it's expected to fail, add it to
+  $(XFAIL_TESTS) too.  If the new tests uses or depends on a data file
+  (say `foo.data'), add the proper dependency declaration(s) in
+  `tests/Makefile.am' (e.g., "foo.log: foo.data"), and add `foo.data'
+  to $(EXTRA_DIST).
+
+  It's ok to have automatically generated tests.  Just be sure that they
+  work also in VPATH setups, that their dependencies are fully specified,
+  and that the commands/recipe to generate them are portable.  See the
+  existing test scripts' generation rules in `tests/Makefile.am' for some
+  good examples.
 
   Explain what each test does, at least briefly.
 
@@ -245,7 +253,7 @@ Writing test cases
   you think; for more information, you can refer to the Autoconf manual,
   especially the section `Portable shell programming' -- which should be
   reachable at the following URL:
-  http://www.gnu.org/software/autoconf/manual/html_node/Portable-Shell.html
+   <http://www.gnu.org/software/autoconf/manual/html_node/Portable-Shell.html>
   See also about a particularly nasty bug of zsh, in the section `Do Not'
   below.
 
@@ -263,8 +271,8 @@ Writing test cases
   it incomplete or sloppy.
 
   Do not test a ratfor error with `$RATFOR && testcase_FAIL', since the
-  ratfor program might fail for a reason different from the one you thought
-  of.
+  ratfor program might fail for a reason different from the one you've
+  thought of.
   Better use something like:
      run_RATFOR -e 1 || testcase_FAIL
      $GREP 'expected diagnostic' stderr || testcase_FAIL
