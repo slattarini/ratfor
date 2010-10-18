@@ -78,8 +78,9 @@ handwritten_tests = \
   else-without-if-fail.test \
   empty-input.test \
   exponentiation-operator_f77.test \
-  for-with-empty-clauses_f77.test \
   for_f77.test \
+  for-nested_f77.test \
+  for-with-empty-clauses_f77.test \
   forever1_f77.test \
   forever2_f77.test \
   function-name-invalid-1.test \
@@ -245,7 +246,8 @@ handwritten_tests = \
   verbatim-long-line.test \
   verbatim-no-extra-new-line.test \
   verbatim-stress_f77.test \
-  while_f77.test
+  while_f77.test \
+  while-nested_f77.test
 
 
 ##

@@ -1,0 +1,92 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test that "while" loops can be safely nested.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+integer function incr(i)
+    integer i
+    i = i + 1
+    return (i - 1)
+end
+
+program testnestfor
+    implicit none
+    integer x, y, z, incr
+
+    write(*,200)
+
+    x = 4
+    while(11 > x) {
+        y = 1
+        while (y < 5) {
+            z = y
+            while(y + incr(z) <= 7)
+                write(*,100) x, y, z-1
+            y = y + 2
+        }
+        x = x * 2
+    }
+
+    write(*,200)
+    call halt
+
+100 format(I10, ' ', I10, ' ', I10)
+200 format('~~~~~~~~')
+end
+EOF
+
+cat > exp <<EOF
+~~~~~~~~
+4 1 1
+4 1 2
+4 1 3
+4 1 4
+4 1 5
+4 1 6
+4 3 3
+4 3 4
+8 1 1
+8 1 2
+8 1 3
+8 1 4
+8 1 5
+8 1 6
+8 3 3
+8 3 4
+~~~~~~~~
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 10 ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+ws_normalize <stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
