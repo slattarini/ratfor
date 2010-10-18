@@ -267,9 +267,4 @@ Miscellaneous
   into the C Ratfor Git repository.
 
   We don't use SVN-style $Id$ lines, which create more problems than
-  they solve.  In fact, when a file with $Id$ lines and "ident" git
-  attribute is (locally) committed, its $Id$ line is *not* updated with
-  the new commit's SHA-1 id; thus, a "make dist" can easily create a
-  tarball including files with *wrong* $Id$ line -- which is far, far
-  worse than having no $Id$ line at all.
-
+  they solve, especially with Git.
