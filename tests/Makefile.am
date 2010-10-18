@@ -34,7 +34,8 @@ handwritten_tests = \
   comments-keep-at-stmt-begin.test \
   comments-keep_f77.test \
   comments-no-extra-white-spaces.test \
-  comments-not-in-strings.test \
+  comments-not-in-dquoted-strings.test \
+  comments-not-in-squoted-strings.test \
   comments-rbracket.test \
   comments-semicolon.test \
   comments-unobtrusiveness.test \

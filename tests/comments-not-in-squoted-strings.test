@@ -16,42 +16,38 @@
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
 # Check that ratfor #-comments are not erroneusly discarded from
-# strings.
+# single-quoted strings.   Keep this in sync with sister test
+# `comments-not-in-squoted-strings.test'
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 k="keep me"
+q=\'
 
-cat > tst1.r <<EOF
-"# $k 1"
-  "# $k 2"
-a b c "# $k 3"
-3 "# $k 4"
-foo = 1; "# $k 5"
-{ "# $k 6" }
-{ x "# $k 7" }
-foo("# $k 8")
-call bar("# $k 9")
-for(x="# $k 10"; true; pass;) pass
+cat > tst.r <<EOF
+$q#:$k 1:$q
+  $q# :$k 2:$q
+a b c $q#:$k 3: $q
+3 $q# :$k 4: $q
+foo = 1; $q# :$k 5: $q
+{ $q#:$k 6:$q }
+{ x $q#:$k 7:$q }
+foo($q# :$k 8: $q)
+call bar($q#:$k 9:$q)
+for(x=$q#:$k 10:$q; true; pass;) pass
 while(1) {
-  "# $k 11"
-  if(2) "# $k 12"
+  $q# :$k 11:$q
+  if(2) $q#:$k 12:$q
 }
-repeat "# $k 13" until(3)
-repeat { s = "# $k 13" }
+repeat $q# :$k 13:$q until(3)
+repeat { s = $q#:$k 14:$q }
 EOF
 
-$SED -e "s/\"/'/g" tst1.r >tst2.r
-
-for i in 1 2; do
-    cat tst$i.r
-    run_RATFOR tst$i.r || testcase_FAIL
-    mv stdout stdout$i
-    mv stderr stderr$i
-    test -s stderr$i && testcase_FAIL
-    for j in 1 2 3 4 5 6 7 8 9 10 11 12 13; do
-        $FGREP "$k $j" stdout$i || testcase_FAIL
-    done
+cat tst.r # for debugging
+run_RATFOR tst.r || testcase_FAIL
+test -s stderr && testcase_FAIL
+for i in 1 2 3 4 5 6 7 8 9 10 11 12 13 14; do
+    $FGREP ":$k $i:" stdout || testcase_FAIL
 done
 
 testcase_DONE
