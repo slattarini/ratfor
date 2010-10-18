@@ -38,11 +38,11 @@ case $stmt in
         ;;
 
     "do")
-        (echo "do i=1,10"; echo ";")  > $b-1.r
-        (echo "do i=1,10"; echo "{}") > $b-2.r
-        echo "do i=1,10; ;"           > $b-3.r
-        echo "do i=1,10 {}"           > $b-4.r
-        echo "do i=1,10; {}"          > $b-5.r
+        (echo "do i=1,10" && echo ";")  > $b-1.r
+        (echo "do i=1,10" && echo "{}") > $b-2.r
+        echo "do i=1,10; ;"             > $b-3.r
+        echo "do i=1,10 {}"             > $b-4.r
+        echo "do i=1,10; {}"            > $b-5.r
         ;;
 
     "for")
