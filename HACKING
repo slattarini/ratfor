@@ -85,7 +85,7 @@ C Coding Style
 
   Constants defined with `enum' or with `#define' must be written in
   UPPERCASE.  Macros defined with `#define' should be written in UPPERCASE,
-  *unless* keeping them lowercase can make the code clearer.
+  *unless* keeping them lowercase can make the code definitely clearer.
 
   Do not use typedefs (apart the already exising typedef `bool' for
   booleans): it's better know the real type of what is being declared
@@ -135,12 +135,12 @@ C Coding Style
     ...
     /* BAD */
     for (i = 0; i < SIZE; i++)
-        /* init array */
+        /* initialize i-th array element */
         a[i] = i + 1
     ...
   do this:
     ...
-    /*  GOOD */
+    /* GOOD */
     for (i = 0; i < SIZE; i++) {
         /* init array */
         a[i] = i + 1
@@ -212,17 +212,22 @@ Testsuite
   For more information about the graybox tests, you can refer to the (still
   skimpy) file `tests/graybox/HACKING'.
 
-  FIXME the unit tests has not been written yet, and no HACKING/README file
-  for them has been provided yet.
+  *** FIXME! ***
+    The unit tests has not been written yet, and no HACKING/README file
+    for them has been provided yet.
 
 
 Fixing bugs
 -----------
 
-  The correct response to most actual bugs is to write a new test case
-  which demonstrates the bug.  Then fix the bug, re-run the test suite,
+  The correct response to most actual bugs is to write new testcase(s)
+  which demonstrate the bug.  Then fix the bug, re-run the test suite,
   and check everything in.
 
+  If the bug is particularly complex or subtle, it might be even better
+  to first commit the (still failing) testcase, and only thereafter fix
+  the bug, committing this fix separately.  The testcase should then be
+  expected to pass after the fix is in place.
 
 Making a release
 ----------------
