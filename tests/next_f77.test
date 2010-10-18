@@ -119,6 +119,7 @@ EOF
 
 : > exp
 
+# This is used only to make the verbose logs prettier and clearer.
 xline='~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 
 echo "$xline" >>exp
