@@ -44,17 +44,15 @@ AC_CONFIG_SUBDIRS([tests/blackbox])
 # invoked script `blackbox-tests/configure'.
 #
 
-# Ratfor program to be used in the testsuite. *Must* be an absolute path.
+# Ratfor program to be used in the testsuite.  It *must* be an
+# absolute path.
 # NOTE: when the configure script is running, the current working
 # directory (returned by `pwd') is the build directory.
-RATFOR=`pwd`/src/c-ratfor
-export RATFOR
+RATFOR=`pwd`/src/c-ratfor; export RATFOR
 AC_MSG_NOTICE([exported RATFOR='$RATFOR'])
 
 test -f "$srcdir/xfail-tests.list" && test -r "$srcdir/xfail-tests.list" \
  || AC_MSG_ERROR([file `xfail-tests.list' not found in srcdir `$srcdir'])
-
-m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
 
 AC_MSG_NOTICE([reading list of test cases expected to fail])
 RAT4_TESTSUITE_XFAIL_TESTS=`
