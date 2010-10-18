@@ -3,8 +3,8 @@ List of user-visible changes of Ratfor Testsuite.
 New in XXX
 -----------
  * Added tests checking that nested "switch" statements work.
- * New test ensuring that comments are not terminated by semicolons or
-   right curly brackets.
+ * Added tests checking that ratfor comments are not terminated by
+   semicolons or right curly brackets.
  * Much better and more extensive tests on the "repeat/until" statement.
  * Added tests checking that ratfor statements with empty bodies (e.g.
    "if(cond);" or "while(cond){}") work as expected.
