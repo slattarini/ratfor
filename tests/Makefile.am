@@ -263,7 +263,7 @@ integers-many-bases.log integers-many-bases_f77.log: \
   integers-many-bases.data
 
 EXTRA_DIST += break-next-fail.data
-break-fail.test next-fail.test: break-next-fail.data
+break-fail.log next-fail.log: break-next-fail.data
 
 EXTRA_DIST += break-next-nested-fail.data
 break-nested-fail.log next-nested-fail.log: break-next-nested-fail.data
