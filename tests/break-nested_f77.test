@@ -1,0 +1,141 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test that "break N" (N > 0) can break out N levels of enclosing loops.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+program testbreaklvl
+    implicit none
+    integer i, j, k
+
+100 format('')
+200 format(A10, ' ', A10, ' run ', I10, ' ')
+300 format(A10, ' after')
+
+    ###  WHILE  ###
+    write(*,100)
+    i = 1
+    while(i <= 2) {
+        while(1 == 1) {
+            while(1 == 1) {
+                write(*, 200) 'while', 'depth3', i
+                break 2
+                call halt(1)
+            }
+            write(*, 200) 'while', 'depth2', i
+            call halt(1)
+        }
+        write(*, 200) 'while', 'depth1', i
+        i = i + 1
+    }
+    write(*, 300) 'while'
+
+    ###  FOR  ###
+    write(*,100)
+    for (i = 1; i <= 2; i = i + 1) {
+        for(j = 1; j == 1; j = 1) {
+            for(k = 1; k == 1; k = 1) {
+                write(*, 200) 'for', 'depth3', i
+                break 2
+                call halt(1)
+            }
+            write(*, 200) 'for', 'depth2', i
+            call halt(1)
+        }
+        write(*, 200) 'for', 'depth1', i
+    }
+    write(*, 300) 'for'
+
+    ###  REPEAT  ###
+    write(*,100)
+    i = 1
+    repeat {
+        repeat {
+            repeat {
+                write(*, 200) 'repeat', 'depth3', i
+                break 2
+                call halt(1)
+            }
+            write(*, 200) 'repeat', 'depth2', i
+            call halt(1)
+        }
+        write(*, 200) 'repeat', 'depth1', i
+        i = i + 1
+    } until (i >= 3)
+    write(*, 300) 'repeat'
+
+    ###  DO  ###
+    write(*,100)
+    do i = 1,2 {
+        do j=2,10 {
+            do k=2,10 {
+                write(*, 200) 'do', 'depth3', i
+                break 2
+                call halt(1)
+            }
+            write(*, 200) 'do', 'depth2', i
+            call halt(1)
+        }
+        write(*, 200) 'do', 'depth1', i
+    }
+    write(*, 300) 'do'
+
+    ###  STOP  ###
+    write(*,100)
+    call halt
+
+end
+EOF
+
+: > exp
+
+# This is used only to make the verbose logs prettier and clearer.
+xline='~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+
+echo "$xline" >>exp
+for kw in 'while' 'for' 'repeat' 'do'; do
+    $SED "s/^$ws0p//" <<EOF
+
+        ${kw} depth3 run 1
+        ${kw} depth1 run 1
+        ${kw} depth3 run 2
+        ${kw} depth1 run 2
+        ${kw} after
+EOF
+done >>exp
+echo >>exp
+echo "$xline" >>exp
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 15 ./tst.exe || testcase_FAIL
+(echo "$xline" && ws_normalize <stdout && echo "$xline") >got
+
+cat exp
+cat got
+
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

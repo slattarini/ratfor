@@ -25,8 +25,10 @@ EXTRA_DIST += $(handwritten_tests)
 TESTS += $(handwritten_tests)
 handwritten_tests = \
   balanced-parens.test \
-  break-fail.test \
   break_f77.test \
+  break-nested_f77.test \
+  break-fail.test \
+  break-nested-fail.test \
   case-sensibility-basic.test \
   comments-discard-after-numerical-label.test \
   comments-discard-at-stmt-begin.test \
@@ -144,8 +146,10 @@ handwritten_tests = \
   misc1.test \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
-  next-fail.test \
   next_f77.test \
+  next-nested_f77.test \
+  next-fail.test \
+  next-nested-fail.test \
   no-curly-brackets.test \
   no-double-quotes.test \
   no-extra-leading-white-spaces.test \
@@ -260,6 +264,9 @@ integers-many-bases.log integers-many-bases_f77.log: \
 
 EXTRA_DIST += break-next-fail.data
 break-fail.test next-fail.test: break-next-fail.data
+
+EXTRA_DIST += break-next-nested-fail.data
+break-nested-fail.log next-nested-fail.log: break-next-nested-fail.data
 
 EXTRA_DIST += subprog-name-invalid.sh
 subroutine-name-missing-1.log \

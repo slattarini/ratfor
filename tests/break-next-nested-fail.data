@@ -1,0 +1,44 @@
+## Data file shared by tests `next-nested-fail' and `break-nested-fail'
+
+KWORD 1                 # ERR
+KWORD 2                 # ERR
+
+for(;;)
+    KWORD 1
+while(true) { KWORD 1 }
+
+if(false)
+    KWORD 1             # ERR
+
+for(;;)
+    KWORD 2             # ERR
+while(true)
+    KWORD 2             # ERR
+
+while(true)
+{
+    KWORD
+    KWORD 3             # ERR
+}
+
+for(;;)
+   for(;;)
+      KWORD 3           # ERR
+
+while(true)
+    repeat KWORD 2
+    repeat KWORD 3      # ERR
+
+for(;;)
+   do i = 1,n
+       while(true) {
+           KWORD 3
+           KWORD 4      # ERR
+           KWORD 2
+       }
+
+for(;;) {
+    repeat {
+        KWORD 3         # ERR
+    } until(false)
+}
