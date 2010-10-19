@@ -54,7 +54,7 @@ AC_MSG_NOTICE([exported RATFOR='$RATFOR'])
 test -f "$srcdir/xfail-tests.list" && test -r "$srcdir/xfail-tests.list" \
  || AC_MSG_ERROR([file `xfail-tests.list' not found in srcdir `$srcdir'])
 
-m4_pattern_allow([RAT4_TESTSUITE_XFAIL_TESTS])
+m4_pattern_allow([^RAT4_TESTSUITE_XFAIL_TESTS$])
 
 AC_MSG_NOTICE([reading list of test cases expected to fail])
 RAT4_TESTSUITE_XFAIL_TESTS=`
