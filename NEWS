@@ -2,6 +2,7 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
+ * The rules creating the generated test script should now work portably.
  * Extended tests on `break' and `next' keywords, esp. by checking that
    they work as advised when the optional integer argument is present.
  * Added tests checking that nested "for", "while" and "switch" statements

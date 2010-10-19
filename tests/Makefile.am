@@ -3,9 +3,6 @@
 ##
 # Makefile for the tests in the Ratfor Testsuite.
 
-# Required to avoid make erronously seeing comments in shell code.
-sharp = \#
-
 ## All updated later throughout the file.
 TESTS =
 EXTRA_DIST =
@@ -323,24 +320,23 @@ MOSTLYCLEANFILES += *.test-t
 .PHONY: test-scripts
 test-scripts: $(generated_tests)
 
-## helper internal variables
-autogen_sh__pre = $(AM_V_at)set -e;\
+## Two helper internal variables.
+autogen_sh__pre = $(AM_V_at)set -e; \
   rm -f $@ $@-t; \
   { \
-    echo '$(sharp)! /bin/sh'; \
-    echo '$(sharp) This file is part of the Ratfor Testsuite.'; \
-    echo '$(sharp) This file has been automatically generated. ' \
-         'DO NOT EDIT BY HAND!'; \
+## The use of a `#' character into a make variable assignement is
+## impossible to do portable, so we resort to the following `tr'-based
+## hack.
+    { echo '@! /bin/sh'; \
+      echo '@ This file is part of the Ratfor Testsuite.'; \
+      echo '@ This file has been automatically generated. ' \
+           'DO NOT EDIT BY HAND!'; \
+	} | tr '@' '\043'; \
     echo; \
     echo '. $(top_builddir)/lib/rat4-testsuite-init.sh || exit 99'; \
     echo; \
   } >$@-t
-
-autogen_sh__post = $(AM_V_at)set -e;\
-  echo >>$@-t; \
-  echo '$(sharp) vim: ft=sh ts=4 sw=4 et' >>$@-t; \
-  chmod a-w,a+x $@-t; \
-  mv -f $@-t $@
+autogen_sh__post = $(AM_V_at)chmod a-w,a+x $@-t && mv -f $@-t $@
 
 #
 # Ratfor control structures after numeric labels.
