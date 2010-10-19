@@ -8,7 +8,6 @@ sharp = \#
 
 ## All updated later throughout the file.
 TESTS =
-check_SCRIPTS =
 EXTRA_DIST =
 MOSTLYCLEANFILES =
 CLEANFILES =
@@ -317,10 +316,12 @@ include-at-stmt-beginning-only-squote.log \
 #
 
 generated_tests = ## updated later
-check_SCRIPTS += $(generated_tests)
 TESTS += $(generated_tests)
 CLEANFILES += $(generated_tests)
 MOSTLYCLEANFILES += *.test-t
+
+.PHONY: test-scripts
+test-scripts: $(generated_tests)
 
 ## helper internal variables
 autogen_sh__pre = $(AM_V_at)set -e;\
