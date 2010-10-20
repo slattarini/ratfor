@@ -1,5 +1,9 @@
 List of user-visible changes of Ratfor Testsuite.
 
+New in XXX
+-----------
+ * Again more tests on `break' and `next', esp. when used with arguments.
+
 New in 0.9i
 -----------
  * The rules creating the generated test script should now work portably.

@@ -22,6 +22,7 @@ TESTS += $(handwritten_tests)
 handwritten_tests = \
   balanced-parens.test \
   break_f77.test \
+  break1_f77.test \
   break-nested_f77.test \
   break-fail.test \
   break-nested-fail.test \
@@ -143,6 +144,7 @@ handwritten_tests = \
   nested-loops_f77.test \
   nested-subprogram-fail.test \
   next_f77.test \
+  next1_f77.test \
   next-nested_f77.test \
   next-fail.test \
   next-nested-fail.test \

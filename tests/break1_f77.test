@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
 # This file is part of the Ratfor Testsuite.
 #
 # This program is free software; you can redistribute it and/or modify
@@ -15,8 +15,8 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Test the `break' statement, without arguments (by compiling and running
-# the generated fortran code)
+# Test that "break 1" is equivalent to "break" (by compiling and running
+# the generated fortran code).
 # Keep this in sync with sister test `break_f77.test'.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
@@ -34,7 +34,7 @@ program testbreak
     i = 5
     while(i < 10) {
         write(*, 100) 'while1', i
-        break
+        break 1
         i = i + 1
     }
 
@@ -44,7 +44,7 @@ program testbreak
     while(i < 10) {
         write(*, 100) 'while2', i
         if (i >= 3)
-            break
+            break 1
         i = i + 1
     }
 
@@ -52,7 +52,7 @@ program testbreak
     write(*,200)
     for(i = 5; i < 10; i = i + 1) {
         write(*, 100) 'for1', i
-        break
+        break 1
     }
 
     ###  FOR  ###
@@ -60,7 +60,7 @@ program testbreak
     for(i = 1; i < 10; i = i + 1) {
         write(*, 100) 'for2', i
         if (i >= 3)
-            break
+            break 1
     }
 
     ###  REPEAT  ###
@@ -68,7 +68,7 @@ program testbreak
     i = 5
     repeat {
         write(*, 100) 'repeat1', i
-        break
+        break 1
         i = i + 1
     } until(i >= 10)
 
@@ -78,7 +78,7 @@ program testbreak
     repeat {
         write(*, 100) 'repeat2', i
         if (i >= 3)
-            break
+            break 1
         i = i + 1
     } until(i >= 10)
 
@@ -86,7 +86,7 @@ program testbreak
     write(*,200)
     do i = 5, 10 {
         write(*, 100) 'do1', i
-        break
+        break 1
     }
 
     ###  DO  ###
@@ -94,7 +94,7 @@ program testbreak
     do i = 1, 10 {
         write(*, 100) 'do2', i
         if (i >= 3)
-            break
+            break 1
     }
 
     ###  STOP  ###

@@ -17,6 +17,7 @@
 
 # Test the `next' statement (by compiling and running the generated
 # fortran code).
+# Keep this in sync with sister test `next_f77.test'.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 

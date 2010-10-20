@@ -15,93 +15,107 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Test the `break' statement, without arguments (by compiling and running
-# the generated fortran code)
-# Keep this in sync with sister test `break_f77.test'.
+# Test that "next 1" is equivalent to "next" (by compiling and running
+# the generated fortran code).
+# Keep this in sync with sister test `next_f77.test'.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
 
 cat > tst.r <<EOF
-program testbreak
+program testnext
     implicit none
     integer i
 
 100 format(A20, ' / ', I20)
+150 format(A20, ' / ', A20)
 200 format('')
 
     ###  WHILE  ###
     write(*,200)
-    i = 5
-    while(i < 10) {
+    i = 1
+    while(i < 4) {
         write(*, 100) 'while1', i
-        break
+        i = i + 1
+        next 1
         i = i + 1
     }
 
     ###  WHILE  ###
     write(*,200)
     i = 1
-    while(i < 10) {
+    while(i <= 6) {
         write(*, 100) 'while2', i
-        if (i >= 3)
-            break
+        i = i + 1
+        if (i <= 3)
+            next 1
         i = i + 1
     }
 
     ###  FOR  ###
     write(*,200)
-    for(i = 5; i < 10; i = i + 1) {
+    for(i = 1; i < 4; i = i + 1) {
         write(*, 100) 'for1', i
-        break
+        next 1
+        i = i + 1
     }
 
     ###  FOR  ###
     write(*,200)
-    for(i = 1; i < 10; i = i + 1) {
+    for(i = 1; i <= 6; i = i + 1) {
         write(*, 100) 'for2', i
-        if (i >= 3)
-            break
+        if (i + 1 <= 3)
+            next 1
+        i = i + 1
     }
 
     ###  REPEAT  ###
     write(*,200)
-    i = 5
+    i = 1
     repeat {
         write(*, 100) 'repeat1', i
-        break
         i = i + 1
-    } until(i >= 10)
+        next 1
+        i = i + 1
+    } until(i >= 4)
 
     ###  REPEAT  ###
     write(*,200)
     i = 1
     repeat {
         write(*, 100) 'repeat2', i
-        if (i >= 3)
-            break
         i = i + 1
-    } until(i >= 10)
+        if (i <= 3)
+            next 1
+        i = i + 1
+    } until(i >= 6)
+
+    #
+    # WARNING: modifying the value of the looping variable in the body
+    #          of a do-loop is a Fortran big no-no.
+    #
 
     ###  DO  ###
     write(*,200)
-    do i = 5, 10 {
+    do i = 1, 3 {
         write(*, 100) 'do1', i
-        break
+        next 1
+        write(*, 150) 'do1', 'No-No'
     }
 
     ###  DO  ###
     write(*,200)
-    do i = 1, 10 {
+    do i = 1, 6 {
         write(*, 100) 'do2', i
-        if (i >= 3)
-            break
+        if (i > 3)
+            next 1
+        write(*, 100) 'do2', i*10
     }
 
     ###  STOP  ###
     write(*,200)
     call halt
-
 end
+
 EOF
 
 : > exp
@@ -110,18 +124,39 @@ EOF
 xline='~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
 
 echo "$xline" >>exp
-for kw in 'while' 'for' 'repeat' 'do'; do
+
+for kw in 'while' 'for' 'repeat'; do
     $SED "s/^$ws0p//" <<EOF
 
-        ${kw}1 / 5
+        ${kw}1 / 1
+        ${kw}1 / 2
+        ${kw}1 / 3
 
         ${kw}2 / 1
         ${kw}2 / 2
         ${kw}2 / 3
+        ${kw}2 / 5
 EOF
 done >>exp
-echo >>exp
-echo "$xline" >>exp
+
+cat >>exp <<EOF
+
+do1 / 1
+do1 / 2
+do1 / 3
+
+do2 / 1
+do2 / 10
+do2 / 2
+do2 / 20
+do2 / 3
+do2 / 30
+do2 / 4
+do2 / 5
+do2 / 6
+EOF
+
+(echo && echo "$xline") >>exp
 
 cat tst.r
 
@@ -129,12 +164,12 @@ run_RATFOR tst.r || testcase_FAIL
 mv stdout tst.f
 run_F77 tst.f || testcase_FAIL
 run_command timer -t 15 ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
 (echo "$xline" && ws_normalize <stdout && echo "$xline") >got
 
 cat exp
 cat got
 
-test -s stderr && testcase_FAIL
 $DIFF_U exp got || testcase_FAIL
 
 testcase_DONE
