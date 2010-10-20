@@ -28,16 +28,10 @@ SUBDIRS = lib sanity-checks tests
 EXTRA_DIST = \
   HACKING \
   GNUmakefile \
-  build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
   maint/maint.mk \
   maint/release.mk \
-  maint/developer.mk \
-  ChangeLog-old \
-  ChangeLog-2009 \
-  $(top_srcdir)/ChangeLog
-## the use of $(top_srcdir) above is required to have non-GNU make
-## implementations (e.g. FreeBSD make and Solaris make) working
+  maint/developer.mk
 
 # List of files which must not be put in the distributed tarball.
 no_dist_files = \
@@ -48,10 +42,8 @@ no_dist_files = \
 # Enabling of maintainer rules.
 if ENABLE_MAINTAINER_MAKE_RULES
   ENABLE_MAINTAINER_MAKE_RULES = yes
-  FORCE_CHANGELOG_GENERATION = yes
 else
   ENABLE_MAINTAINER_MAKE_RULES = no
-  FORCE_CHANGELOG_GENERATION = no
 endif
 
 # Check that we do not erreonously include in the tarball any file which
@@ -64,15 +56,6 @@ dist-hook: dist-hook-create-tarball-version
 .PHONY: dist-hook-create-tarball-version
 dist-hook-create-tarball-version:
 	echo '$(VERSION)' > $(distdir)/.tarball-version
-
-# ChangeLog generation, from Git commit messages.
-
-# Commits before this date shouldn't be put in the ChangeLog.
-changelog_start_date = 2010-01-01
-# Use the commit dates of authors, not of commiters.
-gitlog_to_changelog_extra_options = --author-date
-# Include proper rule(s) to generate the ChangeLog.
-include am/GitGenerateChangeLog.am
 
 # Configure settings that should be preserved also in `make distcheck'
 DISTCHECK_CONFIGURE_FLAGS = \
