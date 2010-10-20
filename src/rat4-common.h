@@ -107,7 +107,7 @@
 /* Use this to declare static functions which must be exposed in the
  * testsuite.  Useful to enahnce testability of C Ratfor sources. */
 #if IS_RAT4_UNITTEST
-# define STATIC_TESTABLE_FUNC /* extranlly visible */
+# define STATIC_TESTABLE_FUNC /* externally visible */
 #else
 # define STATIC_TESTABLE_FUNC static
 #endif
