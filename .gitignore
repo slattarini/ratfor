@@ -9,7 +9,5 @@ Makefile.in
 /configure
 /configure.lineno
 
-/ChangeLog
-
 /ratfor-testsuite-[0-9]*.tar.gz
 /ratfor-testsuite-[0-9]*/
