@@ -1,5 +1,5 @@
 #!/bin/sh
-# Copied from SteLib at 2010-03-10 16:46:32 +0100.  DO NOT EDIT!
+# Copied from SteLib at 2010-10-20 15:30:37 +0200.  DO NOT EDIT!
 #
 # -------------------------------------------------------------------------
 #
@@ -50,9 +50,9 @@ if test -n "${ZSH_VERSION+set}" && (emulate sh) >/dev/null 2>&1; then
     # Good, FUNCTION_ARGZERO option was already off when this file was
     # sourced.  Thus we've nothing to do.
     argv0=$0
-  elif test -n "${functrace[-1]}"; then
+  elif eval '(test -n "${functrace[-1]}") >/dev/null 2>&1'; then
     # FUNCTION_ARGZERO option was on, but we have an easy workaround.
-    argv0=${functrace[-1]%:*}
+    eval 'argv0=${functrace[-1]%:*}'
   else
     # Give up.
     echo "$0: (Zsh version $ZSH_VERSION) cannot determine the" \
