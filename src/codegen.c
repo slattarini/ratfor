@@ -356,36 +356,44 @@ brknxt(int sp, int lextyp[], int labval[], int token)
 {
     int n, i;
     char t, ptoken[MAXTOK];
+    const char *kword;
+
+    if (token == LEXBREAK)
+        kword = "break";
+    else if (token == LEXNEXT)
+        kword = "next";
+    else
+        abort();
 
     n = 0;
     t = get_nonblank_token(ptoken, MAXTOK);
-    if (is_all_digits(ptoken)) { /* have break n or next n */
-        n = string_to_integer(ptoken) - 1;
-    } else if (t != SEMICOL) { /* default case */
+    if (is_all_digits(ptoken)) { /* "break n" or "next n" */
+        if ((n = string_to_integer(ptoken) - 1) < 0)
+            synerr("illegal %s argument.", kword);
+    } else {
+        if (!is_stmt_ending(t))
+            synerr("illegal %s argument.", kword);
         put_back_string(ptoken);
     }
-    for (i = sp; i >= 0; i--)
+    for (i = sp; i >= 0; i--) {
         if (lextyp[i] == LEXWHILE || lextyp[i] == LEXDO
             || lextyp[i] == LEXFOR || lextyp[i] == LEXREPEAT) {
             if (n > 0) {
                 n--;
                 continue; /* seek proper level */
-            }
-            else if (token == LEXBREAK)
+            } else if (token == LEXBREAK) {
                 outgo(labval[i]+1);
-            else
+            } else {
                 outgo(labval[i]);
+            }
 /* original value
             xfer = true;
 */
             xfer = false;
             return;
         }
-    if (token == LEXBREAK)
-        synerr("illegal break.");
-    else
-        synerr("illegal next.");
-    return;
+    }
+    synerr("illegal %s.", kword);
 }
 
 /* docode - generate code for beginning of do */

@@ -1,0 +1,75 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that incorrect (and only incorrect) usages of the `break'
+# statement are caught.
+# Please keep this in sync with sister test `next-badargs.test'.
+
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
+
+cat > badargs <<'EOF'
+0
+-1
+-2
+-32767
+x
+foo
+BAR
+q_u_x
+.
+,
+:
++
+-
+*
+/
+!
+@
+=
+''
+""
+'foo bar'
+"baz quux"
+EOF
+
+kword='break'
+# The "append" command accounts for tokens that might cause automatic
+# line continuation.
+$SED "s/.*/for(;;) $kword &/
+a\
+zardoz" badargs > tst1.r
+$SED "s/.*/for(;;) $kword &;/" badargs > tst2.r
+$SED "s/.*/for(;;) { $kword & }/" badargs > tst3.r
+$SED "s/.*/for(;;) { $kword &; }/" badargs > tst4.r
+for i in 1 2 3 4; do
+    $AWK "/^for/ {
+        print \"tst$i.r:\" NR \": illegal $kword argument.\"
+    }" tst$i.r > exp$i
+done
+
+for i in 1 2 3 4; do
+    cat tst$i.r
+    run_RATFOR -e 1 tst$i.r || testcase_FAIL
+    mv stderr got$i
+    cat exp$i
+    cat got$i
+    $DIFF_U exp$i got$i || testcase_FAIL
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

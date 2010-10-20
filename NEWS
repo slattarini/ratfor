@@ -1,5 +1,9 @@
 List of user-visible changes of C Ratfor.
 
+New in XXX
+-----------
+ * "break" and "next" now diagnose invalid arguments.
+
 New in 1.0r
 -----------
  * File inclusion with `include FILENAME' is now recognized only at

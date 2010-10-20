@@ -13,6 +13,8 @@ EXTRA_DIST = $(TESTS)
 XFAIL_TESTS = no-blank-lines.test
 
 TESTS = \
+  break-badargs.test \
+  next-badargs.test \
   comments-no-hang.test \
   comment-too-long-in-define-ignored.test \
   comment-too-long-in-define-no-crash.test \
