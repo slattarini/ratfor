@@ -30,17 +30,11 @@ dist_doc_DATA = README BUGS NEWS
 EXTRA_DIST = \
   xfail-tests.list \
   HACKING \
-  build-aux/gitlog-to-changelog \
   build-aux/git-version-gen \
   GNUmakefile \
   maint/maint.mk \
   maint/release.mk \
-  maint/developer.mk \
-  ChangeLog-old \
-  ChangeLog-2009 \
-  $(top_srcdir)/ChangeLog
-## the use of $(top_srcdir) above is required to have non-GNU make
-## implementations (e.g. FreeBSD make and Solaris make) working
+  maint/developer.mk
 
 # List of files which must not be put in the distributed tarball.
 no_dist_files = maint/config.site maint/local-cfg.mk maint/personal/*
@@ -48,10 +42,8 @@ no_dist_files = maint/config.site maint/local-cfg.mk maint/personal/*
 # Enabling of maintainer rules.
 if ENABLE_MAINTAINER_MAKE_RULES
   ENABLE_MAINTAINER_MAKE_RULES = yes
-  FORCE_CHANGELOG_GENERATION = yes
 else
   ENABLE_MAINTAINER_MAKE_RULES = no
-  FORCE_CHANGELOG_GENERATION = no
 endif
 
 # Check that we do not erreonously include in the tarball any file which
@@ -63,15 +55,6 @@ dist-hook: dist-hook-create-tarball-version
 .PHONY: dist-hook-create-tarball-version
 dist-hook-create-tarball-version:
 	echo '$(VERSION)' > $(distdir)/.tarball-version
-
-# ChangeLog generation, from Git commit messages.
-
-# Commits before this date shouldn't be put in the ChangeLog.
-changelog_start_date = 2010-01-01
-# Use the commit dates of authors, not of commiters.
-gitlog_to_changelog_extra_options = --author-date
-# Include the proper dist-hook to generate te ChangeLog.
-include am/GitGenerateChangeLog.am
 
 # This is defined here so that it can be extended in maint/*.mk, if needed.
 distcheck-hook:

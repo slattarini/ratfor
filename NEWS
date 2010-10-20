@@ -3,6 +3,8 @@ List of user-visible changes of C Ratfor.
 New in XXX
 -----------
  * "break" and "next" now diagnose invalid arguments.
+ * We don't ship a ChangeLog file anymore.  The ChangeLog was generated
+   from git history anyway, so nothing is lost with this decision.
 
 New in 1.0r
 -----------
