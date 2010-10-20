@@ -3,11 +3,9 @@
 ##
 # Makefile for the tests in the Ratfor Testsuite.
 
-## All updated later throughout the file.
+## Updated later throughout the file.
 TESTS =
 EXTRA_DIST =
-MOSTLYCLEANFILES =
-CLEANFILES =
 
 # Defined at configure time.
 XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
@@ -316,8 +314,9 @@ include-at-stmt-beginning-only-squote.log \
 
 generated_tests = ## updated later
 TESTS += $(generated_tests)
-CLEANFILES += $(generated_tests)
-MOSTLYCLEANFILES += *.test-t
+EXTRA_DIST += $(generated_tests)
+MAINTAINERCLEANFILES = $(generated_tests)
+MOSTLYCLEANFILES = *.test-t
 
 .PHONY: test-scripts
 test-scripts: $(generated_tests)
@@ -370,7 +369,7 @@ $(tests_control_structure_after_numeric_label_f77:.test=.log): \
   control-structure-after-numeric-label_f77.sh
 
 $(tests_control_structure_after_numeric_label) \
-$(tests_control_structure_after_numeric_label_f77): Makefile
+$(tests_control_structure_after_numeric_label_f77): Makefile.am
 	$(autogen_sh__pre)
 	$(AM_V_GEN)case '$@' in \
 	   *_f77.test) a='_f77';; \
@@ -415,7 +414,7 @@ $(tests_keyword_in_statement_middle_f77:.test=.log): \
   keyword-in-statement-middle_f77.sh
 
 $(tests_keyword_in_statement_middle) \
-$(tests_keyword_in_statement_middle_f77): Makefile
+$(tests_keyword_in_statement_middle_f77): Makefile.am
 	$(autogen_sh__pre)
 	$(AM_V_GEN)case '$@' in \
 	   *_f77.test) a='_f77';; \
@@ -459,7 +458,7 @@ $(tests_control_structure_with_empty_body_f77:.test=.log): \
   control-structure-with-empty-body_f77.sh
 
 $(tests_control_structure_with_empty_body) \
-$(tests_control_structure_with_empty_body_f77): Makefile
+$(tests_control_structure_with_empty_body_f77): Makefile.am
 	$(autogen_sh__pre)
 	$(AM_V_GEN)case '$@' in \
 	   *_f77.test) a='_f77';; \
@@ -488,7 +487,7 @@ EXTRA_DIST += keyword-missing-left-paren.sh
 $(tests_keyword_missing_left_paren:.test=.log): \
   keyword-missing-left-paren.sh
 
-$(tests_keyword_missing_left_paren): Makefile
+$(tests_keyword_missing_left_paren): Makefile.am
 	$(autogen_sh__pre)
 	$(AM_V_GEN): \
 	   && helper="keyword-missing-left-paren.sh" \
