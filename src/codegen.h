@@ -26,7 +26,7 @@ void outcon(int);
 void labelc(char []);
 void otherstmt(char lexstr[]);
 
-void docode(int *);
+void do_code(int *);
 void dostat(int);
 
 void for_code(int *);

@@ -201,7 +201,7 @@ parse(void)
                 ifcode(&lab);
                 break;
             case LEXDO:
-                docode(&lab);
+                do_code(&lab);
                 break;
             case LEXWHILE:
                 while_code(&lab);

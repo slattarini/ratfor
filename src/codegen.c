@@ -396,9 +396,9 @@ brknxt(int sp, int lextyp[], int labval[], int token)
     synerr("illegal %s.", kword);
 }
 
-/* docode - generate code for beginning of do */
+/* do_code - generate code for beginning of do */
 void
-docode(int *lab)
+do_code(int *lab)
 {
     xfer = false;
     outtab();
