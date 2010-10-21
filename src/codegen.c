@@ -538,6 +538,18 @@ if_not_goto_code(int lab)
     outgo(lab);     /* " goto lab " */
 }
 
+/* ifthen_code - generate "if((...))then" */
+static void
+ifthen_code(void)
+{
+    outtab();       /* get to column 7 */
+    outstr(sif);    /* " if( " */
+    balpar();       /* collect and output condition */
+    outch(RPAREN);  /* " ) " */
+    outstr(sthen);  /* " then " */
+    outdon();
+}
+
 /* if_code - generate initial code for if */
 void
 if_code(int *lab)
@@ -553,18 +565,6 @@ if_end(void)
 {
     outtab();
     outstr(sendif);
-    outdon();
-}
-
-/* ifthen_code - generate "if((...))then" */
-void
-ifthen_code(void)
-{
-    outtab();       /* get to column 7 */
-    outstr(sif);    /* " if( " */
-    balpar();       /* collect and output condition */
-    outch(RPAREN);  /* " ) " */
-    outstr(sthen);  /* " then " */
     outdon();
 }
 
