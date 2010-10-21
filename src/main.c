@@ -15,13 +15,13 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-/*< 
+/*<
 
 C Ratfor
- 
+
 Usage
   ratfor [options] [-o output.f] [input.r]
- 
+
 Input Parameters
   l - flag [-l n]  user sets strating label n
   o - flag [-o output]  specify output file, otherwise it is stdout
@@ -69,7 +69,7 @@ main(int argc, char *argv[])
     int c, startlab;
     bool errflg, keep_comments;
     const char *infile = "-", *outfile = "-";
-    
+
     progname = argv[0];
 
     errflg = false;

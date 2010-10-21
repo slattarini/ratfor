@@ -115,7 +115,7 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
          * true anymore that we are scanning it. */
         reading_parenthesized_macro_definition = false;
     }
-    
+
     /* get rid of temporary internal macro */
 #   undef EXTEND_DEFN_WITH_TOKEN_
 }

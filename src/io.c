@@ -61,7 +61,7 @@ pbstr_(const char str[], const bool cooked)
 
 /* Get next char (either pushed back or new from the stream). */
 #define NGETC_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
-    
+
 BEGIN_C_DECLS
 
 /* Get a (possibly pushed back) character, dealing with line continuation
@@ -70,7 +70,7 @@ int
 ngetch(FILE *fp)
 {
     int c;
-    
+
     /* check for a continuation '_\n' */
     while ((c = NGETC_(fp)) == UNDERLINE) {
         c = NGETC_(fp);
@@ -84,7 +84,7 @@ ngetch(FILE *fp)
     }
     if (is_strict_newline(c))
         ++lineno[inclevel];
-    
+
     return(c);
 }
 
@@ -174,7 +174,7 @@ outdon(void)
 }
 
 /* Write a decimal number in output card. */
-void 
+void
 outnum(int n)
 {
 #define MAXCHARS_ 10

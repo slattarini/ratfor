@@ -401,7 +401,7 @@ int
 get_nonblank_token(char buf[], int bufsiz)
 {
     int tok;
-    
+
     do {
         tok = get_token(buf, bufsiz);
     } while(is_blank(tok));
