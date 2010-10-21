@@ -568,9 +568,9 @@ ifthenc(void)
     outdon();
 }
 
-/* labelc - output statement number */
+/* label_code - output statement number */
 void
-labelc(char lexstr[])
+label_code(char lexstr[])
 {
 
     xfer = false;  /* can't suppress goto's now */

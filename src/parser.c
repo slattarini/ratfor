@@ -235,7 +235,7 @@ parse(void)
                 }
                 break;
             case TOKT_DIGITS:
-                labelc(lexstr);
+                label_code(lexstr);
                 break;
             case LEXELSE:
                 if (lextyp[sp] == LEXIF)

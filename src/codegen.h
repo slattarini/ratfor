@@ -46,7 +46,7 @@ void cascode(int, int);
 void swend(int);
 void swcode(int *);
 
-void labelc(char []);
+void label_code(char []);
 void retcode(void);
 void verbatim(void);
 void strdcl(void);
