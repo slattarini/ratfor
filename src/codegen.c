@@ -417,10 +417,10 @@ swvar(int lab)
 
 BEGIN_C_DECLS
 
-/* break_and_next_code - generate code for break n and next n
+/* break_or_next_code - generate code for break n and next n
    n = 1 is the default */
 void
-break_and_next_code(int sp, int lextyp[], int labval[], int token)
+break_or_next_code(int sp, int lextyp[], int labval[], int token)
 {
     int n, i;
     char t, ptoken[MAXTOK];

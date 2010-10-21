@@ -41,7 +41,7 @@ void until_code(int);
 void while_code(int *);
 void while_end(int);
 
-void break_and_next_code(int, int [], int [], int);
+void break_or_next_code(int, int [], int [], int);
 
 void case_code(int, int);
 void switch_end(int);
