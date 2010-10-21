@@ -19,7 +19,10 @@
 #  define RAT4_CODEGEN_H 1
 BEGIN_C_DECLS
 
-/* subroutines for code generation */
+/***  Subroutines and macros for code generation  ***/
+
+/* verbatim - copy directly to output until the next newline character */
+#define verbatim() output_verbatim(infile[inclevel])
 
 void if_code(int *);
 void elseif_code(void);
@@ -46,9 +49,7 @@ void switch_code(int *);
 
 void label_code(char []);
 void return_code(void);
-void verbatim(void);
 void otherstmt(char lexstr[]);
-
 
 END_C_DECLS
 #endif

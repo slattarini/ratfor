@@ -417,13 +417,6 @@ swvar(int lab)
 
 BEGIN_C_DECLS
 
-/* verbatim - copy directly to output until the next newline character */
-void
-verbatim(void)
-{
-    output_verbatim(infile[inclevel]);
-}
-
 /* break_and_next_code - generate code for break n and next n
    n = 1 is the default */
 void
