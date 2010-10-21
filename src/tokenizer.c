@@ -281,16 +281,16 @@ get_non_alphanumeric_raw_token(char buf[], int bufsiz, FILE *fp)
             tok = convert_relational_shortand(buf, bufsiz, fp);
             break;
         case SHARP:
-            /* # ratfor comment */
-            if (!keep_comments || !reading_parenthesized_macro_definition) {
+            /* ratfor comment */
+            if (keep_comments && reading_parenthesized_macro_definition) {
+                tok = SHARP;
+                read_until_char_match(buf, bufsiz, fp, is_newline,
+                                      "comment in define(...) too long.");
+            } else {
                 (void) ngetch(fp); /* TODO: assert == buf[0] */
                 dispatch_comment(fp);
                 tok = buf[0] = NEWLINE;
                 buf[1] = EOS;
-            } else {
-                tok = SHARP;
-                read_until_char_match(buf, bufsiz, fp, is_newline,
-                                      "comment in define(...) too long.");
             }
             break;
         default:
