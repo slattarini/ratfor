@@ -607,8 +607,8 @@ outcon(int lab)
     outdon();
 }
 
-/* repcod - generate code for beginning of repeat */
-void repcode(int *lab)
+/* repeat_code - generate code for beginning of repeat */
+void repeat_code(int *lab)
 {
     /* Output an unlabeled "continue", in case there was a label.  See
      * the "NOTE on unlabled continue" above for more information. */

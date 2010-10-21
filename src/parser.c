@@ -210,7 +210,7 @@ parse(void)
                 for_code(&lab);
                 break;
             case LEXREPEAT:
-                repcode(&lab);
+                repeat_code(&lab);
                 break;
             case LEXSWITCH:
                 swcode(&lab);

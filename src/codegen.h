@@ -38,7 +38,7 @@ void ifend(void);
 void elseifc(void);
 void ifngo(int);
 
-void repcode(int *);
+void repeat_code(int *);
 void repeats(int);
 void untilcode(int);
 
