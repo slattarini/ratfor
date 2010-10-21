@@ -24,7 +24,7 @@ BEGIN_C_DECLS
 void if_code(int *);
 void ifthenc(void);
 void if_end(void);
-void elseifc(void);
+void elseif_code(void);
 void ifngo(int);
 
 void do_code(int *);

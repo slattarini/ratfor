@@ -418,9 +418,9 @@ do_end(int lab)
     outcon(lab+1);
 }
 
-/* elseifc - generate code for end of if before else */
+/* elseif_code - generate code for end of if before else */
 void
-elseifc(void)
+elseif_code(void)
 {
     outtab();
     outstr(selse);
