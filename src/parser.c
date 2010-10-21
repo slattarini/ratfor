@@ -213,7 +213,7 @@ parse(void)
                 repeat_code(&lab);
                 break;
             case LEXSWITCH:
-                swcode(&lab);
+                switch_code(&lab);
                 break;
             case LEXCASE:
             case LEXDEFAULT:

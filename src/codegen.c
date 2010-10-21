@@ -792,9 +792,9 @@ swvar(int lab)
     outnum(lab);
 }
 
-/* swcode - generate code for switch stmt. */
+/* switch_code - generate code for switch statement. */
 void
-swcode(int *lab)
+switch_code(int *lab)
 {
     char scrtok[MAXTOK];
 

@@ -42,7 +42,7 @@ void break_and_next_code(int, int [], int [], int);
 
 void case_code(int, int);
 void swend(int);
-void swcode(int *);
+void switch_code(int *);
 
 void label_code(char []);
 void return_code(void);
