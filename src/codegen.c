@@ -544,7 +544,7 @@ if_code(int *lab)
 {
     xfer = false;
     *lab = labgen(1);
-    ifthenc();
+    ifthen_code();
 }
 
 /* if_end - generate code for end of if */
@@ -556,9 +556,9 @@ if_end(void)
     outdon();
 }
 
-/* ifthenc - generate "if((...))then" */
+/* ifthen_code - generate "if((...))then" */
 void
-ifthenc(void)
+ifthen_code(void)
 {
     outtab();       /* get to column 7 */
     outstr(sif);    /* " if( " */
@@ -648,7 +648,7 @@ while_code(int *lab)
     outcon(0);
     *lab = labgen(2); /* see while_end() to know why we need 2 labels */
     outnum(*lab);
-    ifthenc();
+    ifthen_code();
 }
 
 /* while_end - generate code for end of while */
