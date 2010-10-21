@@ -42,7 +42,7 @@
  * PRIVATE GLOBAL VARIABLES
  */
 
-/* shared among unstak() and parser() */
+/* shared among unstack() and parser() */
 static int sp = 0;
 static int labval[MAXSTACK];
 static int lextyp[MAXSTACK];
@@ -76,7 +76,7 @@ detected_unusual_error(int toktype)
 }
 
 static void
-unstak(int lextype)
+unstack(int lextype)
 {
     for (; sp > 0; sp--) {
         switch(lextyp[sp]) {
@@ -305,7 +305,7 @@ parse(void)
                 }
                 lextype = lex(lexstr, MAXTOK); /* peek at next token */
                 put_back_string(lexstr);
-                unstak(lextype);
+                unstack(lextype);
                 break;
         } /* switch lextype */
 
