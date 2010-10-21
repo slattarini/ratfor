@@ -231,7 +231,7 @@ parse(void)
                     else
                         synerr("illegal default");
                 } else {
-                    cascode(labval[i], lextype);
+                    case_code(labval[i], lextype);
                 }
                 break;
             case TOKT_DIGITS:

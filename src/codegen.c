@@ -722,9 +722,9 @@ caslab (int *n, int *t)
     return(0); /* expected to be ignored */
 }
 
-/* cascode - generate code for case or default label */
+/* case_code - generate code for case or default label */
 void
-cascode(int lab, int token)
+case_code(int lab, int token)
 {
     int t, l, lb, ub, i, j, junk;
     char scrtok[MAXTOK];

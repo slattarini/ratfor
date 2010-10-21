@@ -40,7 +40,7 @@ void while_end(int);
 
 void break_and_next_code(int, int [], int [], int);
 
-void cascode(int, int);
+void case_code(int, int);
 void swend(int);
 void swcode(int *);
 
