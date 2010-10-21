@@ -198,7 +198,7 @@ outnum(int n)
  * wrapping, no line continuation, no sanitazation: just a real verbatim
  * copy. */
 void
-outasis(FILE * fp)
+output_verbatim(FILE * fp)
 {
     /* We can't use `outch(c)' here, since we want to output the text
      * really verbatim, with no line wrapping (if the user want to output

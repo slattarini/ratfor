@@ -421,7 +421,7 @@ BEGIN_C_DECLS
 void
 verbatim(void)
 {
-    outasis(infile[inclevel]);
+    output_verbatim(infile[inclevel]);
 }
 
 /* break_and_next_code - generate code for break n and next n

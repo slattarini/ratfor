@@ -33,7 +33,7 @@ void outtab(void);
 void outdon(void);
 void outnum(int);
 void output_comment(FILE *);
-void outasis(FILE *);
+void output_verbatim(FILE *);
 
 END_C_DECLS
 
