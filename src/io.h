@@ -32,7 +32,7 @@ void outstr(const char []);
 void outtab(void);
 void outdon(void);
 void outnum(int);
-void outcmnt(FILE *);
+void output_comment(FILE *);
 void outasis(FILE *);
 
 END_C_DECLS

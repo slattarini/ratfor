@@ -212,7 +212,7 @@ outasis(FILE * fp)
 
 /* Copy comment to output card, dealing with line wrapping if necessary. */
 void
-outcmnt(FILE * fp)
+output_comment(FILE * fp)
 {
     char c;
     char comout[82];

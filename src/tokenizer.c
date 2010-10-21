@@ -102,7 +102,7 @@ dispatch_comment(FILE *fp)
 {
     int i;
     if (keep_comments)
-        outcmnt(fp); /* copy comments to output */
+        output_comment(fp); /* copy comments to output */
     else
         for (i = ngetch(fp); !is_newline(i); i = ngetch(fp))
             /* strip comments */;
