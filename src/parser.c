@@ -107,7 +107,7 @@ unstak(int lextype)
                 dostat(labval[sp]);
                 break;
             case LEXWHILE:
-                whiles(labval[sp]);
+                while_end(labval[sp]);
                 break;
             case LEXFOR:
                 for_end(labval[sp]);

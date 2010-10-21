@@ -645,14 +645,14 @@ whilecode(int *lab)
     /* Output an unlabeled "continue", in case there was a label.  See
      * the "NOTE on unlabled continue" above for more information. */
     outcon(0);
-    *lab = labgen(2); /* see whiles() to know why we need 2 labels */
+    *lab = labgen(2); /* see while_end() to know why we need 2 labels */
     outnum(*lab);
     ifthenc();
 }
 
-/* whiles - generate code for end of while */
+/* while_end - generate code for end of while */
 void
-whiles(int lab)
+while_end(int lab)
 {
     outgo(lab);
     ifend();

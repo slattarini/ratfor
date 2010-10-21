@@ -43,7 +43,7 @@ void repeats(int);
 void untilcode(int);
 
 void whilecode(int *);
-void whiles(int);
+void while_end(int);
 
 void retcode(void);
 void cascode(int, int);
