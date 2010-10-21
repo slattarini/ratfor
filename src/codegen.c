@@ -528,7 +528,7 @@ for_end(int lab)
 }
 
 /* if_not_then_go_code - generate "if(.not.(...))goto lab" */
-void
+static void
 if_not_goto_code(int lab)
 {
     outtab();       /* get to column 7 */
