@@ -4,10 +4,7 @@ This is the TODO file for C Ratfor.
 
  * Add `ifdef', `ifndef', `endif' and `undef'.
 
- * Cleanup and improvements of the parser:
-    - Integrate `define', `ifdef', `ifndef', `endif' and `undef' in the
-      parser.
-    - Probably there's room for other changes and improvements.
+ * Cleanup and improvements of the parser.
 
  * Modify the semantic of the `-C' option: `#' comments  should be kept
    only if they appear at the beginning of a statement.  This is probably
