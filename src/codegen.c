@@ -376,9 +376,9 @@ ifthen_code(void)
     outdon();
 }
 
-/* caslab - get one case label */
+/* get_case_label - get one case label */
 static int
-caslab (int *n, int *t)
+get_case_label (int *n, int *t)
 {
     char tok[MAXTOK];
     int sign;
@@ -745,10 +745,10 @@ case_code(int lab, int token)
     xfer = true;
     l = labgen(1);
     if (token == LEXCASE) { /* # case n[,n]... : ... */
-        while (caslab (&lb, &t) != EOF) {
+        while (get_case_label (&lb, &t) != EOF) {
             ub = lb;
             if (t == MINUS)
-                junk = caslab (&ub, &t);
+                junk = get_case_label (&ub, &t);
             if (lb > ub) {
                 synerr ("illegal range in case label.");
                 ub = lb;
