@@ -92,7 +92,7 @@ unstak(int lextype)
             case LEXREPEAT:
                 if (lextype == LEXUNTIL)
                     return;
-                repeats(labval[sp]);
+                repeat_end(labval[sp]);
                 break;
             case LEXELSE:
                 if (sp > 1)

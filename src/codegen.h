@@ -39,7 +39,7 @@ void elseifc(void);
 void ifngo(int);
 
 void repeat_code(int *);
-void repeats(int);
+void repeat_end(int);
 void untilcode(int);
 
 void while_code(int *);

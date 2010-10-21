@@ -628,9 +628,9 @@ untilcode(int lab)
     outcon(lab+1);  /* end loop */
 }
 
-/* repeats - generate code for end of bare "repeat STMT" */
+/* repeat_end - generate code for end of bare "repeat STMT" */
 void
-repeats(int lab)
+repeat_end(int lab)
 {
     xfer = false;
     outcon(lab);    /* where to go on `next` */
