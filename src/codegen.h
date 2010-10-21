@@ -30,7 +30,7 @@ void docode(int *);
 void dostat(int);
 
 void forcode(int *);
-void fors(int);
+void for_end(int);
 
 void ifcode(int *);
 void ifthenc(void);

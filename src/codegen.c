@@ -507,9 +507,9 @@ forcode(int *lab)
     *lab = tlab;
 }
 
-/* fors - process end of for statement */
+/* for_end - process end of for statement */
 void
-fors(int lab)
+for_end(int lab)
 {
     int i, j;
 

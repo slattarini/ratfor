@@ -110,7 +110,7 @@ unstak(int lextype)
                 whiles(labval[sp]);
                 break;
             case LEXFOR:
-                fors(labval[sp]);
+                for_end(labval[sp]);
                 break;
         } /* end switch */
     } /* end for */
