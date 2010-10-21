@@ -21,22 +21,17 @@ BEGIN_C_DECLS
 
 /* subroutines for code generation */
 
-void brknxt(int, int [], int [], int);
-void outcon(int);
-void labelc(char []);
-void otherstmt(char lexstr[]);
+void ifcode(int *);
+void ifthenc(void);
+void ifend(void);
+void elseifc(void);
+void ifngo(int);
 
 void do_code(int *);
 void do_end(int);
 
 void for_code(int *);
 void for_end(int);
-
-void ifcode(int *);
-void ifthenc(void);
-void ifend(void);
-void elseifc(void);
-void ifngo(int);
 
 void repeat_code(int *);
 void repeat_end(int);
@@ -45,13 +40,19 @@ void until_code(int);
 void while_code(int *);
 void while_end(int);
 
-void retcode(void);
+void brknxt(int, int [], int [], int);
+
 void cascode(int, int);
 void swend(int);
-void strdcl(void);
 void swcode(int *);
 
+void labelc(char []);
+void retcode(void);
 void verbatim(void);
+void strdcl(void);
+void outcon(int);
+void otherstmt(char lexstr[]);
+
 
 END_C_DECLS
 #endif
