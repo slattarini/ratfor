@@ -49,7 +49,7 @@ void switch_code(int *);
 
 void label_code(char []);
 void return_code(void);
-void otherstmt(char lexstr[]);
+void other_statement(char lexstr[]);
 
 END_C_DECLS
 #endif

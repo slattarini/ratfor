@@ -300,7 +300,7 @@ parse(void)
                         return_code();
                         break;
                     default:
-                        otherstmt(lexstr);
+                        other_statement(lexstr);
                         break;
                 }
                 lextype = lex(lexstr, MAXTOK); /* peek at next token */

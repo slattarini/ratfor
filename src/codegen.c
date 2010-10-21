@@ -625,9 +625,9 @@ label_code(char lexstr[])
     outtab();
 }
 
-/* otherstmt - output ordinary Fortran statement */
+/* other_statement - output ordinary Fortran statement */
 void
-otherstmt(char lexstr[])
+other_statement(char lexstr[])
 {
     xfer = false;
     outtab();
