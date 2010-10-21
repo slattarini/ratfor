@@ -337,12 +337,6 @@ outgo(int n)
     outdon();
 }
 
-/*
- * Public Functions.
- */
-
-BEGIN_C_DECLS
-
 /* outcon - output "lab   continue" */
 static void
 outcon(int lab)
@@ -358,6 +352,70 @@ outcon(int lab)
     outstr(scontinue);
     outdon();
 }
+
+/* if_not_then_go_code - generate "if(.not.(...))goto lab" */
+static void
+if_not_goto_code(int lab)
+{
+    outtab();       /* get to column 7 */
+    outstr(sifnot); /* " if(.not." */
+    balpar();       /* collect and output condition */
+    outch(RPAREN);  /* " ) " */
+    outgo(lab);     /* " goto lab " */
+}
+
+/* ifthen_code - generate "if((...))then" */
+static void
+ifthen_code(void)
+{
+    outtab();       /* get to column 7 */
+    outstr(sif);    /* " if( " */
+    balpar();       /* collect and output condition */
+    outch(RPAREN);  /* " ) " */
+    outstr(sthen);  /* " then " */
+    outdon();
+}
+
+/* caslab - get one case label */
+static int
+caslab (int *n, int *t)
+{
+    char tok[MAXTOK];
+    int sign;
+
+    *t = get_nonblank_token (tok, MAXTOK);
+    while (is_newline(*t))
+        *t = get_nonblank_token (tok, MAXTOK);
+    if (*t == EOF)
+        return(*t);
+    sign = ((tok[0] == MINUS && tok[1] == EOS) ? -1 : 1);
+    if ((tok[0] == MINUS || tok[0] == PLUS) && tok[1] == EOS)
+        *t = get_nonblank_token (tok, MAXTOK);
+    if (*t != TOKT_DIGITS) {
+        synerr ("invalid case label.");
+        *n = 0;
+    } else {
+        *n = sign * string_to_integer(tok);
+    }
+    do { /* ignore blank lines */;
+        *t = get_nonblank_token (tok, MAXTOK);
+    } while (is_newline(*t));
+    return(0); /* expected to be ignored */
+}
+
+/* swvar  - output switch variable Innn, where nnn = lab */
+static void
+swvar(int lab)
+{
+    outch('I');
+    outnum(lab);
+}
+
+/*
+ * Public Functions.
+ */
+
+BEGIN_C_DECLS
 
 /* verbatim - copy directly to output until the next newline character */
 void
@@ -544,29 +602,6 @@ for_end(int lab)
     fordep--;
 }
 
-/* if_not_then_go_code - generate "if(.not.(...))goto lab" */
-static void
-if_not_goto_code(int lab)
-{
-    outtab();       /* get to column 7 */
-    outstr(sifnot); /* " if(.not." */
-    balpar();       /* collect and output condition */
-    outch(RPAREN);  /* " ) " */
-    outgo(lab);     /* " goto lab " */
-}
-
-/* ifthen_code - generate "if((...))then" */
-static void
-ifthen_code(void)
-{
-    outtab();       /* get to column 7 */
-    outstr(sif);    /* " if( " */
-    balpar();       /* collect and output condition */
-    outch(RPAREN);  /* " ) " */
-    outstr(sthen);  /* " then " */
-    outdon();
-}
-
 /* if_code - generate initial code for if */
 void
 if_code(int *lab)
@@ -695,33 +730,6 @@ gen_raw_return_stmt:
     xfer = true;
 }
 
-/* caslab - get one case label */
-static int
-caslab (int *n, int *t)
-{
-    char tok[MAXTOK];
-    int sign;
-
-    *t = get_nonblank_token (tok, MAXTOK);
-    while (is_newline(*t))
-        *t = get_nonblank_token (tok, MAXTOK);
-    if (*t == EOF)
-        return(*t);
-    sign = ((tok[0] == MINUS && tok[1] == EOS) ? -1 : 1);
-    if ((tok[0] == MINUS || tok[0] == PLUS) && tok[1] == EOS)
-        *t = get_nonblank_token (tok, MAXTOK);
-    if (*t != TOKT_DIGITS) {
-        synerr ("invalid case label.");
-        *n = 0;
-    } else {
-        *n = sign * string_to_integer(tok);
-    }
-    do { /* ignore blank lines */;
-        *t = get_nonblank_token (tok, MAXTOK);
-    } while (is_newline(*t));
-    return(0); /* expected to be ignored */
-}
-
 /* case_code - generate code for case or default label */
 void
 case_code(int lab, int token)
@@ -782,14 +790,6 @@ case_code(int lab, int token)
 
     xfer = false;
     outcon (l);
-}
-
-/* swvar  - output switch variable Innn, where nnn = lab */
-static void
-swvar(int lab)
-{
-    outch('I');
-    outnum(lab);
 }
 
 /* switch_code - generate code for switch statement. */
