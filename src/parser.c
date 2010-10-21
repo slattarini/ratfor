@@ -245,7 +245,7 @@ parse(void)
                 break;
             case LEXUNTIL:
                 if (lextyp[sp] == LEXREPEAT)
-                    untilcode(labval[sp]);
+                    until_code(labval[sp]);
                 else
                     synerr("illegal until.");
                 break;

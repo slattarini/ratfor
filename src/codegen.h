@@ -40,7 +40,7 @@ void ifngo(int);
 
 void repeat_code(int *);
 void repeat_end(int);
-void untilcode(int);
+void until_code(int);
 
 void while_code(int *);
 void while_end(int);

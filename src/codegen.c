@@ -618,9 +618,9 @@ void repeat_code(int *lab)
     *lab += 1;      /* label to go on next's */
 }
 
-/* untilcode - generate code for "until(COND)" after a "repeat STMT". */
+/* until_code - generate code for "until(COND)" after a "repeat STMT". */
 void
-untilcode(int lab)
+until_code(int lab)
 {
     xfer = false;
     outcon(lab);    /* where to go on `next` */
