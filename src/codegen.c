@@ -527,9 +527,9 @@ for_end(int lab)
     fordep--;
 }
 
-/* ifngo - generate "if(.not.(...))goto lab" */
+/* if_not_then_go_code - generate "if(.not.(...))goto lab" */
 void
-ifngo(int lab)
+if_not_goto_code(int lab)
 {
     outtab();       /* get to column 7 */
     outstr(sifnot); /* " if(.not." */
@@ -623,9 +623,10 @@ void
 until_code(int lab)
 {
     xfer = false;
-    outcon(lab);    /* where to go on `next` */
-    ifngo(lab-1);   /* collect COND, if it's false start the loop again */
-    outcon(lab+1);  /* end loop */
+    outcon(lab);                /* where to go on `next` */
+    if_not_goto_code(lab-1);    /* collect COND, if it's false start
+                                   then loop again */
+    outcon(lab+1);              /* end loop */
 }
 
 /* repeat_end - generate code for end of bare "repeat STMT" */

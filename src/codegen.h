@@ -25,7 +25,7 @@ void if_code(int *);
 void ifthenc(void);
 void if_end(void);
 void elseif_code(void);
-void ifngo(int);
+void if_not_goto_code(int);
 
 void do_code(int *);
 void do_end(int);
