@@ -198,7 +198,7 @@ parse(void)
                 get_and_install_macro_definition();
                 break;
             case LEXIF:
-                ifcode(&lab);
+                if_code(&lab);
                 break;
             case LEXDO:
                 do_code(&lab);

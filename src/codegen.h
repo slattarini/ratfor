@@ -21,7 +21,7 @@ BEGIN_C_DECLS
 
 /* subroutines for code generation */
 
-void ifcode(int *);
+void if_code(int *);
 void ifthenc(void);
 void ifend(void);
 void elseifc(void);

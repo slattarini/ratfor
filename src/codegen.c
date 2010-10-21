@@ -538,9 +538,9 @@ ifngo(int lab)
     outgo(lab);     /* " goto lab " */
 }
 
-/* ifcode - generate initial code for if */
+/* if_code - generate initial code for if */
 void
-ifcode(int *lab)
+if_code(int *lab)
 {
     xfer = false;
     *lab = labgen(1);
