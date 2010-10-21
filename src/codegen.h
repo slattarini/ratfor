@@ -38,7 +38,7 @@ void until_code(int);
 void while_code(int *);
 void while_end(int);
 
-void brknxt(int, int [], int [], int);
+void break_and_next_code(int, int [], int [], int);
 
 void cascode(int, int);
 void swend(int);

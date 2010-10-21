@@ -294,7 +294,7 @@ parse(void)
                         break;
                     case LEXBREAK:
                     case LEXNEXT:
-                        brknxt(sp, lextyp, labval, lextype);
+                        break_and_next_code(sp, lextyp, labval, lextype);
                         break;
                     case LEXRETURN:
                         return_code();

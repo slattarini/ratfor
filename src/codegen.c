@@ -350,9 +350,10 @@ verbatim(void)
     outasis(infile[inclevel]);
 }
 
-/* brknxt - generate code for break n and next n; n = 1 is default */
+/* break_and_next_code - generate code for break n and next n
+   n = 1 is the default */
 void
-brknxt(int sp, int lextyp[], int labval[], int token)
+break_and_next_code(int sp, int lextyp[], int labval[], int token)
 {
     int n, i;
     char t, ptoken[MAXTOK];
