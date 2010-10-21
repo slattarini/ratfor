@@ -297,7 +297,7 @@ parse(void)
                         brknxt(sp, lextyp, labval, lextype);
                         break;
                     case LEXRETURN:
-                        retcode();
+                        return_code();
                         break;
                     default:
                         otherstmt(lexstr);

@@ -659,9 +659,9 @@ while_end(int lab)
     outcon(lab+1); /* needed by e.g. break */
 }
 
-/* retcode - generate code for return */
+/* return_code - generate code for return */
 void
-retcode(void)
+return_code(void)
 {
     char token[MAXTOK], t;
 

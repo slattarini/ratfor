@@ -47,7 +47,7 @@ void swend(int);
 void swcode(int *);
 
 void label_code(char []);
-void retcode(void);
+void return_code(void);
 void verbatim(void);
 void strdcl(void);
 void outcon(int);
