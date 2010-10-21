@@ -29,7 +29,7 @@ void otherstmt(char lexstr[]);
 void docode(int *);
 void dostat(int);
 
-void forcode(int *);
+void for_code(int *);
 void for_end(int);
 
 void ifcode(int *);

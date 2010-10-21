@@ -207,7 +207,7 @@ parse(void)
                 while_code(&lab);
                 break;
             case LEXFOR:
-                forcode(&lab);
+                for_code(&lab);
                 break;
             case LEXREPEAT:
                 repcode(&lab);

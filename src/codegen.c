@@ -37,7 +37,7 @@
  *** NOTE on unlabled "continue" ***
  *
  * The unlabeled "continue"s generated in the functions `while_code',
- * `repcode' and `forcode' below are *required* in the unlikely
+ * `repcode' and `for_code' below are *required* in the unlikely
  * circumstance that the "while"/"for"/"repeat" statement in the
  * ratfor input has been labeled, as in e.g.:
  *   10 while(i > 0) ...
@@ -427,9 +427,9 @@ elseifc(void)
     outdon();
 }
 
-/* forcode - beginning of for statement */
+/* for_code - beginning of for statement */
 void
-forcode(int *lab)
+for_code(int *lab)
 {
     char t, token[MAXTOK];
     int i, j, nlpar,tlab;
