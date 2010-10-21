@@ -87,7 +87,7 @@ unstak(int lextype)
             case LEXIF:
                 if (lextype == LEXELSE)
                     return;
-                ifend();
+                if_end();
                 break;
             case LEXREPEAT:
                 if (lextype == LEXUNTIL)
@@ -97,7 +97,7 @@ unstak(int lextype)
             case LEXELSE:
                 if (sp > 1)
                     sp--;
-                ifend();
+                if_end();
                 break;
             case LEXUNTIL:
                 if (sp > 1)

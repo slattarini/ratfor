@@ -23,7 +23,7 @@ BEGIN_C_DECLS
 
 void if_code(int *);
 void ifthenc(void);
-void ifend(void);
+void if_end(void);
 void elseifc(void);
 void ifngo(int);
 

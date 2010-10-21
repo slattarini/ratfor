@@ -547,9 +547,9 @@ if_code(int *lab)
     ifthenc();
 }
 
-/* ifend - generate code for end of if */
+/* if_end - generate code for end of if */
 void
-ifend(void)
+if_end(void)
 {
     outtab();
     outstr(sendif);
@@ -655,7 +655,7 @@ void
 while_end(int lab)
 {
     outgo(lab);
-    ifend();
+    if_end();
     outcon(lab+1); /* needed by e.g. break */
 }
 
