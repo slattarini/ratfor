@@ -410,9 +410,9 @@ do_code(int *lab)
     outdon();
 }
 
-/* dostat - generate code for end of do statement */
+/* do_end - generate code for end of do statement */
 void
-dostat(int lab)
+do_end(int lab)
 {
     outcon(lab);
     outcon(lab+1);

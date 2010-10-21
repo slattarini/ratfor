@@ -27,7 +27,7 @@ void labelc(char []);
 void otherstmt(char lexstr[]);
 
 void do_code(int *);
-void dostat(int);
+void do_end(int);
 
 void for_code(int *);
 void for_end(int);
