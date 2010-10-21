@@ -288,7 +288,7 @@ parse(void)
                         if (lextyp[sp] == LBRACE)
                             sp--;
                         else if (lextyp[sp] == LEXSWITCH)
-                            swend(labval[sp--]);
+                            switch_end(labval[sp--]);
                         else
                             synerr("illegal right brace.");
                         break;

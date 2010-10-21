@@ -822,9 +822,9 @@ switch_code(int *lab)
     }
 }
 
-/* swend  - finish off switch statement; generate dispatch code */
+/* switch_end  - finish off switch statement; generate dispatch code */
 void
-swend(int lab)
+switch_end(int lab)
 {
     int lb, ub, n, i;
 
