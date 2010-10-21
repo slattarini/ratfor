@@ -734,7 +734,7 @@ gen_raw_return_stmt:
 void
 case_code(int lab, int token)
 {
-    int t, l, lb, ub, i, j, junk;
+    int t, l, lb, ub, i, j;
     char scrtok[MAXTOK];
 
     if (swtop <= 0) {
@@ -748,7 +748,7 @@ case_code(int lab, int token)
         while (get_case_label (&lb, &t) != EOF) {
             ub = lb;
             if (t == MINUS)
-                junk = get_case_label (&ub, &t);
+                (void) get_case_label (&ub, &t);
             if (lb > ub) {
                 synerr ("illegal range in case label.");
                 ub = lb;
