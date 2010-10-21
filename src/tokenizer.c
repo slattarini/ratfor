@@ -351,9 +351,8 @@ BEGIN_C_DECLS
 
 /* Get "unpreprocessed" token from ratfor current global input stream
  * (without performing macro expansion, but being aware of active file
- * inclusions) and save it in buf[].  Also deal with ratfor comments
- * (# COMMENT...) and verbatim escapes (% VERBATIM..).  Return the type
- * of the token read. */
+ * inclusions), and save it in buf[].  Also deal with ratfor comments
+ * (# COMMENT...).  Return the type of the token read. */
 int
 get_unexpanded_token(char buf[], int bufsiz)
 {

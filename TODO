@@ -5,8 +5,6 @@ This is the TODO file for C Ratfor.
  * Add `ifdef', `ifndef', `endif' and `undef'.
 
  * Cleanup and improvements of the parser:
-    - Recognize the `%' escaping only at the beggining of a statement;
-      do this by recognizing `%' in the parser.
     - Integrate `define', `ifdef', `ifndef', `endif' and `undef' in the
       parser.
     - Probably there's room for other changes and improvements.
