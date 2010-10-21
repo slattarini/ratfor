@@ -15,8 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check that incorrect (and only incorrect) usages of the `break'
-# statement are caught.
+# Check that ratfor diagnose bad arguments for the `break' keyword.
 # Please keep this in sync with sister test `next-badargs.test'.
 
 . ../blackbox/lib/rat4-testsuite-init.sh || exit 99
