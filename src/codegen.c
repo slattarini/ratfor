@@ -36,7 +36,7 @@
 /*
  *** NOTE on unlabled "continue" ***
  *
- * The unlabeled "continue"s generated in the functions `whilecode',
+ * The unlabeled "continue"s generated in the functions `while_code',
  * `repcode' and `forcode' below are *required* in the unlikely
  * circumstance that the "while"/"for"/"repeat" statement in the
  * ratfor input has been labeled, as in e.g.:
@@ -638,9 +638,9 @@ repeats(int lab)
     outcon(lab+1);  /* end loop */
 }
 
-/* whilecode - generate code for beginning of while */
+/* while_code - generate code for beginning of while */
 void
-whilecode(int *lab)
+while_code(int *lab)
 {
     /* Output an unlabeled "continue", in case there was a label.  See
      * the "NOTE on unlabled continue" above for more information. */

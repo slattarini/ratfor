@@ -204,7 +204,7 @@ parse(void)
                 docode(&lab);
                 break;
             case LEXWHILE:
-                whilecode(&lab);
+                while_code(&lab);
                 break;
             case LEXFOR:
                 forcode(&lab);

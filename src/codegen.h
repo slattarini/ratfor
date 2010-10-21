@@ -42,7 +42,7 @@ void repcode(int *);
 void repeats(int);
 void untilcode(int);
 
-void whilecode(int *);
+void while_code(int *);
 void while_end(int);
 
 void retcode(void);
