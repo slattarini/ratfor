@@ -343,6 +343,22 @@ outgo(int n)
 
 BEGIN_C_DECLS
 
+/* outcon - output "lab   continue" */
+static void
+outcon(int lab)
+{
+    xfer = false;
+#if 0
+    if (lab <= 0 && outp == 0)
+        return; /* don't need unlabeled continues */
+#endif
+    if (lab > 0)
+        outnum(lab);
+    outtab();
+    outstr(scontinue);
+    outdon();
+}
+
 /* verbatim - copy directly to output until the next newline character */
 void
 verbatim(void)
@@ -589,22 +605,6 @@ otherstmt(char lexstr[])
     outtab();
     put_back_string(lexstr);    /* so that we can eat it up again ... */
     eatup();                    /* ... now, with the rest of the line */
-    outdon();
-}
-
-/* outcon - output "lab   continue" */
-void
-outcon(int lab)
-{
-    xfer = false;
-#if 0
-    if (lab <= 0 && outp == 0)
-        return; /* don't need unlabeled continues */
-#endif
-    if (lab > 0)
-        outnum(lab);
-    outtab();
-    outstr(scontinue);
     outdon();
 }
 

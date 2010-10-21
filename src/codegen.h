@@ -47,7 +47,6 @@ void switch_code(int *);
 void label_code(char []);
 void return_code(void);
 void verbatim(void);
-void outcon(int);
 void otherstmt(char lexstr[]);
 
 
