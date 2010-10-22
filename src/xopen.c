@@ -19,10 +19,8 @@
 #include <fcntl.h>      /* for open(2) */
 #include <unistd.h>     /* for fstat(2) */
 #include <sys/stat.h>   /* for `S_I*' constants */
-
-#include "error.h"      /* for `fatal()' and `synerr()' */
+#include <errno.h>
 #include "xopen.h"
-
 
 FILE *
 xopen(const char *path, enum io_mode mode,
