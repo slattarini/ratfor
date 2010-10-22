@@ -28,7 +28,7 @@ xopen(const char *path, enum io_mode mode,
 {
     int fd, creat_mode, open_mode;
     FILE *file = NULL, *default_file;
-    const char *fdopen_mode, *open_how;
+    const char *fdopen_mode, *open_how, *action;
     struct stat st;
 
     switch (mode) {
@@ -52,12 +52,7 @@ xopen(const char *path, enum io_mode mode,
     }
 
     /* simple kludge to avoid code duplication */
-#   define FAILED_(s_) \
-        do { \
-            error_handler("%s: cannot %s %s: %s", path, s_, open_how, \
-                          strerror(errno)); \
-            goto open_failed; \
-        } while (false);
+#   define FAILED_(s_) do { action = (s_); goto open_failed; } while (0);
 
     if (STREQ(path, "-")) {
         return default_file;
@@ -75,6 +70,8 @@ xopen(const char *path, enum io_mode mode,
     }
 
 open_failed:
+    error_handler("%s: cannot %s %s: %s", path, action, open_how,
+                  strerror(errno));
     if (file != NULL)
         fclose(file);
     return NULL;
