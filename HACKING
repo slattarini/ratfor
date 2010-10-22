@@ -6,7 +6,7 @@ Bootstrap
 ---------
 
   To bootstrap checked-out sources, just run
-    $ ./bootstrap.sh
+    $ ./bootstrap
   from the top directory. This will automatically fetch/update any Git
   submodule (honoring the `GIT' environment variable), bootstrap them,
   and then run `autoreconf -vi' (honoring the `AUTORECONF' environment
@@ -22,7 +22,7 @@ Git Submodules
   C Ratfor uses the "Ratfor Testsuite" package as a git submodule, to
   do blackbox testing.
 
-  This submodule is automatically fetched by the `bootstrap.sh' script.
+  This submodule is automatically fetched by the `bootstrap' script.
   If you want to fetch/update it indipendently, just run:
     $ git submodule init && git submodule update
   from the top directory.  But before doing this, you are strongly
