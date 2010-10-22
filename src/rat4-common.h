@@ -25,11 +25,8 @@
 #include <string.h>
 #define E_USAGE 2
 
-#define ACCENT      '`' /* backtick */
 #define AND         '&'
-#define ATSIGN      '@'
-#define BACKSLASH   '\\'
-#define BACKTICK    ACCENT
+#define BACKSLASH   '\\' /* still unused, but might be in the future */
 #define BANG        '!'
 #define BAR         '|'
 #define BLANK       ' '
@@ -50,11 +47,9 @@
 #define DQUOTE      '"'
 #define EOS         '\0'
 #define EQUALS      '='
-#define ESCAPE      ATSIGN
 #define FKNEWLINE   '\007'  /* "fake" newline */
 #define GREATER     '>'
 #define LBRACE      '{'
-#define LBRACK      '['
 #define LESS        '<'
 #define LPAREN      '('
 #define MINUS       '-'
@@ -64,9 +59,7 @@
 #define PERCENT     '%'
 #define PERIOD      '.'
 #define PLUS        '+'
-#define QMARK       '?'
 #define RBRACE      '}'
-#define RBRACK      ']'
 #define RPAREN      ')'
 #define SEMICOL     ';'
 #define SHARP       '#'
@@ -74,7 +67,6 @@
 #define SQUOTE      '\''
 #define STAR        '*'
 #define TAB         '\t'
-#define TILDE       '~'
 #define UNDERLINE   '_'
 
 #define RADIX PERCENT /* `%' indicates alternate radix for numbers */
