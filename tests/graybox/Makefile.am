@@ -4,8 +4,6 @@
 # C Ratfor: a ratfor preprocessor written in C.
 # Makefile for the tests/graybox subdirectory.
 
-AUTOMAKE_OPTIONS = color-tests parallel-tests
-
 ## List of tests.
 
 EXTRA_DIST = $(TESTS)
