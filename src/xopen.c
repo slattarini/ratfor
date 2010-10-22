@@ -49,7 +49,7 @@ xopen(const char *path, enum io_mode mode,
         open_how = "for writing";
         break;
     default:
-        abort(); /* CANTHAPPEN */
+        abort(); /* can't happen */
         break;
     }
 
