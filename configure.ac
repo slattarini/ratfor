@@ -173,6 +173,17 @@ nw="$nw -Wmissing-format-attribute"
 nw="$nw -Wtraditional-conversion"
 # Still too many spurious warnings with this enabled; needs investigation.
 nw="$nw -Wunreachable-code"
+if test x"$ax_cv_check_cc_is_cxx" = x"yes"; then
+    # This warnings makes no sense with C++.
+    nw="$nw -Wdeclaration-after-statement"
+    nw="$nw -Wbad-function-cast"
+    nw="$nw -Wc++-compat"
+    nw="$nw -Wstrict-prototypes"
+    nw="$nw -Wold-style-definition"
+    nw="$nw -Wmissing-prototypes"
+    nw="$nw -Wnested-externs"
+fi
+
 # Save the list in a variable with a "more proper" name, get rid
 # of temporary variable `nw'.
 undesired_gcc_warnings=$nw
