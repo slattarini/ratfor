@@ -15,7 +15,7 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-# Check the the `define' builtin deal gracefully with long macro defs.
+# Check that the `define' builtin deal gracefully with long macro defs.
 # This testcase is a bit hackish.
 
 . ../lib/rat4-testsuite-init.sh || exit 99
