@@ -2,6 +2,7 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
+ * Stress tests on the `define' builtin have been extended.
  * The portability of the test shell script has been improved, esp. w.r.t.
    older Almquist shells.
  * Generated tests are now distributed, so that they won't need to be

@@ -56,6 +56,7 @@ handwritten_tests = \
   define-fail.test \
   define-long-definition.test \
   define-long-name.test \
+  define-manydefs.test \
   define-multiline-with-comment.test \
   define-multiline.test \
   define-multiline_f77.test \
