@@ -76,3 +76,16 @@
 /while-missing-left-paren.test
 /for-missing-left-paren.test
 /until-missing-left-paren.test
+
+/function-in-do-condition.test
+/function-in-for-condition.test
+/function-in-if-condition.test
+/function-in-switch-condition.test
+/function-in-until-condition.test
+/function-in-while-condition.test
+/subroutine-in-do-condition.test
+/subroutine-in-for-condition.test
+/subroutine-in-if-condition.test
+/subroutine-in-switch-condition.test
+/subroutine-in-until-condition.test
+/subroutine-in-while-condition.test

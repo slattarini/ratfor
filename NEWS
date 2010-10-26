@@ -2,6 +2,11 @@ List of user-visible changes of Ratfor Testsuite.
 
 New in XXX
 -----------
+ * New tests check that the "function" and "subroutine" pseudo-keywords
+   found inside a control structure condition, as in e.g.:
+     if (function < 1) ...
+     for(...; subroutine < 10; ...) ...
+   are ignored.
  * Stress tests on the `define' builtin have been extended.
  * The portability of the test shell script has been improved, esp. w.r.t.
    older Almquist shells.

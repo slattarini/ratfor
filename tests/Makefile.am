@@ -497,6 +497,42 @@ $(tests_keyword_missing_left_paren): Makefile.am
 	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
 	$(autogen_sh__post)
 
+#
+# Ratfor "pseudo-keywords" `function' and `subprogram' should not be
+# recognized in control structures' conditions.
+#
+
+tests_subprog_in_stmt_condition = \
+  function-in-do-condition.test \
+  function-in-for-condition.test \
+  function-in-if-condition.test \
+  function-in-switch-condition.test \
+  function-in-until-condition.test \
+  function-in-while-condition.test \
+  subroutine-in-do-condition.test \
+  subroutine-in-for-condition.test \
+  subroutine-in-if-condition.test \
+  subroutine-in-switch-condition.test \
+  subroutine-in-until-condition.test \
+  subroutine-in-while-condition.test
+
+generated_tests += $(tests_subprog_in_stmt_condition)
+
+EXTRA_DIST += subprog-in-stmt-condition.sh
+$(tests_subprog_in_stmt_condition:.test=.log): \
+  subprog-in-stmt-condition.sh
+
+$(tests_subprog_in_stmt_condition): Makefile.am
+	$(autogen_sh__pre)
+	$(AM_V_GEN): \
+	   && helper="subprog-in-stmt-condition.sh" \
+	   && subp=`expr x'$@' : x'\([^-]*\)-.*'` \
+	   && stmt=`expr x'$@' : x"$$subp"'-in-\([^-]*\)-.*'` \
+	   && echo "subprog='$$subp'" >> $@-t \
+	   && echo "stmt='$$stmt'" >> $@-t \
+	   && echo "rat4t_require_helper_script '$$helper'" >> $@-t
+	$(autogen_sh__post)
+
 
 ## Testsuite environment and setup.
 include ../am/TestsEnvironment.am
