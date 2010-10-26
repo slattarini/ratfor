@@ -18,7 +18,7 @@
 /* Table lookup routines. */
 
 #include "rat4-common.h"
-#include "hash.h"
+#include "rat4-hash.h"
 
 static struct hashlist *hashtab[HASHMAX];
 

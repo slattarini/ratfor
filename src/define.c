@@ -28,7 +28,7 @@
 #include "define.h"
 #include "io.h"
 #include "error.h"
-#include "hash.h"
+#include "rat4-hash.h"
 
 /*
  * PRIVATE FUNCTIONS.

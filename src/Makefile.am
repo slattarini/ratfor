@@ -19,7 +19,7 @@ c_ratfor_SOURCES = \
 	error.c error.h \
 	io.c io.h \
 	xopen.c xopen.h \
-	hash.c hash.h \
+	rat4-hash.c rat4-hash.h \
 	init.c init.h \
 	tokenizer.c tokenizer.h \
 	define.c define.h \
