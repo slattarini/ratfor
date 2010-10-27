@@ -4,28 +4,34 @@
 # C Ratfor: a ratfor preprocessor written in C.
 # Makefile for the tests/unit subdirectory.
 
+## -------------------------------- ##
+##  Global initialization & setup.  ##
+## -------------------------------- ##
+
+## Get the list of C Ratfor source files.
 include $(top_srcdir)/src/SourcesAndHeaders.am
+
+CLEANFILES = ## define it here so that it can be updated later
 
 # We need access to C Ratfor headers *and* sources sor inclusion in
 # test source files here.
 AM_CPPFLAGS = -I $(top_srcdir)/src
 
-EXTRA_DIST = tests-common.h ## shared by all tests
+# An header file shared by all tests programs.
+EXTRA_DIST = tests-common.h
 
-TESTS = $(test_programs)
+## -------------------------------------------------------------------- ##
+##  Static library used by unit tests, used to expose ratfor internals  ##
+## -------------------------------------------------------------------- ##
 
-EXTRA_PROGRAMS = $(test_programs)
-## Extra programs are not cleaned automatically.
-CLEANFILES = $(EXTRA_PROGRAMS)
-
-test_programs = ## will be updated later
-
-## Static library used by unit tests, used to expose ratfor internals.
-
+# For the moment, all binary programs in this directory are test
+# programs, and all of them must depend from our ratfor library.
 LDADD = librat4.a
+
 EXTRA_LIBRARIES = librat4.a
-## Extra libraries are not cleaned automatically.
+# Extra libraries are not cleaned automatically.
 CLEANFILES += $(EXTRA_LIBRARIES)
+
 librat4_a_SOURCES = $(ratfor_source_names:=_.c)
 
 $(librat4_a_SOURCES):
@@ -39,12 +45,22 @@ $(librat4_a_SOURCES):
 
 CLEANFILES += $(librat4_a_SOURCES)
 
-## Define tests and their dependencies.
+## --------------------------------------------------- ##
+##  Test binary programs tests and their dependencies  ##
+## --------------------------------------------------- ##
 
-test_programs += test-hash-collision
+binary_test_programs = test-hash-collision
 
-## Testsuite environment and setup.
-## TODO
+EXTRA_PROGRAMS = $(binary_test_programs)
+# Extra programs are not cleaned automatically.
+CLEANFILES += $(binary_test_programs)
+
+# Currently we only have binary test, not scripts.
+TESTS = $(binary_test_programs)
+
+## ------------------------------------ ##
+##  Services offered by included files  ##
+## ------------------------------------ ##
 
 ## Testsuite cleanup.
 include ../blackbox/am/LocalCleanup.am
