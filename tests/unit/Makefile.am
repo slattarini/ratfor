@@ -17,6 +17,10 @@ CLEANFILES = ## define it here so that it can be updated later
 # test source files here.
 AM_CPPFLAGS = -I $(top_srcdir)/src
 
+# Enable as many compiler warnings as possible.  Also, make compiler
+# warnings fatal, if the user aked so.
+AM_CFLAGS = $(WARN_CFLAGS) $(WERROR_CFLAGS)
+
 # An header file shared by all tests programs.
 EXTRA_DIST = tests-common.h
 
