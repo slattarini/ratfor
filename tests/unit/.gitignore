@@ -3,4 +3,6 @@
 /*.dir
 /*.o
 /.deps/
+/*_.c
+/librat4.a
 /test-hash-collision

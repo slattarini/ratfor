@@ -91,6 +91,13 @@ AX_CACHE_CHECK_CC_IS_CXX
 AX_AH_C_DECLS_MACROS
 
 #
+# Checks for programs.
+#
+
+# We'll build a static library for unit testing.
+AC_PROG_RANLIB
+
+#
 # Checks for headers.
 #
 
