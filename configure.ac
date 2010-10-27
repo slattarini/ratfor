@@ -144,7 +144,14 @@ AX_ARG_ENABLE_MAINTAINER_MAKE_RULES
 # shell variable `all_gcc_warnings'.
 gl_MANYWARN_ALL_GCC([all_gcc_warnings])
 
-# No will set up the list of the undesired warnings.
+# The C compiler flag `-pedantic' can confuse third party compilers
+# (e.g. SunStudio cc), so try it only if we know that the C compiler
+# is gcc.
+if test x"$GCC" = x"yes"; then
+    AS_VAR_APPEND([all_gcc_warnings], [" -pedantic"])
+fi
+
+# Now will set up the list of the undesired warnings.
 nw="" # short name, for lazy typists.
 # Don't let system headers trigger warnings.
 nw="$nw -Wsystem-headers"
