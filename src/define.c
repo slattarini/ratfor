@@ -139,16 +139,12 @@ get_and_install_macro_definition(void)
     hash_install(name, body);
 }
 
-/* Look-up definition of name[] in user-defined macros. If it's not found,
- * return false, else and copy the definition in buf[] and return true. */
+/* Look-up definition of name in user-defined macros. If it's not found,
+ * return NULL, else return a pointer to its definition. */
 const char *
 macro_definition_lookup(const char *name)
 {
-    struct hashlist *p;
-    if ((p = hash_lookup(name)) == NULL)
-        return(NULL);
-    else
-        return(p->def);
+    return hash_lookup(name);
 }
 
 END_C_DECLS

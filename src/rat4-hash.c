@@ -19,6 +19,16 @@
 
 #include "rat4-common.h"
 #include "rat4-hash.h"
+#include "error.h"
+
+#define HASHMAX 100 /* size of hashtable */
+
+/* basic table entry */
+struct hashlist {
+    const char *name;
+    const char *def;
+    struct hashlist *next; /* next in chain */
+};
 
 static struct hashlist *hashtab[HASHMAX];
 
@@ -32,40 +42,40 @@ hash(const char *s)
     return (hashval % HASHMAX);
 }
 
-C_DECL struct hashlist *
+C_DECL const char *
 hash_lookup(const char *s)
 {
     struct hashlist *np;
 
     for (np = hashtab[hash(s)]; np != NULL; np = np->next)
         if (STREQ(s, np->name))
-            return(np); /* found     */
-    return(NULL);       /* not found */
+            return(np->def);  /* found     */
+    return(NULL);             /* not found */
 }
 
-C_DECL struct hashlist*
+C_DECL void
 hash_install(const char *name, const char *def)
 {
     int hashval;
-    struct hashlist *np;
+    struct hashlist *hp;
+    const char *olddef;
 
-    if ((np = hash_lookup(name)) == NULL) { /* not found */
+    if ((olddef = hash_lookup(name)) == NULL) { /* not found */
         /* cast needed to avoid errors with c++ compilers */
-        np = (struct hashlist *) malloc(sizeof(*np));
-        if (np == NULL)
-            return(NULL);
-        if ((np->name = strdup(name)) == NULL)
-            return(NULL);
-        hashval = hash(np->name);
-        np->next = hashtab[hashval];
-        hashtab[hashval] = np;
+        hp = (struct hashlist *) malloc(sizeof(*hp));
+        if (hp == NULL)
+            fatal("out of memory");
+        if ((hp->name = strdup(name)) == NULL)
+            fatal("out of memory");
+        hashval = hash(hp->name);
+        hp->next = hashtab[hashval];
+        hashtab[hashval] = hp;
     } else { /* found */
         /* cast needed to avoid compiler warning */
-        free((void *)np->def);
+        free((void *)olddef);
     }
-    if ((np->def = strdup(def)) == NULL)
-        return(NULL);
-    return(np);
+    if ((hp->def = strdup(def)) == NULL)
+        fatal("out of memory");
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */
