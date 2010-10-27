@@ -37,8 +37,8 @@ hash(const char *key)
 {
     int i;
 
-    for (i = 0; *key != '\0';)
-        i += *key++;
+    for (i = 0; *key != '\0'; key++)
+        i += *key;
     return (i % HASHMAX);
 }
 
