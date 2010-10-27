@@ -38,12 +38,12 @@ CLEANFILES += $(EXTRA_LIBRARIES)
 
 librat4_a_SOURCES = $(ratfor_source_names:=_.c)
 
-$(librat4_a_SOURCES):
+$(librat4_a_SOURCES): Makefile.am
 	$(AM_V_at)rm -f $@ $@-t
 	$(AM_V_GEN)filename=`expr x'$@' : x'\(.*\)_.c$$'` \
 	  && echo "/* This file has been automatically generated. " \
 	          "DO NOT EDIT BY HAND! */" > $@-t \
-	  && echo "#define IS_RAT4_UNITTEST 1" >> $@-t
+	  && echo "#define IS_RAT4_UNITTEST 1" >> $@-t \
 	  && echo "#include <$$filename.c>" >> $@-t
 	$(AM_V_at)chmod a-w $@-t && mv -f $@-t $@
 
