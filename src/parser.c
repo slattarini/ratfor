@@ -112,6 +112,11 @@ unstack(int lextype)
             case LEXFOR:
                 for_end(labval[sp]);
                 break;
+            case TOKT_DIGITS:
+                break; /* nothing to do */
+            default:
+                abort(); /* can't happen */
+                break;
         } /* end switch */
     } /* end for */
 }
@@ -249,6 +254,11 @@ parse(void)
                 else
                     synerr("illegal until.");
                 break;
+            /* FIXME: when we'll have a more proper lexer, check for
+             * "LEXOTHER" here as the last possible value for lextype,
+             * and call `abort()' in the "default" case below. */
+            default:
+                break; /* nothing to do */
         } /* switch lextype */
 
         /* manange stack of statements */

@@ -25,7 +25,10 @@
 #include "labgen.h"
 #include "codegen.h"
 
+#if 0
+/* disabled until we re-introduce support dor `string' statement. */
 #define MAXSTRNAME MAXFUNCNAME /* max length for a string name */
+#endif
 #define MAXSWITCH  300         /* max stack for switch statement */
 #define MAXFORSTK  200         /* max space for for reinit clauses */
 
@@ -177,8 +180,9 @@ token_requires_automatic_line_continuation(int t)
         case EQUALS:
         case TOKT_RELATN:
             return true;
+        default:
+            return false;
     }
-    return false;
 }
 
 static const char *

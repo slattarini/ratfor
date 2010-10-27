@@ -140,8 +140,51 @@ AX_ARG_ENABLE_MAINTAINER_MAKE_RULES
 # Compiler warnings and strictness.
 #
 
-# Enable as many compiler warnings as possible.
-AX_CC_ENABLE_ALL_COMPILER_WARNINGS
+# Get a list of as many compiler warnings as possible, and save it in the
+# shell variable `all_gcc_warnings'.
+gl_MANYWARN_ALL_GCC([all_gcc_warnings])
+
+# No will set up the list of the undesired warnings.
+nw="" # short name, for lazy typists.
+# Don't let system headers trigger warnings.
+nw="$nw -Wsystem-headers"
+# All compiler preprocessors support "#if UNDEF".
+nw="$nw -Wundef"
+# All compilers nowadays support ANSI C
+nw="$nw -Wtraditional"
+# This warning is useless since we don't use the `-fstrict-overflow'
+# switch; moreover, it might easily lead to false positives.
+nw="$nw -Wstrict-overflow"
+# These warnings usually don't point to mistakes.
+nw="$nw -Wconversion"
+# These warnings seems useless, and I don't know I to work around them.
+nw="$nw -Wcast-qual"
+# Will prolly require fiddling with __attribute__.
+nw="$nw -Wmissing-noreturn"
+nw="$nw -Wmissing-format-attribute"
+# Still too many warnings with this enabled; needs investigation.
+nw="$nw -Wtraditional-conversion"
+# Still too many spurious warnings with this enabled; needs investigation.
+nw="$nw -Wunreachable-code"
+# Save the list in a variable with a "more proper" name, get rid
+# of temporary variable `nw'.
+undesired_gcc_warnings=$nw
+AS_UNSET([nw])
+
+# Filter out all the undesired GCC warnings, ans save the list of the
+# desired warnings in the shell variable `desired_gcc_warnings'.
+gl_MANYWARN_COMPLEMENT([desired_gcc_warnings],
+                       [$all_gcc_warnings],
+                       [$undesired_gcc_warnings])
+
+# Enable all the desired GCC warnings.
+for w in $desired_gcc_warnings; do
+  gl_WARN_ADD([$w], [WARN_CFLAGS])
+done
+AS_UNSET([w])
+
+# Make list of GCC warnings accessible to Makefiles.
+AC_SUBST([WARN_CFLAGS])
 
 # Process configure option `--enable-werror-cflag', telling whether or
 # not the `-Werror' flag should be added (when supported) to default
