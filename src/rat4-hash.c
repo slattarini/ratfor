@@ -32,7 +32,7 @@ struct hashlist {
 
 static struct hashlist *hashtab[HASHMAX];
 
-static int
+STATIC_TESTABLE_FUNC int
 hash(const char *key)
 {
     int i;

@@ -25,7 +25,25 @@
 int
 main(void)
 {
-    ASSERT(true);
+    int hash(const char *);
+
+    /* sanity checks */
+    ASSERT(hash("ad") == hash("da"));
+    ASSERT(hash("bc") == hash("cb"));
+    ASSERT(hash("bc") == hash("ad"));
+
+    /* test setup */
+    hash_install("ad", "A-D");
+    hash_install("da", "D-A");
+    hash_install("bc", "B-C");
+    hash_install("cb", "C-B");
+
+    /* real tests */
+    ASSERT(STREQ(hash_lookup("ad"), "A-D"));
+    ASSERT(STREQ(hash_lookup("da"), "D-A"));
+    ASSERT(STREQ(hash_lookup("bc"), "B-C"));
+    ASSERT(STREQ(hash_lookup("cb"), "C-B"));
+
     return(EXIT_SUCCESS);
 }
 
