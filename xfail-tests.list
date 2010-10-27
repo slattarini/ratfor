@@ -34,4 +34,11 @@ include-at-stmt-beginning-at-least-squote.test
 # but for the moment it's simpler to mark it as xfailing.
 comments-no-extra-white-spaces.test
 
+# "function" and "subroutine" pseudo-keywords are still erroneously
+# processed into initialization/increment code of `for' and `do' loops.
+function-in-do-condition.test
+function-in-for-condition.test
+subroutine-in-do-condition.test
+subroutine-in-for-condition.test
+
 # vim: ft=conf ts=4 sw=4 et
