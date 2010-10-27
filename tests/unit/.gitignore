@@ -1,3 +1,6 @@
 /*.log
 /*.log-t
 /*.dir
+/*.o
+/.deps/
+/test-hash-collision

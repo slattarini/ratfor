@@ -6,14 +6,19 @@
 
 AM_CPPFLAGS = -I $(top_srcdir)/src
 
-## List of tests.
+EXTRA_DIST = tests-common.h ## shared by all tests
 
-EXTRA_DIST = $(TESTS)
+TESTS = $(test_programs)
+EXTRA_PROGRAMS = $(test_programs)
 
-TESTS = ## TODO
+CLEANFILES = $(EXTRA_PROGRAMS) ## extra programs are cleaned automatically
 
-## Requirements and dependencies of tests.
-## TODO
+test_programs = ## will be updated later
+
+## Define tests and their dependencies.
+
+test_programs += test-hash-collision
+test_hash_collision_SOURCES = test-hash-collision.c rat4-hash_.c error_.c
 
 ## Testsuite environment and setup.
 ## TODO
