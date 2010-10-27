@@ -11,7 +11,7 @@ bin_PROGRAMS = c-ratfor
 AM_CFLAGS = $(WARN_CFLAGS) $(WERROR_CFLAGS)
 
 c_ratfor_SOURCES = \
-    rat4-global.h \
+	rat4-global.h \
 	rat4-common.h \
 	tok-types.h \
 	lex-types.h \
