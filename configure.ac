@@ -82,7 +82,7 @@ AM_SILENT_RULES([no]) dnl. make `silent-rules' disabled by default
 # Checks for C compiler and support.
 #
 
-AC_PROG_CC_STDC
+AC_PROG_CC
 AM_PROG_CC_C_O
 
 # See if $CC is a C++ compiler.
