@@ -14,4 +14,3 @@ c_ratfor_SOURCES = $(ratfor_c_files) $(ratfor_h_files)
 AM_CFLAGS = $(WARN_CFLAGS) $(WERROR_CFLAGS)
 
 ## vim: ft=automake noet sw=4 ts=4
-
