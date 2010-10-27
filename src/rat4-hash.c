@@ -25,56 +25,56 @@
 
 /* basic table entry */
 struct hashlist {
-    const char *name;
-    const char *def;
+    const char *key;
+    const char *val;
     struct hashlist *next; /* next in chain */
 };
 
 static struct hashlist *hashtab[HASHMAX];
 
 static int
-hash(const char *s)
+hash(const char *key)
 {
-    int hashval;
+    int i;
 
-    for (hashval = 0; *s != '\0';)
-        hashval += *s++;
-    return (hashval % HASHMAX);
+    for (i = 0; *key != '\0';)
+        i += *key++;
+    return (i % HASHMAX);
 }
 
 C_DECL const char *
-hash_lookup(const char *s)
+hash_lookup(const char *key)
 {
     struct hashlist *np;
 
-    for (np = hashtab[hash(s)]; np != NULL; np = np->next)
-        if (STREQ(s, np->name))
-            return(np->def);  /* found     */
+    for (np = hashtab[hash(key)]; np != NULL; np = np->next)
+        if (STREQ(key, np->key))
+            return(np->val);  /* found     */
     return(NULL);             /* not found */
 }
 
 C_DECL void
-hash_install(const char *name, const char *def)
+hash_install(const char *key, const char *val)
 {
-    int hashval;
+    int hashed_key;
     struct hashlist *hp;
-    const char *olddef;
+    const char *oldval;
 
-    if ((olddef = hash_lookup(name)) == NULL) { /* not found */
+    if ((oldval = hash_lookup(key)) == NULL) { /* not found */
         /* cast needed to avoid errors with c++ compilers */
         hp = (struct hashlist *) malloc(sizeof(*hp));
         if (hp == NULL)
             fatal("out of memory");
-        if ((hp->name = strdup(name)) == NULL)
+        if ((hp->key = strdup(key)) == NULL)
             fatal("out of memory");
-        hashval = hash(hp->name);
-        hp->next = hashtab[hashval];
-        hashtab[hashval] = hp;
-    } else { /* found */
+        hashed_key = hash(hp->key);
+        hp->next = hashtab[hashed_key];
+        hashtab[hashed_key] = hp;
+    } else { /* found, must deallocate older value to avoid memory leak */
         /* cast needed to avoid compiler warning */
-        free((void *)olddef);
+        free((void *)oldval);
     }
-    if ((hp->def = strdup(def)) == NULL)
+    if ((hp->val = strdup(val)) == NULL)
         fatal("out of memory");
 }
 
