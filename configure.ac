@@ -144,7 +144,8 @@ AX_ARG_ENABLE_MAINTAINER_MAKE_RULES
 AX_CC_ENABLE_ALL_COMPILER_WARNINGS
 
 # Process configure option `--enable-werror-cflag', telling whether or
-# not the `-Werror' flag should be added (when supported) to $CFLAGS.
+# not the `-Werror' flag should be added (when supported) to default
+# compilation flags.
 AX_ARG_ENABLE_WERROR_CFLAG
 
 #

@@ -1,6 +1,6 @@
 # -*- Autoconf -*-
-# Copied from SteLib at 2010-10-20 15:07:37 +0200.  DO NOT EDIT!
-# serial 4 ax_cc_is_cxx_support.m4
+# Copied from SteLib at 2010-10-27 14:50:38 +0200.  DO NOT EDIT!
+# serial 5 ax_cc_enable_all_warnings.m4
 
 #
 # Copyright (C) 2010 Stefano Lattarini.
@@ -16,10 +16,8 @@
 # Enable as many compiler warnings as possible (this is tailered to gcc,
 # but should not cause failures of problems for other compilers).  Try to
 # enable also the warning flags specified in EXTRA-WARNING, in addition
-# to the builtin list of warnings flags.
-# IMPORTANT NOTE: this macro *must* be expanded only after any check on
-# C compiler, C headers, C functions or C libraries, as stricter handling
-# of warnings can interfere with usual Autoconf checks.
+# to the builtin list of warnings flags.  Save the list of supported
+# warnings in the AC_SUBST'd variable `WARN_CFLAGS'.
 AC_DEFUN([AX_CC_ENABLE_ALL_COMPILER_WARNINGS],
     [AC_REQUIRE([AX_CACHE_CHECK_CC_IS_CXX])dnl
     # Enable as many compiler warnings as possible.
@@ -47,11 +45,14 @@ dnl: smarter and more reliable.  Oh well.
     if test x"$GCC" = x"yes"; then
         AS_VAR_APPEND([ax_cc_all_warning_flags], [" -pedantic"])
     fi
+    WARN_CFLAGS=''
     for ax_cc_warning_flag in $ax_cc_all_warning_flags; do
         AX_CACHE_CHECK_CC_FLAG([$ax_cc_warning_flag], [], [],
-                               [AS_VAR_APPEND([CFLAGS], [" $ax_cc_warning_flag"])])
+                               [AS_VAR_APPEND([WARN_CFLAGS],
+                                              [" $ax_cc_warning_flag"])])
     done
     AS_UNSET([ax_cc_warning_flag])
+    AC_SUBST([WARN_CFLAGS])
 ])
 
 # vim: ft=m4 ts=4 sw=4 et
