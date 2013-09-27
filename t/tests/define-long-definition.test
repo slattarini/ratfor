@@ -1,0 +1,86 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that the `define' builtin deal gracefully with long macro defs.
+# This testcase is a bit hackish.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+s=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
+s1=$s$s$s$s$s$s$s$s
+s2="\
+$s
+$s$s
+$s$s$s
+$s$s$s$s
+$s$s$s$s$s + $s$s$s$s"
+
+cat >tst.r <<EOF
+define a1 $s1
+define(a2, {
+$s2
+})
+a1
+a2
+EOF
+
+cat >exp <<EOF
+$s1
+$s2
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+
+# we have to account for line break&continuations introduced by ratfor
+$AWK '
+    BEGIN {
+        s = ""
+        sprn = 0
+    }
+    /^[cC]/{
+        next
+    }
+    /^      / {
+        if (sprn)
+            print s
+        sprn = 1;
+        sub("^      ", "")
+        s = $0
+        next;
+    }
+    /^     [^ ]/{
+        sub("^     [^ ]", "")
+        s = s $0
+        next
+    }
+    END {
+        if (sprn)
+            print s
+    }
+' <stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

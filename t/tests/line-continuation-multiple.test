@@ -1,0 +1,54 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test line continuation by `_'.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<\EOF
+#-------------------------------
+a_
+_
+b
+#-------------------------------
+x_
+_
+_
+_
+_
+_
+y
+EOF
+
+cat > exp <<\EOF
+ab
+xy
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP -v '^[cC]' <stdout | ws_strip >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

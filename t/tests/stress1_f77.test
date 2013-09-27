@@ -1,0 +1,161 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Stress test for ratfor (by compiling and running generated fortran code)
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+# -*- ratfor -*-
+
+define Ifmt I20
+define Afmt A40
+
+integer function foo(a, b)
+    implicit none
+    integer a, b
+    if (a == b) {
+        write(*,100) a, b; 100 format(Ifmt, ' = ', Ifmt);
+    } else if (a > b) {
+        write(*,101) a, b; 101 format(Ifmt, ' > ', Ifmt);
+    } else {
+        write(*,102) a, b; 102 format(Ifmt, ' < ', Ifmt);
+    }
+    return 0
+end # function foo
+
+subroutine bar()
+    integer m, n, t, foo
+    define ONE 1
+    m = ONE
+    n = 2
+    t = foo(m, n)
+    define V2 5
+    define V1 V2
+    # define V1 0
+    define V0 V1
+    t = foo(V0, 4)
+    define V1 1
+    t = foo(V0, m)
+end # subroutine bar
+
+program stress1
+    integer x, y, r, foo
+    define(TSTLBL, write(*,800))
+
+    TSTLBL '@foo'
+    r = foo(10, 11)
+    write(*, 701) r; 701 format("r:",Ifmt)
+
+    TSTLBL '@bar'
+    call bar()
+
+    x = 1; y = 2;
+    TSTLBL '@while'
+    while (x < 10) {
+        if (y != 2)
+            break
+        if (y ^= 2) {
+            x = 20
+            next
+        }
+        write(*,900) x
+        x = x + 1
+    }
+
+    TSTLBL '@repeat-until';
+    repeat {
+        write(*,900)x
+        x=x-1
+    } until (x == 0)
+
+    TSTLBL '@for'
+    # 8%12 is "octal 12" a.k.a. 10
+    for (x = -1; x < 8%12; x = x + 1)
+        write(*,900)x
+
+    TSTLBL '@stop'
+    call halt # program ends here
+    write(*,800) "NOTREACHED"
+
+800 format(Afmt)
+900 format("x:", Ifmt)
+
+end # program stress1
+EOF
+
+cat > exp <<EOF
+@foo
+10 < 11
+r:0
+@bar
+1 < 2
+5 > 4
+1 = 1
+@while
+x:1
+x:2
+x:3
+x:4
+x:5
+x:6
+x:7
+x:8
+x:9
+@repeat-until
+x:10
+x:9
+x:8
+x:7
+x:6
+x:5
+x:4
+x:3
+x:2
+x:1
+@for
+x:-1
+x:0
+x:1
+x:2
+x:3
+x:4
+x:5
+x:6
+x:7
+x:8
+x:9
+@stop
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+ws_normalize <stdout | $SED 's/ *: */:/g' >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

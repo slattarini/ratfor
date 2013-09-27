@@ -1,0 +1,18 @@
+## -*- Makefile.am -*-
+## Copyright (C) 2009, 2010 Stefano Lattarini.
+## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+## This file is part of the Ratfor Testsuite.
+
+# All the tests scripts should end with one of these extensions.
+TEST_EXTENSIONS = .test
+
+# Shell used to run the test scripts.  This is user-overridable.
+TEST_SHELL = $(SHELL)
+
+# Since we are using the new the new `parallel-tests' functionality
+# of automake, use $(TEST_LOG_COMPILER) instead of $(TESTS_ENVIRONMENT),
+# as it is the new recommended way to go, $(TESTS_ENVIRONMENT) being
+# now tought as user-reserved.
+TEST_LOG_COMPILER = $(TEST_SHELL)
+
+## vim: ft=automake noet sw=4 ts=4

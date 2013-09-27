@@ -1,0 +1,69 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that line numbers in error messages are ok, even when expansion
+# of multiline macros is involved.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+$SED 's/#.*$//' > tst.r <<EOF
+l1; l1; l1; #1
+}; l2 #2
+define foo bar #3
+foo #4
+define(zap, #5
+quux1 #6
+quux2); #7
+#8
+zap #9
+case #10
+# 11
+define(err1,next) #12
+#13
+#14
+err1 #15
+define(err2, #16
+fnord #17
+break #18
+fnord); #19
+#20
+err2 #21
+#12
+else #23
+EOF
+
+$AWK '{print NR ":" $0}' tst.r
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+
+for msg in \
+  '2: illegal right brace' \
+  '10: illegal case' \
+  '15: illegal next' \
+  '21: illegal break' \
+  '23: illegal else' \
+; do
+    $FGREP "tst.r:$msg" stderr || testcase_FAIL
+done
+
+for n in 12 16 17 18 19; do
+    $GREP "tst\.r: *$n:" stderr && testcase_FAIL
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

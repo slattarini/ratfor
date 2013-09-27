@@ -1,0 +1,62 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of The Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that code generated from `repeat repeat STMT until(COND)' work.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+program tstnestrpt
+100 format('ok ',I1)
+    integer i
+    i = 0
+    repeat
+        repeat {
+            i = i + 1
+            write(*,100) i
+            if (i >= 4)
+                goto 10
+        } until(i > 10)
+    continue
+10  call halt
+end
+EOF
+
+cat > exp <<EOF
+ok 1
+ok 2
+ok 3
+ok 4
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

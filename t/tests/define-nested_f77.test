@@ -1,0 +1,84 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check "nested" definitions with `define' (with f77)
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat >tst.r <<\EOF
+    program testdefinenest
+
+        implicit none
+
+        define x1 x0
+        define x0 1
+        write(*,100) x1
+
+        define y0 2
+        define y1 y0
+        define y2 y1
+        define y3 y2
+        write(*,100) y3
+
+        define z3 z2
+        define z2 z1
+        define z1 z0
+        define z0 3
+        write(*,100) z3
+
+        define w2 w1
+        define w1 w0
+        define w0 4
+        write(*,100) w2
+        define w0 5
+        write(*,100) w2
+        define w1 6
+        write(*,100) w2
+
+100     format(I1)
+
+        call halt
+
+    end
+EOF
+
+cat > exp <<EOF
+1
+2
+3
+4
+5
+6
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+mv stdout got
+test -s stderr && testcase_FAIL
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

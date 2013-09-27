@@ -1,0 +1,98 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that illegal occurrences of the `default' and `case' keywords
+# are diagnosed correctly.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.dat <<EOF
+01: case
+02: default
+03: case 1: pass
+04: default: pass
+05: switch() {}
+06: case 2: pass
+07: default: pass
+08: if(true) {
+09:      case 3: pass
+10: } else {
+11:      default: pass
+12: }
+13: while(false) {
+14:      case 4: pass
+15:      repeat
+16:         default: pass
+17:      until(true)
+18: }
+19: switch(x) {
+20:   case 5:
+21:     if(true) {
+22:         case 6: pass
+23:     } else {
+24:         default: pass
+25:     }
+26:   default:
+27:     for(;;) {
+28:         case 7: break;
+29:         default: break;
+30:     }
+31: }
+32: switch(x) {{ case 8: pass; }}
+33: switch(x) {{{
+34:
+35:     {{
+36:         case 9: pass;
+37:         default: pass;
+38:     }
+39:     }
+40:   }}
+41: }
+EOF
+
+cat tst.dat
+$SED -e 's/ *[0-9]*: //' tst.dat >tst.r
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+
+$FGREP 'EOF'                       stderr && testcase_FAIL
+$FGREP 'illegal case or default'   stderr && testcase_FAIL
+$FGREP 'invalid case'              stderr && testcase_FAIL
+$FGREP 'duplicated case'           stderr && testcase_FAIL
+$FGREP 'tst.r:20: illegal'         stderr && testcase_FAIL
+$FGREP 'tst.r:26: illegal'         stderr && testcase_FAIL
+$FGREP 'tst.r:32: illegal'         stderr && testcase_FAIL
+$FGREP 'tst.r:36: illegal'         stderr && testcase_FAIL
+$FGREP 'tst.r:37: illegal'         stderr && testcase_FAIL
+$FGREP 'tst.r:1: illegal case'     stderr || testcase_FAIL
+$FGREP 'tst.r:2: illegal default'  stderr || testcase_FAIL
+$FGREP 'tst.r:3: illegal case'     stderr || testcase_FAIL
+$FGREP 'tst.r:4: illegal default'  stderr || testcase_FAIL
+$FGREP 'tst.r:6: illegal case'     stderr || testcase_FAIL
+$FGREP 'tst.r:7: illegal default'  stderr || testcase_FAIL
+$FGREP 'tst.r:9: illegal case'     stderr || testcase_FAIL
+$FGREP 'tst.r:11: illegal default' stderr || testcase_FAIL
+$FGREP 'tst.r:14: illegal case'    stderr || testcase_FAIL
+$FGREP 'tst.r:16: illegal default' stderr || testcase_FAIL
+$FGREP 'tst.r:22: illegal case'    stderr || testcase_FAIL
+$FGREP 'tst.r:24: illegal default' stderr || testcase_FAIL
+$FGREP 'tst.r:28: illegal case'    stderr || testcase_FAIL
+$FGREP 'tst.r:29: illegal default' stderr || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

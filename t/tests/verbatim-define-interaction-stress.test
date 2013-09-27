@@ -1,0 +1,95 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Stress-testing interactions between `%' construct and `define' builtin.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+# -*-*-*-
+
+cat > tst1.r <<EOF
+define PERCENT1 %
+% && a1
+define(PERCENT2,%)
+% && a2
+PERCENT1 && b1
+PERCENT2 && b2
+define mu1 % && c1
+define(mu2,% && c2)
+mu1
+mu2
+mu1 mu2
+EOF
+
+cat tst1.r
+
+run_RATFOR tst1.r || testcase_FAIL "tst1: unexpected ratfor failure"
+
+mv stdout stdout1
+mv stderr stderr1
+
+test ! -s stderr1 || testcase_FAIL "tst1: unexpected message(s) on stderr"
+
+for x in a b c; do
+  for i in 1 2; do
+    $FGREP "&& $x$i" stdout1 \
+      || testcase_FAIL "tst1: not found proper raw \`&& $x$i'"
+    $FGREP ".and. $x$i" stdout1 \
+      && testcase_FAIL "tst1: found improper \`.and. $x$i'"
+  done
+done
+
+$FGREP "&& c1 mu2" stdout1 \
+  || testcase_FAIL "tst1: not found proper raw \`&& c1 mu2'"
+
+# -*-*-*-
+
+cat > tst2.r <<EOF
+define FOO u = 1; % && d1
+define(BAR,v = 2);% && d2
+FOO
+BAR
+EOF
+
+cat > exp <<EOF
+&& d2
+u = 1
+&& d1
+v = 2
+EOF
+
+cat tst2.r
+
+run_RATFOR tst2.r || testcase_FAIL "tst2: unexpected ratfor failure"
+
+mv stdout stdout2
+mv stderr stderr2
+
+test ! -s stderr2 || testcase_FAIL "tst2: unexpected message(s) on stderr"
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e "s/$ws0p=$ws0p/=/" -e '/^$/d' \
+     <stdout2 >got
+cat exp
+cat got
+$DIFF_U exp got \
+  || testcase_FAIL "tst2: stdout: differences from expected output"
+
+# -*-*-*-
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

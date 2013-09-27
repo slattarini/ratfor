@@ -1,0 +1,77 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor can handle  *a lot* of `define'd names at once.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+set +x # avoid too much verbose logs
+
+letters='a b c d e f g h i j k l m n o p q r s t u v w x y z'
+digits='0 1 2 3 4 5 6 7 8 9'
+numbers=''
+
+for h in $digits; do
+    for d in $digits; do
+        for u in $digits; do
+            numbers="$numbers $h$d$u"
+        done
+    done
+done
+unset u d h
+
+echo letters: $letters
+echo numbers: $numbers
+
+echo "$me: creating I/O files (might take a while) ..."
+
+: > def
+: > use
+: > exp
+# with this, we'll have 26000 (yep, twenty-six thousands) "define"d
+# names at once...
+for l in $letters; do
+    for n in $numbers; do
+        echo "define $l$n $l$l$n" >> def
+        echo "$l$n" >> use
+        echo "$l$l$n" >> exp
+    done
+done
+
+echo "$me: files created."
+
+set -x # restore verbose shell traces
+
+# sanity checks
+test `wc -l <def` = 26000 || testcase_HARDERROR
+test `wc -l <use` = 26000 || testcase_HARDERROR
+test `wc -l <exp` = 26000 || testcase_HARDERROR
+
+cat def use > tst.r
+
+# Ratfor might require quite a long time to process such a large file,
+# so be sure to leave it some time (say 3 minutes) before considering
+# it timed out (default with run_RATFOR would be 5 or 10 seconds).
+run_RATFOR -t 180 -- tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

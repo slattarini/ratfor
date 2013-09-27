@@ -1,0 +1,57 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+#
+# Common definitions, environments settings and shell functions for the
+# test scripts of the Ratfor Testsuite.
+#
+# NOTE ON NAMESPACE CLEANLINESS:  We should try to keep ourselves confined
+# to the namespaces `rat4t_*' and `_ra4t_*' as much as possible, for both
+# variables and functions.  For environment variables, the namespace
+# `RAT4_TESTSUITE_*' should be used instead.
+#
+
+(set -u) >/dev/null 2>&1 && set -u
+
+rat4t_top_srcdir='@abs_top_srcdir@'
+rat4t_top_builddir='@abs_top_builddir@'
+rat4t_testaux_srcdir=$rat4t_top_srcdir/lib
+rat4t_testaux_builddir=$rat4t_top_builddir/lib
+
+# Sanity checks.
+case $rat4t_top_srcdir in /*);; *)
+  echo "FATAL: \$rat4t_top_srcdir \`$rat4t_top_srcdir':" \
+       "not an absolute path" >&2
+  exit 99;;
+esac
+case $rat4t_top_builddir in /*);; *)
+  echo "FATAL: \$rat4t_top_builddir \`$rat4t_top_builddir':" \
+       "not an absolute path" >&2
+  exit 99;;
+esac
+if test ! -f "$rat4t_testaux_srcdir/rat4-testsuite-init.in"; then
+  echo "FATAL: \$rat4t_testaux_srcdir \`$rat4t_testaux_srcdir':" \
+              "no file \`rat4-testsuite-init.in' found there" >&2
+  exit 99
+fi
+if test ! -f "$rat4t_testaux_builddir/rat4-testsuite-init.sh"; then
+  echo "FATAL: \$rat4t_testaux_builddir \`$rat4t_testaux_builddir':" \
+              "no file \`rat4-testsuite.sh' found there" >&2
+  exit 99
+fi
+
+. "$rat4t_testaux_builddir"/rat4-testsuite-defs.sh || exit 99
+. "$rat4t_testaux_srcdir"/testlib.sh || exit 99
+. "$rat4t_testaux_srcdir"/rat4-testlib.sh || testcase_HARDERROR
+
+# Print details on the current run of the testcase. Useful for debugging.
+rat4t_print_testrun_info
+
+# Require the fortran compiler the script needs it, skipping the test if
+# that's not available.
+case $me in  *_f77) rat4t_require_fortran_compiler;; esac
+
+# Turn on shell traces.
+set -x
+
+# vim: ft=sh ts=4 sw=4 et

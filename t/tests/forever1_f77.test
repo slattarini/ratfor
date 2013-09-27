@@ -1,0 +1,70 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test `for(;;)' idiom
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+program testforever
+    implicit none
+    integer x, y
+    x = 10
+    y = 20
+    for(;;) {
+        if (x > y)
+          break
+        write(*,100) x, y
+        x = x + 2
+        y = y + 1
+    }
+100 format(I2,' ',I2)
+    call halt
+end
+EOF
+
+cat > exp <<EOF
+10 20
+12 21
+14 22
+16 23
+18 24
+20 25
+22 26
+24 27
+26 28
+28 29
+30 30
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 10 ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

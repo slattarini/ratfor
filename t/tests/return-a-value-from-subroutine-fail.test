@@ -1,0 +1,65 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor give proper error messages if `return' is given an
+# argument inside a subroutine.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+$SED 's/^ *[0-9][0-9]*: *//' >tst.r <<EOF
+01: subroutine sub1 { return 1 } end
+02: subroutine sub2(); return x; end
+03: subroutine sub3()
+04:   return(0)
+05: end
+06: subroutine sub4 {
+07:   return(1+2);
+08: } end
+09: subroutine sub5() {
+10:   return 1 + 2;
+11: } end
+12: subroutine sub6 { return @; } end
+13: subroutine sub7 { return(.); } end
+14: fnord subroutine sub8 { return x } end
+15: foo bar subroutine sub9(); return x; end
+16: a b c 1 2 3 subroutine sub10
+17:   return x
+18: end
+EOF
+
+$AWK '{ printf("%2d:  %s\n", NR, $0) }' tst.r
+
+errmsg="return statement with argument inside a subroutine"
+err_at_line() {
+    $GREP "^tst\\.r:$1: $errmsg" stderr || testcase_FAIL
+}
+
+run_RATFOR -e 1 tst.r || testcase_FAIL
+
+err_at_line 1
+err_at_line 2
+err_at_line 4
+err_at_line 7
+err_at_line 12
+err_at_line 13
+err_at_line 14
+err_at_line 15
+err_at_line 17
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

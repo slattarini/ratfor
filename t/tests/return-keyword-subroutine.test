@@ -1,0 +1,70 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor generate proper code for `return' statement
+# in subroutine.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat >tst1.r <<EOF
+subroutine subr
+return
+EOF
+
+cat >tst2.r <<EOF
+foo subroutine subr
+return
+EOF
+
+cat >tst3.r <<EOF
+subroutine subr { return }
+EOF
+
+cat >tst4.r <<EOF
+1 2 3 subroutine subr { return }
+EOF
+
+cat >tst5.r <<EOF
+! @ .. : = y/z || a == b && c < d && subroutine subr; return
+EOF
+
+cat >tst6.r <<EOF
+subroutine subr()
+return
+EOF
+
+tr '@' "$TAB" >tst7.r <<EOF
+, , subroutine subr@() { return }
+EOF
+
+cat >tst8.r <<EOF
+$TAB $TAB subroutine subr (); return
+EOF
+
+for i in 1 2 3 4 5 6 7 8; do
+    cat tst$i.r
+    run_RATFOR tst$i.r || testcase_FAIL
+    mv stdout stdout$i
+    mv stderr stderr$i
+    test -s stderr$i && testcase_FAIL
+    $GREP "^ *return *$" stdout$i || testcase_FAIL
+    $GREP "^ *subr *=" stdout$i && testcase_FAIL
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

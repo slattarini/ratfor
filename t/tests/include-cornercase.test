@@ -1,0 +1,58 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check some corner-cases in the usage of `include' (w.r.t. semicolons).
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+for i in 1 2 3 4; do
+  (echo "x$i"; echo "y$i") > inc$i.r
+done
+
+cat >tst.r <<EOF
+z1; include inc1.r
+include inc2.r; z2
+include inc3.r; include inc4.r
+EOF
+
+(
+ echo 'z1'
+ cat inc1.r
+ cat inc2.r
+ echo 'z2'
+ cat inc3.r
+ cat inc4.r
+) > ctrl.r
+
+cat tst.r
+cat ctrl.r
+
+run_RATFOR ctrl.r && test ! -s stderr || testcase_HARDERROR
+mv stdout exp
+
+run_RATFOR tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

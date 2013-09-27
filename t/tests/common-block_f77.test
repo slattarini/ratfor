@@ -1,0 +1,140 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check (with F77) that common blacks works smoothly in ratfor.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat >tst.r <<EOF
+subroutine swap_m_n
+    implicit none
+    integer m, n; common /coeff/ m, n;
+    integer tmp
+    tmp = m
+    m = n
+    n = tmp
+end
+
+subroutine incr_m_n
+    implicit none
+    integer a, b; common /coeff/ a, b;
+    a = a + 1
+    b = b + 1
+end
+
+subroutine incr_2_m_n
+    implicit none
+    integer u, n;
+    common /coeff/ u, n
+    u = u + 2
+    n = n + 2
+end
+
+integer function add_to_m(i)
+    implicit none
+    integer m, x; common /coeff/ m, x
+    integer i # placed after "common" by purpose
+    m = m + i
+    return m
+end
+
+subroutine add_to_n(i)
+    implicit none
+    integer i # placed before "common" by purpose
+    integer x, n; common /coeff/ x, n
+    n = n + i
+    return
+end
+
+program testcommonblock
+    implicit none
+    integer m, n, add_to_m
+    common /coeff/ m, n
+ 10 format(A1, ': ', I2)
+ 20 format('~~~~~~')
+ define SEP { write(*,20); }
+ define PMN { write(*,10) 'm', m; write(*,10) 'n', n; SEP; }
+    m = 10
+    n = 30
+    SEP
+    PMN
+    call incr_m_n
+    PMN
+    call incr_2_m_n
+    PMN
+    call add_to_n(10)
+    PMN
+    m = 11; n = 16;
+    PMN
+    write(*,10) 'R', add_to_m(4)
+    SEP
+    PMN
+    m = m + 3
+    PMN
+    call swap_m_n
+    PMN
+    call halt
+end
+EOF
+
+cat >exp <<EOF
+~~~~~~
+m: 10
+n: 30
+~~~~~~
+m: 11
+n: 31
+~~~~~~
+m: 13
+n: 33
+~~~~~~
+m: 13
+n: 43
+~~~~~~
+m: 11
+n: 16
+~~~~~~
+R: 15
+~~~~~~
+m: 15
+n: 16
+~~~~~~
+m: 18
+n: 16
+~~~~~~
+m: 16
+n: 18
+~~~~~~
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

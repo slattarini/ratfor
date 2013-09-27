@@ -1,0 +1,105 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor generate proper code for `return' statement
+# in functions.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat >tst01.r <<EOF
+integer function func
+return 1
+EOF
+
+cat >tst02.r <<EOF
+character function func { return 1 }
+EOF
+
+cat >tst03.r <<EOF
+foo bar function func; return 1
+EOF
+
+cat >tst04.r <<EOF
+100 function func()
+return 1
+EOF
+
+tr '@' "$TAB" >tst05.r <<EOF
+function func@() { return 1 }
+EOF
+
+cat >tst06.r <<EOF
+: @ && ... ! == x=y , $ _ function func ! (); return 55
+EOF
+
+cat >tst07.r <<EOF
+function func
+return 99; x = 2 + 3
+EOF
+
+cat >tst08.r <<EOF
+function func
+return(1+(x//15+2)**2)
+EOF
+
+cat >tst09.r <<EOF
+muuu function func
+return 'qwerty'
+EOF
+
+cat >tst10.r <<EOF
+function func
+return 1 x = 2 + 3 @ 4 'str ' ***/.$
+EOF
+
+cat tst01.r
+cat tst02.r
+cat tst03.r
+cat tst04.r
+cat tst05.r
+cat tst06.r
+cat tst07.r
+cat tst08.r
+cat tst09.r
+cat tst10.r
+
+# Usage: check_return INPUT-NUM RETURN-VALUE
+check_func_return() {
+    n=$1
+    r=`escape_for_grep "$2"`
+    run_RATFOR tst$n.r || testcase_FAIL
+    mv stderr stderr$n || testcase_HARDERROR
+    mv stdout stdout$n || testcase_HARDERROR
+    test -s stderr$n && testcase_FAIL
+    $GREP "^ *return *$" stdout$n || testcase_FAIL
+    $GREP "^ *func *= *$r *$" stdout$n || testcase_FAIL
+}
+
+check_func_return 01 "1"
+check_func_return 02 "1"
+check_func_return 03 "1"
+check_func_return 04 "1"
+check_func_return 05 "1"
+check_func_return 06 "55"
+check_func_return 07 "99"
+check_func_return 08 "(1+(x//15+2)**2)"
+check_func_return 09 "'qwerty'"
+check_func_return 10 "1 x = 2 + 3 @ 4 'str ' ***/.$"
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

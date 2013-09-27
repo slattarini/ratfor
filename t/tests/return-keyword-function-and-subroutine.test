@@ -1,0 +1,86 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor generate proper code for `return' statement
+# even when mixed definitions of functions and suvìbriutines are
+# seen.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat >tst1.r <<EOF
+function func1
+end
+function func2
+return 0
+EOF
+
+cat >tst2.r <<EOF
+subroutine subr1
+end
+subroutine subr2
+return
+EOF
+
+cat >tst3.r <<EOF
+subroutine subr1
+end
+function func2
+return 0
+EOF
+
+cat >tst4.r <<EOF
+function func1
+end
+function subr2
+return
+EOF
+
+cat tst1.r
+cat tst2.r
+cat tst3.r
+cat tst4.r
+
+xrun_RATFOR() {
+    n=$1
+    run_RATFOR tst$n.r || testcase_FAIL
+    mv stdout stdout$n || testcase_HARDERROR
+    mv stderr stderr$n || testcase_HARDERROR
+    test ! -s stderr$n || testcase_FAIL
+}
+
+xrun_RATFOR 1
+$GREP "^ *return *$"         stdout1 || testcase_FAIL
+$GREP "^ *func1 *.*=.* 0 *$" stdout1 && testcase_FAIL
+$GREP "^ *func2 *= *0 *$"    stdout1 || testcase_FAIL
+
+xrun_RATFOR 2
+$GREP "^ *return *$"        stdout2 || testcase_FAIL
+$GREP "^ *subr.* *= *0 *$"  stdout2 && testcase_FAIL
+
+xrun_RATFOR 3
+$GREP "^ *return *$"        stdout3 || testcase_FAIL
+$GREP "^ *subr.* *= *0 *$"  stdout3 && testcase_FAIL
+$GREP "^ *func2 *= *0 *$"   stdout3 || testcase_FAIL
+
+xrun_RATFOR 4
+$GREP "^ *return *$"        stdout4 || testcase_FAIL
+$GREP "^ *subr.* *= *0 *$"  stdout4 && testcase_FAIL
+$GREP "^ *func.* *= *0 *$"  stdout4 && testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

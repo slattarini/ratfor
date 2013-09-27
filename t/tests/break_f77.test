@@ -1,0 +1,142 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test the `break' statement, without arguments (by compiling and running
+# the generated fortran code)
+# Keep this in sync with sister test `break_f77.test'.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+program testbreak
+    implicit none
+    integer i
+
+100 format(A20, ' / ', I20)
+200 format('')
+
+    ###  WHILE  ###
+    write(*,200)
+    i = 5
+    while(i < 10) {
+        write(*, 100) 'while1', i
+        break
+        i = i + 1
+    }
+
+    ###  WHILE  ###
+    write(*,200)
+    i = 1
+    while(i < 10) {
+        write(*, 100) 'while2', i
+        if (i >= 3)
+            break
+        i = i + 1
+    }
+
+    ###  FOR  ###
+    write(*,200)
+    for(i = 5; i < 10; i = i + 1) {
+        write(*, 100) 'for1', i
+        break
+    }
+
+    ###  FOR  ###
+    write(*,200)
+    for(i = 1; i < 10; i = i + 1) {
+        write(*, 100) 'for2', i
+        if (i >= 3)
+            break
+    }
+
+    ###  REPEAT  ###
+    write(*,200)
+    i = 5
+    repeat {
+        write(*, 100) 'repeat1', i
+        break
+        i = i + 1
+    } until(i >= 10)
+
+    ###  REPEAT  ###
+    write(*,200)
+    i = 1
+    repeat {
+        write(*, 100) 'repeat2', i
+        if (i >= 3)
+            break
+        i = i + 1
+    } until(i >= 10)
+
+    ###  DO  ###
+    write(*,200)
+    do i = 5, 10 {
+        write(*, 100) 'do1', i
+        break
+    }
+
+    ###  DO  ###
+    write(*,200)
+    do i = 1, 10 {
+        write(*, 100) 'do2', i
+        if (i >= 3)
+            break
+    }
+
+    ###  STOP  ###
+    write(*,200)
+    call halt
+
+end
+EOF
+
+: > exp
+
+# This is used only to make the verbose logs prettier and clearer.
+xline='~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+
+echo "$xline" >>exp
+for kw in 'while' 'for' 'repeat' 'do'; do
+    $SED "s/^$ws0p//" <<EOF
+
+        ${kw}1 / 5
+
+        ${kw}2 / 1
+        ${kw}2 / 2
+        ${kw}2 / 3
+EOF
+done >>exp
+echo >>exp
+echo "$xline" >>exp
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 15 ./tst.exe || testcase_FAIL
+(echo "$xline" && ws_normalize <stdout && echo "$xline") >got
+
+cat exp
+cat got
+
+test -s stderr && testcase_FAIL
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,102 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test line continuation by `_' (more complex usages).
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+tr '@' ' ' > tst.r <<\EOF
+#-------------------------------
+abc_
+def
+#-------------------------------
+abc_
+@def
+#-------------------------------
+abc___
+def
+#-------------------------------
+abc_@_
+def
+#-------------------------------
+x_
+y_
+z_
+t
+#-------------------------------
+x_@
+y
+#-------------------------------
+x_
+
+y
+#-------------------------------
+define sym1 r_
+s_
+t
+sym1
+#-------------------------------
+define(sym2, u_
+v_
+w)
+sym2
+#-------------------------------
+def_
+ine_
+@sym3 foo
+sym3
+#-------------------------------
+d_
+e_
+f_
+i_
+n_
+e_
+(sym4, bar)
+sym4
+#-------------------------------
+EOF
+
+cat > exp <<\EOF
+abcdef
+abc def
+abc__def
+abc_ def
+xyzt
+x_
+y
+x
+y
+rst
+uvw
+foo
+bar
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP -v '^[cC]' <stdout | ws_strip >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

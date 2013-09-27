@@ -1,0 +1,44 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check `include' on paths containing `.' or `..'
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+mkdir subdir
+echo 'include ./inc.r' > tstdot.r
+echo 'include ../inc.r' > subdir/tstdotdot.r
+echo 'foo' > inc.r
+
+ls -l subdir
+cat inc.r
+cat tstdot.r
+cat subdir/tstdotdot.r
+
+run_RATFOR tstdot.r || testcase_FAIL
+$FGREP 'include' stdout && testcase_FAIL
+$FGREP 'foo' stdout || testcase_FAIL
+
+cd subdir
+run_RATFOR tstdotdot.r || testcase_FAIL
+$FGREP 'include' stdout && testcase_FAIL
+$FGREP 'foo' stdout || testcase_FAIL
+cd ..
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

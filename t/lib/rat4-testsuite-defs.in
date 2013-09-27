@@ -1,0 +1,32 @@
+#!/bin/sh
+# @configure_input@
+#
+# Copyright (C) 2009, 2010 Stefano Lattarini.
+# Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+#
+# Common definitions and environments settings for the test scripts
+# of the Ratfor Testsuite.
+#
+# NAMESPACE CLEANLINESS: for environment variables, we should try to keep
+# ourselves confined to the namespace `RAT4_TESTSUITE_*'.
+# Also, we should use only the namespaces `rat4t_*' and `_ra4t_*' for both
+# variables and functions, but here we can do an exception for the sake of
+# simplicity (in the case of e.g. PACKAGE_VERSION, RATFOR or F77) and of
+# interoperability with testlib.sh (in the case e.g. of GREP, SED, SHELL
+# and DIFF_U).
+#
+
+PACKAGE_VERSION='@PACKAGE_VERSION@'
+PACKAGE_NAME='@PACKAGE_NAME@'
+EXEEXT='@EXEEXT@'
+GREP=${RAT4_TESTSUITE_GREP-'@GREP@'}
+EGREP=${RAT4_TESTSUITE_EGREP-'@EGREP@'}
+FGREP=${RAT4_TESTSUITE_FGREP-'@FGREP@'}
+SED=${RAT4_TESTSUITE_SED-'@SED@'}
+AWK=${RAT4_TESTSUITE_AWK-'@AWK@'}
+SHELL=${RAT4_TESTSUITE_SHELL-'@SHELL@'}
+DIFF_U=${RAT4_TESTSUITE_DIFF_U-'@DIFF_U@'}
+F77=${RAT4_TESTSUITE_F77-'@F77@'}
+RATFOR=${RAT4_TESTSUITE_RATFOR-'@RATFOR@'}
+
+# vim: ft=sh ts=4 sw=4 et

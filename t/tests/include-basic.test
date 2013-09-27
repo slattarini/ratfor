@@ -1,0 +1,77 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check basic usage of `include' statement.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > included.r <<EOF
+foo1
+foo2
+EOF
+
+cat >tst1.r <<EOF
+main1
+include included.r
+main2
+EOF
+
+cat > exp1 <<\EOF
+main1
+foo1
+foo2
+main2
+EOF
+
+echo 'bar' > included
+
+cat >tst2.r <<EOF
+main1
+include included
+main2
+EOF
+
+cat > exp2 <<\EOF
+main1
+bar
+main2
+EOF
+
+cat tst1.r
+cat included.r
+cat tst2.r
+cat included
+
+run_RATFOR tst1.r || testcase_FAIL
+mv stdout stdout1
+mv stderr stderr1
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout1 >got1
+cat exp1
+cat got1
+$DIFF_U exp1 got1 || testcase_FAIL
+
+run_RATFOR tst2.r || testcase_FAIL
+mv stdout stdout2
+mv stderr stderr2
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout2 >got2
+cat exp2
+cat got2
+$DIFF_U exp2 got2 || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

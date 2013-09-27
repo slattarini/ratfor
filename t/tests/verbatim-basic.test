@@ -1,0 +1,49 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check the basic use of `%' to output lines verbatim.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+vtext="{|| bar VeRbAtIm $TAB &&}"
+vtext2="define foo bar; $vtext"
+
+echo "%$vtext" >tst1.r
+echo "foo; %$vtext" >tst2.r
+(echo "define bar quux"; echo " %$vtext") >tst3.r
+(echo "%$vtext2"; echo "foo is safe") >tst4.r
+
+cat tst1.r
+run_RATFOR tst1.r || testcase_FAIL
+$GREP "^$vtext$" stdout || testcase_FAIL
+
+cat tst2.r
+run_RATFOR tst2.r || testcase_FAIL
+$GREP "^$vtext$" stdout || testcase_FAIL
+
+cat tst3.r
+run_RATFOR tst3.r || testcase_FAIL
+$GREP "^$vtext$" stdout || testcase_FAIL
+
+cat tst4.r
+run_RATFOR tst4.r || testcase_FAIL
+$GREP "^$vtext2$" stdout || testcase_FAIL
+$GREP -i "foo${ws0p}is${ws0p}safe" stdout || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

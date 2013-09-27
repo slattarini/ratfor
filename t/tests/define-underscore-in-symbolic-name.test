@@ -1,0 +1,90 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check use of `define' with macros having underscore characters (`_')
+# in their names.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+# WARNING: and underscore followed by a newline trigger line continuation,
+# so we must be sure that no line here ends with an underscore.
+$SED -e 's/_$/_ /' >tst.r <<EOF
+define sym1     text
+define sym_1    t_e_x_t
+
+define foo      x0
+define fo_o     x1
+define fo__o    x2
+define f_o_o    x3
+define f__o_o   x4
+define f__o__o  x5
+define _foo     x6
+define __foo    x7
+define foo_     x8
+define foo__    x9
+
+define _        underscore
+define __       doubleunderscore
+
+sym1
+sym_1
+foo
+fo_o
+fo__o
+f_o_o
+f__o_o
+f__o__o
+_foo
+__foo
+foo_
+foo__
+_
+__
+EOF
+
+cat >exp <<EOF
+text
+t_e_x_t
+x0
+x1
+x2
+x3
+x4
+x5
+x6
+x7
+x8
+x9
+underscore
+doubleunderscore
+EOF
+
+$SED -e 's/$/$/' -e 's/^/^/' tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

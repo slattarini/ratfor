@@ -1,0 +1,62 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor properly strips all white spaces before comments,
+# and do not leave extra empty lines when processing comments.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+m='snafu'
+
+: >tst.r
+for s in '' ' ' "$TAB" '  ' "$TAB$TAB" " $TAB  $TAB"; do
+    echo "$m$s#xxx"
+    echo "{$m$s#xxx"
+    echo '}'
+    for x in 'while(1)' 'if(1)' 'for(x=1;x<2;x=x+1)' 'repeat'; do
+        echo "$x$s#xxx"
+        echo "pass"
+        echo "$x $m$s#xxx"
+        case $x in *'('*) echo "$x$m$s#xxx";; esac
+    done
+    echo "repeat$s#xxx"
+    echo "pass"
+    echo "until(1)"
+    echo "repeat$s#xxx"
+    echo "$x$m$s#xxx"
+    echo "until(1)"
+done >tst.r
+
+
+for flg in '' -C; do
+    run_RATFOR $flg tst.r || testcase_FAIL
+    if test -n "$flg"; then
+        mv stdout stdout$flg
+        mv stderr stderr$flg
+    fi
+    test ! -s stderr$flg || testcase_FAIL
+    if $FGREP "$m " stdout$flg; then
+        testcase_FAIL "found trailing whitespaces in output of ratfor $flg"
+    fi
+    if $GREP "^$ws0p$" stdout$flg; then
+        testcase_FAIL "found blank lines in output of ratfor $flg"
+    fi
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

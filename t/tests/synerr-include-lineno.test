@@ -1,0 +1,87 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that line numbers in error messages are ok, even in included files
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > top.r <<EOF
+#1
+#2
+} #3
+} #4
+# 5
+include in1.r #6
+#7
+} #8
+#9
+} #10
+EOF
+
+cat > in1.r <<EOF
+} #1
+#2
+include in2.r; } #3
+include in2.r; #4
+} #5
+include in3.r; } #6
+EOF
+
+cat > in2.r <<EOF
+l1; l1; l1; #1
+} #2
+#3
+#4
+#5
+#6
+} } #7
+EOF
+
+cat > in3.r <<EOF
+l1
+l2
+l3
+EOF
+
+cat top.r
+cat in1.r
+cat in2.r
+cat in3.r
+
+run_RATFOR -e 1 top.r   || testcase_FAIL
+
+$FGREP 'top.r:3:'  stderr || testcase_FAIL
+$FGREP 'top.r:4:'  stderr || testcase_FAIL
+$FGREP 'top.r:8:'  stderr || testcase_FAIL
+$FGREP 'top.r:10:' stderr || testcase_FAIL
+$FGREP 'in1.r:1:'  stderr || testcase_FAIL
+$FGREP 'in1.r:3:'  stderr || testcase_FAIL
+$FGREP 'in1.r:5:'  stderr || testcase_FAIL
+$FGREP 'in1.r:6:'  stderr || testcase_FAIL
+$FGREP 'in2.r:2:'  stderr || testcase_FAIL
+$FGREP 'in2.r:7:'  stderr || testcase_FAIL
+$FGREP 'in3.r:'    stderr && testcase_FAIL
+
+c2=`$FGREP -c 'in2.r:2:' stderr || :`
+c7=`$FGREP -c 'in2.r:7:' stderr || :`
+
+test 2 -eq "$c2" || testcase_FAIL
+test 4 -eq "$c7" || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

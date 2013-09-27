@@ -1,0 +1,62 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Testsuite sanity check: additional checks on the `timer' auxiliary
+# program.
+
+# The tests here require that we can compile simple C programs; but
+# a C compiler is not required by the Ratfor Testsuite, so we must
+# SKIP this test if compilations fail.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat >xsleep.c <<\EOF
+#include <stdio.h>
+#include <unistd.h>
+int main(void)
+{
+    printf("%d\n", (int) getpid());
+    fflush(stdout); /* we expect to be terminated */
+    sleep(15);
+    return 0;
+}
+EOF
+
+compiled=false
+# Let's try some compilers
+for cc in ${RAT4_TESTSUITE_CC+"$RAT4_TESTSUITE_CC"} gcc cc; do
+    if $cc -o xsleep xsleep.c && test -f xsleep && test -x xsleep; then
+        compiled=true
+        break
+    fi
+done
+
+$compiled || testcase_SKIP "couldn't compile simple C programs"
+
+run_command -e 254 timer -t 4 ./xsleep || testcase_FAIL
+$GREP 'timer: command.*xsleep.*timed out' stderr || testcase_FAIL
+test `wc -l <stdout` -eq 1 || testcase_FAIL
+pid=`cat stdout`
+kill -9 $pid && testcase_FAIL
+
+#
+# Done.
+#
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,57 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Stress test for ratfor (by compiling and running generated fortran code)
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+tr '%@' "${NEWLINE}${TAB}" > tst.r <<EOF
+subroutine ok(n){{integer n;write(*,100)n; 100%@@@@@ format(%'ok',%%I1 @@)}
+@%@%@%@%end
+%%;%;%%%%%%%%%%%%%%%%;%;%%%%%%%%@@;@;@@@@@@@@ %@  % @ @@% %@%@%;;;;;;;;;;;}
+program stress3;implicit@none;integer@@@x,@y,%@%@%  %%  @@  @ z,t
+x=100;y=10   @@ %%%%%%%%%%%%%%%%%%%%%%% z@@=%%%%1
+if(%%%%%%%%%%%%%%x%%%%%%+1%%%%%%==101){call@@@@@@@@@@@@ok(1)} @ @ @ @ @ @ @
+if@(y@@@*10==%%%%%%%%%%%x){{{{;;;;call ok( 2 ); ;}}@@@}%%%%%%%%%%%%%%%%%%%}
+for (t=1;t<=%@z;%@t@%@=@%@t@%@+@%@1@)%%%%%%%%%%%%%call ok(t+@@2); c_
+a_
+ll halt; end #stress3
+EOF
+
+cat > exp <<EOF
+ok1
+ok2
+ok3
+EOF
+
+$SED -e 's/^/^/' -e 's/$/$/' tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

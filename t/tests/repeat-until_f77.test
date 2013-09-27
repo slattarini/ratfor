@@ -1,0 +1,96 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test the `repeat/until' statement (by compiling and running the
+# generated fortran code)
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+program testrepeatuntil
+    implicit none
+    integer x
+
+    write(*,200)
+
+    x = 0
+    repeat x = x + 1; until (x > 5);
+    write(*,100) x
+
+    write(*,200)
+
+    x = 3
+    repeat { x = x + 1 } until(x > 7);
+    write(*,100) x
+
+    write(*,200)
+
+    x = 0
+    repeat {
+        write(*,100) x
+        x = x + 2
+    } until (x > 8);
+
+    write(*,200)
+
+    x = 5
+    repeat {
+        x = x -1
+    } until (x < 10);
+    write(*,100) x
+
+    write(*,200)
+
+    call halt
+100 format(I1)
+200 format('~~~')
+end
+EOF
+
+cat > exp <<EOF
+~~~
+6
+~~~
+8
+~~~
+0
+2
+4
+6
+8
+~~~
+4
+~~~
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command timer -t 10 ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

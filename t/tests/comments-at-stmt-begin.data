@@ -1,0 +1,52 @@
+!
+! Data file used in tests:
+!  - comments-discard-at-stmt-begin.test
+!  - comments-keep-at-stmt-begin.test
+! which check behaviour(s) of ratfor w.r.t. comments placed at the
+! of statements.
+!
+
+#~
+  #~
+;#~
+;\t#~
+{ #~
+}
+{#~
+}
+
+if (false) #~
+  pass
+
+while (false)
+{
+  #~
+  pass
+}
+
+repeat\t#~
+  pass
+until(true)
+   for(a;b;c) #~
+  pass
+
+if(false)
+#~
+pass
+for(x=1; x<10; x=x+1) {
+  #~
+  pass
+}
+
+for(j=1;j<2;j=j+1) #~
+  if(x>1) { #~
+    while(y != 11)
+      #~
+      repeat {
+        pass
+        #~
+        x = 1; #~
+      } until(z^=4)
+    call foo()
+  }
+

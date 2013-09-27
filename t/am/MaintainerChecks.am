@@ -1,0 +1,121 @@
+## -*- Makefile.am -*-
+##
+## Maintainer-specific checks for the Ratfor Testsuite.
+## This file should be included by the top-level Makefile.am.
+##
+## Copyright (C) 2010 Stefano Lattarini
+## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+##
+## This program is free software: you can redistribute it and/or modify it
+## under the terms of the GNU Lesser General Public License as published
+## by the Free Software Foundation; either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## Lesser General Public License for more details.
+##
+## You should have received a copy of the GNU Lesser General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+
+###########################################################################
+
+# User-configurable: wheter to ignore whitelist of known and/or spurious
+# failures in maintainer-checks.
+USE_MAINTCHECK_WHITELIST = yes
+
+# Internal macro to deal with silent-rules.
+maintcheck__pre = @test x'$(AM_V_at)' != x'@' || echo " MAINTCHECK $@"
+
+# Internal macro, contains shell code to obtain the list of files on
+# which to perform syntax-checks.
+maintcheck__get_sc_files = \
+  sc_files=`\
+    echo lib/rat4-testlib.sh; \
+    for d in $(test_subdirs); do \
+      for f in $$d/*.test $$d/*.sh; do \
+        test -f $$f && echo $$f; \
+      done; \
+    done; :`
+
+# List of directories where to recurse into for testing and related
+# maintainer-checks.
+test_subdirs = sanity-checks tests
+
+# List of the targets doing maintainer-specific checks.
+maintcheck_targets = ## will be updated later
+
+# The target running all the maintainer-checks.
+maintainer-check: $(maintcheck_targets)
+.PHONY: maintainer-check $(maintcheck_targets)
+
+###########################################################################
+
+#
+# Check that the list of tests given in the Makefile is equal to the
+# list of all test scripts in the Automake testsuite.
+#
+
+maintainer-check-list-of-tests:
+	$(maintcheck__pre)
+	$(AM_V_at)(set -u) >/dev/null 2>&1 && set -u; \
+	target='$@'; \
+	fail=''; \
+	if echo a: | $(MAKE) --no-print-directory -f- a >/dev/null 2>&1; then \
+	  make_opts='--no-print-directory'; \
+	else \
+	  make_opts=''; \
+	fi; \
+	CDPATH="$${ZSH_VERSION+.}$(PATH_SEPARATOR)"; \
+	cwd=`pwd` || exit 1; \
+	echo ' ---'; \
+	echo " {pwd = $$cwd}"; \
+	for subdir in $(test_subdirs); do \
+	  echo " [cd $$cwd/$$subdir]"; \
+	  (cd $$subdir && $(MAKE) $(AM_MAKEFLAGS) $$make_opts $$target) \
+	    || fail=yes; \
+	done; \
+	echo " {pwd = $$cwd}"; \
+	echo ' ---'; \
+	test -z "$$fail"
+maintcheck_targets += maintainer-check-list-of-tests
+
+###########################################################################
+
+#
+# Check against known typos in the names of functions from our testing
+# framework.
+#
+
+sc--typos-wrt-testing-framework-functions:
+	$(maintcheck__pre)
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  $(PERL) build-aux/typos-wrt-testing-framework-functions.pl $$sc_files
+
+maintcheck_targets += sc--typos-wrt-testing-framework-functions
+EXTRA_DIST += build-aux/typos-wrt-testing-framework-functions.pl
+
+###########################################################################
+
+#
+# Generic checks against deprecated commands/constructs.
+#
+
+sc--deprecated-constructs:
+	$(maintcheck__pre)
+	$(AM_V_at)$(maintcheck__get_sc_files); \
+	  if test x'$(USE_MAINTCHECK_WHITELIST)' = x'yes'; then \
+	    opts='--use-whitelist'; \
+	  else \
+	    opts='--ignore-whitelist'; \
+	  fi; \
+	  $(PERL) build-aux/deprecated-constructs.pl $$opts -- $$sc_files
+
+maintcheck_targets += sc--deprecated-constructs
+EXTRA_DIST += build-aux/deprecated-constructs.pl
+
+###########################################################################
+
+## vim: ft=automake noet sw=4 ts=4

@@ -1,0 +1,138 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Testsuite sanity check: check the `run_command' subroutine.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+NL='
+'
+
+cwd=`pwd` || testcase_HARDERROR
+
+test_cleanup() {
+    rm -f stdout stderr stdall
+}
+
+PATH=$cwd:$PATH
+export PATH
+
+$SED 's/^ *//' >test_script <<'EOF'
+    #!/bin/sh
+    echo "OUT${1-}"
+    echo "ERR${1-}" >&2
+    exit ${2-0}
+EOF
+chmod a+x test_script
+
+test_cleanup
+run_command test_script 1 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT1" || testcase_FAIL
+test x"`cat stderr`" = x"ERR1" || testcase_FAIL
+
+test_cleanup
+run_command ./test_script 2 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT2" || testcase_FAIL
+test x"`cat stderr`" = x"ERR2" || testcase_FAIL
+
+test_cleanup
+run_command "$cwd"/test_script 3 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT3" || testcase_FAIL
+test x"`cat stderr`" = x"ERR3" || testcase_FAIL
+
+test_cleanup
+run_command -e 0 test_script 4 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT4" || testcase_FAIL
+test x"`cat stderr`" = x"ERR4" || testcase_FAIL
+
+test_cleanup
+run_command -m test_script 5 || testcase_FAIL
+test -f stdout && testcase_FAIL
+test -f stderr && testcase_FAIL
+test -f stdall || testcase_FAIL
+test x"`tr '\012' '@' <stdall`" = x"OUT5@ERR5@" || testcase_FAIL
+
+test_cleanup
+run_command -e 15 test_script 6 15 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT6" || testcase_FAIL
+test x"`cat stderr`" = x"ERR6" || testcase_FAIL
+
+test_cleanup
+run_command -e FAIL test_script 7 3 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT7" || testcase_FAIL
+test x"`cat stderr`" = x"ERR7" || testcase_FAIL
+
+test_cleanup
+run_command -e IGNORE test_script 8 0 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT8" || testcase_FAIL
+test x"`cat stderr`" = x"ERR8" || testcase_FAIL
+
+test_cleanup
+run_command -e IGNORE test_script 9 1 || testcase_FAIL
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT9" || testcase_FAIL
+test x"`cat stderr`" = x"ERR9" || testcase_FAIL
+
+test_cleanup
+run_command -e RETURN -m test_script 10 0 || testcase_FAIL
+test -f stdout && testcase_FAIL
+test -f stderr && testcase_FAIL
+test -f stdall || testcase_FAIL
+test x"`tr '\012' '@' <stdall`" = x"OUT10@ERR10@" || testcase_FAIL
+
+test_cleanup
+if run_command -e RETURN test_script 11 27; then
+    testcase_FAIL
+else
+    estatus=$?
+    test $estatus -eq 27 || testcase_FAIL
+fi
+unset estatus
+test -f stdout || testcase_FAIL
+test -f stderr || testcase_FAIL
+test -f stdall && testcase_FAIL
+test x"`cat stdout`" = x"OUT11" || testcase_FAIL
+test x"`cat stderr`" = x"ERR11" || testcase_FAIL
+
+test_cleanup
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,68 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test automatic line continuation on operators (test is done by grepping
+# ratfor output).
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+tr '._' " ${TAB}" >tst.r <<EOF
+a1,
+a2
+b1,__
+
+b2
+..c1,..__._
+.._._
+___
+....
+
+c2
+"~~~~~~"
+foo(
+)
+bar__.(__.
+...
+___
+._._
+
+)
+EOF
+
+cat >exp <<EOF
+a1,a2
+b1,b2
+c1,c2
+~~~~~~
+foo()
+bar()
+EOF
+
+$SED -e "s/$TAB/\\\\t/g" -e 's/$/$/' -e 's/^/^/' tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP -v '^[cC]' stdout | ws_normalize | $SED -e 's/ *()/()/'\
+  | $SED -e "s/^ *[\"']\\(~*\\)[\"'] *$/\1/" >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

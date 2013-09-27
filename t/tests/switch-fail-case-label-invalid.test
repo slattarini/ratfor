@@ -1,0 +1,45 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that invalid/missing `case' labels are correctly diagnosed.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+n=0
+for case_ in 'case:' 'case x:' 'case;' 'case (1):' 'case /:'; do
+  n=`expr $n + 1`
+  cat > tst$n.r <<EOF
+switch(1) {
+    $case_
+}
+EOF
+done
+
+i=1
+while test $i -le $n; do
+  cat tst$i.r
+  run_RATFOR -e 1 tst$i.r || testcase_FAIL
+  mv stdout stdout$i
+  mv stderr stderr$i
+  $EGREP "^tst$i\.r:2: (invalid case label|illegal case syntax)" stderr$i \
+    || testcase_FAIL
+  i=`expr $i + 1`
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,40 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that data statements in input are not spoiled by improper
+# automatic line continuation.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat >tst.r <<EOF
+data m/10/, n/20/, x/2.5/, y/2.5/
+alone
+data m,n/10,20/, x,y/2*2.5/
+alone
+data A/ 200 * 0.0/
+alone
+data r/0.3/$TAB
+alone
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP -i "data.*alone" stdout && testcase_FAIL
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

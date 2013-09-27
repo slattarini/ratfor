@@ -1,0 +1,68 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of C Ratfor.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that "deeply" nested "repeat/until" statements work.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+subroutine xsub(i)
+    integer i
+10  format(I1)
+    write(*,10) i
+    i = i + 1
+end
+
+program tstnestrpt
+    integer i
+    i = 0
+    repeat
+        repeat
+            repeat
+                repeat
+                    repeat
+                        repeat
+                            call xsub(i)
+                        until(i > 0)
+                    until(i > 0)
+                until(i > 0)
+            until(i > 0)
+        until(i > 0)
+    until(i > 0)
+    call halt
+end
+EOF
+
+echo '0' >exp
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

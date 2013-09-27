@@ -1,0 +1,51 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that the `%' directive for verbatim text is recognized
+# at the beginning of a statement.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+s="x & (y * ${TAB}y) || (z1 ==z2);$TAB; 1   FOO; #zap"
+
+: > tst.r
+: > exp
+i=0
+for b in '' ';' 'pass;' '{'; do
+    for w in '' ' ' "$TAB" " $TAB$TAB "; do
+        i=`expr $i + 1`
+        echo "${b}${w}%n$i $s" >> tst.r
+        if test x"$b" = x"{"; then echo '}' >> tst.r; fi
+        echo "n$i $s" >> exp
+    done
+done
+
+cat tst.r
+run_RATFOR tst.r || testcase_FAIL "unexpected ratfor failure"
+test ! -s stderr || testcase_FAIL "unexpected message(s) on stderr"
+
+$SED -e '/^[cC]/d' -e "/^$ws0p$/d" -e "/^${ws0p}pass${ws0p}/d" stdout >got
+
+$FGREP '%' got && testcase_FAIL "raw \`%' char dound in ratfor output"
+
+cat exp
+cat got
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

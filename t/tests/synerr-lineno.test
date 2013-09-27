@@ -1,0 +1,56 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that line numbers in error messages are ok.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+echo '}' > tst1.r
+run_RATFOR -e 1 tst1.r || testcase_FAIL
+mv stdout stdout3
+mv stderr stderr1
+$FGREP 'tst1.r:1:' stderr1 || testcase_FAIL
+
+cat > tst2.r <<EOF
+#1
+} #2
+#3
+#4
+} #5
+#6
+EOF
+run_RATFOR -e 1 tst2.r || testcase_FAIL
+mv stdout stdout2
+mv stderr stderr2
+$FGREP 'tst2.r:2:' stderr2 || testcase_FAIL
+$FGREP 'tst2.r:5:' stderr2 || testcase_FAIL
+
+cat > tst3.r <<EOF
+{ #1
+#2
+#3
+EOF
+
+run_RATFOR -e 1 tst3.r || testcase_FAIL
+mv stdout stdout3
+mv stderr stderr3
+# unexpected EOF in input
+$FGREP 'tst3.r:3:' stderr3 || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

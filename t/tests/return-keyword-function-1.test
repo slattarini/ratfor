@@ -1,0 +1,53 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that ratfor generate correct code for a `return' statement.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+
+tr '^' ' ' > tst.r <<EOF
+function f1
+    return 1+1
+end
+
+function f2()
+    return 2-2
+end
+
+function f3(x)
+    return (3^+^^^3)
+end
+
+function f4; return(4^^-^4); end
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+$GREP "^ *return *$" stdout || testcase_FAIL
+test `$GREP -c "^ *return *$" stdout` -eq 4 || testcase_FAIL
+$GREP "[^ ].*return" stdout && testcase_FAIL
+$GREP "return.*[^ ]" stdout && testcase_FAIL
+$GREP "^ *f1 *= *1+1 *$" stdout || testcase_FAIL
+$GREP "^ *f2 *= *2-2 *$" stdout || testcase_FAIL
+$GREP "^ *f3 *= *(3 + 3) *$" stdout || testcase_FAIL
+$GREP "^ *f4 *= *(4 - 4) *$" stdout || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,144 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test the `for' statement with empty clauses (by compiling and
+# running the generated fortran code).
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<EOF
+program testfor
+    implicit none
+    integer x
+
+    write(*,200) 'empty none'
+    for(x = 0; x < 3; x = x + 1) {
+        write(*,100) x
+    }
+
+    write(*,200) 'empty 1'
+    x = 0
+    for(; x < 3; x = x + 1) {
+        write(*,100) x
+    }
+
+    write(*,200) 'empty 2'
+    for (x = 0; ; x = x + 1) {
+        if (x >= 3)
+            goto 1000
+        write(*,100) x
+    }; 1000 continue
+
+    write(*,200) 'empty 3'
+    for(x = 0; x < 3;) {
+        write(*,100) x
+        x = x + 1
+    };
+
+    write(*,200) 'empty 1, 2'
+    x = 0
+    for(; ; x = x  + 1) {
+        if (x >= 3)
+            goto 2000
+        write(*,100) x
+    }; 2000 continue
+
+    write(*,200) 'empty 1, 3'
+    x = 0
+    for(; x < 3; ) {
+        write(*,100) x
+        x = x + 1
+    };
+
+    write(*,200) 'empty 2, 3'
+    for(x = 0; ;) {
+        if (x >= 3)
+            goto 3000
+        write(*,100) x
+        x = x + 1
+    }; 3000 continue
+
+    write(*,200) 'empty 1, 2, 3'
+    x = 0
+    for(;;) {
+        if (x >= 3)
+            goto 4000
+        write(*,100) x
+        x = x + 1
+    }; 4000 continue
+
+    write(*,200) ''
+
+100 format(I2)
+200 format('~~~ ', A20)
+    call halt
+end
+EOF
+
+cat > exp <<EOF
+~~~ empty none
+0
+1
+2
+~~~ empty 1
+0
+1
+2
+~~~ empty 2
+0
+1
+2
+~~~ empty 3
+0
+1
+2
+~~~ empty 1, 2
+0
+1
+2
+~~~ empty 1, 3
+0
+1
+2
+~~~ empty 2, 3
+0
+1
+2
+~~~ empty 1, 2, 3
+0
+1
+2
+~~~
+EOF
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+mv stdout tst.f
+run_F77 tst.f || testcase_FAIL
+run_command ./tst.exe || testcase_FAIL
+test -s stderr && testcase_FAIL
+ws_normalize <stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

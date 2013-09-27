@@ -1,0 +1,57 @@
+##
+## Data file used in tests:
+##  - integers-many-bases.test
+##  - integers-many-bases-f77.test
+## which check the ratfor support for integers in bases != 10 (B%ddd...)
+##
+## format of lines:  INPUT  EXPECTED-OUTPUT  [COMPILE-OK]
+## where COMPILE-OK should be either "compile" or "fail" (default is
+## "compile")
+##
+
+# just a decimal number
+123     123     compile-also
+
+# just a decimal number (ratfor should not recognize a leading
+# `0' as an indicator of an octal number)
+0123    0123    no-compile
+0123    123    compile-only
+
+# just a 0 followed by a string (ratfor should not recognize a
+# leading `0x' as an indicator of an haxadecimal number)
+0x1a5b  0x1a5b  no-compile
+
+# octal numbers
+8%10        8       compile-also
+8%123       83      compile-also
+# ratfor stops covering as it encounters a non-digit
+8%10s2      8s2     no-compile
+# an octal number, stops at '9', which is not an octal digit
+8%109       89      compile-also
+
+# numbers in various bases
+3%121       16      compile-also
+7%12        9       compile-also
+11%A0       110     compile-also
+11%a4       114     compile-also
+
+# binary numbers
+2%110100            52      compile-also
+2%100100110111      2359    compile-also
+2%0000100100110111  2359    compile-also
+
+# hex numbers
+16%2ff      767     compile-also
+16%2ffg     767g    no-compile
+16%a1       161     compile-also
+16%A1       161     compile-also
+16%dead     57005   compile-also
+16%beef     48879   compile-also
+
+# TODO: these?
+#8%8
+#11%f
+#2%3
+
+# this is too large and does not work presently, so must be disabled.
+#16%deadbeef     37359285571

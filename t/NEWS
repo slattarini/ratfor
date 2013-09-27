@@ -1,0 +1,131 @@
+List of user-visible changes of Ratfor Testsuite.
+
+New in XXX
+-----------
+ * New tests check that the "function" and "subroutine" pseudo-keywords
+   found inside a control structure condition, as in e.g.:
+     if (function < 1) ...
+     for(...; subroutine < 10; ...) ...
+   are ignored.
+ * Stress tests on the `define' builtin have been extended.
+ * The portability of the test shell script has been improved, esp. w.r.t.
+   older Almquist shells.
+ * Generated tests are now distributed, so that they won't need to be
+   re-generated on the user system.
+ * We don't ship a ChangeLog file anymore.  The ChangeLog was generated
+   from git history anyway, so nothing is lost with this decision.
+
+New in 0.9i
+-----------
+ * The rules creating the generated test script should now work portably.
+ * Extended tests on `break' and `next' keywords, esp. by checking that
+   they work as advised when the optional integer argument is present.
+ * Added tests checking that nested "for", "while" and "switch" statements
+   work as expected.
+ * Added tests checking that ratfor comments are not terminated by
+   semicolons or right curly brackets.
+ * Much better and more extensive tests on the "repeat/until" statement.
+ * Added tests checking that ratfor statements with empty bodies (e.g.
+   "if(cond);" or "while(cond){}") work as expected.
+ * Added tests checking that ratfor correctly complains when parentheses
+   are missing after keywords that require them (e.g. "if" and "until").
+ * Added tests checking that the `break' and `next' ratfor keywords are
+   recognized and processed when placed after a numerical label, and are
+   not recognized/processed when placed in the middle of a statement (we
+   should have added this checks previously, but they were forgotten out,
+   somehow).
+ * In test scripts: ensure that no shell builtin is run where an external
+   command is expected.  This fixes a weird bug occurring when a Fortran
+   compiler named `fc' was used, as it could collide with the `fc' builtin
+   on Korn shells.
+ * Fixed a couple of minor bugs in test scripts and data files.
+ * Fixed spurious failures w.r.t. some shells, as Almquist Shell and Bash
+   2.0.
+
+New in 0.9h
+-----------
+ * Added and extended tests regarding Ratfor keywords.  In particular,
+   there are tests checking that (most of) those keywords (e.g. `while',
+   `for', `if') are recognized and processed when placed after a numerical
+   label, and are on the contrary not recognized/processed when placed in
+   the middle of a statement.
+ * Added and extended tests regarding the `define' and `include' builtins,
+   the handling of Ratfor comments, and the `%' verbatim escaping.  In
+   particular, there are now test checking that the `define' and `include'
+   builtins and the `%' escaping construct are processed only when placed
+   at the beginning of a statement.
+ * The Ratfor Testsuite is now explicitly covered by the GNU General
+   Public License, version 3 or later.
+ * The shell libraries used by the test scripts has been made more
+   namespace-clean.  This can enhance their usefulness and solidity
+   for usage by client packages.
+
+New in 0.9g
+-----------
+ * The testsuite has been improved and strenghtened.  Especially notable
+   is the fact that now different testcases in a same test script are
+   (mostly) decoupled.  In particular, a test script does not stop at the
+   first failed testcase, but run all the testcases and report all those
+   which failed.
+ * Now a ChangeLog file is distributed, being automatically generated
+   from Git commit messages.
+
+New in 0.9f
+-----------
+ * Fixed a bug which prevented the tests scripts to work with Heirloom Sh
+   and/or Solaris Sh.
+ * Silent rules in the Makefiles are not enabled by default anymore.
+ * With Zsh version 4.x or later, it's now possible to run the test scripts
+   with just e.g. `zsh foo.test', without needing to use the Zsh option
+   `-o no_function_argzero'.
+ * When specifying to configure the list of test scripts expected to fail
+   (through the variable `RAT4_TESTUITE_XFAIL_TESTS'), it's now possible
+   to simply use test basenames rather than test fullnames (e.g. `foo'
+   raher than `foo.tests').  This shortcut should have been supported also
+   previosuly, but didn't worked in practice due to a bug in configure.
+
+New in 0.9e
+-----------
+ * Now the testsuite should work also with mksh (the MirBSD Korn Shell) on
+   Linux systems (previously a bug in the interaction between the GNU C
+   Library and mksh prevented this).
+
+New in 0.9d
+-----------
+ * Now the user can define, at configure time, a list of test cases
+   expected to fail (see variable `RAT4_TESTUITE_XFAIL_TESTS').
+ * The Ratfor Testsuite have been fixed to work also with gfortran
+   version 4.0.  Previously it didn't work because of a misbehaviour in
+   gfortran-4.0 which caused the `STOP' builtin in the compiled programs
+   to be too much verbose.
+
+New in 0.9c
+-----------
+ * Fixed a bug in the auxiliary script `timer', which could cause spurious
+   intermittent failures with some Korn shells.
+
+New in 0.9b
+-----------
+ * Now the `configure' scripts checks that the detected Fortran 77
+   compiler can create executables (this was not done before).  The check
+   is performed even if the compiler is specified by the user himself
+   (through the `F77' variable).  The only exception is when F77 is
+   defined as "NONE", meaning that no Fortran compiler is to be used by
+   the testsuite (this special behaviour was present also in the previous
+   versions).
+ * Auxiliary program `timer' (used by the testsuite) has been rewritten
+   as a shell script, so that no C compiler is required anymore to run
+   the Ratfor Testsuite.
+ * Added possibility to import mainter-specific rules when using GNU Make,
+   if the (new) option `--enable-maintainer' is passed to the configure
+   script.
+ * The Ratfor Testsuite uses files imported from SteLib (e.g. `maint.mk',
+   `GNUmakefile', and `ax_check_cc_flag.m4').  Some related reorganization
+   and modifications have been required.
+ * Added BUGS and HACKING files.  Consequent adaptation of the README file.
+
+New in 0.9a
+-----------
+ * The Ratfor Testsuite tree has been separated from the Public Domain
+   Ratfor tree, and turned into an indipendent package, beginning a life
+   of its own.

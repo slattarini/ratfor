@@ -1,0 +1,75 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test line continuation by `_' (more complex usages).
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+cat > tst.r <<\EOF
+define TEN 10
+define(ELEVEN,11)
+for(x = 1; x < TEN; x = x + 2)
+    print(x)
+%1&2&3&4
+# this is a comment
+y = 0
+while(y < ELEVEN) {
+    y = y + foo(y)
+    if (y > 100) {
+        y = 3
+    }
+}
+EOF
+
+inject_line_continuations() {
+    $SED 's/\(.\)/\1_@/g' | tr '@' "$NEWLINE" | $AWK '
+        BEGIN {
+            i = 1
+            MOD = 15
+        }
+        (NR % MOD == 0) {
+            print $0
+            for(j = 0; j < i; j++) {
+                print "_"
+            }
+            if (i <= 32)
+                i *= 2
+        }
+        (NR % MOD != 0) {
+            print $0
+        }
+    '
+}
+
+inject_line_continuations <tst.r >tst_.r
+
+cat tst.r
+cat tst_.r
+
+run_RATFOR tst.r || testcase_HARDERROR
+mv stdout exp
+run_RATFOR tst_.r || testcase_FAIL
+mv stdout got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

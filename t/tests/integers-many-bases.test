@@ -1,0 +1,99 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check the ratfor support for integers in bases != 10 (format: b%ddd...)
+# The checks are done by "grepping" the ratfor output.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+# make output of our tests more pleasant for humans
+makeup() {
+    for f in "$@"; do
+        : makeup "$f"
+        $SED -e "s/'//" -e "s/'/ ==> /" <"$f" | ws_normalize >"$f-t"
+        mv -f "$f-t" "$f"
+    done
+}
+
+: NOW WILL READ TEST DATA
+
+: >exp
+: >tst.r
+
+input=$srcdir/integers-many-bases.data
+: "** reading data from $input"
+
+# sanity checks
+test -f "$input" || testcase_HARDERROR "data file \`$input' not found"
+test -r "$input" || testcase_HARDERROR "data file \`$input' not readable"
+
+# The useless `cat' below is required to work around a bug in the combo
+# "MirBSD Korn Shell" + "GNU C Library"
+cat "$input" | (
+  rc=0
+  while read LINE; do
+    case "$LINE" in
+      \#*|"")
+        # comments or empty lines: skip
+        continue
+        ;;
+      *)
+        # line should have format: "INPUT EXPECTED-OUTPUT [COMPILE-FLAG]"
+        set X $LINE; shift; in=$1 out=$2 compile=${3-}; set X; shift
+        case $compile in
+          ""|compile-also|no-compile)
+            ;;
+          compile-only)
+            continue
+            ;;
+          *)
+            echo "$me: invalid 'compile' field: \`$compile'" >&2
+            rc=1
+            continue
+            ;;
+        esac
+        ;;
+    esac
+    echo "'$in' $in" >> tst.r
+    echo "'$in' $out" >> exp
+  done
+  exit $rc
+) || testcase_HARDERROR "some invalid 'compile' field was found"
+
+: TEST DATA READ
+
+cat tst.r
+
+run_RATFOR tst.r || testcase_FAIL
+test ! -s stderr || testcase_FAIL
+
+$GREP -v '^[cC]' <stdout >got
+makeup got exp
+
+set +x
+echo " ==="
+(set -x; cat exp)
+echo " ==="
+(set -x; cat got)
+echo " ==="
+(set -x; $DIFF_U exp got) || testcase_FAIL
+echo " ==="
+
+set -x
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,74 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Test "deeply" nested `include'.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+(set -C) >/dev/null 2>&1 && set -C
+
+cat > top.r <<EOF
+enter0
+include inc1.r
+exit0
+EOF
+
+cat > inc1.r <<EOF
+enter1
+include inc2.r
+exit1
+EOF
+
+cat > inc2.r <<EOF
+enter2
+include inc3.r
+exit2
+EOF
+
+cat > inc3.r <<EOF
+enter3
+exit3
+EOF
+
+cat > exp <<EOF
+enter0
+enter1
+enter2
+enter3
+exit3
+exit2
+exit1
+exit0
+EOF
+
+cat top.r
+cat inc1.r
+cat inc2.r
+cat inc3.r
+
+run_RATFOR top.r || testcase_FAIL
+
+$SED -e '/^[cC]/d' -e "s/^$ws0p//" -e '/^$/d' stdout >got
+
+cat exp
+cat got
+
+$DIFF_U exp got || testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

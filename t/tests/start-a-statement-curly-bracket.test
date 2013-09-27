@@ -1,0 +1,56 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of the Ratfor Testsuite.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that the `{' token triggers the beginning of a new statement.
+
+. ../lib/rat4-testsuite-init.sh || exit 99
+
+# Sanity check.
+rat4t_require_helper_script 'start-a-statement-sanitycheck.sh'
+
+# Real test.
+i=0
+for x in \
+  " { repeat none }" \
+  "{repeat none }" \
+  "$TAB $TAB{  repeat none }" \
+  " { for(;;) pass }" \
+  "{for(;;) pass }" \
+  "$TAB$TAB$TAB {   $TAB for(;;) pass }" \
+; do
+    i=`expr $i + 1`
+    s="x=1$x"
+    echo "$s" >tst$i.r
+    run_RATFOR tst$i.r \
+      || testcase_FAIL "tst$i.r: unexpected ratfor failure"
+    mv stderr stderr$i
+    $SED '/^[cC]/d' stdout >stdout$i
+    rm -f stdout
+    test ! -s stderr$i \
+      || testcase_FAIL "tst$i.r: unexpected ratfor output on stderr"
+    case $s in
+      *'repeat'*) forbidden='repeat';;
+        *'for('*) forbidden='for';;
+        *) testcase_HARDERROR "bad test input: $s";;
+    esac
+    $FGREP "$forbidden" stdout$i \
+      && testcase_FAIL "tst$i.r: found string \`$forbidden' in output"
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et
