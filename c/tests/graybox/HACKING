@@ -1,0 +1,5 @@
+TODO: Complete and extend this file.
+
+In our tests scripts, we use the shell libraries used by the testsuite of
+the "Ratfor Testsuite" package.  A better documentation about how to do
+properly do the same in new test scripts will be added soon (hopefully).

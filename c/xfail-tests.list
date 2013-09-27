@@ -1,0 +1,44 @@
+# List of blackbox tests from the Ratfor Testsuite subpackage which are
+# expected to fail with C Ratfor.
+# Blank lines and lines starting with `#' are ignored.
+
+# Currently, ratfor output strings with the same quoting they are input
+# with; this should be changed, and only single-quoted strings (e.g. 'foo')
+# should be outputted.
+no-double-quotes.test
+
+# The `%'-escaping is now implemented correctly, but due the "suboptimal"
+# (i.e. crappy) implementation of relation shortands' translation, the
+# following tests still fail.
+verbatim-define-interaction-stress.test
+verbatim-define-interaction-basic.test
+
+# Automatic line continuation still doesn't work for some operators and for
+# relational operators (`&&', `<=', `||' etc.)
+line-continuation-automatic-relationals-raw.test
+
+# Due to the way C Ratfor performs translation of relational shorthands,
+# error messages involving them might sometimes result slighty botched and
+# unclear, so these tests won't pass.
+function-name-invalid-3.test
+subroutine-name-invalid-3.test
+
+# C Rafor still fails to recognize quoted file names in the `include'
+# builtin.
+include-at-stmt-beginning-at-least-dquote.test
+include-at-stmt-beginning-at-least-squote.test
+
+# The recent changes in parser have revealed a limitation in the code
+# generation subroutines of C Ratfor, which causes this test to fail.
+# Once we'll have fixed those limitations, this test should pass again,
+# but for the moment it's simpler to mark it as xfailing.
+comments-no-extra-white-spaces.test
+
+# "function" and "subroutine" pseudo-keywords are still erroneously
+# processed into initialization/increment code of `for' and `do' loops.
+function-in-do-condition.test
+function-in-for-condition.test
+subroutine-in-do-condition.test
+subroutine-in-for-condition.test
+
+# vim: ft=conf ts=4 sw=4 et

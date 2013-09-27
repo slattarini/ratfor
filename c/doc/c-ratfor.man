@@ -1,0 +1,155 @@
+.TH C-RATFOR 1 "Unknown Date" "C Ratfor" ""
+.\"
+.SH NAME
+.B c-ratfor
+\- ratfor preprocessor for Fortran77
+
+.SH SYNOPSIS
+\fBc-ratfor\fR [\fB-l\fR \fISTART-LABEL\fR] [\fB-C\fR]
+[\fB-o\fR \fIOUTFILE\fR] [\fIINFILE\fR]
+
+.SH PARAMETERS
+.TP
+.B -l
+.I START-LABEL
+user sets strating label \fISTART-LABEL\fR
+.TP
+.B -o
+.I OUTFILE
+specify output file (default is standard output)
+.TP
+.B -C
+keep comments in (useful for compiler directives)
+
+.SH DESCRIPTION
+Ratfor has the following syntax:
+
+prog:  stat
+       prog stat
+
+stat:  if (...) stat
+       if (...) stat else stat
+       while (...) stat
+       repeat stat
+       repeat stat until (...)
+       for (...;...;...) stat
+       do ... stat
+       switch (intexpr) { case val[,val]: stmt ... default: stmt }
+       break n
+       next n
+       return (...)
+       digits stat
+       { prog }  or  [ prog ]  or  $( prog $)
+       anything unrecognizable
+
+where \fIstat\fR is any Fortran or Ratfor statement, and \fIintexpr\fR is
+an expression that resolves into an integer value.
+A statement is terminated by an end-of-line or a semicolon.
+The following translations are also performed.
+
+      <     .lt.      <=    .le.
+      ==    .eq.
+      !=    .ne.      ^=    .ne.      ~=   .ne.
+      >=    .ge.      >     .gt.
+      |     .or.      &     .and.
+      !     .not.     ^     .not.     ~    .not.
+
+Integer constants in bases other that decimal may be specified as
+\fIn%dddd...\fR  where \fIn\fR is a decimal number indicating the base
+and \fIdddd...\fR are digits in that base.
+For bases > 10, letters are used for digits above 9.
+.br
+Examples:  \fI8%77\fR, \fI16%2ff\fR, \fI2%0010011\fR.
+.br
+The number is converted the equivalent decimal value using multiplication;
+this may cause sign problems if the number has too many digits.
+
+String literals ("..." or '...') can be continued across line boundaries
+by ending the line to be continued with an underline.
+The underline is not included as part of the literal.
+Leading blanks and tabs on the next line are ignored; this facilitates
+consistent indentation.
+
+      include file
+
+will include the named \fIfile\fR in the input.
+
+      define NAME VALUE     or
+      define(NAME,BODY)    
+
+defines NAME as a symbolic parameter with the indicated value.
+.br
+Names of symbolic parameters may contain letters, digits, and underline
+and dollar characters (e.g. B_FLAG, $LENGTH are valid names), but cannot
+begin with a digit (e.g. 3WAY is an invalid name).
+.br
+Upper case is \fBnot\fR equivalent to lower case in parameter names.
+.br
+If a macro \fINAME\fR is defined with the \fIdefine(NAME,BODY)\fR
+construct, then it can hold a multiline value (i.e. \fIBODY\fR can
+contain newline characters).  Moreover, ratfor comments in \fIBODY\fR
+are preserved.  This way, if the `-C' ratfor switch is being used,
+comments in \fIBODY\fR are not outputted at the point the `define'
+is scanned, but rather when \fINAME\fR is expanded.  Please note that
+this is \fBnot\fR true for macros defined with the \fIdefine NAME VALUE\fR
+construct.  Also, be aware that other ratfor implementations might behave
+differently, even if we think that the behaviour of C Ratfor in this
+matter is the most sensible and intuitive one.
+
+.B "WARNING: the following is currently unsupported"
+
+      string name "character string"          or
+      string name(size) "character string"
+
+defines name to be an integer array long enough to accomodate the ASCII
+codes for the given character string, one per word.
+The last word of name is initialized to the symbolic parameter EOS, and
+indicates the end of string.
+
+.SH LICENSE
+C Ratfor is released under the GNU General Public License, version 3
+or later. For more info, see <http://www.gnu.org/licenses/>.
+
+.SH "SEE ALSO"
+.PP
+The paper "\fBRATFOR - a preprocessor for rational Fortran\fR", by Brian
+Kernighan (appeared in "Software - Practice and Experience", October 1975)
+provides a very good introduction to Ratfor.  An extended and updated copy
+of this article is available in PostScript format at the URL:
+.br
+ \fI<http://www.mit.edu:8001/afs/athena.mit.edu/astaff/project/docsourc/doc/unix.manual.progsupp2/08.ratfor/ratfor.PS>\fB
+.PP
+The most accessible and extensive reference for Ratfor is the celebrated
+book "\fBSoftware Tools\fR" by Brian Kernighan and P.J. Plauger
+(Addison-Wesley, 1976, ISBN 0-201-03669-X).
+.PP
+The folks at the Stanford Exploration Project (\fBSEP\fR) have a useful
+page about Ratfor on their Web site:
+.br
+ \fI<http://sepwww.stanford.edu/doku.php?id=sep:software:ratfor>\fR
+.br
+Among the other things, that page provides a download link for the
+original source code of \fBPublic Domain Ratfor\fR, from which C Ratfor
+itself is derived.
+.PP
+SEP also provides a \fBratfor90\fR utility -- a perl program that
+translates Ratfor code into Fortran90 code:
+.br
+ \fI<http://sepwww.stanford.edu/doku.php?id=sep:software:ratfor90>\fR
+.PP
+Finally, Michael J. Harrison has written (or at least has maintained) a
+Ratfor preprocesor written in Ratfor itself.  This preprocessor supports
+some extensions, additional features and bells-and-whitles over standard
+Ratfor.
+Also, it seems to have been tested, used and maintained for more than 20
+years, so it should be very reliable.
+On the other hand, it has only a partial support (or no support at all)
+for some others standard rafor features; for example, it doesn't recognize
+the `\fI%\fR' "verbatim escaping", neither does it recognize `\fI&&\fR' and
+`\fI||\fR' as aliases for `\fI.and.\fR' and `\fI.or.\fR' (altought it does
+recognize `\fI&\fR' and `\fI|\fR' as such aliases).
+
+.SH KEYWORDS
+ratfor fortran preprocessor fortran77 ratfor77
+
+.\" vim: ft=nroff et sw=2 ts=2

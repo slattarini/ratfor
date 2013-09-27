@@ -1,0 +1,36 @@
+#!/bin/sh
+# Copyright (C) 2009, 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of C Ratfor.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that comments with the `-C' switch do not make ratfor hang.
+# This bug already showed up in practice.
+
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
+
+echo 'abc # comment after another token, as the last line of file' > tst.r
+cat tst.r
+
+e=0
+run_command timer -t 5 "$RATFOR" -C tst.r || e=$?
+case $e in
+  255) testcase_FAIL "ratfor hanged!";;
+    0) ;; # passed
+    *) testcase_FAIL "ratfor failed with status $e";;
+esac
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

@@ -1,0 +1,241 @@
+List of user-visible changes of C Ratfor.
+
+New in XXX
+-----------
+ * "break" and "next" now diagnose invalid arguments.
+ * We don't ship a ChangeLog file anymore.  The ChangeLog was generated
+   from git history anyway, so nothing is lost with this decision.
+
+New in 1.0r
+-----------
+ * File inclusion with `include FILENAME' is now recognized only at
+   the beginning of a ratfor statement (e.g. after a newline or a
+   semicolon).  This is a conscious design choice, not a limitation
+   or an implementation detail.
+ * Macro definitions with either `define NAME VAL' or `define(NAME,VAL)'
+   is now recognized only at the beginning of a ratfor statement (e.g.
+   after a newline or a semicolon).  This is a conscious design choice,
+   not a limitation or an implementation detail.
+ * Blackbox and graybox tests have been extended and improved, especially
+   w.r.t. ratfor comments, `%' verbatim escaping, and `include' and
+   `define' builtins.
+ * Macros defined with the `define(NAME, BODY)' construct now preserve
+   spacing and comments in BODY when the definition is read.  This way,
+   if the `-C' ratfor switch is used, comments in BODY are not outputted
+   at the point the `define' is scanned, but rather when NAME is expanded.
+   This new behaviour seems much more sensible and intuitive than the
+   previous one.
+
+New in 1.0q
+-----------
+ * C Ratfor is not released anymore as public domain software, but is
+   covered by GNU General Public License, version 3 or later.
+
+New in 1.0p
+-----------
+ * The testsuite has been improved and strenghtened.  Especially notable
+   is the fact that now different testcases in a same test script are
+   (mostly) decoupled.  In particular, a test script does not stop at the
+   first failed testcase, but run all the testcase and repoort all those
+   which failed.
+ * Now a ChangeLog file is distributed, being automatically generated
+   from Git commit messages.
+
+New in 1.0o
+-----------
+ * Improved detection of, and error messages for, invalid case/default.
+   In particular, now case/default keywords can be used used only in the
+   block after a `switch' statement, and not also within blocks nested
+   within that block.
+ * Testsuite has been extended and improved, espacially to provide better
+   coverage, better feedback, and an increased portability.
+
+New in 1.0n
+-----------
+ * The name of the package has been changed to "C Ratfor" (previously was
+   "Public Domain Ratfor").  Also, the name of the installed ratfor binary
+   is now `c-ratfor', rather than simply `ratfor'.
+ * The handling of the return statement has been improved and strenghened,
+   especially with reference to error messages.  For example, a return
+   statement outside a function or subroutine is now flagged as an error,
+   as is a return statement with arguments inside a subroutine.
+ * Ratfor does not handle the dot character `.' as an alphanumeric
+   character anymore.  This change should have few visible consequences,
+   the most important of which is probably the fact that the `define'
+   builtin can't anymore define symbolic constants containing dots.
+ * Fixed a bug which prevented the automatical enabling of warnings
+   flags in the C compiler.
+
+New in 1.0m
+-----------
+ * The testsuite have been fixed to work also with gfortran version 4.0.
+   Previously it didn't work because of a misbehaviour in gfortran-4.0,
+   which caused the `STOP' builtin in the compiled programs to be too much
+   verbose even when used without arguments.
+
+New in 1.0l
+-----------
+ * Public Domain Ratfor uses files imported from SteLib (e.g. `maint.mk',
+   `GNUmakefile' and `ax_check_cc_flag.m4').  Some related reorganization
+   and modifications have been required.
+
+New in 1.0k
+-----------
+ * The ratfor testsuite, which is composed only of blackbox-style test
+   scripts, is now a subpackage, with its own configure script, makefiles,
+   auto* auxiliary files etcetera.  It has been moved from the `tests/'
+   subdirectory into the `blackbox-tests/' subdirectory.
+
+New in 1.0j
+-----------
+ * Since Fortran 77 is ubiquitous today, and Fortran 66 almost forgotten,
+   Ratfor now output Fortran 77 code, without bothering anymore about
+   Fortran 66 compatibility.
+ * The `string' directive is no more recognized.  It should be superseded
+   by the improved string-handling capabilities of Fortran 77.
+ * The handling of the `-o' has been improved; in particular
+    - error messages are more detailed;
+    - `-o -' sends output to standard output;
+    - files are no more unnecessarily overwritten if multiple `-o'
+      options are specified (only the last one is honoured).
+ * The error messages have been generally improved and made more detailed.
+   A prominent example of this improvement is the increased level of
+   details in messages about I/O failures, with the explicit indication of
+   the failure's reason, e.g. `No such file or directory' or `Permission
+   denied'.
+ * Now ratfor complains if given more than one non-option arguments,
+   instead of silently discarding all the extra arguments.
+ * Messages about usage errors involving unknown option or options called
+   in the wrong way have now the format:
+    <PROGNAME>: `-<OPTION>': <ERROR-MESSAGE>
+ * Now the `configure' scripts tries by defaults to enable as many warnings
+   as possible in the C compiler.  Currently, there is no way to disable
+   this behaviour.
+ * There is a new configure option, `--enable-werror-flags', which tries
+   to enable the `-Werror' compiler flag (if the compiler supports itd), to
+   turn compile-time warnings into errors.  This option is expected to be
+   used mostly by maintainers.
+ * Previously, if the user used GNU make, maintainer-specific make rules
+   were uncoditionally imported by the GNUmakefile.  Now the user must pass
+   the option `--enable-maintainer-make-rules' to configure to enable the
+   importing of such rules.  This option is expected to be used only by
+   maintainers.
+ * Now, even if using GNU make, a `make' command issued in an unconfigured
+   tree does not anymore trigger autotools boostrapping (i.e. basically the
+   call of `autoreconf', `./configure' and `make all').
+ * It should now be possible to compile Ratfor also with a C++ compiler.
+
+New in 1.0i
+-----------
+
+ * Ratfor is now fully case-sensible, both respect to its input and to its
+   output.  In particular, this means that output is no more converted to
+   lowercase (this conversion was tricky, since e.g. strings and comments
+   had to be left unchanged, and was cause of some bugs and dark corner
+   cases).  This new behaviour shouldn't cause problems, as modern fortran
+   compilers, although case-insensible, are smart enough not to barf on
+   mixed-case input.
+ * The line numbers in error messages should now be always correct, even
+   when inclusion of files or expansion of macros are involved.  Alas,
+   this was not the case before.
+ * An input line starting with `%' is always passed *truly* verbatim to
+   output, without line wrapping (if the user wants to output raw fortran
+   code, we expect him to know what he's doing, so we must be as
+   unobtrusive as possible).  Previously, even the `%'-quoted lines were
+   subjected to line wrapping, so that they did not exceed the maximum
+   line lenght allowed in valid fortran code.
+ * Now an underscore character `_' at the end of a line do continuation
+   *only* for the next newline character, while previously it did line
+   continuation up to the first non-empty line found.
+   For example, with the new behaviour, the input:
+     foo_
+
+     bar
+   has an output similar to:
+     foo
+     bar
+   while with the old behaviour it had an output similar to:
+     foobar
+ * Tabs in input are always converted to single spaces in output, even in
+   generated fortran comments.
+ * If GNU make is called on the unconfigured ratfor tree, it automatically
+   runs autoreconf and ./configure before trying to build the given
+   targets.
+ * Testuite coverage increased, with many new test scripts added.
+ * Added the customary installation instruction (in file `INSTALL').
+
+New in 1.0h
+-----------
+
+ * Extended make rules useful to maintainers, in particular with the
+   addition of files `GNUmakefile' and `maint.mk'
+ * Now the user can explicitly tell configure that he doesn't have (or
+   doesn't want to use) a Fortran 77 compiler for the testsuite.
+   This is done by setting the configure variable `RAT4_TESTSUITE_F77'
+   to `NONE'.
+
+New in 1.0g
+-----------
+
+ * The make target `clean' should now work correctly even an a already
+   cleaned tree (previously it could fail if no temporary directory used
+   by test scripts was present!)
+ * Ratfor uses Git as its version control system.
+
+New in 1.0f
+-----------
+
+ * The format of error messages has been improved -- now it follows the
+   gcc-style `FILENAME:LINENO: ERRMSG'
+ * Bugfix in option parsing: the option `-l' is now recognized again
+ * The make targets `distcheck' and `clean' should now work.
+ * The make target `check' now let the user override the variable
+   `$(TESTS)' withour problems
+ * The list of known bugs has been extended and improved.
+ * The ratfor binary used by the testsuite is now correctly rebuild
+   when needed, even from within the `tests' directory
+ * The ratfor source code has been modularized and cleaned somewhat.
+
+New in 1.0e
+-----------
+
+ * On non-fatal syntax errors in input, a proper error message is displayed
+   on standard error, but input processing is not stopped (this was also
+   the previous behaviour).  However, if any syntax error occourred, ratfor
+   is now guaranteed to eventually exit with  exit status `1' (previously
+   it exited with exit status `0').
+ * Ratfor does not more force quoted filenames for `include' to work.
+ * Unfortunately, Ratfor does not more even accept quoted filenames passed
+   to `include'.  Hopefully this will be fixed in a future release.
+ * The testsuite now uses only one Fortran 77 compiler, not a list of them.
+   The user can override the Fortran compiler automatically detected by
+   configure using the variable `RAT4_TESTSUITE_F77' (previously the
+   variable `RAT4_TESTSUITE_F77_LIST' was to be used instead).
+ * The user can now override the `TESTS_ENVIRONMENT' variable when doing
+   `make check'.
+ * The environmental variables which can influence the ratfor testsuite are
+   now all placed in the namespace `RAT4_TESTSUITE_*'
+
+New in 1.0d
+-----------
+
+ * Ratfor build system now uses automake and autoconf.
+ * Added a testsuite.
+ * Added this NEWS file.
+ * Ratfor uses Subversion as its version control system.
+
+New in 1.0c
+-----------
+
+ * NOTHING: never released
+
+New in 1.0b
+-----------
+
+ * NOTHING: never released
+
+New in 1.0a
+-----------
+
+ * NOTHING: never released
+

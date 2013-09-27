@@ -1,0 +1,3 @@
+[submodule "the-ratfor-testsuite"]
+	path = tests/blackbox
+	url = ../ratfor-testsuite.git

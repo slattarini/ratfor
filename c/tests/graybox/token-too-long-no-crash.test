@@ -1,0 +1,49 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of C Ratfor.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that C Ratfor complains and dies gracefully (rather than crashing)
+# when it founds a token too long in input.
+
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
+
+c='x'
+
+. "$srcdir/too-long.sh" \
+  || testcase_HARDERROR "failed to source file \`$srcdir/too-long.sh'"
+
+set +x # do not clutter output with long irrelevant traces
+
+set +x # do not clutter output with long irrelevant traces
+echo "$long_token" >tst-tokn.r
+echo "function $long_token" >tst-func.r
+echo "subroutine $long_token" >tst-subr.r
+echo "str = '$long_token'" >tst-str1.r
+echo "str = \"$long_token\"" >tst-str2.r
+set -x # restore xtrace
+
+for x in tokn func subr str1 str2; do
+    cat tst-$x.r
+    run_RATFOR -e 1 tst-$x.r || testcase_FAIL "bad ratfor exit status"
+    mv stdout stdout-$x
+    mv stderr stderr-$x
+    $FGREP "tst-$x.r:1: alphanumeric token too long" stderr-$x \
+      || testcase_FAIL "expected diagnostic not found"
+done
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

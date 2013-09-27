@@ -1,0 +1,5 @@
+Original implmentation of Public Domain Ratfor was written and amended by
+Oz, Ken Yap, W. Bauske (IBM), and SEP (http://sepwww.stanford.edu).
+
+The conversion from Public Domain Ratfor to C Ratfor was done by Stefano
+Lattarini (<stefano.lattarini@gmail.com>).

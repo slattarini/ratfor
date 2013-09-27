@@ -1,0 +1,14 @@
+This is the TODO file for C Ratfor.
+
+ * Support option `-I' to look for included files.
+
+ * Add `ifdef', `ifndef', `endif' and `undef'.
+
+ * Cleanup and improvements of the parser.
+
+ * Modify the semantic of the `-C' option: `#' comments  should be kept
+   only if they appear at the beginning of a statement.  This is probably
+   best done by changing the parser so that it recognizes the `#' as a
+   special kind of statement.
+
+ * Re-add support for `string' ratfor statement.

@@ -1,0 +1,275 @@
+HACKING file for C Ratfor.
+This file attempts to describe the rules to use when hacking it.
+
+
+Bootstrap
+---------
+
+  To bootstrap checked-out sources, just run
+    $ ./bootstrap
+  from the top directory. This will automatically fetch/update any Git
+  submodule (honoring the `GIT' environment variable), bootstrap them,
+  and then run `autoreconf -vi' (honoring the `AUTORECONF' environment
+  variable).
+
+  Note that to correctly generate the autotools' files you'll need to have
+  installed the recent versions of autoconf (2.64) and automake (1.11.1).
+
+
+Git Submodules
+--------------
+
+  C Ratfor uses the "Ratfor Testsuite" package as a git submodule, to
+  do blackbox testing.
+
+  This submodule is automatically fetched by the `bootstrap' script.
+  If you want to fetch/update it indipendently, just run:
+    $ git submodule init && git submodule update
+  from the top directory.  But before doing this, you are strongly
+  encouraged to read the "Chapter 8. Submodules" of the Git manual:
+    http://www.kernel.org/pub/software/scm/git/docs/user-manual.html
+
+
+Configuring and building
+------------------------
+
+  Run configure with the option `--enable-maintainer-make-rules', to
+  enable the importing of the maintainer-specific rules (saved in files
+  `maint/*.mk') in GNUmakefile.
+
+  Run configure with the option `--enable-werror-cflag', to enable the
+  `-Werror' flag in the C compiler (if supported).  This helps catching
+  errors at compile-time.
+
+  Use GNU make to enable the automatic depedencies tracking (done by
+  automake) and to render the maintainer-specific make rules usable.
+
+  Also, note that, on a cloned git repository, the configure script read in
+  by default the file `maint/config.site', which contains code to make the
+  `-Werror' C compiler flag and the maintainer-specific make rules enabled
+  by default.  So you shouldn't need to explicitly pass to configure the
+  `--enable-*' option described above.
+
+
+Recording changes
+-----------------
+
+  Add an adequate and clear comment for every check-in.
+
+  Format the git commit message following the GNU Coding Standards for
+  ChangeLog entries:
+    http://www.gnu.org/prep/standards/html_node/Change-Logs.html
+  Note that we do not mantain a ChangeLog file directly.  Such a file is
+  automatically generated from `git log' output (look at the `ChangeLog'
+  target in top-level Makefile for more information).
+
+  Changes other than minor bug fixes must be mentioned in NEWS.
+  Important bug fixings must be mentioned in NEWS, too.
+
+  If you do a change that add some obscure code for a good reason, please
+  comment the code carefully and explicitly describe the resason that led
+  you to write it.
+
+
+C Coding Style
+--------------
+
+  Mostly K&R style.
+
+  Use indentation of four character.
+
+  Do not use tab characters in C headers and source files, *ever*.
+
+  For variables: do not use CamelCase or mixedCase, but use only
+  names_with_undercores.
+
+  Constants defined with `enum' or with `#define' must be written in
+  UPPERCASE.  Macros defined with `#define' should be written in UPPERCASE,
+  *unless* keeping them lowercase can make the code definitely clearer.
+
+  Do not use typedefs (apart the already exising typedef `bool' for
+  booleans): it's better know the real type of what is being declared
+  and used, even if that means a bit more typing.
+
+  Preprocessor statements (#if and such) *must* start at column one. To
+  indent preprocessor directives you should put the # at the beginning
+  of a line, followed by any number of whitespaces.
+
+  Do not write function definitions like this:
+    ...
+    int foo(void) {
+       ... /* function body here */
+    }
+    ...
+    char* bar(char c, char s[], int n)
+    {
+       ... /* function body here */
+    }
+    ...
+  Instead use:
+    ...
+    int
+    foo(void)
+    {
+       ... /* function body here */
+    }
+    ...
+    char *
+    bar(char c, char s[], int n)
+    {
+       ... /* function body here */
+    }
+    ...
+  This greatly increases greppability of C source files.
+
+  For header files: protect from multiple inclusions with the idiom
+  (assuming a `foo.h' header file):
+    #ifndef RAT4_FOO_H
+    #  define RAT4_FOO_H 1
+    ... /* content of header file here */
+    #endif /* RAT4_FOO_H */
+
+  It's ok, and even recommended, to enclose statements in curly brackets
+  to increase readability, even when this is not strictly necessary.
+  For example, instead of this:
+    ...
+    /* BAD */
+    for (i = 0; i < SIZE; i++)
+        /* initialize i-th array element */
+        a[i] = i + 1
+    ...
+  do this:
+    ...
+    /* GOOD */
+    for (i = 0; i < SIZE; i++) {
+        /* init array */
+        a[i] = i + 1
+    }
+    ...
+  and instead of this:
+    ...
+    /* MIGHT BE CONFUSING */
+    if (x > 3)
+        error()
+    else
+        y++:
+    if (y > 4)
+        do_something();
+    ...
+  do this:
+    ...
+    /* BETTER */
+    if (x > 3) {
+        error()
+    } else {
+        y++:
+    }
+    if (y > 4)
+        do_something();
+    ...
+  On the contrary, there's no need of adding curly brackets here:
+    ...
+    /* ACCEPTABLE */
+    for (i = 0; i < SIZE; i++)
+        if (a[i] < 0)
+            a[i] = 0
+    if (x > 3)
+        error()
+    ...
+    but adding them won't hurt either, unless it hampers readability
+    (e.g. by making the body of a function too long).
+
+
+C++ Compatibility
+-----------------
+
+ Ratfor must compile even under a C++ compiler.  In particular, this means
+ that:
+   - C++ reserved keywords, like `and', `or', `private' or `public' cannot
+     be used.
+   - Global variables and non-static functions must be explicitly marked
+     as `extern "C"' when compiling with a C++ compiler; this can be
+     accomplished using the macros `BEGIN_C_DECLS', `END_C_DECLS' and
+     `C_DECL', defined in <config.h>.
+   - Since the C++ compilers are stricter in type checking, the return
+     value of malloc must always be cast explicitly; e.g. this does not
+     work:
+       char *p = malloc(STRING_SIZE); /* WRONG */
+     and this must be used instead:
+       char *p = (char *) malloc(STRING_SIZE); /* GOOD */
+
+
+Testsuite
+---------
+
+  Currently, the testsuite comprises blackbox, graybox and unit tests.
+
+  The blackbox tests are provided by the "Ratfor Testsuite" package, which
+  is imported into the C Ratfor tree as a git submodule.  For more details
+  about that package, you can refer to the files `tests/blackbox/README'
+  and `tests/blackbox/HACKING'.
+
+  For more information about the graybox tests, you can refer to the (still
+  skimpy) file `tests/graybox/HACKING'.
+
+  *** FIXME! ***
+    The unit tests has not been written yet, and no HACKING/README file
+    for them has been provided yet.
+
+
+Fixing bugs
+-----------
+
+  The correct response to most actual bugs is to write new testcase(s)
+  which demonstrate the bug.  Then fix the bug, re-run the test suite,
+  and check everything in.
+
+  If the bug is particularly complex or subtle, it might be even better
+  to first commit the (still failing) testcase, and only thereafter fix
+  the bug, committing this fix separately.  The testcase should then be
+  expected to pass after the fix is in place.
+
+Making a release
+----------------
+
+  NOTE: In what follows, `$VERSION' will denote the version of the package
+  you are releasing.  $VERSION should be something like 0.9, 2.0, 1.11.1 or
+  10.12 for stable releases, and 0.8a, 3.1b, 1.2.1c or even 3.1z for alpha
+  and beta releases.  Likewise, `$RELEASE_TYPE' will denote the type of the
+  release; it *must* be either `stable', `beta' or `alpha'.
+
+  Commit any pending change to Git.  Re-bootstrap and re-configure the
+  package.  Be sure you have enabled the import of maintainer make rules.
+  Run the testsuite of the package, with `make check && make distcheck'.
+  If this fail, fix the errors, commit to Git and repeat the procedure,
+  until the previous command succeed.
+
+  Repeat the previous steps for some different configurations, e.g. by
+  changing the C compiler (CC), the Fortran compiler (F77), and/or the
+  shell used by configure and by the makefiles (CONFIG_SHELL).  Also,
+  try to use a C++ compiler as the C compiler.  Finally, if possible,
+  also try different make(1) programs, and run the testsuite in parallel
+  mode (e.g. by using `make -jN check && make -jN distcheck' for N > 1).
+
+  When all the above steps are finally sucessfull, edit the `NEWS' file
+  to cite the new $VERSION, and commit that change (with a message like
+  "NEWS: version bumped to $VERSION").  Create an annotated git tag named
+  *exactly* `v$VERSION' (e.g. `v1.0' or `v2.1e'), and with a comment that
+  is *exactly* `$RELEASE_TYPE release $VERSION' (e.g. `stable release 1.0'
+  or `beta release 2.1e').
+
+  Then simply issue a `make alpha' (if releasing an alpha version), `make
+  beta' (if releasing a beta version), or `make stable' (if releasing a
+  stable version).  This will do some sanity checks on the state of your
+  repository (mostly to verify that you took the steps listed above), and
+  if this passes will create a distribution tarball with `make distcheck'.
+
+
+Miscellaneous
+-------------
+
+  We don't commit generated files like configure or the various Makefile.in
+  into the C Ratfor Git repository.
+
+  We don't use SVN-style $Id$ lines, which create more problems than
+  they solve, especially with Git.

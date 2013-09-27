@@ -1,0 +1,51 @@
+#!/bin/sh
+# Copyright (C) 2010 Stefano Lattarini <stefano.lattarini@gmail.com>.
+# This file is part of C Ratfor.
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation; either version 3, or (at your option)
+# any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# Check that empty statements do not leave blank lines in ratfor output.
+
+. ../blackbox/lib/rat4-testsuite-init.sh || exit 99
+
+$SED -e "s/\\\\t/$TAB/g" -e "s/\\\\s/ /g" > tst.r <<'EOF'
+
+\s
+\t
+{}
+{{}}
+;\s\s
+;;;
+;\s;\t;
+\t;{\s\t}
+if(cond);
+while(cond){}
+if(cond){}else;
+if(cond);else\t\s;
+for(a=1;a<10;a=a+1){}
+do i=1,n {}
+repeat;
+while(cond)\t\s;\s\s\t\s
+repeat{}until(cond)
+if(cond)\s\s\t;
+repeat{\s\t}until(cond)
+EOF
+
+cat tst.r
+run_RATFOR -e IGNORE tst.r
+test `$GREP -c "^${ws0p}$" stdout` -gt 0 && testcase_FAIL
+
+testcase_DONE
+
+# vim: ft=sh ts=4 sw=4 et

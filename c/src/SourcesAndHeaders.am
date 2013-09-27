@@ -1,0 +1,31 @@
+## -*- Makefile.am -*-
+## Process this file with automake to produce Makefile.in
+##
+# C Ratfor: a ratfor preprocessor written in C.
+# This makefile fragment might be included by several Makefiles.am
+
+ratfor_source_names = \
+	io \
+	xopen \
+	rat4-hash \
+	error \
+	init \
+	tokenizer \
+	define \
+	include \
+	parser \
+	labgen \
+	codegen
+
+ratfor_c_files = \
+	main.c \
+	$(ratfor_source_names:=.c)
+
+ratfor_h_files = \
+	rat4-global.h \
+	rat4-common.h \
+	tok-types.h \
+	lex-types.h \
+	$(ratfor_source_names:=.h)
+
+## vim: ft=automake noet sw=4 ts=4

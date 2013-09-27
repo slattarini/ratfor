@@ -1,0 +1,50 @@
+## -*- Makefile -*-
+## Copied from SteLib at 2010-02-10 01:57:42 +0100.  DO NOT EDIT!
+##
+## Provide a dist-hook target checking that the user does not erreonously
+## include in the tarball any file which is not meant for distribution.
+## The list of files whose distribution is forbidden should be put in the
+## `$(no_dist_files)' variable.
+##
+## Copyright (C) 2009, 2010 Stefano Lattarini
+## Written by Stefano Lattarini <stefano.lattarini@gmail.com>
+##
+## This program is free software: you can redistribute it and/or modify it
+## under the terms of the GNU Lesser General Public License as published
+## by the Free Software Foundation; either version 3 of the License, or
+## (at your option) any later version.
+##
+## This program is distributed in the hope that it will be useful,
+## but WITHOUT ANY WARRANTY; without even the implied warranty of
+## MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+## Lesser General Public License for more details.
+##
+## You should have received a copy of the GNU Lesser General Public License
+## along with this program.  If not, see <http://www.gnu.org/licenses/>.
+##
+
+# Check that we do not erreonously include in the tarball any file which
+# is not meant for distribution.
+dist-hook: stelib--dist-hook-check-no-dist-files
+.PHONY: stelib--dist-hook-check-no-dist-files
+stelib--dist-hook-check-no-dist-files:
+	$(AM_V_at)\
+	bad_dist_files=''; \
+## make the following `for' loop working even if $(no_dist_files) is empty
+	no_dist_files='$(no_dist_files)'; \
+	for f in $$no_dist_files; do \
+	  if test -r $(distdir)/$$f; then \
+	    bad_dist_files="$$bad_dist_files $$f"; \
+	  fi; \
+	done; \
+	if test -n "$$bad_dist_files"; then \
+	  echo "$@: ERROR: the following files have erroneously been put" \
+	       "in the distributed tarball:" >&2; \
+	  for f in $$bad_dist_files; do \
+	    echo "  - $$f" >&2; \
+	  done; \
+	  exit 1; \
+	fi; \
+	exit 0
+
+## vim: ft=make ts=4 sw=4 noet
