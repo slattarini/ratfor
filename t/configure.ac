@@ -1,94 +1,11 @@
 # -*- Autoconf -*-
 # configure.ac file for Ratfor Testsuite.
 # Process this file with autoconf to produce a configure script.
-#
-# Copyright (C) 2009, 2010 Stefano Lattarini
-# Written by Stefano Lattarini <stefano.lattarini@gmail.com>
-#
-# This program is free software: you can redistribute it and/or modify
-# it under the terms of the GNU General Public License as published by
-# the Free Software Foundation; either version 3 of the License, or
-# (at your option) any later version.
-#
-# This program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-# GNU General Public License for more details.
-#
-# You should have received a copy of the GNU General Public License
-# along with this program.  If not, see <http://www.gnu.org/licenses/>.
-#
 
-m4_pattern_forbid([^_AX_])
-m4_pattern_forbid([^AX_])
-m4_pattern_forbid([^_RAT4_])
-m4_pattern_forbid([^RAT4_])
-
-#
-# Autoconf's initializations.
-#
-
-AC_PREREQ([2.64])
-
-AC_INIT([Ratfor Testsuite],
-        m4_esyscmd([build-aux/git-version-gen .tarball-version]),
-        [stefano.lattarini@gmail.com])
-
-AC_CONFIG_SRCDIR([tests/ifelse-ambiguity_f77.test])
-AC_CONFIG_MACRO_DIR([m4])
-AC_CONFIG_AUX_DIR([build-aux])
-
-#
-# Maintainer-specific initializations and defaults.
-#
-
-AX_INCLUDE_MAINT_CONFIG_SITE
-
-#
-# Automake's initializations.
-#
-
-AM_INIT_AUTOMAKE([1.11.1 foreign -Wall -Werror color-tests parallel-tests
-                         no-installinfo no-texinfo.tex])
-dnl: enable `silent-rules' support, but make silent rules disabled by
-dnl: default
-AM_SILENT_RULES([no])
-
-#
-# Enable maintainer-specific make rules, on user request.
-#
-
-# Option `--enable-maintainer-make-rules' tells that maintaner-specific
-# rules should be imported in the GNUmakefile.
-AX_ARG_ENABLE_MAINTAINER_MAKE_RULES
-
-#
-# Determine the list of tests to be skipped.
-#
-
-AC_ARG_VAR([RAT4_TESTSUITE_XFAIL_TESTS],
-           [List of testcases expected to fail with your version of
-            Ratfor (list is empty by default)])
-
-munged_RAT4_TESTSUITE_XFAIL_TESTS=''
-for tst in $RAT4_TESTSUITE_XFAIL_TESTS; do
-  AS_CASE([$tst], [*.test], [], [tst="$tst.test"])
-  AS_VAR_APPEND([munged_RAT4_TESTSUITE_XFAIL_TESTS], [" $tst"])
-done
-RAT4_TESTSUITE_XFAIL_TESTS=$munged_RAT4_TESTSUITE_XFAIL_TESTS
-AS_UNSET([munged_RAT4_TESTSUITE_XFAIL_TESTS])
-
-for tst in $RAT4_TESTSUITE_XFAIL_TESTS; do
-  AC_MSG_NOTICE([the testcase `$tst' will be expected to fail])
-done
-
-AS_UNSET([tst])
-
-#
-# Checks on programs.
-#
+# TODO: merge with top-level configure.ac
 
 # Check for a Ratfor preprocessor, to be used by the test scripts.
+# TODO: point to the built C-Ratfor.
 AC_PATH_PROGS([RATFOR], [ratfor ratfor77], [:])
 if test x"$RATFOR" = x":"; then
   AC_MSG_ERROR([No ratfor program found])
@@ -131,13 +48,6 @@ AX_PROG_DIFF_U
 # Look for perl, which is used by some maintainer-specific checks.
 AX_PROG_PERL([5.008], [perl], [sh -c 'echo No perl available >&2; exit 1'])
 
-#
-# Do output.
-#
-
-# Make GNUmakefile available also in VPATH builds.
-AC_CONFIG_LINKS([GNUmakefile:GNUmakefile])
-
 AC_CONFIG_FILES([
     Makefile
     lib/Makefile
@@ -158,13 +68,3 @@ AC_CONFIG_FILES([lib/timer:lib/timer.in],
                 [chmod a-w,a+x lib/timer])
 
 AC_OUTPUT
-
-#
-# Done.
-#
-
-AX_REPORT_IF_BETA
-
-AS_EXIT(0)
-
-dnl* vim: ft=config ts=4 sw=4 et

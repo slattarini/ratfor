@@ -1,0 +1,6 @@
+Enhancements and modernization of the old Public Domain Ratfor.
+Just for fun.  Unfinished, and now sadly also unmaintained.
+
+FIXME: the build system of this package is broken and badly
+bit-rotten.  Hopefully I'll find sometimes to fix it (at
+least to the point where the package builds).

@@ -28,39 +28,12 @@ dist_doc_DATA = README BUGS NEWS
 
 # List of extra files to be put in the distributed tarball.
 EXTRA_DIST = \
-  xfail-tests.list \
   HACKING \
   build-aux/git-version-gen \
   GNUmakefile \
   maint/maint.mk \
   maint/release.mk \
   maint/developer.mk
-
-# List of files which must not be put in the distributed tarball.
-no_dist_files = maint/config.site maint/local-cfg.mk maint/personal/*
-
-# Enabling of maintainer rules.
-if ENABLE_MAINTAINER_MAKE_RULES
-  ENABLE_MAINTAINER_MAKE_RULES = yes
-else
-  ENABLE_MAINTAINER_MAKE_RULES = no
-endif
-
-# Check that we do not erreonously include in the tarball any file which
-# is not meant for distribution.
-include am/CheckNoDistFiles.am
-
-# Version string management for distributed tarballs.
-dist-hook: dist-hook-create-tarball-version
-.PHONY: dist-hook-create-tarball-version
-dist-hook-create-tarball-version:
-	echo '$(VERSION)' > $(distdir)/.tarball-version
-
-# This is defined here so that it can be extended in maint/*.mk, if needed.
-distcheck-hook:
-
-# Rule(s) to clean temporary files left around by configure/config.status.
-include am/MostlyCleanConfigureTmp.am
 
 # Maintainer-specific checks.
 .PHONY: maintainer-check

@@ -6,14 +6,48 @@
 ## Updated later throughout the file.
 TESTS =
 EXTRA_DIST =
+XFAIL_TESTS =
 
-# Defined at configure time.
-XFAIL_TESTS = $(RAT4_TESTSUITE_XFAIL_TESTS)
+# Currently, ratfor output strings with the same quoting they are input
+# with; this should be changed, and only single-quoted strings (e.g. 'foo')
+# should be outputted.
+XFAIL_TESTS += no-double-quotes.test
 
+# The `%'-escaping is now implemented correctly, but due the "suboptimal"
+# (i.e. crappy) implementation of relation shortands' translation, the
+# following tests still fail.
+XFAIL_TESTS += verbatim-define-interaction-stress.test
+XFAIL_TESTS += verbatim-define-interaction-basic.test
 
-##
+# Automatic line continuation still doesn't work for some operators and for
+# relational operators (`&&', `<=', `||' etc.)
+XFAIL_TESTS += line-continuation-automatic-relationals-raw.test
+
+# Due to the way C Ratfor performs translation of relational shorthands,
+# error messages involving them might sometimes result slighty botched and
+# unclear, so these tests won't pass.
+XFAIL_TESTS += function-name-invalid-3.test
+XFAIL_TESTS += subroutine-name-invalid-3.test
+
+# C Rafor still fails to recognize quoted file names in the `include'
+# builtin.
+XFAIL_TESTS += include-at-stmt-beginning-at-least-dquote.test
+XFAIL_TESTS += include-at-stmt-beginning-at-least-squote.test
+
+# The recent changes in parser have revealed a limitation in the code
+# generation subroutines of C Ratfor, which causes this test to fail.
+# Once we'll have fixed those limitations, this test should pass again,
+# but for the moment it's simpler to mark it as xfailing.
+XFAIL_TESTS += comments-no-extra-white-spaces.test
+
+# "function" and "subroutine" pseudo-keywords are still erroneously
+# processed into initialization/increment code of `for' and `do' loops.
+XFAIL_TESTS += function-in-do-condition.test
+XFAIL_TESTS += function-in-for-condition.test
+XFAIL_TESTS += subroutine-in-do-condition.test
+XFAIL_TESTS += subroutine-in-for-condition.test
+
 ## Hand-written tests.
-##
 
 EXTRA_DIST += $(handwritten_tests)
 TESTS += $(handwritten_tests)
@@ -251,9 +285,7 @@ handwritten_tests = \
   while-nested_f77.test
 
 
-##
 ## Requirements and dependencies of tests.
-##
 
 EXTRA_DIST += integers-many-bases.data
 integers-many-bases.log integers-many-bases_f77.log: \
@@ -305,13 +337,7 @@ include-at-stmt-beginning-only-squote.log \
   : include-at-stmt-beginning-only.sh
 
 
-##
 ## Generated tests.
-##
-
-#
-# General scaffolding.
-#
 
 generated_tests = ## updated later
 TESTS += $(generated_tests)
@@ -327,7 +353,7 @@ autogen_sh__pre = $(AM_V_at)set -e; \
   rm -f $@ $@-t; \
   { \
 ## The use of a `#' character into a make variable assignement is
-## impossible to do portable, so we resort to the following `tr'-based
+## impossible to do portably, so we resort to the following `tr'-based
 ## hack.
     { echo '@! /bin/sh'; \
       echo '@ This file is part of the Ratfor Testsuite.'; \
@@ -543,8 +569,5 @@ include ../am/LocalCleanup.am
 ## Consistency checks on the list of tests.
 include ../am/CheckListOfTests.am
 maintainer-check-list-of-tests: $(generated_tests)
-
-## Work around a bug of FreeBSD make w.r.t. parallel tests.
-include ../am/WorkaroundParallelTests.am
 
 ## vim: ft=automake noet sw=4 ts=4
