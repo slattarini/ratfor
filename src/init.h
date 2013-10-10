@@ -16,6 +16,6 @@
  */
 #ifndef RAT4_INIT_H
 #  define RAT4_INIT_H 1
-C_DECL void init(int, int, const char *);
+void init(int, int, const char *);
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

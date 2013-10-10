@@ -17,7 +17,6 @@
 
 #ifndef RAT4_CODEGEN_H
 #  define RAT4_CODEGEN_H 1
-BEGIN_C_DECLS
 
 /***  Subroutines and macros for code generation  ***/
 
@@ -50,7 +49,5 @@ void switch_code(int *);
 void label_code(char []);
 void return_code(void);
 void other_statement(char lexstr[]);
-
-END_C_DECLS
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

@@ -347,8 +347,6 @@ non_blank:
  * PUBLIC FUNCTIONS.
  */
 
-BEGIN_C_DECLS
-
 /* Get "unpreprocessed" token from ratfor current global input stream
  * (without performing macro expansion, but being aware of active file
  * inclusions), and save it in buf[].  Also deal with ratfor comments
@@ -406,7 +404,5 @@ get_nonblank_token(char buf[], int bufsiz)
     } while(is_blank(tok));
     return(tok);
 }
-
-END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

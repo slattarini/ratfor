@@ -62,8 +62,6 @@ pbstr_(const char str[], const bool cooked)
 /* Get next char (either pushed back or new from the stream). */
 #define NGETC_(fp) (bp >= 0 ? buf[bp--] : getc(fp))
 
-BEGIN_C_DECLS
-
 /* Get a (possibly pushed back) character, dealing with line continuation
  * and keeping the count of line number. */
 int
@@ -116,8 +114,6 @@ put_back_string_cooked(const char str[])
     pbstr_(str, true);
 }
 
-END_C_DECLS
-
 
 /*
  *  O U T P U T  F O R T R A N - C O M P A T I B L E  T E X T
@@ -125,8 +121,6 @@ END_C_DECLS
 
 static char outbuf[82]; /*  output lines collected here    */
 static int outp = 0;    /*  last position filled in outbuf */
-
-BEGIN_C_DECLS
 
 /* Put one char into output card, with automatic line wrapping and
  * continuation. */
@@ -234,7 +228,5 @@ output_comment(FILE * fp)
     comout[comoutp+1] = EOS;
     puts_(comout);
 }
-
-END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

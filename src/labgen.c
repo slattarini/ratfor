@@ -21,8 +21,6 @@
 static int startlab; /* first label used by `labgen()' */
 static int label; /* next label returned by generate_labels */
 
-BEGIN_C_DECLS
-
 /* labgen - generate n consecutive labels, return first one */
 int
 labgen(int n)
@@ -49,7 +47,5 @@ can_label_conflict(int lab)
 {
     return(lab >= startlab? true : false);
 }
-
-END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

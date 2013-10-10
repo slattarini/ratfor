@@ -29,15 +29,9 @@ comment-too-long-in-define-ignored.log: too-long.sh
 token-too-long-no-crash.log: too-long.sh
 
 ## Testsuite environment and setup.
-include ../blackbox/am/TestsEnvironment.am
-
-## Testsuite cleanup.
-include ../blackbox/am/LocalCleanup.am
+include ../t/am/TestsEnvironment.am
 
 ## Consistency checks on the list of tests.
-include ../blackbox/am/CheckListOfTests.am
-
-## Work around a bug of FreeBSD make w.r.t. parallel tests.
-include ../blackbox/am/WorkaroundParallelTests.am
+include ../t/am/CheckListOfTests.am
 
 ## vim: ft=automake noet sw=4 ts=4

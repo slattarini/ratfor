@@ -419,8 +419,6 @@ swvar(int lab)
  * Public Functions.
  */
 
-BEGIN_C_DECLS
-
 /* break_or_next_code - generate code for break n and next n
    n = 1 is the default */
 void
@@ -823,10 +821,8 @@ switch_code(int *lab)
 void
 switch_end(int lab)
 {
-    int lb, ub, n, i;
+    int n, i;
 
-    lb = swstak[swtop + 3];
-    ub = swstak[swlast - 2];
     n = swstak[swtop + 1];
     outgo(lab + 1); /* # terminate last case */
     if (swstak[swtop + 2] == 0)
@@ -861,7 +857,5 @@ switch_end(int lab)
     swlast = swtop;   /* # pop switch stack */
     swtop = swstak[swtop];
 }
-
-END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

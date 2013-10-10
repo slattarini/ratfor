@@ -35,8 +35,6 @@
  * PUBLIC FUNCTIONS.
  */
 
-BEGIN_C_DECLS
-
 /* Open path and push it on the input files stack. Deal with errors. */
 /* FIXME: re-add support for quoted filenames, sooner or later */
 void
@@ -100,7 +98,5 @@ process_file_inclusion(void)
     path[i] = EOS;
     push_file_stack(path);
 }
-
-END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

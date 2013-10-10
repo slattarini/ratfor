@@ -42,7 +42,7 @@ hash(const char *key)
     return (i % HASHMAX);
 }
 
-C_DECL const char *
+const char *
 hash_lookup(const char *key)
 {
     struct hashlist *np;
@@ -53,7 +53,7 @@ hash_lookup(const char *key)
     return(NULL);             /* not found */
 }
 
-C_DECL void
+void
 hash_install(const char *key, const char *val)
 {
     int hashed_key;
@@ -67,6 +67,8 @@ hash_install(const char *key, const char *val)
             fatal("out of memory");
         if ((hp->key = strdup(key)) == NULL)
             fatal("out of memory");
+        if ((hp->val = strdup(val)) == NULL)
+            fatal("out of memory");
         hashed_key = hash(hp->key);
         hp->next = hashtab[hashed_key];
         hashtab[hashed_key] = hp;
@@ -74,8 +76,6 @@ hash_install(const char *key, const char *val)
         /* cast needed to avoid compiler warning */
         free((void *)oldval);
     }
-    if ((hp->val = strdup(val)) == NULL)
-        fatal("out of memory");
 }
 
 /* vim: set ft=c ts=4 sw=4 et : */

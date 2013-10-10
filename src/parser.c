@@ -176,7 +176,7 @@ lex(char buf[], int bufsiz)
  * PUBLIC FUNCTIONS
  */
 
-C_DECL void
+void
 parse(void)
 {
     char lexstr[MAXTOK];

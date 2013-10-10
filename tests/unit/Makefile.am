@@ -66,13 +66,7 @@ TESTS = $(binary_test_programs)
 ##  Services offered by included files  ##
 ## ------------------------------------ ##
 
-## Testsuite cleanup.
-include ../blackbox/am/LocalCleanup.am
-
 ## Consistency checks on the list of tests.
-include ../blackbox/am/CheckListOfTests.am
-
-## Work around a bug of FreeBSD make w.r.t. parallel tests.
-include ../blackbox/am/WorkaroundParallelTests.am
+include ../t/am/CheckListOfTests.am
 
 ## vim: ft=automake noet sw=4 ts=4

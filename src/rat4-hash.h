@@ -19,8 +19,8 @@
 #  define RAT4_LOOKUP_H 1
 
 /* Table lookup routines structure and definitions. */
-C_DECL void hash_install(const char *, const char *);
-C_DECL const char *hash_lookup(const char *);
+void hash_install(const char *, const char *);
+const char *hash_lookup(const char *);
 
 #endif
 /* vim: set ft=c ts=4 sw=4 et : */

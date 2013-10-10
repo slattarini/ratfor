@@ -124,8 +124,6 @@ get_macro_definition(char name[], int namesiz, char def[], int defsiz)
  * PUBLIC FUNCTIONS.
  */
 
-BEGIN_C_DECLS
-
 /* Read macro definition from current ratfor input stream, and save it
  * in global list of user-defined macros. */
 void
@@ -146,7 +144,5 @@ macro_definition_lookup(const char *name)
 {
     return hash_lookup(name);
 }
-
-END_C_DECLS
 
 /* vim: set ft=c ts=4 sw=4 et : */

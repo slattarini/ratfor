@@ -61,7 +61,7 @@ bool reading_parenthesized_macro_definition;
 
 /* use `x_foo' names to avoid colliding with similarly named global
  * variables */
-C_DECL void
+void
 init(int x_startlab, int x_keep_comments, const char *x_filename)
 {
     FILE *x_infile;
